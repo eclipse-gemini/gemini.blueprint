@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<description>Exporter configuration</description>
+
+
+	<bean id="listener"
+		class="org.eclipse.gemini.blueprint.blueprint.ExporterListener" />
+
+	<bean id="map" class="java.util.LinkedHashMap" scope="singleton"/>
+
+	<service id="simple" ref="map" interface="java.util.Map"
+		ranking="123">
+		<description>Just an exporter</description>
+		<service-properties>
+			<entry key="fat" value="lip" />
+			<entry key="mountain" value="song" />
+		</service-properties>
+	</service>
+
+	<service id="nested">
+		<interfaces>
+			<value>java.util.Map</value>
+			<value>java.io.Serializable</value>
+		</interfaces>
+
+		<registration-listener registration-method="up"
+			unregistration-method="down">
+			<ref component-id="listener" />
+		</registration-listener>
+
+		<registration-listener registration-method="up"
+			unregistration-method="down">
+			<bean
+				class="org.eclipse.gemini.blueprint.blueprint.ExporterListener" />
+		</registration-listener>
+
+		<bean class="java.util.LinkedHashMap" />
+	</service>
+</blueprint>

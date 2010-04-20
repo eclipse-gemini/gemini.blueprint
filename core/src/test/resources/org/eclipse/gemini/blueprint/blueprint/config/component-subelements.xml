@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<description>Configuration with sub-elements</description>
+
+	<bean id="bf" class="org.eclipse.gemini.blueprint.blueprint.BeanFactoryFB"/>
+
+	<!-- 
+	<bean id="self" class="org.eclipse.gemini.blueprint.blueprint.DynamicCycleComponent" scope="prototype">
+		<argument value="self"/>
+		<argument ref="bf"/>
+		<property name="prop" ref="char"/>
+	</bean>
+	
+	<bean id="trigger" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA" ref="self"/>
+	</bean>
+	 -->
+	 
+ 
+	<bean id="char" class="java.lang.Character">
+		<argument type="char" value="\u0000" />
+	</bean>
+
+	<bean id="constructor-arg" class="java.lang.Integer">
+		<description>description</description>
+		<argument index="0" type="int" value="3" />
+	</bean>
+
+	 
+	<bean id="constructor-arg-ref" class="java.lang.String">
+		<description>description2</description>
+		<argument type="java.lang.String" ref="constructor-arg" />
+	</bean>
+ 	
+	<bean id="propertyValueInline" class="java.net.Socket">
+		<property name="keepAlive" value="false" />
+	</bean>
+
+	<bean id="propertyValueRef" class="java.net.Socket">
+		<property name="sendBufferSize" ref="constructor-arg" />
+	</bean>
+
+	<bean id="idref" class="java.lang.String">
+		<argument>
+			<idref component-id="constructor-arg" />
+		</argument>
+	</bean>
+
+	<bean id="propertyValueNested" class="java.net.Socket">
+		<property name="sendBufferSize">
+			<bean class="java.lang.Integer">
+				<argument value="3" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="array" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<array>
+				<ref component-id="char" />
+				<value>literal2</value>
+				<null />
+			</array>
+		</property>
+	</bean>
+
+	<bean id="mixedCollection" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<list value-type="java.lang.String">
+				<value>literal</value>
+				<array value-type="java.lang.Integer">
+					<value>2</value>
+					<value>4</value>
+				</array>
+				<array value-type="int">
+					<value>3</value>
+					<value>5</value>
+				</array>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="list" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<list>
+				<value type="java.lang.String">value</value>
+				<idref component-id="idref" />
+				<null />
+				<ref component-id="idref" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="listWDefaultType" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<list value-type="java.lang.Double">
+				<value>0.0</value>
+				<value>1.0</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="set" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<set>
+				<value type="java.lang.String">value</value>
+				<idref component-id="idref" />
+				<null />
+				<ref component-id="idref" />
+			</set>
+		</property>
+
+	</bean>
+
+	<bean id="map" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<map>
+				<entry key="foo" value="bar" />
+				<entry key-ref="list" value-ref="set" />
+				<entry>
+					<key>
+						<ref component-id="set" />
+					</key>
+					<ref component-id="list" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="props" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<props>
+				<prop key="one">two</prop>
+				<prop key="aero">smith</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="null" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<null />
+		</property>
+	</bean>
+
+	<bean id="compZeroLengthString" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA" value="" />
+	</bean>
+	<!--
+		<bean id="dateConstructor"
+		class="org.eclipse.gemini.blueprint.blueprint.DateConstructor"> <argument
+		value="6/1/1999" type="java.util.Date"/> </bean>
+	-->
+
+	<bean id="nan" factory-method="valueOf" class="java.lang.Double">
+		<argument value="NaN" type="double" />
+	</bean>
+
+	<bean id="ambigousConstructor"
+		class="org.eclipse.gemini.blueprint.blueprint.AmbigousTestComponent">
+		<argument type="java.lang.String" value="compThreeArgOverride" />
+		<argument type="java.lang.Object" value="true">
+		</argument>
+		<argument type="java.lang.String">
+			<null />
+		</argument>
+	</bean>
+
+	<bean id="nestedArgs" class="java.lang.Boolean">
+		<argument type="java.lang.String">
+			<value type="java.lang.Boolean">true</value>
+		</argument>
+	</bean>
+
+	<bean id="nestedArgs2" class="java.lang.Boolean">
+		<argument type="boolean">
+			<value>true</value>
+		</argument>
+	</bean>
+
+	<bean id="staticFactory" factory-method="staticMethod"
+		class="org.eclipse.gemini.blueprint.blueprint.FactoryComponent">
+		<argument value="String" index="1" />
+		<argument value="123" index="2" />
+		<argument value="981" index="0" />
+	</bean>
+
+
+	<bean id="noArgStaticFactory" class="org.eclipse.gemini.blueprint.blueprint.FactoryComponent"
+		factory-method="staticMethod" />
+
+	<bean id="oneArgStaticFactory" class="org.eclipse.gemini.blueprint.blueprint.FactoryComponent"
+		factory-method="staticMethod">
+		<argument value="iridium" />
+	</bean>
+
+	<bean id="instanceFactory" class="org.eclipse.gemini.blueprint.blueprint.FactoryComponent" />
+
+	<bean id="noArgInstanceFactory" factory-method="instanceMethod"
+		factory-ref="instanceFactory" />
+
+	<bean id="oneArgInstanceFactory" factory-ref="instanceFactory"
+		factory-method="instanceMethod">
+		<argument value="iridium" />
+	</bean>
+
+	<bean id="namedComparator" class="org.eclipse.gemini.blueprint.blueprint.DummyComparator" />
+
+	<bean id="nestedRef" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<reference-list availability="optional" interface="java.util.Map" />
+		</property>
+	</bean>
+
+	<bean id="ambigousComponent"
+		class="org.eclipse.gemini.blueprint.blueprint.AmbigousTestComponent">
+		<property name="ambigousProp">
+			<value type="java.lang.String">123</value>
+		</property>
+	</bean>
+
+
+	<bean id="arrayItem" class="org.eclipse.gemini.blueprint.blueprint.ArrayItem">
+		<argument>
+			<list>
+			</list>
+		</argument>
+	</bean>
+
+	<!--
+		SPR-5844  -->
+		
+	<bean id="primitiveArray"
+		class="org.eclipse.gemini.blueprint.blueprint.PrimitiveArrayConstructorInjection">
+		<argument type="int[]">
+			<array value-type="int"> 
+				<value>1</value>
+			</array>
+		</argument> 
+	</bean>
+
+	<bean id="compDateArray" factory-method="makeInstance"
+		class="org.eclipse.gemini.blueprint.blueprint.ConstructorInjectionStaticFactory">
+		<argument>
+			<array value-type="java.util.Date">
+				<value>19 Feb 2009</value>
+				<value>20 Feb 2009</value>
+			</array>
+		</argument>
+	</bean>
+
+	
+	<bean id="compURLArray" factory-method="makeInstance"
+		class="org.eclipse.gemini.blueprint.blueprint.ConstructorInjectionStaticFactory">
+		<argument>
+			<array value-type="java.net.URL">
+				<value>http://www.osgi.org</value>
+				<value>http://www.gmail.com</value>
+			</array>
+		</argument>
+	</bean>
+
+	<bean id="nestedBeanInitializing" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<bean class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+				<property name="propA" value="innerBean" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="compInnerMap" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+        <argument>
+            <map>
+                <entry>
+                    <key>
+                        <bean class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+							<argument type="java.lang.String" value="compInnerEntryKey1"/>
+						</bean>
+                    </key>
+                    <bean class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+						<argument type="java.lang.String" value="compInnerEntryValue1"/>
+					</bean>
+                </entry>
+                <entry>
+                    <key>
+                        <bean class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+							<property name="propA" value="compInnerEntryKey2"/>
+						</bean>
+                    </key>
+                    <bean class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+						<property name="propA" value="compInnerEntryValue2"/>
+					</bean>
+                </entry>
+            </map>
+        </argument>
+    </bean>
+    
+    <bean id="typedItem" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+            <list value-type="java.lang.Double">
+                <value>0.0</value>
+                <value>1.0</value>
+            </list>
+		</property>
+    </bean>
+
+</blueprint>

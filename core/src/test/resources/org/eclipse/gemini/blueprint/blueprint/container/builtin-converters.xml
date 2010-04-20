@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests the builtin conversions between set, list, and array with different combinations
+        of concrete and abstract collection classes.  All conversions are done using builtin
+        conversions (no type converters)
+    </description>
+
+   <bean id="IntegerOne" class="java.lang.Integer">
+        <argument type="int" value="1"/>
+    </bean>
+    
+	<bean id="customCollection" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+		<property name="customCollection">
+			<array>
+				<value>1</value>
+				<value>2</value>
+			</array>
+		</property>
+	</bean>
+	
+	<bean id="customMap" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="customMap">
+            <map>
+                <entry key="abc" value="123" />
+                <entry key="def" value="456" />
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="customDictionary" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="customDictionary">
+            <map>
+                <entry key="abc" value="123" />
+                <entry key="def" value="456" />
+            </map>
+        </property>
+    </bean>
+	
+    <bean id="setToCollection" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="collection">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+
+    <bean id="setToList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="list">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="set">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToSortedSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="sortedSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToStack" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="stack">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToHashSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="hashSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToLinkedHashSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="linkedHashSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToTreeSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="treeSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToArrayList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="arrayList">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToLinkedList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="linkedList">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToVector" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="vector">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="listToCollection" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="collection">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="list">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="set">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToSortedSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="sortedSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToStack" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="stack">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToHashSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="hashSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listTolinkedHashSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="linkedHashSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToTreeSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="treeSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToArrayList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="arrayList">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToLinkedList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="linkedList">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToVector" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="vector">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="arrayToCollection" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="collection">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="list">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="set">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToSortedSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="sortedSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToStack" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="stack">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToHashSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="hashSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayTolinkedHashSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="linkedHashSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToTreeSet" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="treeSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToArrayList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="arrayList">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToLinkedList" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="linkedList">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToVector" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="vector">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+    
+        <bean id="mapToHashMap" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="hashMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mapToTreeMap" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="treeMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mapToHashtable" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="hashtable">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mapToDictionary" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="dictionary">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mapToSortedMap" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="sortedMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mapToConcurrentMap" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="concurrentMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mapToConcurrentHashMap" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="concurrentHashMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+	
+    <bean id="arrayToQueue" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+        <property name="queue">
+            <array>
+                <value>abc</value>
+            </array>
+        </property>
+    </bean>
+    
+    <bean id="propertiesInjection" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
+    	<property name="properties">
+    		<value>
+    		Name= Rex
+			Organization =OSGi Alliance
+			Nationality    :    China
+			Language: \u4e2d\u6587, English
+			Graduated=Shanghai Jiao Tong University
+			#key is the word before the first whitespace - "Major"
+			Major Computer Science
+			!Gender should be a String ""
+			Gender
+			</value>
+    	</property>
+    </bean>
+    
+     
+</blueprint>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd"
+	osgi:default-timeout="10"
+	osgi:default-cardinality="0..X">
+
+
+	<osgi:reference id="refWDefaults" interface="java.io.Serializable"/>		
+	<osgi:set id="colWDefaults" interface="java.io.Serializable"/>
+	
+	<osgi:reference id="refWLocalConfig" interface="java.io.Serializable" timeout="55" cardinality="1..1"/>
+		
+	<osgi:set id="colWLocalConfig" interface="java.io.Serializable" cardinality="1..N"/>
+	
+	<bean id="primToWrapperBeanFactory" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean"/>
+	
+	<bean id="nestedURLValue" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean">
+		<constructor-arg>
+			<value type="java.net.URL">http://www.osgi.org</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="nestedURLValueFactory" factory-method="makeInstance" factory-bean="primToWrapperBeanFactory">
+		<constructor-arg><value type="java.net.URL">http://www.osgi.org</value></constructor-arg>
+	</bean>
+	 
+	<bean id="emptyArrayConstruct" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean">
+		<constructor-arg>
+			<array value-type="java.lang.String"></array>
+		</constructor-arg>
+	</bean>
+	 
+	 
+	<bean id="compNullArray" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean">
+		<constructor-arg type="java.lang.String[]">
+			<array value-type="java.lang.String"><null/></array>
+		</constructor-arg>
+	</bean>	
+</beans>

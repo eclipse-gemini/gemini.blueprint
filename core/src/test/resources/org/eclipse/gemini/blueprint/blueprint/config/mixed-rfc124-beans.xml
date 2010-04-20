@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<description>
+		Mixed namespace configuration using rfc 124 as root
+	</description>
+
+	<bean id="simple-component" class="java.lang.Object" />
+	<beans:bean id="nested-bean" class="java.lang.Object" />
+
+	<bean
+		class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<beans:bean class="java.lang.Object" />
+		</property>
+	</bean>
+	
+	<bean
+		class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<beans:bean class="java.lang.Object" />
+		</property>
+	</bean>
+
+	<bean
+		class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA">
+			<beans:list>
+				<!-- this fails w/ the current schema  
+				<bean class="java.lang.Object" />
+				-->
+				<beans:bean class="java.lang.Object" />
+			</beans:list>
+		</property>
+	</bean>
+	 	
+	<beans:bean id="nan" factory-method="valueOf" class="java.lang.Double">
+       <beans:constructor-arg value="NaN" type="double"/>
+    </beans:bean> 
+	
+ 	
+	<bean id="char" class="java.lang.Character">
+       <argument>
+       	 <value>&#0120;</value>
+       </argument>
+    </bean>
+
+<!--     
+    <bean id="lazyPrototype" class="java.lang.String" scope="prototype" activation="eager"/>
+ -->
+</blueprint>

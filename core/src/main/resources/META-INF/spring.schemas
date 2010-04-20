@@ -1,0 +1,12 @@
+http\://www.springframework.org/schema/osgi/spring-osgi-1.0.xsd=org/eclipse/gemini/blueprint/config/spring-osgi-1.0.xsd
+http\://www.springframework.org/schema/osgi/spring-osgi-1.1.xsd=org/eclipse/gemini/blueprint/config/spring-osgi-1.1.xsd
+http\://www.springframework.org/schema/osgi/spring-osgi-1.2.xsd=org/eclipse/gemini/blueprint/config/spring-osgi-1.2.xsd
+http\://www.springframework.org/schema/osgi/spring-osgi-2.0-m2.xsd=org/sgemini/blueprint/config/spring-osgi-2.0-m2.xsd
+http\://www.springframework.org/schema/osgi/spring-osgi.xsd=org/eclipse/gemini/blueprint/config/spring-osgi-2.0-m2.xsd
+http\://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium-1.0.xsd=org/eclipse/gemini/blueprint/compendium/config/spring-osgi-compendium-1.0.xsd
+http\://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium-1.1.xsd=org/eclipse/gemini/blueprint/compendium/config/spring-osgi-compendium-1.1.xsd
+http\://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium-1.2.xsd=org/eclipse/gemini/blueprint/compendium/config/spring-osgi-compendium-1.2.xsd
+http\://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium-2.0-m2.xsd=org/eclipse/gemini/blueprint/compendium/config/spring-osgi-compendium-2.0-m2.xsd
+http\://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd=org/eclipse/gemini/blueprint/compendium/config/spring-osgi-compendium-2.0-m2.xsd
+# Blueprint namespaces
+http\://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd=org/eclipse/gemini/blueprint/blueprint/config/blueprint-1.0.xsd

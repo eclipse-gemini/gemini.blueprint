@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<description>Components mixed subelements</description>
+
+	<bean id="classname" class="java.lang.String">
+		<argument type="java.lang.String" value="java.io.Serializable" />
+	</bean>
+
+	<bean id="class" factory-method="forName" class="java.lang.Class">
+		<argument value="java.lang.Cloneable" />
+	</bean>
+
+	<reference id="foo" interface="java.io.Serializable">
+		<!--
+			nested interface refs not supported any more <interfaces> <ref
+			component-id="classname" /> <ref component-id="class" />
+			</interfaces>
+		-->
+	</reference>
+
+	<reference id="bar" interface="java.io.Serializable">
+	</reference>
+
+
+</blueprint>

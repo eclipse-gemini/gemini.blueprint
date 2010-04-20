@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    
+    <bean id="a" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+    	<argument ref="b"/>
+    </bean>
+
+	<bean id="b" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument ref="c"/>
+	</bean>
+	
+	<bean id="c" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<property name="propA" ref="b"/>
+	</bean>
+    
+</blueprint>

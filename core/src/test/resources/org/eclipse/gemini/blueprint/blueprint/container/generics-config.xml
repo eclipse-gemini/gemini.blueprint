@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	
+	<description>Generic component instantiation</description>
+
+    <bean id="rawInjection" class="org.eclipse.gemini.blueprint.blueprint.container.GenerifiedBean">
+        <property name="booleanHolder">
+            <bean class="org.eclipse.gemini.blueprint.blueprint.container.GenericHolder">
+                <argument>
+                	<value type="java.lang.Boolean">true</value>
+                </argument>
+            </bean>
+        </property>        
+    </bean>
+    
+ 
+    <bean id="genericConversion" class="org.eclipse.gemini.blueprint.blueprint.container.GenerifiedBean">
+        <property name="pointMap">
+            <list>
+                <value>Start</value>
+                <value>123</value>
+                <value>456</value>
+                <value>Finish</value>
+                <value>0</value>
+                <value>0</value>
+            </list>
+        </property>        
+        <property name="stringHolder">
+            <bean class="org.eclipse.gemini.blueprint.blueprint.container.GenericHolder">
+                <argument>
+                	<value type="java.lang.String">xyz</value>
+                </argument>
+            </bean>
+        </property>
+        <property name="concurrentMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>        
+    </bean>
+    
+    <bean id="concurrentMap" class="org.eclipse.gemini.blueprint.blueprint.container.GenerifiedBean">
+        <property name="concurrentMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>        
+    </bean>
+   	
+</blueprint>

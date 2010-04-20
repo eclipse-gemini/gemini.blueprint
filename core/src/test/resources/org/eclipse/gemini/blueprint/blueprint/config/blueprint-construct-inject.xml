@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-activation="lazy">
+
+	<bean id="constructorAssign" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument value="XYZ"/>
+	</bean>
+
+	<!-- Wrapped char array -->
+	<bean id="compWrappedCharArray" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument>
+			<array value-type="java.lang.Character">
+				<value>a</value>
+				<value>b</value>
+			</array>
+		</argument>
+	</bean>
+
+	<!-- Primitive short array -->
+	<bean id="compPrimShortArray" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument>
+			<array value-type="short">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</argument>
+	</bean>
+
+	<!-- Date array -->
+	<bean id="compDateArray" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument>
+			<array value-type="java.util.Date">
+				<value>19 Feb 2009</value>
+				<value>20 Feb 2009</value>
+			</array>
+		</argument>
+	</bean>
+
+	<!-- URL array -->
+	<bean id="compURLArray" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument>
+			<array value-type="java.net.URL">
+				<value>http://www.osgi.org</value>
+				<value>http://www.gmail.com</value>
+			</array>
+		</argument>
+	</bean>
+
+	<!-- Class array -->
+	<bean id="compClassArray" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument>
+			<array value-type="java.lang.Class">
+				<value>java.lang.String</value>
+				<value>java.lang.Boolean</value>
+			</array>
+		</argument>
+	</bean>
+
+	<!-- Locale array -->
+	<bean id="compLocaleArray" class="org.eclipse.gemini.blueprint.blueprint.TestComponent">
+		<argument>
+			<array value-type="java.util.Locale">
+				<value>en_US</value>
+				<value>zh_CN</value>
+			</array>
+		</argument>
+	</bean>
+
+	<bean id="primToWrapperArg" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean" activation="lazy">
+		<argument>
+			<value type="java.lang.Boolean">true</value>
+		</argument>
+	</bean>
+
+	<bean id="primToWrapperBeanFactory" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean"/>
+
+    <bean id="primToWrapperFactory" factory-ref="primToWrapperBeanFactory" factory-method="makeInstance" activation="lazy">
+       <argument>
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+    </bean>
+
+	<bean id="collectionConflict" class="org.eclipse.gemini.blueprint.blueprint.AssignBean" activation="lazy">
+		<argument>
+           <list>
+               <value>abc</value>
+               <value>def</value>
+           </list>
+		</argument>
+	</bean>
+
+	<bean id="nestedURLValue" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean">
+		<argument><value type="java.net.URL">http://www.osgi.org</value></argument>
+	</bean>
+	
+	<bean id="nestedURLValueFactory" factory-method="makeInstance" factory-ref="primToWrapperBeanFactory">
+		<argument><value type="java.net.URL">http://www.osgi.org</value></argument>
+	</bean>
+	 
+	<bean id="emptyArrayConstruct" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean" activation="lazy">
+		<argument>
+			<array value-type="java.lang.String"></array>
+		</argument>
+	</bean>
+	 
+	 
+	<bean id="compNullArray" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean">
+		<argument type="java.lang.String[]">
+			<array value-type="java.lang.String"><null/></array>
+		</argument>
+	</bean>
+	
+	<bean id="emptyArrayConstru" class="org.eclipse.gemini.blueprint.blueprint.ConstructorBean">
+		<argument type="int[]">
+			<array value-type="int">
+				<value>1</value>
+			</array>
+		</argument>
+	</bean>
+	
+	<!--  more injection cases -->
+	
+	<bean id="compProperties" class="org.eclipse.gemini.blueprint.blueprint.ConstructorInjectedBean">
+		<argument value="Name=John" type="java.util.Properties"/>
+	</bean>
+</blueprint>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd		
+		http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<!-- osgix:managed-properties -->
+	<bean id="simple" class="org.eclipse.gemini.blueprint.compendium.OneSetter">
+		<osgix:managed-properties persistent-id="simple"/>
+		<property name="clz" value="java.lang.Object"/>
+	</bean>
+	
+	<bean class="org.eclipse.gemini.blueprint.compendium.OneSetter">
+		<osgix:managed-properties persistent-id="non-name"/>
+	</bean>
+	
+	<bean id="simpleWUpdate" class="org.eclipse.gemini.blueprint.compendium.OneSetter">
+		<osgix:managed-properties persistent-id="simple" autowire-on-update="true"/>
+	</bean>
+	
+	<bean id="multipleWUpdate" class="org.eclipse.gemini.blueprint.compendium.MultipleSetters">
+		<osgix:managed-properties persistent-id="multiple" autowire-on-update="true"/>
+		<property name="integer" value="23"/>
+	</bean>
+
+	<bean id="beanManaged" class="org.eclipse.gemini.blueprint.compendium.BeanManaged">
+		<osgix:managed-properties persistent-id="bean-managed" update-method="update"/>
+		<property name="integer" value="23"/>
+	</bean>
+	
+	<bean id="mixedManaged" class="org.eclipse.gemini.blueprint.compendium.BeanManaged">
+		<osgix:managed-properties persistent-id="bean-managed" autowire-on-update="true" update-method="update"/>
+		<property name="integer" value="23"/>
+	</bean>
+	
+</beans>

@@ -1,0 +1,8 @@
+digraph G{
+    A;
+    B -> C;
+    D -> E;
+    E -> D;
+}
+
+// order is C, A, B, E, D

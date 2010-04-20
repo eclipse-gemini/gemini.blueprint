@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<description>Importer collections configuration</description>
+
+	<!-- collections -->
+	<bean id="comparator" class="org.eclipse.gemini.blueprint.blueprint.DummyComparator" />
+
+	<bean id="compa" class="org.eclipse.gemini.blueprint.blueprint.DummyComparator" />
+
+	<reference-list id="simpleList" interface="java.lang.Cloneable" />
+
+	<bean id="listener" class="org.eclipse.gemini.blueprint.blueprint.ImporterListener" />
+
+	<reference-list id="listeners" interface="java.io.Serializable">
+		<reference-listener bind-method="bindM"
+			unbind-method="unbindM" ref="listener" />
+
+		<reference-listener bind-method="up" unbind-method="down">
+			<bean class="org.eclipse.gemini.blueprint.blueprint.ImporterListener" />
+		</reference-listener>
+		<reference-listener bind-method="refBind"
+			unbind-method="refUnbind">
+			<ref component-id="listener" />
+		</reference-listener>
+	</reference-list>
+
+</blueprint>

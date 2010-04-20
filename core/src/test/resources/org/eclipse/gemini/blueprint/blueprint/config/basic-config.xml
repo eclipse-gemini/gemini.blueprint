@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	
+	<description>Components just with attributes</description>
+
+	<bean id="simple" class="java.lang.Object"/>
+	
+	<bean id="depends-on" class="java.lang.Object" depends-on="simple"/>
+	
+	<bean id="destroy-method" class="java.util.Properties" destroy-method="clear"/>
+
+	<bean id="lazy-init" class="java.lang.Object" activation="lazy"/>
+	
+	<bean id="factory-method" class="java.lang.System" factory-method="currentTimeMillis"/>
+	
+	<bean id="thread" class="java.lang.Thread"/>
+	
+	<bean id="factory-component" factory-ref="thread" factory-method="getName"/>
+	
+	<!-- 
+	<bean id="self-reference" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" scope="prototype">
+		<property name="propA" ref="self-reference"/>
+	</bean>
+	 -->
+</blueprint>

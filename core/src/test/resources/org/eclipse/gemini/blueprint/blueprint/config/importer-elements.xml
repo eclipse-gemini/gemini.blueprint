@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<description>Importer configuration</description>
+
+	<reference id="simple" interface="java.lang.Cloneable" />
+
+	<bean id="listener" class="org.eclipse.gemini.blueprint.blueprint.ImporterListener" />
+
+	<reference id="options" interface="java.io.Serializable"
+		availability="optional" component-name="foo" filter="(name=foo)">
+		<reference-listener bind-method="bind" unbind-method="unbind" ref="listener" />
+	</reference>
+
+	<reference id="multipleInterfaces" interface="java.lang.Cloneable"/>
+
+	<reference id="multipleListeners" interface="java.lang.Cloneable">
+		<reference-listener bind-method="bindM" unbind-method="unbindM" ref="listener" />
+
+		<reference-listener bind-method="up" unbind-method="down">
+			<bean class="org.eclipse.gemini.blueprint.blueprint.ImporterListener" />
+		</reference-listener>
+		<reference-listener bind-method="refBind" unbind-method="refUnbind">
+			<ref component-id="listener" />
+		</reference-listener>
+	</reference>
+
+	<reference id="timeout" interface="java.lang.Cloneable"
+		timeout="1234" />
+		
+    
+    <!-- promoted beans should be hidden to the Blueprint API -->
+    <!--  the nested property should be reflected as a nested component rather then a reference to a top level bean -->
+    <bean id="nestedReference" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" init-method="init">
+       <property name="propA">
+           <reference interface="java.io.Serializable" timeout="1000"/>
+       </property>
+    </bean>
+    
+     <bean id="nestedCollectionReference" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" init-method="init">
+       <property name="propA">
+           <reference-list interface="java.io.Serializable" member-type="service-reference"/>
+       </property>
+    </bean>   		
+       		
+</blueprint>

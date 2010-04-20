@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bp:blueprint xmlns="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		http://www.osgi.org/xmlns/blueprint-cm/v1.0.0 http://www.osgi.org/xmlns/blueprint-cm/v1.0.0/blueprint-cm.xsd">
+
+	<!-- 
+
+	<cm-properties id="named" persistent-id="foo.bar" />
+
+	<cm-properties id="noLocalOverride" persistent-id="noLocalOverride"/>
+		<prop key="foo">bar</prop>
+		<prop key="kry">pton</prop>
+	</cm-properties>
+		 -->
+	<!-- 
+
+	<cm-properties id="localOverride" persistent-id="localOverride"/>
+		local-override="true">
+		<prop key="foo">bar</prop>
+		<prop key="kry">pton</prop>
+	</cm-properties>
+    -->
+    
+	<bp:bean id="props" class="java.util.Properties" />
+
+	<!-- simple -->
+	<managed-service-factory id="simple"
+		factory-pid="my.pid" interface="java.lang.Object" auto-export="all-classes">
+		<bp:bean class="java.lang.Object" />
+	</managed-service-factory>
+
+	<!-- ccl specified -->
+	<managed-service-factory id="ccl" factory-pid="my.pid">
+		<interfaces>
+			<value>java.util.Map</value>
+			<value>java.io.Serializable</value>
+		</interfaces>
+		<bp:bean class="java.util.HashMap" />
+	</managed-service-factory>
+
+	<!-- update strategy specified -->
+	<managed-service-factory id="container-update"
+		factory-pid="my.pid" update-strategy="container-managed" auto-export="all-classes">
+		<bp:bean class="java.lang.Object" />
+	</managed-service-factory>
+
+	<managed-service-factory id="bp:bean-update"
+		factory-pid="my.pid" update-strategy="bp:bean-managed"
+		update-method="update" auto-export="all-classes">
+		<bp:bean class="java.lang.Object" />
+	</managed-service-factory>
+
+	<bp:bean class="org.eclipse.gemini.blueprint.compendium.OneSetter">
+		<managed-properties persistent-id="non-name" />
+	</bp:bean>
+
+	<bp:bean id="simpleWUpdate" class="org.eclipse.gemini.blueprint.compendium.OneSetter">
+		<managed-properties persistent-id="simple"
+			update-strategy="container-managed" />
+	</bp:bean>
+
+	<bp:bean id="multipleWUpdate"
+		class="org.eclipse.gemini.blueprint.compendium.MultipleSetters">
+		<managed-properties persistent-id="multiple"
+			update-strategy="container-managed" />
+		<property name="integer" value="23" />
+	</bp:bean>
+
+	<bp:bean id="bp:beanManaged"
+		class="org.eclipse.gemini.blueprint.compendium.BeanManaged">
+		<managed-properties persistent-id="bp:bean-managed"
+			update-strategy="bp:bean-managed" update-method="update" />
+		<property name="integer" value="23" />
+	</bp:bean>
+</bp:blueprint>

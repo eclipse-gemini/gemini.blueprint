@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <!-- this is lazily initialized, but since the reference depends on it, it should still get created -->
+    <bean id="dependsleaf1" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" init-method="init" activation="lazy"/>
+
+    <bean id="dependsleaf2" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" init-method="init" activation="lazy"/>
+
+    <reference-list id="lazyCollection" interface="java.awt.Shape" availability="optional" 
+    	depends-on="dependsleaf1 dependsleaf2" activation="lazy">
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="listener"/>
+    </reference-list>
+    
+    <bean id="listener" class="org.eclipse.gemini.blueprint.blueprint.ImporterListener"/>
+    
+</blueprint>

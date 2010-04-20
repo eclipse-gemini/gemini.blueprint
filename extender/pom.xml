@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project>
+	<parent>
+		<artifactId>gemini-blueprint</artifactId>
+		<groupId>org.eclipse.gemini.blueprint</groupId>
+		<version>1.0.0.M1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipse.gemini.blueprint</groupId>
+	<artifactId>gemini-blueprint-extender</artifactId>
+	<packaging>jar</packaging>
+	<name>Gemini Blueprint Extender</name>
+	<url>http://www.eclipse.org/gemini/blueprint/</url>
+
+  <description>
+  Spring/OSGi extender. Listens for and bootstraps Spring-powered OSGi bundles.
+  </description>
+  
+  <properties>
+    <javadoc.loc>${basedir}/../docs/src/javadoc</javadoc.loc>
+	<spring.osgi.symbolic.name>${symName.prefix}.extender</spring.osgi.symbolic.name>
+  </properties>
+  
+    
+  <dependencies>
+      <dependency>
+          <groupId>org.eclipse.gemini.blueprint</groupId>
+          <artifactId>gemini-blueprint-mock</artifactId>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.gemini.blueprint</groupId>
+          <artifactId>gemini-blueprint-core</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.gemini.blueprint</groupId>
+          <artifactId>gemini-blueprint-io</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.aopalliance</groupId>
+          <artifactId>com.springsource.org.aopalliance</artifactId>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>org.osgi.compendium</artifactId>
+          <version>1.0.1</version>
+          <scope>provided</scope>
+     </dependency>         
+  </dependencies>
+
+</project>

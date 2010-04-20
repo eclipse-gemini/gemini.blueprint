@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	default-availability="optional" default-timeout="300" default-activation="lazy">
+
+   <bean id="nested" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" init-method="init">
+       <property name="propA">
+           <reference interface="java.awt.Shape" availability="mandatory"/>
+       </property>
+       <property name="propB">
+           <reference-list interface="java.awt.Shape" member-type="service-reference">
+               <description>Testing descriptions also</description>
+           </reference-list>
+       </property>
+   </bean>
+   
+   <bean id="dependsleaf1" class="org.eclipse.gemini.blueprint.blueprint.InitializedBean" init-method="init">
+   		<argument>
+   			<value>dependsleaf1</value>
+   		</argument>
+   </bean>
+   
+   <bean id="dependsleaf2" class="org.eclipse.gemini.blueprint.blueprint.InitializedBean" init-method="init" 
+   			depends-on="dependsleaf1">
+   		<argument>
+   			<value>dependsleaf2</value>
+   		</argument>
+   </bean>
+
+   <bean id="exporterListener" class="org.eclipse.gemini.blueprint.blueprint.ExporterListener"/>
+    
+   <!-- simple export using a reference and just one interface. -->
+   <service id="lazy-service" ref="nested" interface="java.io.Serializable"
+       depends-on="dependsleaf1 dependsleaf2">
+       <service-properties>
+           <entry key="service.property.integer">
+               <ref component-id="dependsleaf1"/>
+           </entry>
+       </service-properties>
+       <registration-listener ref="exporterListener"
+           registration-method="up"
+           unregistration-method="down"/>
+   </service>
+   
+   <reference id="lazy-ref" interface="java.io.Serializable" availability="optional"/>
+   
+   <reference-list id="lazy-col" interface="java.io.Serializable" availability="optional"/>
+   
+   
+   <bean id="overriden-activation" class="org.eclipse.gemini.blueprint.blueprint.InitializedBean" init-method="init" activation="eager">
+   		<argument>
+   			<value>overridden-activation</value>
+   		</argument>
+   </bean>
+ 	
+ 	 
+   <service id="overriden-service" ref="overriden-activation" auto-export="all-classes" activation="eager"/>
+    
+ 	
+   <!-- 
+   <bean id="exception" class="org.eclipse.gemini.blueprint.blueprint.InitializedBean" scope="prototype" destroy-method="foo"/>
+     -->
+</blueprint>
