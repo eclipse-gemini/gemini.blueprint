@@ -637,10 +637,10 @@ Ignored-Existing-Headers:
               <!-- exclusions -->
               <excludes>
                 <!-- integration tests -->
-                <exclude>org/springframework/osgi/iandt/**</exclude>
-                <exclude>org/springframework/osgi/test/parsing/**</exclude>
+                <exclude>org/eclipse/gemini/blueprint/iandt/**</exclude>
+                <exclude>org/eclipse/gemini/blueprint/test/parsing/**</exclude>
                 <!-- addressed in 1.2 -->
-                <exclude>org/springframework/osgi/compendium/internal/**</exclude>
+                <exclude>org/eclipse/gemini/blueprint/compendium/internal/**</exclude>
               </excludes>
           </configuration>
       </plugin>

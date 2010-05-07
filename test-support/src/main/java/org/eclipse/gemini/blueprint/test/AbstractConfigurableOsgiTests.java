@@ -61,6 +61,12 @@ public abstract class AbstractConfigurableOsgiTests extends AbstractOsgiTests {
 	public static final String OSGI_FRAMEWORK_SELECTOR = "org.eclipse.gemini.blueprint.test.framework";
 
 	/**
+	 * Spring DM system property for selecting the appropriate OSGi implementation (used as fallback).
+	 */
+	public static final String SPRING_DM_OSGI_FRAMEWORK_SELECTOR = "org.springframework.osgi.test.framework";
+	
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * <p/>This implementation determines and creates the OSGi platform used by
@@ -117,6 +123,7 @@ public abstract class AbstractConfigurableOsgiTests extends AbstractOsgiTests {
 	/**
 	 * Indicates what OSGi platform should be used by the test suite. By
 	 * default, {@link #OSGI_FRAMEWORK_SELECTOR} system property is used.
+	 * If not present, {@link #SPRING_DM_OSGI_FRAMEWORK_SELECTOR} system property is checked. 
 	 * Subclasses can override this and provide directly the OSGi platform name.
 	 * By default, the platform name holds the fully qualified name of the OSGi
 	 * platform class.
@@ -129,7 +136,14 @@ public abstract class AbstractConfigurableOsgiTests extends AbstractOsgiTests {
 		if (logger.isTraceEnabled())
 			logger.trace("System property [" + OSGI_FRAMEWORK_SELECTOR + "] has value=" + systemProperty);
 
-		return (systemProperty == null ? Platforms.EQUINOX : systemProperty);
+		if (!StringUtils.hasText(systemProperty)) {
+			systemProperty = System.getProperty(SPRING_DM_OSGI_FRAMEWORK_SELECTOR);
+		}
+		
+		if (logger.isTraceEnabled())
+			logger.trace("System property [" + OSGI_FRAMEWORK_SELECTOR + "] has value=" + systemProperty);
+
+		return (StringUtils.hasText(systemProperty) ? Platforms.EQUINOX : systemProperty);
 	}
 
 	/**
