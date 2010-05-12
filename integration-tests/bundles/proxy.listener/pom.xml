@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <version>1.0.0.M1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+    <artifactId>proxy.listener</artifactId>
+    <packaging>jar</packaging>
+    <name>Gemini Blueprint Test Bundle: Just a listener exported as a service</name>
+    <description>An OSGi bundle that exports a service listener</description>
+    <url>http://www.eclipse.org/gemini/blueprint/</url>
+
+</project>
+

@@ -1,0 +1,11 @@
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.dependencies.factory
+Bundle-Name: Simple-Service created by factory
+Bundle-Vendor: Spring Framework
+Spring-Context: *;
+Import-Package: org.springframework.beans.factory
+Export-Package: org.eclipse.gemini.blueprint.iandt.simpleservice, org.eclipse.gemini.blueprint.iandt.simpleservice2,
+  org.eclipse.gemini.blueprint.iandt.simpleservice2.impl
+Bundle-ClassPath: .,
+ target/classes/

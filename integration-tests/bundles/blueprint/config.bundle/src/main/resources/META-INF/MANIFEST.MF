@@ -1,0 +1,6 @@
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.springframework.osgi.rfc124.iandt.config.bundle
+Bundle-Name: Config-Bundle
+Bundle-Vendor: SpringSource
+Blueprint-Bundle: config/

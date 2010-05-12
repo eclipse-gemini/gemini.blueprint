@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+	<bean id="map" class="java.util.HashMap" />
+
+	<osgi:service id="export1" auto-export="interfaces" ref="map">
+		<osgi:service-properties>
+			<entry key="use" value="case"/>
+		</osgi:service-properties>
+	</osgi:service>
+	<osgi:service id="export2" auto-export="interfaces" ref="map" />
+
+
+	<osgi:list id="list" interface="java.io.Serializable" cardinality="0..N">
+		<osgi:reference-listener bind-method="bind" unbind-method="unbind">
+			<bean class="org.eclipse.gemini.blueprint.iandt.exportimport.Listener" />
+		</osgi:reference-listener>
+	</osgi:list>
+	
+	<osgi:reference id="na" interface="java.util.Queue"/>
+	
+	<osgi:service id="export-na" auto-export="interfaces" ref="map" depends-on="na">
+		<osgi:registration-listener 
+			registration-method="bind" 
+			unregistration-method="unbind">
+			<bean class="org.eclipse.gemini.blueprint.iandt.exportimport.Listener" />
+		</osgi:registration-listener>
+		<osgi:service-properties>
+			<entry key="use" value="case"/>
+		</osgi:service-properties>
+	</osgi:service>
+	
+</beans>

@@ -1,0 +1,7 @@
+Bundle-Name: io-fragment-1
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.io.fragment.1
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: org.eclipse.gemini.blueprint.iandt.io.functional.fragments
+Fragment1-Header: fragment1
+Fragment-Header: fragment1

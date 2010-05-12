@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-Name: Integration test for OSGi bundle scoping
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.scope.integration
+Bundle-Vendor: Spring Framework
+Bundle-Activator: org.eclipse.gemini.blueprint.test.JUnitTestActivator
+Import-Package: junit.framework,
+  org.osgi.framework,
+  org.apache.commons.logging,
+  org.springframework.util,
+  org.eclipse.gemini.blueprint.service,
+  org.eclipse.gemini.blueprint.util,
+  org.eclipse.gemini.blueprint.test,
+  org.eclipse.gemini.blueprint.test.platform,
+  org.eclipse.gemini.blueprint.iandt.scope.common,
+  org.eclipse.gemini.blueprint.iandt.scope.a,
+  org.eclipse.gemini.blueprint.iandt.scope.b,
+  org.eclipse.gemini.blueprint.test.provisioning,
+  org.springframework.context,
+  org.springframework.test
+ 

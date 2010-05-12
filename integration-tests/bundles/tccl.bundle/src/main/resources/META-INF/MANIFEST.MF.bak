@@ -1,0 +1,5 @@
+Bundle-Name: org-springframework-osgi-iandt-tccl
+Bundle-SymbolicName: org.springframework.osgi.iandt.tccl
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Import-Package: org.springframework.osgi.iandt.tccl

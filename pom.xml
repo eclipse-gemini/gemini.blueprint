@@ -22,12 +22,12 @@
     <spring.maven.artifact.version>3.0.2.RELEASE</spring.maven.artifact.version>
     <spring.base.version>3.0.0</spring.base.version>
     
-    <!--- Spring OSGi packages imported version (respect the OSGi naming pattern)-->
-    <spring.osgi.import.version>1.0.0.M1</spring.osgi.import.version>
+    <!--- Gemini Blueprint packages imported version (respect the OSGi naming pattern)-->
+    <gemini.blueprint.import.version>1.0.0.M1</gemini.blueprint.import.version>
     
-    <!--- Spring OSGi packages exported version -->
-    <spring.osgi.export.version>1.0.0.M1</spring.osgi.export.version>
-    <spring.osgi.bundle.version>1.0.0.M1</spring.osgi.bundle.version>
+    <!--- Gemini Blueprint packages exported version -->
+    <gemini.blueprint.export.version>1.0.0.M1</gemini.blueprint.export.version>
+    <gemini.blueprint.bundle.version>1.0.0.M1</gemini.blueprint.bundle.version>
 
     <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
     <spring.osgi.symbolic.name>${groupId}.${artifactId}</spring.osgi.symbolic.name>
@@ -60,8 +60,8 @@
    <!-- common version ranges -->
    <spring.version.range.nq>[${spring.base.version},4.0)</spring.version.range.nq>
    <spring.version.range>"${spring.version.range.nq}"</spring.version.range>
-   <spring.osgi.version.range.nq>[${spring.osgi.import.version},${spring.osgi.import.version}]</spring.osgi.version.range.nq>
-   <spring.osgi.version.range>"${spring.osgi.version.range.nq}"</spring.osgi.version.range>
+   <gemini.blueprint.version.range.nq>[${gemini.blueprint.import.version},${gemini.blueprint.import.version}]</gemini.blueprint.version.range.nq>
+   <gemini.blueprint.version.range>"${gemini.blueprint.version.range.nq}"</gemini.blueprint.version.range>
    <logging.version.range>"[1.0,2.0)"</logging.version.range>
    <!-- jarjar -->
    <jarjar.keep></jarjar.keep>
@@ -543,7 +543,7 @@
         <configuration>
            <manifestTemplatePath>${basedir}/template.mf</manifestTemplatePath>
            <manifestHeaders><![CDATA[Bundle-Name: ${artifactId}
-Bundle-Version: ${spring.osgi.bundle.version}
+Bundle-Version: ${gemini.blueprint.bundle.version}
 Bundle-SymbolicName: ${spring.osgi.symbolic.name}
 Bundle-Vendor: Eclipse Foundation
 Bundle-DocURL: http://www.eclipse.org/gemini/blueprint/
@@ -664,7 +664,7 @@ Ignored-Existing-Headers:
         </dependency>
       </dependencies>
       <properties>
-        <osgi.test.platform>org.springframework.osgi.test.platform.EquinoxPlatform</osgi.test.platform>
+        <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.EquinoxPlatform</osgi.test.platform>
         <log4j.ignoreTCL>true</log4j.ignoreTCL>
       </properties>
     </profile>
@@ -681,7 +681,7 @@ Ignored-Existing-Headers:
         </dependency>
       </dependencies>
       <properties>
-        <osgi.test.platform>org.springframework.osgi.test.platform.KnopflerfishPlatform</osgi.test.platform>
+        <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.KnopflerfishPlatform</osgi.test.platform>
         <log4j.ignoreTCL>true</log4j.ignoreTCL>
         <org.knopflerfish.osgi.setcontextclassloader>true</org.knopflerfish.osgi.setcontextclassloader>
       </properties>
@@ -725,7 +725,7 @@ Ignored-Existing-Headers:
         </dependency>
       </dependencies>
       <properties>
-        <osgi.test.platform>org.springframework.osgi.test.platform.FelixPlatform</osgi.test.platform>
+        <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.FelixPlatform</osgi.test.platform>
         <log4j.ignoreTCL>true</log4j.ignoreTCL>
       </properties>
     </profile>

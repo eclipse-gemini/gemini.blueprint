@@ -141,9 +141,9 @@ public abstract class AbstractConfigurableOsgiTests extends AbstractOsgiTests {
 		}
 		
 		if (logger.isTraceEnabled())
-			logger.trace("System property [" + OSGI_FRAMEWORK_SELECTOR + "] has value=" + systemProperty);
+			logger.trace("System property [" + SPRING_DM_OSGI_FRAMEWORK_SELECTOR + "] has value=" + systemProperty);
 
-		return (StringUtils.hasText(systemProperty) ? Platforms.EQUINOX : systemProperty);
+		return (!StringUtils.hasText(systemProperty) ? Platforms.EQUINOX : systemProperty);
 	}
 
 	/**

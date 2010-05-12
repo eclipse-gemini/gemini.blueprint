@@ -5,7 +5,7 @@ Import-Template:
  org.osgi.service.cm;version=1.2;resolution:=optional,
  org.osgi.service.packageadmin;version=1.2,
  org.apache.commons.logging.*;version=${logging.version.range},
- org.springframework.osgi.*;version=${spring.osgi.version.range},
+ org.eclipse.gemini.blueprint.*;version=${gemini.blueprint.version.range},
  org.springframework.*;version=${spring.version.range},
  org.objectweb.*;version="[2,3)";resolution:=optional,
  org.eclipse.*;resolution:=optional,
@@ -13,7 +13,7 @@ Import-Template:
  org.apache.felix.*;resolution:=optional,
  junit.*;version=3.8,
  *;resolution:=optional
-Bundle-Activator: org.springframework.osgi.test.internal.support.Activator
+Bundle-Activator: org.eclipse.gemini.blueprint.test.internal.support.Activator
 Unversioned-Imports: 
  *
  

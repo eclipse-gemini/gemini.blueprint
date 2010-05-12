@@ -1,0 +1,9 @@
+Bundle-Name: namespace-test
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.ns.own.provider
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
+Import-Package: org.springframework.beans.factory.config,
+ org.springframework.beans.factory.xml,
+ org.springframework.beans.factory.support,
+ org.w3c.dom

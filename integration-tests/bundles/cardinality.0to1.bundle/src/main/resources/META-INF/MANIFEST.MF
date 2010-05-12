@@ -1,0 +1,9 @@
+Bundle-Version: 1.0
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.cardinality.0to1
+Bundle-Name: cardinality_0__1
+Bundle-Vendor: Spring Framework
+Bundle-ManifestVersion: 2
+Import-Package: org.eclipse.gemini.blueprint.iandt.simpleservice2
+Export-Package: org.eclipse.gemini.blueprint.iandt.cardinality0to1.test
+Bundle-ClassPath: .,
+ target/classes/

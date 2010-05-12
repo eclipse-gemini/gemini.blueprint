@@ -78,7 +78,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	}
 
 
-	private static final String SPRING_OSGI_VERSION_PROP_KEY = "ignore.spring.osgi.version";
+	private static final String GEMINI_BLUEPRINT_VERSION_PROP_KEY = "ignore.gemini.blueprint.version";
 
 	private static final String SPRING_VERSION_PROP_KEY = "ignore.spring.version";
 
@@ -97,7 +97,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	 */
 	protected String getSpringDMVersion() {
 		if (springOsgiVersion == null) {
-			springOsgiVersion = readProperty(SPRING_OSGI_VERSION_PROP_KEY);
+			springOsgiVersion = readProperty(GEMINI_BLUEPRINT_VERSION_PROP_KEY);
 		}
 
 		return springOsgiVersion;
@@ -180,7 +180,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 			logger.trace("Loaded properties " + props);
 
 		// pass properties to test instance running inside OSGi space
-		System.getProperties().put(SPRING_OSGI_VERSION_PROP_KEY, props.get(SPRING_OSGI_VERSION_PROP_KEY));
+		System.getProperties().put(GEMINI_BLUEPRINT_VERSION_PROP_KEY, props.get(GEMINI_BLUEPRINT_VERSION_PROP_KEY));
 		System.getProperties().put(SPRING_VERSION_PROP_KEY, props.get(SPRING_VERSION_PROP_KEY));
 
 		Properties excluded = PropertiesUtil.filterKeysStartingWith(props, IGNORE);
@@ -204,7 +204,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 
 		String[] bundles = (String[]) props.keySet().toArray(new String[props.size()]);
 		// sort the array (as the Properties file doesn't respect the order)
-		bundles = StringUtils.sortStringArray(bundles);
+		//bundles = StringUtils.sortStringArray(bundles);
 
 		if (logger.isDebugEnabled())
 			logger.debug("Default framework bundles :" + ObjectUtils.nullSafeToString(bundles));

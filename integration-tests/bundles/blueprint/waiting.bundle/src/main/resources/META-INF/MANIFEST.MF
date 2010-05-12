@@ -1,0 +1,5 @@
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.springframework.osgi.rfc124.iandt.waiting.bundle;blueprint.timeout:=1000
+Bundle-Name: Waiting Bundle
+Bundle-Vendor: SpringSource

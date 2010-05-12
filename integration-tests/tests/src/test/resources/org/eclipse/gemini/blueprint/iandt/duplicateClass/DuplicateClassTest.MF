@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Name: Functional testing of Spring dependencies
+Bundle-SymbolicName: org.springframework.osgi.iandt.duplicateClass.functional
+Bundle-Vendor: Spring Framework
+Bundle-Activator: org.eclipse.gemini.blueprint.test.JUnitTestActivator
+DynamicImport-Package: org.eclipse.gemini.blueprint.iandt.simpleservice,
+ org.eclipse.gemini.blueprint.iandt.simpleservice.impl    
+Import-Package: junit.framework,
+ org.osgi.framework,
+ org.springframework.core.io,
+ org.eclipse.gemini.blueprint.util,
+ org.eclipse.gemini.blueprint.test,
+ org.eclipse.gemini.blueprint.test.platform,
+ org.eclipse.gemini.blueprint.test.provisioning,
+ org.springframework.test,
+ org.apache.commons.logging

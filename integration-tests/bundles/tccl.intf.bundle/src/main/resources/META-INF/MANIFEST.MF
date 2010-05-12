@@ -1,0 +1,5 @@
+Bundle-Name: org-springframework-osgi-iandt-tccl-intf
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.tccl.intf
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Export-Package: org.eclipse.gemini.blueprint.iandt.tccl

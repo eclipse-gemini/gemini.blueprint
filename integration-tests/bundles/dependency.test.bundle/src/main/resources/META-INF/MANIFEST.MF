@@ -1,0 +1,9 @@
+Bundle-Name: org-springframework-osgi-iandt-dependencies
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.dependencies
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-ClassPath: .
+Spring-Context: *; eagerly-init-importers:=true
+Import-Package: org.eclipse.gemini.blueprint.iandt.simpleservice,
+  org.eclipse.gemini.blueprint.iandt.simpleservice2
+Export-Package: org.eclipse.gemini.blueprint.iandt.dependencies

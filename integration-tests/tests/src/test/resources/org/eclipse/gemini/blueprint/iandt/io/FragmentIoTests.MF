@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-Name: Functional testing of IO Blueprint dependencies
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.io.functional.fragments
+Bundle-Vendor: Spring Framework
+Bundle-Activator: org.eclipse.gemini.blueprint.test.JUnitTestActivator
+Import-Package: junit.framework,
+ org.osgi.framework,
+ org.springframework.core.io,
+ org.springframework.core.io.support,
+ org.eclipse.gemini.blueprint.io,
+ org.springframework.util,
+ org.eclipse.gemini.blueprint.util,
+ org.eclipse.gemini.blueprint.test,
+ org.eclipse.gemini.blueprint.test.platform,
+ org.eclipse.gemini.blueprint.test.provisioning,
+ org.springframework.test,
+ org.apache.commons.logging

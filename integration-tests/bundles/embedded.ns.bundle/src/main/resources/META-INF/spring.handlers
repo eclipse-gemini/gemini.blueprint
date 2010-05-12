@@ -1,0 +1,1 @@
+http\://www.springframework.org/schema/osgi/test=org.eclipse.gemini.blueprint.iandt.namespace.config.DummyNamespaceHandler

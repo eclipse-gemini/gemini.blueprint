@@ -1,0 +1,9 @@
+Bundle-Name: org-eclipse-gemini-blueprint-iandt-lifecycle
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.lifecycle
+Bundle-Version: 2.0
+Bundle-ManifestVersion: 2
+Bundle-ClassPath: . 
+Import-Package: org.springframework.beans.factory,
+ org.eclipse.gemini.blueprint.context,
+ org.osgi.framework
+  

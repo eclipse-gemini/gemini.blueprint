@@ -1,0 +1,16 @@
+<?xml version="1.0"?><project>
+  <parent>
+    <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
+    <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+    <version>1.0.0.M1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+  <artifactId>trivial</artifactId>
+  <packaging>jar</packaging>
+  <name>Gemini Blueprint Test Bundle: Trivial OSGi bundle</name>
+  <description>An OSGi bundle that contains and exports just one class
+  </description>
+  <url>http://www.eclipse.org/gemini/blueprint/</url>
+  
+</project>

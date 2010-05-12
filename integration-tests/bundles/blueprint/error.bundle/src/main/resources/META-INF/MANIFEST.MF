@@ -1,0 +1,5 @@
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.springframework.osgi.rfc124.iandt.error.bundle
+Bundle-Name: Error Bundle
+Bundle-Vendor: SpringSource

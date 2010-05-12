@@ -1,0 +1,8 @@
+Bundle-Name: org.eclipse.gemini.blueprint.iandt-scope-b
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.scope.b
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Import-Package: org.eclipse.gemini.blueprint.iandt.scope.common
+Export-Package: org.eclipse.gemini.blueprint.iandt.scope.b
+Bundle-ClassPath: .,
+ target/classes/

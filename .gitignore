@@ -1,4 +1,5 @@
 .svn
 target
 *.log
+*.bak*
 eclipse_config
