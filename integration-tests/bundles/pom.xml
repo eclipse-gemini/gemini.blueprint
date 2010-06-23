@@ -75,9 +75,8 @@
     <module>lazy.basic</module>
     <module>lazy.export.no.import</module>
     <module>lazy.export.import</module>
-    <!-- blueprint bundles 
+    <!-- blueprint bundles  -->
     <module>blueprint</module>
-    -->
   </modules>
 
  <build>

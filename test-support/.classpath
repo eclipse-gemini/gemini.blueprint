@@ -4,12 +4,12 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/resources"/>
-	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.core/3.0.0.RELEASE/org.springframework.core-3.0.0.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.core/3.0.0.RELEASE/org.springframework.core-3.0.0.RELEASE-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.core/3.0.3.RELEASE/org.springframework.core-3.0.3.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.core/3.0.3.RELEASE/org.springframework.core-3.0.3.RELEASE-sources.jar"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar" sourcepath="/JUNIT_SRC"/>
 	<classpathentry kind="var" path="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.test/3.0.0.RELEASE/org.springframework.test-3.0.0.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.test/3.0.0.RELEASE/org.springframework.test-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.context/3.0.0.RELEASE/org.springframework.context-3.0.0.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.context/3.0.0.RELEASE/org.springframework.context-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.beans/3.0.0.RELEASE/org.springframework.beans-3.0.0.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.beans/3.0.0.RELEASE/org.springframework.beans-3.0.0.RELEASE-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.test/3.0.3.RELEASE/org.springframework.test-3.0.3.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.test/3.0.3.RELEASE/org.springframework.test-3.0.3.RELEASE-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.context/3.0.3.RELEASE/org.springframework.context-3.0.3.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.context/3.0.3.RELEASE/org.springframework.context-3.0.3.RELEASE-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.beans/3.0.3.RELEASE/org.springframework.beans-3.0.3.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.beans/3.0.3.RELEASE/org.springframework.beans-3.0.3.RELEASE-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/com.springsource.slf4j.api/1.5.6/com.springsource.slf4j.api-1.5.6.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/com.springsource.slf4j.org.apache.commons.logging/1.5.6/com.springsource.slf4j.org.apache.commons.logging-1.5.6.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/com.springsource.slf4j.log4j/1.5.6/com.springsource.slf4j.log4j-1.5.6.jar"/>

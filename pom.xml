@@ -19,7 +19,7 @@
 
   <properties>
     <!-- Spring version -->
-    <spring.maven.artifact.version>3.0.2.RELEASE</spring.maven.artifact.version>
+    <spring.maven.artifact.version>3.0.3.RELEASE</spring.maven.artifact.version>
     <spring.base.version>3.0.0</spring.base.version>
     
     <!--- Gemini Blueprint packages imported version (respect the OSGi naming pattern)-->
