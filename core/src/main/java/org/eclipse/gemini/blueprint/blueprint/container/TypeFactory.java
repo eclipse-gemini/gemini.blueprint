@@ -49,7 +49,7 @@ class TypeFactory {
 		}
 
 		GenericsReifiedType(TypeDescriptor descriptor) {
-			super(ClassUtils.resolvePrimitiveIfNecessary(descriptor.getType()));
+			super(((descriptor==TypeDescriptor.NULL) || (descriptor == null)) ? Object.class: ClassUtils.resolvePrimitiveIfNecessary(descriptor.getType()));
 			arguments = getArguments(descriptor);
 			size = arguments.size();
 		}
@@ -79,6 +79,10 @@ class TypeFactory {
 	private static List<ReifiedType> getArguments(TypeDescriptor type) {
 		List<ReifiedType> arguments;
 
+		if (type== null || type == TypeDescriptor.NULL) {
+			return Collections.emptyList();
+		}
+		
 		// is it an array/map
 		if (type.isCollection()) {
 			arguments = new ArrayList<ReifiedType>(1);

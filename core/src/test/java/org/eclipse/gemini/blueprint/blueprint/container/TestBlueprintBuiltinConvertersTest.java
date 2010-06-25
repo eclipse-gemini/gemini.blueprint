@@ -21,6 +21,7 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 import org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent;
+import org.eclipse.gemini.blueprint.blueprint.MyCustomDictionary;
 import org.eclipse.gemini.blueprint.blueprint.MyCustomList;
 import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintConverterService;
@@ -96,7 +97,9 @@ public class TestBlueprintBuiltinConvertersTest extends TestCase {
 		Collection col = (Collection) value;
 		assertEquals(2, col.size());
 		cpn = context.getBean("customDictionary", CollectionTestComponent.class);
-		assertTrue(cpn.getPropertyValue() instanceof Dictionary);
-		System.out.println(cpn.getPropertyValue());
+		Object pv = cpn.getPropertyValue();
+		assertTrue(pv instanceof Dictionary);
+		assertTrue(pv instanceof MyCustomDictionary);
+		assertEquals(2, ((MyCustomDictionary)pv).size());
 	}
 }

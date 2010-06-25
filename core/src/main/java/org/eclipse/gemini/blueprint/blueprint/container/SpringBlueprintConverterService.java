@@ -90,6 +90,9 @@ public class SpringBlueprintConverterService implements ConversionService {
 	}
 
 	public Object convert(final Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+		if (targetType == TypeDescriptor.NULL)
+			return source;
+		
 		final ReifiedType type = TypeFactory.getType(targetType);
 		boolean hasSecurity = (System.getSecurityManager() != null);
 		AccessControlContext acc = (hasSecurity ? SecurityUtils.getAccFrom(cbf) : null);

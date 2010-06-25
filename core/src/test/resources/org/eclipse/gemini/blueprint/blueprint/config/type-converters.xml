@@ -74,5 +74,4 @@
 			<ref component-id="referenceFactory"/>
 		</property>
 	</bean>
-	
 </blueprint>

@@ -37,7 +37,8 @@
             </map>
         </property>
     </bean>
-	
+
+    
     <bean id="setToCollection" class="org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent">
         <property name="collection">
             <set>
@@ -455,6 +456,4 @@
 			</value>
     	</property>
     </bean>
-    
-     
 </blueprint>

@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import junit.framework.TestCase;
 
+import org.eclipse.gemini.blueprint.blueprint.MyCustomDictionary;
 import org.osgi.service.blueprint.container.ReifiedType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
@@ -77,6 +78,9 @@ public class TypeFactoryTest extends TestCase {
 		}
 
 		public void typeVariable(AtomicReference<A> arg) {
+		}
+		
+		public void customDictionary(MyCustomDictionary customDict) {
 		}
 	}
 
@@ -177,9 +181,23 @@ public class TypeFactoryTest extends TestCase {
 		assertEquals(Object.class, tp.getActualTypeArgument(0).getRawClass());
 	}
 
+	public void testCustomDictionary() throws Exception {
+		ReifiedType tp = getReifiedTypeFor("customDictionary");
+		assertEquals(2, tp.size());
+		assertEquals(MyCustomDictionary.class, tp.getRawClass());
+		assertEquals(Object.class, tp.getActualTypeArgument(0).getRawClass());
+		assertEquals(Object.class, tp.getActualTypeArgument(1).getRawClass());
+	}
+	
+	public void testUnknownType() throws Exception {
+		ReifiedType type = TypeFactory.getType(TypeDescriptor.NULL);
+		assertEquals(Object.class, type.getRawClass());
+	}
+
 	private ReifiedType getReifiedTypeFor(String methodName) {
 		Method mt = BeanUtils.findDeclaredMethodWithMinimalParameters(TestSet.class, methodName);
 		TypeDescriptor td = new TypeDescriptor(new MethodParameter(mt, 0));
 		return TypeFactory.getType(td);
 	}
+	
 }
