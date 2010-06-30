@@ -542,7 +542,7 @@
         </executions>
         <configuration>
            <manifestTemplatePath>${basedir}/template.mf</manifestTemplatePath>
-           <manifestHeaders><![CDATA[Bundle-Name: ${artifactId}
+           <manifestHeaders><![CDATA[Bundle-Name: ${artifactId} (Incubation)
 Bundle-Version: ${gemini.blueprint.bundle.version}
 Bundle-SymbolicName: ${spring.osgi.symbolic.name}
 Bundle-Vendor: Eclipse Foundation
@@ -550,7 +550,7 @@ Bundle-DocURL: http://www.eclipse.org/gemini/blueprint/
 Bundle-Description: ${pom.description}
 Bundle-License: http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php
 Bundle-ManifestVersion: 2
-Implementation-Title: Eclipse Gemini Blueprint - Incubation
+Implementation-Title: Eclipse Gemini Blueprint (Incubation)
 Implementation-Version: ${pom.version}
 Implementation-Vendor: Eclipse Foundation
 Implementation-Vendor-Id: org.eclipse.gemini.blueprint
