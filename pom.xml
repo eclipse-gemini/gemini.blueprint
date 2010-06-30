@@ -4,7 +4,7 @@
   <groupId>org.eclipse.gemini.blueprint</groupId>
   <artifactId>gemini-blueprint</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.0.M1-SNAPSHOT</version>
+  <version>1.0.0.M1</version>
   <name>Gemini Blueprint</name>
   <url>http://www.eclipse.org/gemini/blueprint/</url>
   <description>
@@ -936,14 +936,14 @@ Ignored-Existing-Headers:
             <url>scp://static.springframework.org/var/www/domains/springframework.org/static/htdocs/spring-osgi/snapshot-site/</url>
         </site>
         <repository>
-            <id>spring-milestone</id>
-            <name>Spring Milestone Repository</name>
-            <url>s3://maven.springframework.org/milestone</url>
+            <id>zodiac-milestone</id>
+            <name>Zodiac Milestone Repository</name>
+            <url>s3://zodiac.springsource.com/maven/bundles/milestone</url>
         </repository>    
         <snapshotRepository>
-            <id>spring-snapshot</id>
-            <name>Spring Snapshot Repository</name>
-            <url>s3://maven.springframework.org/snapshot</url>
+            <id>zodiac-snapshot</id>
+            <name>Zodiac Snapshot Repository</name>
+            <url>s3://zodiac.springsource.com/maven/bundles/snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 

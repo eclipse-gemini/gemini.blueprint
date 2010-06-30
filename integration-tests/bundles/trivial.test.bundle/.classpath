@@ -11,8 +11,8 @@
 	<classpathentry kind="var" path="M2_REPO/org/junit/com.springsource.junit/3.8.2/com.springsource.junit-3.8.2.jar" sourcepath="M2_REPO/org/junit/com.springsource.junit/3.8.2/com.springsource.junit-3.8.2-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/trivial/rfc-124-1.0-SNAPSHOT/trivial-rfc-124-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/trivial.tests/1.0.0.M1-SNAPSHOT/trivial.tests-1.0.0.M1-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/trivial.tests/1.0.0.M1/trivial.tests-1.0.0.M1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/junit/com.springsource.junit/3.8.2/com.springsource.junit-3.8.2.jar" sourcepath="M2_REPO/org/junit/com.springsource.junit/3.8.2/com.springsource.junit-3.8.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/trivial/1.0.0.M1-SNAPSHOT/trivial-1.0.0.M1-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/trivial/1.0.0.M1/trivial-1.0.0.M1.jar"/>
 	
 </classpath>

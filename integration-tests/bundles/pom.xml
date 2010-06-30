@@ -3,7 +3,7 @@
   <parent>
     <artifactId>gemini-blueprint</artifactId>
     <groupId>org.eclipse.gemini.blueprint</groupId>
-    <version>1.0.0.M1-SNAPSHOT</version>
+    <version>1.0.0.M1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
@@ -70,11 +70,12 @@
     -->
     <module>jdk5</module>
 
-    <!-- lazy bundles -->
+    <!-- lazy bundles 
     <module>lazy.companion.bundle</module>
     <module>lazy.basic</module>
     <module>lazy.export.no.import</module>
     <module>lazy.export.import</module>
+    -->
     <!-- blueprint bundles  -->
     <module>blueprint</module>
   </modules>

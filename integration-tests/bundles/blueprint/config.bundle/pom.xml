@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.eclipse.gemini.blueprint.iandt.blueprint</groupId>
         <artifactId>bundles</artifactId>
-        <version>1.0.0.M1-SNAPSHOT</version>
+        <version>1.0.0.M1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.gemini.blueprint.iandt.blueprint</groupId>
     <artifactId>config.bundle</artifactId>
 	<packaging>jar</packaging>
-    <name>Spring OSGi Blueprint Test Bundle: Configuration test bundle</name>
+    <name>Eclipse Gemini Blueprint Test Bundle: Configuration test bundle</name>
     <description>An OSGi bundle that provides different configuration locations</description>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
 </project>

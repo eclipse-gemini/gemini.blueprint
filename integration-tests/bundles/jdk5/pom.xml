@@ -3,13 +3,13 @@
   <parent>
     <artifactId>gemini-blueprint</artifactId>
     <groupId>org.eclipse.gemini.blueprint</groupId>
-    <version>1.0.0.M1-SNAPSHOT</version>
+    <version>1.0.0.M1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>spring-osgi-jdk5-integration-test-bundles</artifactId>
   <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
   <packaging>pom</packaging>
-  <name>Spring OSGi JDK5 Integration Testing Bundles</name>
+  <name>Eclipse Gemini Blueprint JDK5 Integration Testing Bundles</name>
   <url>http://www.eclipse.org/gemini/blueprint/</url>
   
   <properties>
