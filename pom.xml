@@ -4,7 +4,7 @@
   <groupId>org.eclipse.gemini.blueprint</groupId>
   <artifactId>gemini-blueprint</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.0.M1</version>
+  <version>1.0.0.M2-SNAPSHOT</version>
   <name>Gemini Blueprint</name>
   <url>http://www.eclipse.org/gemini/blueprint/</url>
   <description>
@@ -23,11 +23,11 @@
     <spring.base.version>3.0.0</spring.base.version>
     
     <!--- Gemini Blueprint packages imported version (respect the OSGi naming pattern)-->
-    <gemini.blueprint.import.version>1.0.0.M1</gemini.blueprint.import.version>
+    <gemini.blueprint.import.version>1.0.0.M2</gemini.blueprint.import.version>
     
     <!--- Gemini Blueprint packages exported version -->
-    <gemini.blueprint.export.version>1.0.0.M1</gemini.blueprint.export.version>
-    <gemini.blueprint.bundle.version>1.0.0.M1</gemini.blueprint.bundle.version>
+    <gemini.blueprint.export.version>1.0.0.M2</gemini.blueprint.export.version>
+    <gemini.blueprint.bundle.version>1.0.0.M2</gemini.blueprint.bundle.version>
 
     <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
     <spring.osgi.symbolic.name>${groupId}.${artifactId}</spring.osgi.symbolic.name>

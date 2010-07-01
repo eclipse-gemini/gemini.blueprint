@@ -13,33 +13,33 @@
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/com.springsource.slf4j.api/1.5.6/com.springsource.slf4j.api-1.5.6.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/com.springsource.slf4j.org.apache.commons.logging/1.5.6/com.springsource.slf4j.org.apache.commons.logging-1.5.6.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/com.springsource.slf4j.log4j/1.5.6/com.springsource.slf4j.log4j-1.5.6.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/lifecycle/1.0.0.M1/lifecycle-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/service.listener/1.0.0.M1/service.listener-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/simple.service/1.0.0.M1/simple.service-1.0.0.M1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/lifecycle/1.0.0.M2-SNAPSHOT/lifecycle-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/service.listener/1.0.0.M2-SNAPSHOT/service.listener-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/simple.service/1.0.0.M2-SNAPSHOT/simple.service-1.0.0.M2-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/net/sourceforge/cglib/com.springsource.net.sf.cglib/2.2.0/com.springsource.net.sf.cglib-2.2.0.jar" sourcepath="/CGLIB_SRC"/>
 	<classpathentry kind="var" path="M2_REPO/org/junit/com.springsource.junit/3.8.2/com.springsource.junit-3.8.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/felix/org.apache.felix.main/2.0.2/org.apache.felix.main-2.0.2.jar" sourcepath="/FELIX_SRC"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-core/1.0.0.M1/gemini-blueprint-core-1.0.0.M1.jar" sourcepath="/OSGI_SRC_ROOT/core"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-core/1.0.0.M2-SNAPSHOT/gemini-blueprint-core-1.0.0.M2-SNAPSHOT.jar" sourcepath="/OSGI_SRC_ROOT/core"/>
 	<classpathentry kind="var" path="M2_REPO/org/osgi/osgi_R4_compendium/1.0/osgi_R4_compendium-1.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-test/1.0.0.M1/gemini-blueprint-test-1.0.0.M1.jar" sourcepath="/OSGI_SRC_ROOT/test-support/src/main/java"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-io/1.0.0.M1/gemini-blueprint-io-1.0.0.M1.jar" sourcepath="/OSGI_SRC_ROOT/io/src/main/java"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-test/1.0.0.M2-SNAPSHOT/gemini-blueprint-test-1.0.0.M2-SNAPSHOT.jar" sourcepath="/OSGI_SRC_ROOT/test-support/src/main/java"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-io/1.0.0.M2-SNAPSHOT/gemini-blueprint-io-1.0.0.M2-SNAPSHOT.jar" sourcepath="/OSGI_SRC_ROOT/io/src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="var" path="M2_REPO/org/objectweb/asm/com.springsource.org.objectweb.asm/2.2.3/com.springsource.org.objectweb.asm-2.2.3.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/scoped.bundle.a/1.0.0.M1/scoped.bundle.a-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/scoped.bundle.b/1.0.0.M1/scoped.bundle.b-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/scoped.bundle.common/1.0.0.M1/scoped.bundle.common-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/cardinality0to1/1.0.0.M1/cardinality0to1-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/tccl/1.0.0.M1/tccl-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/configuration/1.0.0.M1/configuration-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/reference.proxy/1.0.0.M1/reference.proxy-1.0.0.M1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/scoped.bundle.a/1.0.0.M2-SNAPSHOT/scoped.bundle.a-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/scoped.bundle.b/1.0.0.M2-SNAPSHOT/scoped.bundle.b-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/scoped.bundle.common/1.0.0.M2-SNAPSHOT/scoped.bundle.common-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/cardinality0to1/1.0.0.M2-SNAPSHOT/cardinality0to1-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/tccl/1.0.0.M2-SNAPSHOT/tccl-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/configuration/1.0.0.M2-SNAPSHOT/configuration-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/reference.proxy/1.0.0.M2-SNAPSHOT/reference.proxy-1.0.0.M2-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/com.springsource.javax.servlet/2.4.0/com.springsource.javax.servlet-2.4.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/springframework/osgi/jasper.osgi/5.5.23-SNAPSHOT/jasper.osgi-5.5.23-SNAPSHOT.jar" sourcepath="/JASPER_SRC"/>
 	<classpathentry kind="var" path="M2_REPO/org/springframework/osgi/catalina.osgi/5.5.23-SNAPSHOT/catalina.osgi-5.5.23-SNAPSHOT.jar" sourcepath="/CATALINA_5.5.X"/>
 	<classpathentry kind="var" path="M2_REPO/com/cenqua/clover/clover/2.3.1/clover-2.3.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-extender/1.0.0.M1/gemini-blueprint-extender-1.0.0.M1.jar" sourcepath="/OSGI_SRC_ROOT/extender/src/main/java"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/proxy.listener/1.0.0.M1/proxy.listener-1.0.0.M1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/gemini-blueprint-extender/1.0.0.M2-SNAPSHOT/gemini-blueprint-extender-1.0.0.M2-SNAPSHOT.jar" sourcepath="/OSGI_SRC_ROOT/extender/src/main/java"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/proxy.listener/1.0.0.M2-SNAPSHOT/proxy.listener-1.0.0.M2-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/log4j/com.springsource.org.apache.log4j/1.2.15/com.springsource.org.apache.log4j-1.2.15.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/tccl.intf/1.0.0.M1/tccl.intf-1.0.0.M1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/component.scan.bundle/1.0.0.M1/component.scan.bundle-1.0.0.M1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/tccl.intf/1.0.0.M2-SNAPSHOT/tccl.intf-1.0.0.M2-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/component.scan.bundle/1.0.0.M2-SNAPSHOT/component.scan.bundle-1.0.0.M2-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/test-classes"/>
 </classpath>

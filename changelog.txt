@@ -2,6 +2,9 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+Changes in version 1.0.0 M2 (2010-mm-dd)
+----------------------------------------
+
 Changes in version 1.0.0 M1 (2010-06-30)
 ----------------------------------------
 
