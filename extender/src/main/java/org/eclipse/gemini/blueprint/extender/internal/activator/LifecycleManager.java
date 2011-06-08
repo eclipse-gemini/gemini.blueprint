@@ -265,7 +265,7 @@ class LifecycleManager implements DisposableBean {
 							+ " ms, for bundle " + bundleString);
 			}
 
-			appCtxExecutor.setTimeout(config.getTimeout());
+			appCtxExecutor.setTimeout(timeout);
 			appCtxExecutor.setWatchdog(timer);
 			appCtxExecutor.setTaskExecutor(executor);
 			appCtxExecutor.setMonitoringCounter(contextsStarted);
