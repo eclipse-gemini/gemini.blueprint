@@ -350,7 +350,7 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 				try {
 					serviceRegistration = AccessController.doPrivileged(new PrivilegedAction<ServiceRegistration>() {
 						public ServiceRegistration run() {
-							return getBundleContext().registerService(serviceNames, this, serviceProperties);
+							return getBundleContext().registerService(serviceNames, AbstractOsgiBundleApplicationContext.this, serviceProperties);
 						}
 					}, acc);
 				} catch (AccessControlException ex) {
