@@ -284,7 +284,17 @@ public abstract class BaseIntegrationTest extends AbstractConfigurableBundleCrea
 	@Override
 	protected OsgiPlatform createPlatform() {
 		OsgiPlatform platform = super.createPlatform();
+		
+		
+		platform.getConfigurationProperties().setProperty("org.osgi.framework.storage.clean", "onFirstInit");
+		
 		platform.getConfigurationProperties().setProperty("felix.fragment.validation", "warning");
+		
+		// KF 3.1 settings
+		//platform.getConfigurationProperties().setProperty("org.knopflerfish.framework.all_signed", "false");
+		//platform.getConfigurationProperties().setProperty("org.knopflerfish.framework.debug.classloader", "true");
+		//platform.getConfigurationProperties().setProperty("org.knopflerfish.framework.bundlestorage", "file");
+		
 		return platform;
 	}
 }

@@ -8,18 +8,14 @@
   <name>Gemini Blueprint</name>
   <url>http://www.eclipse.org/gemini/blueprint/</url>
   <description>
-  The Spring Dynamic Modules project makes it easy to build Spring applications
-  that run in an OSGi framework. A Spring application written in this
-  way provides better separation of modules, the ability to
-  dynamically add, remove, and update modules in a running system, the
-  ability to deploy multiple versions of a module simultaneously (and
-  have clients automatically bind to the appropriate one), and a dynamic
-  service model.
+  Eclipse Gemini Blueprint project makes it easy to build Java applications that run in an OSGi framework. By using Gemini Blueprint, applications benefit from using a 
+  better separation of modules, the ability to dynamically add, remove, and update modules in a running system, the ability to deploy multiple versions of a module 
+  simultaneously (and have clients automatically bind to the appropriate one), and a dynamic service model.
   </description>
 
   <properties>
     <!-- Spring version -->
-    <spring.maven.artifact.version>3.0.3.RELEASE</spring.maven.artifact.version>
+    <spring.maven.artifact.version>3.0.4.RELEASE</spring.maven.artifact.version>
     <spring.base.version>3.0.0</spring.base.version>
     
     <!--- Gemini Blueprint packages imported version (respect the OSGi naming pattern)-->
@@ -38,9 +34,9 @@
    <slf4j.version>1.5.6</slf4j.version>
    
    <!-- platform versions -->
-   <equinox.ver>3.5.1.R35x_v20090827</equinox.ver>
-   <kf.ver>3.0.0.beta3</kf.ver>
-   <felix.ver>2.0.2</felix.ver>
+   <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
+   <kf.ver>3.1.0</kf.ver>
+   <felix.ver>2.0.5</felix.ver>
    
    <!-- javadoc configuration -->
    <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -75,10 +71,8 @@
   <!-- ============================================= -->
 
   <issueManagement>
-    <system>JIRA</system>
-    <url>
-      http://jira.springframework.org/browse/OSGI
-    </url>
+    <system>Bugzilla</system>
+    <url>http://bugs.eclipse.org/bugs/buglist.cgi?product=Gemini.Blueprint</url>
   </issueManagement>
 
   <ciManagement>
@@ -102,20 +96,14 @@
 
   <scm>
     <connection>
-      scm:svn:http://anonsvn.springframework.org/svn/spring-osgi/trunk
+      scm:svn:http://dev.eclipse.org/svnroot/rt/org.eclipse.gemini.blueprint/trunk
     </connection>
     <developerConnection>
-      scm:svn:https://src.springframework.org/svn/spring-osgi/trunk
+      scm:svn:https://dev.eclipse.org/svnroot/rt/org.eclipse.gemini.blueprint/trunk
     </developerConnection>
-    <url>https://fisheye.springframework.org/browse/spring-osgi</url>
   </scm>
 
   <inceptionYear>2006</inceptionYear>
-
-  <organization>
-    <name>Spring Framework</name>
-    <url>http://www.springframework.org</url>
-  </organization>
 
   <developers>
     <developer>

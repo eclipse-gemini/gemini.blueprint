@@ -10,4 +10,3 @@ Import-Package: junit.framework,
  org.springframework.core.io;version="${spring.import.version}",
  org.eclipse.gemini.blueprint.test,
  org.apache.commons.logging
-
