@@ -357,12 +357,12 @@ public class ExtenderConfiguration implements DisposableBean {
 	private TaskExecutor createDefaultTaskExecutor() {
 		// create thread-pool for starting contexts
 		ThreadGroup threadGroup =
-				new ThreadGroup("spring-osgi-extender[" + ObjectUtils.getIdentityHexString(this) + "]-threads");
+				new ThreadGroup("eclipse-gemini-blueprint-extender[" + ObjectUtils.getIdentityHexString(this) + "]-threads");
 		threadGroup.setDaemon(false);
 
 		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
 		taskExecutor.setThreadGroup(threadGroup);
-		taskExecutor.setThreadNamePrefix("SpringOsgiExtenderThread-");
+		taskExecutor.setThreadNamePrefix("EclipseGeminiBlueprintExtenderThread-");
 
 		isTaskExecutorManagedInternally = true;
 
@@ -373,7 +373,7 @@ public class ExtenderConfiguration implements DisposableBean {
 		TimerTaskExecutor taskExecutor = new TimerTaskExecutor() {
 			@Override
 			protected Timer createTimer() {
-				return new Timer("Spring DM context shutdown thread", true);
+				return new Timer("Gemini Blueprint context shutdown thread", true);
 			}
 		};
 
