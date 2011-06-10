@@ -153,18 +153,35 @@ public class ContextLoaderListener implements BundleActivator {
 	 */
 	private class NamespaceBundleLister extends BaseListener {
 
-		protected void handleEvent(BundleEvent event) {
+		private final boolean resolved;
 
+		NamespaceBundleLister(boolean resolvedBundles) {
+			this.resolved = resolvedBundles;
+		}
+
+		protected void handleEvent(BundleEvent event) {
 			Bundle bundle = event.getBundle();
 
 			switch (event.getType()) {
+
+			case BundleEvent.RESOLVED:
+				if (resolved) {
+					maybeAddNamespaceHandlerFor(bundle, false);
+				}
+				break;
+
 			case LAZY_ACTIVATION_EVENT_TYPE: {
-				push(bundle);
-				maybeAddNamespaceHandlerFor(bundle, true);
+				if (!resolved) {
+					push(bundle);
+					maybeAddNamespaceHandlerFor(bundle, true);
+				}
+				break;
 			}
 			case BundleEvent.STARTED: {
-				if (!pop(bundle)) {
-					maybeAddNamespaceHandlerFor(bundle, false);
+				if (!resolved) {
+					if (!pop(bundle)) {
+						maybeAddNamespaceHandlerFor(bundle, false);
+					}
 				}
 				break;
 			}
@@ -326,7 +343,9 @@ public class ContextLoaderListener implements BundleActivator {
 
 		// register listener first to make sure any bundles in INSTALLED state
 		// are not lost
-		nsListener = new NamespaceBundleLister();
+		
+		// if the property is defined and true, consider bundles in STARTED/LAZY-INIT state, otherwise use RESOLVED
+		nsListener = new NamespaceBundleLister(!Boolean.getBoolean("org.eclipse.gemini.blueprint.ns.bundles.started"));
 		context.addBundleListener(nsListener);
 
 		Bundle[] previousBundles = context.getBundles();
