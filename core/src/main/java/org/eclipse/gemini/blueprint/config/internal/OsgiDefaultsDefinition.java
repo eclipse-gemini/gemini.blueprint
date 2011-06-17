@@ -30,8 +30,9 @@ import org.w3c.dom.Element;
  */
 public class OsgiDefaultsDefinition {
 
-	private static final String OSGI_NS = "http://www.springframework.org/schema/osgi";
-
+	private static final String SDM_NS = "http://www.springframework.org/schema/osgi";
+	private static final String EGB_NS = "http://www.eclipse.org/gemini/blueprint/schema/blueprint";
+	
 	private static final String DEFAULT_TIMEOUT = "default-timeout";
 	private static final String DEFAULT_AVAILABILITY = "default-availability";
 	private static final String DEFAULT_CARDINALITY = "default-cardinality";
@@ -49,19 +50,24 @@ public class OsgiDefaultsDefinition {
 		ReferenceParsingUtil.checkAvailabilityAndCardinalityDuplication(root, DEFAULT_AVAILABILITY,
 				DEFAULT_CARDINALITY, parserContext);
 
-		String timeout = getAttribute(root, OSGI_NS, DEFAULT_TIMEOUT);
+		parseDefaults(root, EGB_NS);
+		parseDefaults(root, SDM_NS);
+	}
+
+	private void parseDefaults(Element root, String namespace) {
+		String timeout = getAttribute(root, namespace, DEFAULT_TIMEOUT);
 
 		if (StringUtils.hasText(timeout)) {
 			setTimeout(timeout);
 		}
 
-		String availability = getAttribute(root, OSGI_NS, DEFAULT_AVAILABILITY);
+		String availability = getAttribute(root, namespace, DEFAULT_AVAILABILITY);
 
 		if (StringUtils.hasText(availability)) {
 			setAvailability(ReferenceParsingUtil.determineAvailability(availability));
 		}
 
-		String cardinality = getAttribute(root, OSGI_NS, DEFAULT_CARDINALITY);
+		String cardinality = getAttribute(root, namespace, DEFAULT_CARDINALITY);
 
 		if (StringUtils.hasText(cardinality)) {
 			setAvailability(ReferenceParsingUtil.determineAvailabilityFromCardinality(cardinality));

@@ -149,8 +149,6 @@ public abstract class AbstractReferenceDefinitionParser extends AbstractBeanDefi
 
 	private static final String CONTEXT_CLASSLOADER = "context-class-loader";
 
-	private static final String M = "m";
-
 	public static final String GENERATED_REF = "org.eclipse.gemini.blueprint.config.reference.generated";
 	public static final String PROMOTED_REF = "org.eclipse.gemini.blueprint.config.reference.promoted";
 

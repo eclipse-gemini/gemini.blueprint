@@ -1,3 +1,13 @@
+# Tooling related information for the blueprint namespace
+http\://www.eclipse.org/gemini/blueprint/schema/blueprint@name=gemini blueprint Namespace
+http\://www.eclipse.org/gemini/blueprint/schema/blueprint@prefix=osgi
+http\://www.eclipse.org/gemini/blueprint/schema/blueprint@icon=org/gemini/blueprint/config/spring-osgi.gif
+
+# Tooling related information for the blueprint compendium namespace
+http\://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium@name=gemini blueprint compendium Namespace
+http\://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium@prefix=osgix
+http\://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium@icon=org/gemini/blueprint/config/spring-osgi.gif
+
 # Tooling related information for the osgi namespace
 http\://www.springframework.org/schema/osgi@name=osgi Namespace
 http\://www.springframework.org/schema/osgi@prefix=osgi
