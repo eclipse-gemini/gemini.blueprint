@@ -1,0 +1,20 @@
+  <chapter id="requirements">
+      <title>Requirements</title>
+
+      <para>Gemini Blueprint 1.x binaries requires JDK level 5.0 and above, 
+      and <ulink url="http://www2.osgi.org/Specifications/HomePage?section=2">OSGi
+      R4.2</ulink> (though R4.1 and even R4.0 might work) and above. For JDK 1.4, consider using Spring Dynamic Modules 1.x.
+      </para>
+      <para>
+      Bundles deployed for use with Gemini Blueprint should specify
+      <literal>"Bundle-ManifestVersion: 2"</literal> in their manifest (require OSGi R4 behaviour).
+      Note that for OSGi 4.2 specific functionality (such as the Blueprint Container),
+      an appropriate container needs to be used.
+      </para>
+      <para>
+      We test against <ulink
+      url="http://www.eclipse.org/equinox/">Equinox</ulink> 3.6.x, <ulink
+      url="http://felix.apache.org/">Felix</ulink> 2.0.0+, and <ulink
+      url="http://www.knopflerfish.org/">Knopflerfish</ulink> 3.0.x as part of our
+      continuous integration process.</para>
+  </chapter>

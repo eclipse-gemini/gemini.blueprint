@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+
+      <partintro>
+          <para>
+            <para>This document is the reference guide for Gemini Blueprint. It explains the relationship
+            between Gemini Blueprint and the OSGi 4.2 Blueprint specification, defines Gemini Blueprint 
+            concepts and semantics, the syntax for the <ulink url="http://www.osgi.org">
+			OSGi Service Platform</ulink> based namespaces, the Gemini Blueprint extender bundle
+			and the OSGi manifest header entries defined by Gemini Blueprint.</para>
+			
+			<para>For an introduction to OSGi or Spring, or Gemini Blueprint examples, please refer to
+			<xref linkend="get-started"/> - this documentation refers only to Gemini Blueprint and assumes the user is familiar
+			with OSGi and Spring concepts.</para>
+
+			<para><emphasis>Note: OSGi is a trademark of the OSGi Alliance. Project
+			name is pending final approval from the Alliance.</emphasis></para>
+            <!--
+			<para><emphasis>Note: Please see the <ulink
+			url="./issues.html">known issues</ulink> page for Gemini Blueprint &version; release.</emphasis>
+		    </para>
+		    -->
+          </para>
+          
+      </partintro>
