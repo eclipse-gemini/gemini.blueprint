@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book xmlns:xi="http://www.w3.org/2001/XInclude">
+  <bookinfo>
+    <title>Eclipse Gemini Blueprint Reference Guide</title>
+    <releaseinfo>&version;</releaseinfo>
+    
+    <authorgroup>
+      <author>
+        <firstname>Adrian M</firstname>
+        <surname>Colyer</surname>
+        <affiliation>SpringSource, division of VMware</affiliation>
+      </author>
+      <author>
+        <firstname>Hal</firstname>
+        <surname>Hildebrand</surname>
+        <affiliation>Oracle</affiliation>
+      </author>
+      <author>
+        <firstname>Costin</firstname>
+        <surname>Leau</surname>
+        <affiliation>SpringSource, division of VMware</affiliation>
+      </author>
+      <author>
+        <firstname>Andy</firstname>
+        <surname>Piper</surname>
+        <affiliation>BEA</affiliation>
+      </author>
+    </authorgroup>
+
+
+    <legalnotice>
+    
+      <para>Documentation made available under the terms of the Eclipse Public License v1.0 
+      and Apache License v2.0 which accompanies this distribution. 
+      The Eclipse Public License is available at <ulink url="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</ulink> and 
+      the Apache License v2.0 is available at <ulink url="http://www.opensource.org/licenses/apache2.0.php">http://www.opensource.org/licenses/apache2.0.php</ulink>.
+      You may elect to redistribute this code under either of these licenses.</para>
+    </legalnotice>
+    
+    <copyright>
+      <year>2006 -</year>
+      <year>2011</year>
+      <holder>VMware Inc.</holder>
+      <holder>Oracle Inc.</holder>
+    </copyright>
+  </bookinfo>
+
+  <toc />
+
+  <xi:include href="preface.xml"/>
+  
+  <part id="introduction">
+      <title>Introduction</title>
+
+      <xi:include href="introduction/eclipse-migration.xml"/>
+      <xi:include href="introduction/introduction.xml"/>
+      <xi:include href="introduction/why-spring-dm.xml"/>
+      <xi:include href="introduction/requirements.xml"/>
+      <xi:include href="introduction/getting-started.xml"/>
+      <xi:include href="introduction/what-is-new.xml"/>
+
+      <!-- background on OSGi -->
+  </part>
+  <part id="reference">
+	  <title>Reference Documentation</title>
+
+      <xi:include href="reference/introduction.xml"/>
+      <xi:include href="reference/blueprint.xml"/>
+      <xi:include href="reference/bundle-app-context.xml"/>
+      <xi:include href="reference/deployment.xml"/>
+      <xi:include href="reference/service-registry.xml"/>
+      <xi:include href="reference/bundles.xml"/>
+      <xi:include href="reference/web/web.xml"/>
+      <xi:include href="reference/compendium/compendium.xml"/>
+      <xi:include href="reference/testing.xml"/>
+  </part>
+  <part id="resources">
+      <title>Other Resources</title>
+      <partintro>
+          <para>
+              In addition to this reference documentation, there are a number of
+              other resources that may help you learn how to use OSGi and Eclipse Gemini Blueprint.
+              These additional, third-party resources are enumerated in this 
+              section.
+          </para>
+      </partintro>
+      <xi:include href="links.xml"/>
+      <!-- 
+      <xi:include href="bibliography.xml"/>
+       -->
+  </part>
+  <part id="appendixes">
+      <title>Appendixes</title>
+      <xi:include href="appendix/introduction.xml"/>
+      <xi:include href="appendix/appendix-security.xml"/>
+      <xi:include href="appendix/appendix-pde.xml"/>
+      <xi:include href="appendix/appendix-tips.xml"/>
+      <xi:include href="appendix/appendix-roadmap.xml"/>
+      <xi:include href="appendix/appendix-osgi-repo.xml"/>
+      <xi:include href="appendix/appendix-schema.xml"/>
+      <xi:include href="appendix/appendix-ack.xml"/>
+  </part>
+</book>
