@@ -44,9 +44,6 @@
 										<include name="**/*.jpg" />										
 									</fileset>
 								</copy>
-								<move file="target/site/reference/pdf/index.pdf" tofile="target/site/reference/pdf/spring-dm-reference.pdf" failonerror="false" />
-								<move file="target/site/reference/pdf/faq.pdf" tofile="target/site/reference/pdf/spring-dm-faq.pdf" failonerror="false" />
-								<move file="target/site/reference/pdf/issues.pdf" tofile="target/site/reference/pdf/spring-dm-issues.pdf" failonerror="false" />
 							</postProcess>							
 						</configuration>
 						<phase>pre-site</phase>
@@ -124,6 +121,4 @@
           <url>scp://static.springframework.org/var/www/domains/springframework.org/static/htdocs/spring-osgi/snapshot-site/</url>
       </site>
   </distributionManagement>
- 
-
 </project>

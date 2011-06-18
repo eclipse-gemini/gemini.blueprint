@@ -13,7 +13,7 @@
 	<url>http://www.eclipse.org/gemini/blueprint/</url>
 
   <description>
-  Spring/OSGi extender. Listens for and bootstraps Spring-powered OSGi bundles.
+  Eclipse Gemini Blueprint extender. Listens for and bootstraps OSGi 4.2 Blueprint and Spring-powered OSGi bundles.
   </description>
   
   <properties>
