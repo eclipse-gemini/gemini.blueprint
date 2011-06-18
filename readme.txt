@@ -92,7 +92,7 @@ This distribution contains API documentation and several sample applications ill
 The Eclipse Gemini Blueprint reference documentation can be found at http://www.eclipse.org/gemini/blueprint
 
 A great way to get started is to review and run the sample applications, supplementing with reference manual
-material as needed. You will require Maven 2, which can be downloaded from http://maven.apache.org/, for building
+material as needed. You will require Maven 2.0.x, which can be downloaded from http://maven.apache.org/, for building
 Gemini Blueprint.
 
 5. ADDITIONAL RESOURCES
