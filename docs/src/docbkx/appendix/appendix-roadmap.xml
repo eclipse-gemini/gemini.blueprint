@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE preface PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<appendix id="appendix-roadmap">
+	<title>Roadmap</title>
+
+	<para>
+		This appendix documents features on the Gemini Blueprint
+		roadmap. The design of these features specified here is subject
+		to change. As a most up to date source, please see
+		<ulink url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Gemini.Blueprint">
+			our
+		</ulink>
+		issue tracker.
+	</para>
+
+    <section>
+      <title>Start Level Integration</title>
+
+      <para>A future release of Gemini Blueprint may offer the following
+      additional guarantee with respect to application context creation and
+      start levels:</para>
+
+      <para>Application context creation happens asynchronously. However, the
+      extender bundle does guarantee that the creation of all application
+      contexts for bundles at start level <literal>n</literal> will be
+      complete before the creation of any application context at start level
+      <literal>m</literal>, where <literal>m > n</literal>. Care must
+      therefore be taken not to introduce any mandatory dependencies on
+      services exported by bundles with higher start levels or a deadlock will
+      be introduced.</para>
+
+      <para>In a similar vein, when shutting down the extender bundle,
+      application contexts at start level <literal>m</literal> will be shut
+      down before application contexts at start level <literal>n</literal>,
+      where <literal>m > n</literal>.</para>
+    </section>
+
+   
+</appendix>
