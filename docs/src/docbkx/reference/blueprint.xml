@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE preface PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<chapter id="blueprint">
+    <title>OSGi 4.2 Blueprint Container</title>
+
+	<para>Based on the Gemini Blueprint programming model, the OSGi Alliance introduced in OSGi 4.2 Release
+	the Blueprint Container specification (part of the Compendium Service). Gemini Blueprint 2.0 serves as 
+	the Blueprint Reference <ulink url="http://en.wikipedia.org/wiki/Reference_implementation">Implementation</ulink>
+	- the official, complete implementation of the spec.
+	</para>
+	<para>For this reason, users familiar with Gemini Blueprint, will find Blueprint very familiar and vice versa. 
+	In fact, we recommend that the Blueprint specification is used as a complement to this documentation. It should be
+	mentioned that various aspects of Gemini Blueprint 1.x have been adjusted or slightly changed in 2.0, for consistency reason,
+	to closely follow the Blueprint specification. As a general rule, unless mentioned otherwise, the Gemini Blueprint 2.x and
+	Blueprint behaviour should be the same.</para>
+	<para>Existing and new users have the freedom to mix and match the programming model they want, since Eclipse Gemini Blueprint supports 
+	both the Spring DM 1.x declarations and the Blueprint one, inside the same application.
+	That is, one can declare inside the same configuration, beans using both namespaces, at any point, without 
+	having to make an up-front choice.</para>
+	
+	<para>Please note that this documentation will focus on Gemini Blueprint specific configurations and option; for Blueprint specific
+	behaviour please refer to the OSGi 4.2 Compendium spec, section 121.</para>
+	
+	<section id="blueprint:requirements">
+		<title>Blueprint Requirements</title>
+		<para>The Blueprint Container spec is part of the OSGi 4.2 release and relies on it, in its API. Thus, 
+		in order to use Blueprint, one must use an OSGi 4.2 compatible platform as a runtime environment. Gemini Blueprint itself 
+		requires only an OSGi 4.0 framework so if 4.2 is not an option, one can safely downgrade at the loss of the Blueprint
+		model which can be built on top of Spring/Gemini Blueprint.
+		</para>
+		<note>On environments prior to OSGi 4.2, Gemini Blueprint will disable the Blueprint functionality automatically - users will be notified 
+		through a log message similar to the following:
+
+	    <screen><![CDATA[Pre-4.2 OSGi platform detected; disabling Blueprint Container functionality]]></screen>
+		
+		</note>
+	</section>
+	
+	<section id="blueprint:differences">
+		<title>Blueprint/Gemini Blueprint Differences</title>
+		<para>There are a lot of similarities in terms of functionality and configuration between Gemini Blueprint 1.x and Blueprint which should be 
+		no surprise considering that Spring DM was the basis of the Blueprint spec. In addition to fully supporting the Blueprint configuration schema, 
+		DM 2.x enhanced its declarations by providing option that allow for Blueprint specific behaviour. The table below aggregates the most 
+		important user facing differences between Spring/Gemini Blueprint configurations and Blueprint. Additional comparison information is available
+		throughout the documentation (such as <xref linkend="app-deploy:headers:blueprint"/> or <xref linkend="service-registry:export:blueprint"/>).
+		Again, one can simply switch between the two definition styles, if need be.</para>
+
+
+	  <section id="blueprint:differences:xml">
+		<title>XML Declarations</title>
+
+		<para>Most of the XML declarations are similar between Spring and Blueprint. Using the Spring 
+		<ulink url="http://static.springsource.org/spring/docs/2.5.x/reference/new-in-2.html#new-in-2-ioc-configuration">namespace</ulink> mechanism, 
+		the same configuration can contain both Spring, Gemini Blueprint, Blueprint and other namespaces. Moreover, custom elements can be used for virtually
+		all elements of a Spring configuration (namespace, bean declaration, decoration, etc...). The table below focuses <emphasis>only</emphasis>
+		on the usual, standard Spring namespaces and their Blueprint equivalent.</para>
+
+  	 	<table id="spring-vs-blueprint-xml" pgwide="1">
+          <title>XML Configuration Differences</title>
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry>Element/Attribute</entry>
+                <entry>Gemini Blueprint</entry>
+                <entry>Blueprint</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>Namespace Declaration</entry>
+                <entry><para><literal>http://www.springframework.org/schema/beans</literal></para> 
+                <para>or <literal>http://www.springframework.org/schema/osgi</literal></para></entry>
+                <entry><literal>http://www.osgi.org/xmlns/blueprint/v1.0.0</literal></entry>
+              </row>
+              <row>
+                <entry>Root Element</entry>
+                <entry><literal><![CDATA[<beans>]]></literal></entry>
+                <entry><literal><![CDATA[<blueprint>]]></literal></entry>
+              </row>
+              <row>
+                <entry>Default Lazy</entry>
+                <entry><literal><![CDATA[default-lazy]]></literal></entry>
+                <entry><literal><![CDATA[default-activation]]></literal></entry>
+              </row>
+              <row>
+                <entry>Default Init Method</entry>
+                <entry><literal><![CDATA[default-init-method]]></literal></entry>
+                <entry><literal>-</literal></entry>
+              </row>
+              <row>
+                <entry>Default Destroy Method</entry>
+                <entry><literal><![CDATA[default-destroy-method]]></literal></entry>
+                <entry><literal>-</literal></entry>
+              </row>
+              <row>
+                <entry>Default Autowire Strategy</entry>
+                <entry><literal><![CDATA[default-autowire]]></literal>, <literal><![CDATA[default-autowire-candidates]]></literal></entry>
+                <entry><literal>-</literal></entry>
+              </row>
+              <row>
+                <entry>Root Element</entry>
+                <entry><literal><![CDATA[<beans>]]></literal></entry>
+                <entry><literal><![CDATA[<blueprint>]]></literal></entry>
+              </row>
+              <row>
+                <entry>Bean ID</entry>
+                <entry><literal>id</literal></entry>
+                <entry><literal>id</literal></entry>
+              </row>
+              <row>
+                <entry>Bean Name/Alias</entry>
+                <entry><literal>name</literal>/<literal><![CDATA[<alias>]]></literal></entry>
+                <entry><literal>-</literal></entry>
+              </row>
+              <row>
+                <entry>Bean Class</entry>
+                <entry><literal>class</literal></entry>
+                <entry><literal>class</literal></entry>
+              </row>
+              <row>
+                <entry>Bean Scope Name</entry>
+                <entry><literal>scope</literal></entry>
+                <entry><literal>scope</literal></entry>
+              </row>
+              <row>
+                <entry>Built-in Scopes</entry>
+                <entry><literal>singleton</literal>, <literal>prototype</literal>, <literal>request</literal>, <literal>session</literal>, <literal>bundle</literal></entry>
+                <entry><literal>singleton</literal>, <literal>prototype</literal></entry>
+              </row>
+              <row>
+                <entry>Lazy Initialization Name/Values</entry>
+                <entry><literal>lazy-init</literal>=<literal>true/false</literal></entry>
+                <entry><literal>activation</literal>=<literal>lazy/eager</literal></entry>
+              </row>
+              <row>
+                <entry>Depends</entry>
+                <entry><literal>depends-on</literal></entry>
+                <entry><literal>depends-on</literal></entry>
+              </row>
+              <row>
+                <entry>Init Method</entry>
+                <entry><literal>init-method</literal></entry>
+                <entry><literal>init-method</literal></entry>
+              </row>
+              <row>
+                <entry>Destroy Method</entry>
+                <entry><literal>destroy-method</literal></entry>
+                <entry><literal>destroy-method</literal></entry>
+              </row>
+              <row>
+                <entry>Factory Method</entry>
+                <entry><literal>factory-method</literal></entry>
+                <entry><literal>factory-method</literal></entry>
+              </row>
+              <row>
+                <entry>Factory Bean</entry>
+                <entry><literal>factory-bean</literal></entry>
+                <entry><literal>factory-ref</literal></entry>
+              </row>
+              <row>
+                <entry>Bean Inheritance</entry>
+                <entry><literal>parent</literal></entry>
+                <entry><literal>-</literal></entry>
+              </row>
+              <row>
+                <entry>Autowire Strategy</entry>
+                <entry><literal>autowire</literal>, <literal>autowire-candidate</literal></entry>
+                <entry><literal>-</literal></entry>
+              </row>
+              <row>
+                <entry>Constructor</entry>
+                <entry><literal><![CDATA[<constructor-arg>]]></literal></entry>
+                <entry><literal><![CDATA[<argument>]]></literal></entry>
+              </row>
+              <row>
+                <entry>Property</entry>
+                <entry><literal><![CDATA[<property>]]></literal></entry>
+                <entry><literal><![CDATA[<property>]]></literal></entry>
+              </row>
+              <row>
+                <entry>Value</entry>
+                <entry><literal><![CDATA[<value>]]></literal></entry>
+                <entry><literal><![CDATA[<value>]]></literal></entry>
+              </row>
+              <row>
+                <entry>Service Exporter</entry>
+                <entry><literal><![CDATA[<service>]]></literal></entry>
+                <entry><literal><![CDATA[<service>]]></literal></entry>
+              </row>
+              <row>
+                <entry>Service Importer</entry>
+                <entry><literal><![CDATA[<reference>/<list>/<set>]]></literal></entry>
+                <entry><literal><![CDATA[<reference>/<list>]]></literal></entry>
+              </row>
+
+            </tbody>
+          </tgroup>
+        </table>
+        
+        <para>The configurations below are equivalent in terms of functionality:</para>
+        
+        <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-activation="lazy">
+    <bean id="object" class="java.lang.Object"/>
+    
+    <bean id="length" class="java.lang.Integer">
+        <argument value="4"/>
+    </bean>
+    
+    <bean id="buffer" class="java.lang.StringBuffer" depends-on="simple">
+    	<property name="length" ref="length"/>
+    </bean>
+    
+    <bean id="current-time" class="java.lang.System" factory-method="currentTimeMillis" scope="prototype"/>
+    
+    <bean id="list" class="java.util.ArrayList" destroy-method="clear" activation="eager">
+    	<argument ref="length"/>
+    </bean>
+</blueprint>]]></programlisting>
+        <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+    default-lazy-init="true">
+    
+    <bean id="object" class="java.lang.Object"/>
+    
+    <bean id="length" class="java.lang.Integer">
+        <constructor-arg value="4"/>
+    </bean>
+    
+    <bean id="buffer" class="java.lang.StringBuffer" depends-on="simple">
+    	<property name="length" ref="length"/>
+    </bean>
+    
+    <bean id="current-time" class="java.lang.System" factory-method="currentTimeMillis" scope="prototype"/>
+    
+    <bean id="list" class="java.util.ArrayList" destroy-method="clear" lazy-init="false">
+    	<constructor-arg ref="length"/>
+    </bean>
+</beans>]]></programlisting>
+
+		<para>As mentioned before, in Gemini Blueprint one can mix and match the namespaces:</para>
+		
+		<programlisting language="xml"><![CDATA[<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd		
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    <util:constant id="thread-priority" static-field="java.lang.Thread.MIN_PRIORITY"/>
+    
+    <bean id="exampleThread" class="java.lang.Thread" p:priority-ref="thread-priority">
+    	<constructor-arg>
+    	   <bp:bean class="org.example.SomeRunnable"/>
+    	</constructor-arg>
+    </bean>
+    
+    <task:executor id="rangeWithBoundedQueue" size="7-42" queue-capacity="#{ T(java.lang.Math).random() * 30.0 }"/>
+
+    <bp:reference-list id="cloneableServices" interface="java.lang.Cloneable" />
+<beans>]]></programlisting>
+		
+		<para>The example above, uses the Spring <literal>beans</literal>, <literal>util</literal>, <literal>p</literal>, Spring Expression Language (SpEL)
+		and the <literal>task</literal> namespace introduced in Spring 3.x, and Gemini Blueprint namespace.</para>
+	  </section>
+	
+	  <section id="blueprint:differences:container">
+		<title>Container Capabilities</title>
+		
+		<para>From a container perspective, the Blueprint spec standardizes the a subset of the Spring container. A high-level view comparison, by no 
+		means comprehensive, is summarized in the table below:</para>
+		
+		<table id="spring-vs-blueprint-container" pgwide="1">
+          <title>Container Capabilities Differences</title>
+          <tgroup cols="3">
+			<colspec colname='c1'/>
+			<colspec colname='c2'/>
+			<colspec colname='c3'/>
+			<spanspec spanname="wide" namest="c1" nameend="c3" align="center"/>
+            <thead>
+              <row>
+                <entry>Feature</entry>
+                <entry>Gemini Blueprint</entry>
+                <entry>Blueprint</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row rowsep="1">
+              	<entry spanname="wide"><emphasis>Object Instantiation</emphasis></entry>
+              </row>
+              <row>
+                <entry>Constructor Instantiation</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row>
+                <entry>Static Factory Instantiation</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row>
+                <entry>Instance Factory Instantiation</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row rowsep="1">
+              	<entry spanname="wide"><emphasis>Dependency Injection</emphasis></entry>
+              </row>
+              <row>
+                <entry>Constructor Injection</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row>
+                <entry>Setter Injection</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row>
+                <entry>Field Injection</entry>
+                <entry>Y</entry>
+                <entry>N</entry>
+              </row>
+              <row>
+                <entry>Method Injection</entry>
+                <entry>Y</entry>
+                <entry>N</entry>
+              </row>
+              <row>
+                <entry>Arbitrary Method Injection</entry>
+                <entry>Y</entry>
+                <entry>N</entry>
+              </row>
+              <row>
+                <entry>Autowiring</entry>
+                <entry>Y</entry>
+                <entry>N</entry>
+              </row>
+              <row rowsep="1">
+              	<entry spanname="wide"><emphasis>Component Lifecycle</emphasis></entry>
+              </row>
+              <row>
+                <entry>Lazy Initialization</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row>
+                <entry>Bean Scopes</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row>
+                <entry>Custom Bean Scopes</entry>
+                <entry>Y</entry>
+                <entry>N</entry>
+              </row>
+              <row>
+                <entry>Built-in Callbacks</entry>
+                <entry>Y</entry>
+                <entry>N</entry>
+              </row>
+              <row>
+                <entry>Custom Callbacks</entry>
+                <entry>Y</entry>
+                <entry>Y</entry>
+              </row>
+              <row>
+                <entry>Initialization Processing</entry>
+                <entry>Y</entry>
+                <entry>N</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+		<para>As with the XML configuration, since Gemini Blueprint translates the Blueprint configuration into Spring metadata, one can rely on Spring for features
+		beyond the Blueprint container. For example, one can configure a bean using Blueprint and use annotation on the same instance, for field injection. 
+		The same object can implement Spring's <literal>Aware</literal> interfaces or rely on other post processors for certain behaviour.</para>		
+	  </section>
+	  
+		<para>Note that additional information on Blueprint is available through out the documentation.	These being said, it is highly recommended to read 
+		and use the Blueprint specification as guidance, if the Blueprint Container becomes	the programming model of choice.</para>
+	  
+	</section>
+	
+	<section id="blueprint:using">
+		<title>Using Blueprint</title>
+		<para>There are no extra jars or steps that need to be executed to <emphasis>enable</emphasis> the Blueprint functionality in Gemini Blueprint. 
+		This is built directly into the core, in fact the Blueprint APIs are exported by the Gemini Blueprint core. Please see the next section for 
+		information on how to install Gemini Blueprint and the OSGi compendium spec (section 121) for Blueprint related information such as bootstrapping
+		and configuration locations. For those in a hurry, simply install and start the Gemini Blueprint jars (io, core, extender) and their dependencies
+		(namely Spring and slf4j) and you should be all set: Gemini Blueprint will automatically detect the running environment and the types of bundles started.
+		</para>
+	</section>
+</chapter>

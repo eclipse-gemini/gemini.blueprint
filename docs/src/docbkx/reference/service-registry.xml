@@ -1,0 +1,2374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE preface PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+
+  <chapter id="service-registry">
+    <title>The Service Registry</title>
+
+    <para>The OSGi service registry enables a bundle to publish objects to a
+    shared registry, advertised via a given set of Java interfaces. Published
+    services also have service properties associated with them in the
+    registry. The registry is a crucial feature of OSGi, facilitating decoupling
+    between bundles by promoting a dynamic collaborative model based on 
+    a service-oriented paradigm (publish/find/bind).</para>
+
+	<para>Gemini Blueprint integrates tightly with the service registry, allowing
+	clients to publish, find and bind services in a POJO-friendly manner, without coupling
+	themselves to the OSGi API.</para>
+    <para>By using the <literal>osgi</literal> namespace for Spring (see
+    <xref linkend="appendix-schema"/>) one can be indicate what Spring beans to export 
+    as OSGi services (and how) and to define the criteria and the manner in which
+    services available in the OSGi registry are imported as beans.
+    </para>
+    
+    <para>
+    Just like the rest of the namespaces, the <literal>osgi</literal> namespace can be embedded
+    or nested inside another top-level namespace (typically the Spring <literal>beans</literal> 
+    namespace) or be made the default namespace.</para>
+
+    <para>The following example shows the use of the <literal>osgi</literal>
+    namespace within the familiar Spring beans element:</para>
+
+	<programlistingco>
+	   <areaspec>
+	   	  <area id="service-registry.xml.ns.default.beans" coords="2"/>
+          <area id="service-registry.xml.ns.default.beans.osgi" coords="4"/>
+          <area id="service-registry.xml.ns.default.beans.beans.25" coords="6"/>
+          <area id="service-registry.xml.ns.default.beans.osgi.service" coords="10"/>
+       </areaspec>
+       <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:osgi="http://www.eclipse.org/gemini/blueprint/schema/blueprint"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.eclipse.org/gemini/blueprint/schema/blueprint 
+       http://www.eclipse.org/gemini/blueprint/schema/blueprint/gemini-blueprint.xsd">
+
+    <osgi:service id="simpleServiceOsgi" ref="simpleService"
+      interface="org.xyz.MyService" />
+</beans>]]></programlisting>
+       <calloutlist>
+         <callout arearefs="service-registry.xml.ns.default.beans">
+            <para>Use Spring Framework <literal>beans</literal> schema as the default namespace.
+            </para>
+         </callout>
+       
+         <callout arearefs="service-registry.xml.ns.default.beans.osgi">
+            <para>Import Gemini Blueprint schema and associate a prefix with its namespace (<literal>osgi</literal> in this example).
+            </para>
+         </callout>
+         <callout arearefs="service-registry.xml.ns.default.beans.beans.25">
+         	<para>Make sure to import Spring beans schema version <emphasis>3.0</emphasis> or higher.</para>
+         </callout>
+         <callout arearefs="service-registry.xml.ns.default.beans.osgi.service">
+         	<para>Use Gemini Blueprint elements using the declared namespace prefix (in this example <literal>osgi</literal>).</para>
+         </callout>
+       </calloutlist>
+	</programlistingco>
+
+    <para>Spring DM users can still use its namespace which is still supported by the Gemini Blueprint bundles. So the above configuration becomes:</para>
+    
+	<programlistingco>
+	   <areaspec>
+	   	  <area id="service-registry.xml.ns.default.old.beans" coords="2"/>
+          <area id="service-registry.xml.ns.default.old.beans.osgi" coords="4"/>
+          <area id="service-registry.xml.ns.default.old.beans.beans.25" coords="6"/>
+          <area id="service-registry.xml.ns.default.old.beans.osgi.service" coords="10"/>
+       </areaspec>
+       <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:osgi="http://www.springframework.org/schema/osgi"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/osgi  
+       http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+    <osgi:service id="simpleServiceOsgi" ref="simpleService"
+      interface="org.xyz.MyService" />
+</beans>]]></programlisting>
+       <calloutlist>
+         <callout arearefs="service-registry.xml.ns.default.old.beans">
+            <para>Use Spring Framework <literal>beans</literal> schema as the default namespace.
+            </para>
+         </callout>
+       
+         <callout arearefs="service-registry.xml.ns.default.old.beans.osgi">
+            <para>Import Gemini Blueprint schema and associate a prefix with its namespace (<literal>osgi</literal> in this example).
+            </para>
+         </callout>
+         <callout arearefs="service-registry.xml.ns.default.old.beans.beans.25">
+         	<para>Make sure to import Spring beans schema version <emphasis>3.0</emphasis>.</para>
+         </callout>
+         <callout arearefs="service-registry.xml.ns.default.old.beans.osgi.service">
+         	<para>Use Gemini Blueprint elements using the declared namespace prefix (in this example <literal>osgi</literal>).</para>
+         </callout>
+       </calloutlist>
+	</programlistingco>
+
+    <para>Through-out this documentation both the Gemini Blueprint and Spring DM namespaces will be used interchangeably - in fact, at a close look one will notice the two are identical (except for the
+    schema location declaration). As much as possible, new apps should use the Gemini Blueprint namespace as the Spring DM ones while supported, are being deprecated.</para>
+    
+    <para>Using the OSGi namespace as a top-level namespace, the same service
+    would be declared as follows:</para>
+
+	<programlistingco>
+	   <areaspec>
+	   	  <areaset id="service-registry.xml.ns.default.osgi.beans.root.element" coords="">
+	   	  	<area id="service-registry.xml.ns.default.osgi.beans.root.element.1" coords="2"/>
+	   	  	<area id="service-registry.xml.ns.default.osgi.beans.root.element.2" coords="14"/>
+	   	  </areaset>
+	   
+	   	  <area id="service-registry.xml.ns.default.osgi" coords="3"/>
+          <area id="service-registry.xml.ns.default.osgi.beans" coords="5"/>
+          <area id="service-registry.xml.ns.default.osgi.beans.25" coords="9"/>
+          <area id="service-registry.xml.ns.default.osgi.service" coords="11"/>
+       </areaspec>
+    <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans 
+   xmlns="http://www.eclipse.org/gemini/blueprint/schema/blueprint"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:beans="http://www.springframework.org/schema/beans"
+   xsi:schemaLocation="http://www.eclipse.org/gemini/blueprint/schema/blueprint 
+       http://www.eclipse.org/gemini/blueprint/schema/blueprint/gemini-blueprint.xsd
+       http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <service id="simpleServiceOsgi" ref="simpleService"
+       interface="org.xyz.MyService" />
+
+</beans:beans>
+]]></programlisting>
+
+       <calloutlist>
+         <callout arearefs="service-registry.xml.ns.default.osgi.beans.root.element">
+            <para><literal>beans</literal> root element has to be prefixed with Spring Framework beans schema prefix (<literal>beans</literal> in this example).
+            </para>
+         </callout>
+
+         <callout arearefs="service-registry.xml.ns.default.osgi">
+            <para>Use Gemini Blueprint schema as the default namespace.
+            </para>
+         </callout>
+       
+         <callout arearefs="service-registry.xml.ns.default.osgi.beans">
+            <para>Import Spring Framework <literal>beans</literal> schema and associate a prefix with its namespace (<literal>beans</literal> in this example).
+            </para>
+         </callout>
+         
+         <callout arearefs="service-registry.xml.ns.default.osgi.beans.25">
+         	<para>Make sure to import Spring beans schema version <emphasis>2.5</emphasis>.</para>
+         </callout>
+         
+         <callout arearefs="service-registry.xml.ns.default.osgi.service">
+         	<para>Use Gemini Blueprint elements without any prefix.</para>
+         </callout>
+       </calloutlist>
+	</programlistingco>
+
+    <para>Using the OSGi namespace as a top-level namespace is particularly
+    convenient when following the configuration <link linkend="app-deploy:headers:xml:tip">recommendation</link> from the previous section,
+    to use a dedicated configuration file for all OSGi-related declarations.</para>
+
+    <section id="service-registry:export">
+      <title>Exporting A Spring Bean As An OSGi Service</title>
+
+      <para>The <literal>service</literal> element is used to define a bean
+      representing an exported OSGi service. There are no requirements for
+      the class or object being exported - practically any bean can be exported. 
+      At a minimum you must specify the  bean to be exported, and the 
+      <emphasis>service interface</emphasis> that the service advertises.</para>
+      
+      <note>The publication <emphasis>interface</emphasis> is used by service consumers, to identify the service. A service instance must implement the interface
+      - specifying a non-implemented interface results in an error. The term <emphasis>interface</emphasis> is used in an abstract form; in practice any Java 
+      interface or class, implemented or extended by the service instance can be specified.</note>
+
+      <para>For example, the declaration</para>
+
+      <programlisting language="xml"><![CDATA[<service ref="beanToPublish" interface="com.xyz.MessageService"/>]]></programlisting>
+
+      <para>exports the bean with name <literal>beanToPublish</literal> with
+      interface <literal>com.xyz.MessageService</literal>. The published
+      service will have a service property with the name
+      <literal>org.eclipse.gemini.blueprint.bean.name</literal> set to the name of
+      the target bean being registered (<literal>beanToPublish</literal> in
+      this case).</para>
+
+      <para>As an alternative to exporting a named bean, the bean to be
+      exported to the service registry may be defined as an anonymous inner
+      bean of the service element. Typically the top-level namespace would be
+      the <literal>beans</literal> namespace when using this style:</para>
+
+      <programlisting language="xml"><![CDATA[<osgi:service interface="com.xyz.MessageService">
+  <bean class="SomeClass">
+     ...
+  </bean>
+</osgi:service>]]></programlisting>
+
+	<section id="service-registry:export:registration">
+	 <title>Using The Service Registration</title>
+     <para>Each <literal>service</literal> declaration, provides control access to the exported service.
+	 The declaration returns an element of type <interfacename>org.osgi.framework.ServiceRegistration</interfacename> which can be
+	 used to read or even modify the properties published for the OSGi service. Since DM 2.X, the definition
+	 has been aligned with the Blueprint spec and unregistration of the service is not possible any more (an exception is thrown
+	 if the <methodname>unregister</methodname> is called). Additionally, the returned service registration will track
+	 the service being registered (if multiple registration occur, these will be reflected in the returned registration object).
+	 See <xref linkend="service-registry:export-import-relationship"/> for more information on when registration/unregistration of
+	 exported services can occur.</para>
+
+     <para>To use the service registration, simply inject the service bean definition into the relevant class; the example below
+     shows one way of updating the service properties from Java:
+     </para>
+     
+     <programlisting language="xml"><![CDATA[<service id="myServiceRegistration" ref="beanToPublish"
+     interface="com.xyz.MessageService"/>
+
+<bean id="propUpdater" class="com.xyz.ServicePropertiesUpdater">
+   <property name="serviceRegistration ref="myServiceRegistration"/>
+</bean>]]></programlisting>
+
+      <para>Where <classname>ServicePropertiesUpdater</classname> can have the following definition:</para>
+      
+      <programlisting language="java"><![CDATA[public class ServicePropertiesUpdater implements BeanNameAware {
+
+	private ServiceRegistration serviceRegistration;
+	private String beanName;
+
+	public void setServiceRegistration(ServiceRegistration serviceRegistration) {
+		this.serviceRegistration = serviceRegistration;
+	}
+
+	public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
+
+	public void update() {
+		ServiceReference reference = serviceRegistration.getReference();
+		// get current properties
+		Dictionary dictionary = OsgiServiceReferenceUtils.getServiceProperties(reference);
+		dictionary.put("last-update", new Date());
+		dictionary.put("updated-by", beanName);
+		dictionary.put("user.name", System.getProperties().getProperty("java.version"));
+		// update properties
+		serviceRegistration.setProperties(dictionary);
+	}
+}]]></programlisting>
+      
+      <para>Each time the update() method is called, the service properties are retrived, new ones are added and finally the service
+      registration updated.</para>
+     </section>
+
+ 
+	<section id="service-registry:export:service-factory">
+	  <title><interfacename>org.osgi.framework.ServiceFactory</interfacename> Support</title>
+      <para>OSGi Service Platform Core Specification allows services not just to be registered directly,
+      but also to be created on demand, through the <interfacename>org.osgi.framework.ServiceFactory</interfacename>
+      interface (see section 5.6). Gemini Blueprint/Spring DM recognizes this OSGi interface and honours its contract,
+      by forwarding each new bundle request, to the backing bean implementing the aforementioned interface.</para>
+      
+      <para> As an alternative to implementing the OSGi API, one can use the <literal>bundle</literal> scope, introduced
+      by Gemini Blueprint/Spring DM which offers a <emphasis>instance-per-bundle</emphasis> contract (see <xref linkend="bnd-app-ctx:bundle-scope"/>
+	  for more information). To declare a bean with <literal>bundle</literal> scope
+      simply use the <literal>scope</literal> attribute of the
+      <literal>bean</literal> element:</para>
+
+      <programlisting language="xml"><![CDATA[<osgi:service ref="beanToBeExported" interface="com.xyz.MessageService"/>
+
+<bean id="beanToBeExported" scope="bundle" class="com.xyz.MessageServiceImpl"/>]]></programlisting>
+	</section>
+    <section id="service-registry:export:intfs">
+        <title>Controlling The Set Of Advertised Service Interfaces For
+        An Exported Service</title>
+
+        <para>The OSGi Service Platform Core Specification defines the term
+        <emphasis>service interface</emphasis> to represent the specification
+        of a service's public methods. Typically this will be a Java
+        interface, but the specification also supports registering service
+        objects under a class name, so the phrase <emphasis>service
+        interface</emphasis> can be interpreted as referring to either an
+        interface or a class.</para>
+
+        <para>There are several options for specifying the service
+        interface(s) under which the exported service is registered. The
+        simplest mechanism, shown above, is to use the
+        <literal>interface</literal> attribute to specify a fully-qualified
+        interface name. To register a service under multiple interfaces the
+        nested <literal>interfaces</literal> element can be used in place of
+        the <literal>interface</literal> attribute.</para>
+
+        <programlisting language="xml"><![CDATA[<osgi:service ref="beanToBeExported">
+  <osgi:interfaces>
+     <value>com.xyz.MessageService</value>
+     <value>com.xyz.MarkerInterface</value>
+  </osgi:interfaces>
+</osgi:service>]]></programlisting>
+
+		<para>It is illegal to use both <literal>interface</literal> attribute and
+		<literal>interfaces</literal> element at the same time - use only one of them.
+		</para>
+	  
+	  <section id="service-registry:export:auto-export">
+	    <title>Detecting The Advertised Interfaces At Runtime</title>
+		<sidebar>
+			<title>Hierarchy visibility</title>
+			
+        	<para>Note that when using <literal>auto-export</literal>, only types visible to the
+        	bundle exporting the service are registered. For example, a
+        	super-interface <literal>SI</literal> would not be exported as a
+        	supported service interface even when using
+        	<literal>auto-export="interfaces"</literal> if <literal>SI</literal>
+        	was not on the exporting bundle's classpath.</para>
+        	
+        	<para>Even if exported service class does implement <literal>SI</literal> transitively based
+        	on its parent, if the declaring bundle doesn't import the 
+        	interface, the class is unknown to the exported service. While this 
+        	might seem counter intuitive, it is actually one of the most powerful features of OSGi
+        	which give the bundle authors control over the class visibility and path.
+        	</para>
+        	
+        	<para>Please see the FAQ for a more detailed explanation.</para>
+        </sidebar>
+
+        <para>Using the <literal>auto-export</literal> attribute you can avoid
+        the need to explicitly declare the service interfaces at all by analyzing the
+        object class hierarchy and its interfaces.</para>
+        <para> 
+        The <literal>auto-export</literal> attribute can have one of four
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>disabled</literal> : the default value; no auto-detected of service
+            interfaces is undertaken and the <literal>interface</literal>
+            attribute or <literal>interfaces</literal> element must be used
+            instead.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>interfaces</literal> : the service will be registered using all of the
+            Java interface types implemented by the bean to be exported</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>class-hierarchy</literal> : the service will be registered using the
+            exported bean's implementation type and super-types</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>all-classes</literal> : the service will be registered using the exported
+            bean's implementation type and super-types plus all interfaces
+            implemented by the bean.</para>
+          </listitem>
+        </itemizedlist>
+
+		<para>
+		<literal>auto-export</literal> and <literal>interface(s)</literal> option are not exclusive; both
+		can be used at the same time for fine grained control over the advertised interfaces if there is such
+		a need. However, the former	option should be enough for most cases. 
+		</para>
+        <para>For example, to automatically register a bean under all of the
+        interfaces that it supports you would declare:</para>
+
+        <programlisting language="xml"><![CDATA[<service ref="beanToBeExported" auto-export="interfaces"/>]]></programlisting>
+
+        <para>Given the interface hierarchy:</para>
+
+        <programlisting language="java"><![CDATA[public interface SuperInterface {}
+
+public interface SubInterface extends SuperInterface {}]]></programlisting>
+
+        <para>then a service registered as supporting the
+        <literal>SubInterface</literal> interface is <emphasis>not</emphasis>
+        considered a match in OSGi when a lookup is done for services
+        supporting the <literal>SuperInterface</literal> interface. For this
+        reason it is a best practice to export all interfaces supported by the
+        service being registered explicitly, using either the
+        <literal>interfaces</literal> element or
+        <literal>auto-export="interfaces"</literal>.</para>
+
+      </section>
+      </section>
+      
+
+      <section id="service-registry:export:props">
+        <title>Controlling The Set Of Advertised Properties For An
+        Exported Service</title>
+
+        <para>As previously described, an exported service is always
+        registered with the service property
+        <literal>org.eclipse.gemini.blueprint.bean.name</literal> set to the name
+        of the bean being exported. Since DM 2.x, the bean name is also published
+        under <literal>osgi.service.blueprint.compname</literal> (introduced by 
+        the OSGi 4.2 Blueprint spec).
+        Additional service properties can be
+        specified using the nested <literal>service-properties</literal>
+        element. The <literal>service-properties</literal> element contains
+        key-value pairs to be included in the advertised properties of the
+        service. The key must be a string value, and the value must be a type
+        recognized by OSGi Filters. See section 5.5 of the OSGi Service
+        Platform Core Specification for details of how property values are
+        matched against filter expressions.</para>
+
+        <para>The <literal>service-properties</literal> element must contain
+        at least one nested <literal>entry</literal> element from the Spring
+        beans namespace. For example:</para>
+
+        <programlisting language="xml"><![CDATA[<service ref="beanToBeExported" interface="com.xyz.MyServiceInterface">
+  <service-properties>
+    <beans:entry key="myOtherKey" value="aStringValue"/>
+    <beans:entry key="aThirdKey" value-ref="beanToExposeAsProperty"/>
+  </service-properties>
+</service>]]></programlisting>
+
+		<para>Non-String values can be specified by enforcing the value type. Consider the publication
+		of an OSGi event consumer (<interfacename>org.osgi.service.event.EventHandler</interfacename>)
+		that needs to specify the topics it follows as an array under <literal>event.topics</literal>
+		property. Below are a list of configuration on how this can be achieved:</para>
+		
+		<programlistingco>
+			<programlisting language="xml"><![CDATA[<osgi:service
+     id="eventMonitorService"
+     ref="someBean" 
+     interface="org.osgi.service.event.EventHandler">
+        <osgi:service-properties value-type="java.lang.String[]">
+            <entry key="event.topics" value="eventQueue"/>
+        </osgi:service-properties>     
+</osgi:service>]]></programlisting>
+			<areaspec>
+				<area id="service-registry:export:props:array:top" coords="5 72"/>
+			</areaspec>
+			<calloutlist>
+				<callout arearefs="service-registry:export:props:array:top">
+				Specify an array type for <emphasis>all</emphasis> the values declared inside the <literal>service-properties</literal> element.
+				</callout>
+			</calloutlist>
+		</programlistingco>
+
+		<programlistingco>
+			<programlisting language="xml"><![CDATA[<osgi:service
+     id="eventMonitorService"
+     ref="someBean" 
+     interface="org.osgi.service.event.EventHandler">
+        <osgi:service-properties>
+            <entry key="event.topics">
+                <value type="java.lang.String[]">eventQueue</value>
+            </entry>
+    	</osgi:service-properties>
+</osgi:service>]]></programlisting>
+			<areaspec>
+				<area id="service-registry:export:props:array:nested" coords="7 72"/>
+			</areaspec>
+			<calloutlist>
+				<callout arearefs="service-registry:export:props:array:nested">
+				Indicate the value type just for this particular value.
+				</callout>
+			</calloutlist>
+		</programlistingco>
+		
+		<programlistingco>
+			<programlisting language="xml"><![CDATA[<osgi:service
+     id="eventMonitorService"
+     ref="someBean" 
+     interface="org.osgi.service.event.EventHandler">
+        <osgi:service-properties>
+            <entry key="event.topics">
+                <array value-type="java.lang.String">
+                    <value>eventQueue</value>
+                </array>
+            </entry>
+        </osgi:service-properties>
+</osgi:service>]]></programlisting>
+			<areaspec>
+				<area id="service-registry:export:props:array:array" coords="7 72"/>
+			</areaspec>
+			<calloutlist>
+				<callout arearefs="service-registry:export:props:array:array">
+				Use Spring 3.x <literal><![CDATA[<array>]]></literal> element to create an nested array on the fly.
+				</callout>
+			</calloutlist>
+		</programlistingco>
+        <para>The Gemini Blueprint roadmap includes support for
+        exporting properties registered in the OSGi Configuration
+        Administration service as properties of the registered service. See
+        <xref linkend="appendix-roadmap"/> for more details.</para>
+        
+      </section>
+
+      <section id="service-registry:export:depends-on">
+        <title>The depends-on Attribute</title>
+
+        <para>Spring will manage explicit dependencies of a service element,
+        ensuring for example that the bean to be exported as a service is
+        fully constructed and configured before exporting it. If a service has
+        implicit dependencies on other components (including other service
+        elements) that must be fully initialized before the service can be
+        exported, then the optional <literal>depends-on</literal> attribute
+        can be used to express these dependencies.</para>
+
+        <programlisting language="xml"><![CDATA[<service ref="beanToBeExported" interface="com.xyz.MyServiceInterface"
+     depends-on="myOtherComponent"/>]]></programlisting>
+      </section>
+      
+      <section id="service-registry:export:ccl">
+        <title>The context-class-loader Attribute</title>
+        
+        <para>The OSGi Service Platform Core Specification (most current
+        version is 4.x at time of writing) does not specify what types and
+        resources are visible through the context class loader when an
+        operation is invoked on a service obtained via the service registry.
+        Since some services may use libraries that make certain assumptions
+        about the context class loader, Gemini Blueprint enables you to
+        explicitly control the context class loader during service execution.
+        This is achieved using the option
+        <literal>context-class-loader</literal> attribute of the service
+        element.</para>
+
+        <para>The permissible values for the
+        <literal>context-class-loader</literal> attribute are
+        <literal>unmanaged</literal> (the default) and
+        <literal>service-provider</literal>. When the
+        <literal>service-provider</literal> value is specified, Spring Dynamic
+        Modules ensures that the context class loader can see all of the
+        resources on the class path of the bundle exporting the service.</para>
+        
+        <remark>When setting <literal>context-class-loader</literal> to <literal>service-provider</literal>, the service object will be proxied to
+        handle the class loader. If the service advertises any concrete class then CGLIB library is required .</remark>
+      </section>
+      
+      <section id="service-registry:export:ranking">
+        <title>The <literal>ranking</literal> Attribute</title>
+
+        <para>When registering a service with the service registry, you may
+        optionally specify a service ranking (see section 5.2.5 of the OSGi
+        Service Platform Core Specification). When a bundle looks up a service
+        in the service registry, given two or more matching services the one
+        with the highest ranking will be returned. The default ranking value
+        is zero. To explicitly specify a ranking value for the registered
+        service, use the optional <literal>ranking</literal> attribute.</para>
+
+        <programlisting language="xml"><![CDATA[<service ref="beanToBeExported" interface="com.xyz.MyServiceInterface"
+  ranking="9"/>]]></programlisting>
+      </section>
+
+      <section id="service-registry:export:cache">
+        <title>The <literal>cache-target</literal> Attribute</title>
+
+        <para>By default, services exported are being retrieved from the container each time they are requested.
+        This allows <emphasis>scoped</emphasis> beans to behave correctly depending on the context available
+        when the request is being performed. However, there are cases when the target bean (the entity being
+        exported) needs to be cached no matter its scope. The Blueprint spec for example requires this behaviour
+        for all exported services.</para>
+        <para>To accommodate both cases one, Gemini Blueprint 1.0/Spring DM 2.0 introduces a new attribute, <literal>cache-target</literal>
+        which, as the name suggests, enables the caching of the exported bean. The instance of the bean retrieved,
+        for the first service registration is cached internally by the exporter which will later reuse it.</para>
+		
+        <programlisting language="xml"><![CDATA[<service ref="beanToBeExported" interface="com.xyz.MyServiceInterface"
+  cache-target="true"/>]]></programlisting>
+      </section>
+
+      <section id="service-registry:export:service:attributes">
+       <title><literal>service</literal> Element Attributes</title>
+       <para>
+       As a summary, the following table lists the attributes names, possible values and
+       a short description for each of them.
+       </para>
+       <table id="service-export-options" pgwide="1" align="center">
+          <title>OSGi <![CDATA[<service>]]> attributes</title>
+          <tgroup cols="6">
+          	<colspec colname="c1"/>
+          	<colspec colname="c2"/>
+          	<colspec colname="c3"/>
+          	<colspec colname="c4"/>
+          	<colspec colname="c5"/>
+          	<colspec colname="c6" align="center"/>
+            <spanspec spanname="values" namest="c2" nameend="c5" align="center"/>
+            <thead>
+              <row>
+                <entry>Name</entry>
+                <entry spanname="values">Values</entry>
+                <entry align="center">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>interface</entry>
+                <entry spanname="values">fully qualified class name (such as <classname>java.lang.Thread</classname>)</entry>
+                <entry>the fully qualified name of the class under which the object will be exported</entry>
+              </row>
+              <row>
+                <entry>ref</entry>
+                <entry spanname="values">any bean name</entry>
+                <entry>Reference to the named bean to be exported as a service in the service registry.</entry>
+              </row>
+              <row>
+                <entry>context-class-loader</entry>
+                <entry namest="c2" nameend="c3">unmanaged</entry>
+                <entry namest="c4" nameend="c5">service-provider</entry>
+                <entry>Defines how the context class loader will be managed when an operation is invoked on the 
+                exported service. The default value is <literal>unmanaged</literal> which means that no management of 
+                the context class loader is attempted. A value of <literal>service-provider</literal> guarantees that
+                the context class loader will have visibility of all the resources on the class path of 
+                bundle exporting the service.</entry>
+              </row>
+              <row>
+                <entry>auto-export</entry>
+                <entry>disabled</entry>
+                <entry>interfaces</entry>
+                <entry>class-hierarchy</entry>
+                <entry>all-classes</entry>
+                <entry>Enables Spring to automatically manage the set of service interfaces advertised for the
+				service. By default this facility is <literal>disabled</literal>. A value of <literal>interfaces</literal> advertises all 
+                of the Java interfaces supported by the exported service. A value of <literal>class-hierarchy</literal> 
+                advertises all the Java classes in the hierarchy of the exported service. A value of 
+                <literal>all-classes</literal> advertises all Java interfaces and classes.</entry>
+              </row>
+              <row>
+                <entry>ranking</entry>
+                <entry spanname="values">any integer value</entry>
+                <entry>Specify the service ranking to be used when advertising the service. Default value is 0.</entry>
+              </row>
+              <row>
+                <entry>cache-target</entry>
+                <entry namest="c2" nameend="c3">true</entry>
+                <entry namest="c4" nameend="c5">false</entry>
+                <entry>Specify whether the bean exported as an OSGi service is cached (on first registration) or not. Default value is <literal>false</literal></entry>
+              </row>
+            </tbody>
+          </tgroup>
+      </table>        
+      </section>
+
+      <section id="service-registry:export:lifecycle">
+        <title>Service Registration And Unregistration Lifecycle</title>
+
+        <para>The service defined by a <literal>service</literal> element is
+        registered with the OSGi service registry when the application context
+        is first created. It will be unregistered automatically when the
+        bundle is stopped and the application context is disposed. Additionally,
+        based on the mandatory service import availability, the service can be
+        unregistered and registered at runtime 
+        (see <xref linked="service-registry:export-import-relationship"/>).</para>
+
+        <para>If you need to take some action when a service is unregistered
+        because its dependencies are not satisfied (or when it is registered),
+        then you can define a listener bean using the nested
+        <literal>registration-listener</literal> element.</para>
+
+        <para>The declaration of a registration listener must use either the
+        <literal>ref</literal> attribute to refer to a top-level bean
+        definition, or declare an anonymous listener bean inline. For
+        example:</para>
+
+	  <programlistingco>
+	   <areaspec>
+	   	  <area id="service-registry.exporter.listener.ref" coords="2"/>
+	   	  
+	   	  <areaset id="service-registry.exporter.listener.ref.custom" coords="">
+            <area id="service-registry.exporter.listener.ref.custom.1" coords="3"/>
+            <area id="service-registry.exporter.listener.ref.custom.2" coords="4"/>
+          </areaset>
+	   	  
+          <area id="service-registry.exporter.listener.nested" coords="6"/>
+          <area id="service-registry.exporter.listener.nested.decl" coords="7"/>
+       </areaspec>
+       
+        <programlisting language="xml"><![CDATA[<service ref="beanToBeExported" interface="SomeInterface">
+  <registration-listener ref="myListener"
+    registration-method="serviceRegistered"
+    unregistration-method="serviceUnregistered"/>
+  <registration-listener
+     registration-method="register">
+     <bean class="SomeListenerClass"/>
+  </registration-listener>
+</service>]]></programlisting>
+
+       <calloutlist>
+         <callout arearefs="service-registry.exporter.listener.ref">
+            <para>Listener declaration referring to a top-level bean declaration.
+            </para>
+         </callout>
+       
+         <callout arearefs="service-registry.exporter.listener.ref.custom">
+            <para>Indicate the <literal>registration</literal> and <literal>unregistration</literal> methods.</para>
+         </callout>
+         <callout arearefs="service-registry.exporter.listener.nested">
+         	<para>Declare only a <literal>registration</literal> custom method for this listener.</para>
+         </callout>
+         <callout arearefs="service-registry.exporter.listener.nested.decl">
+         	<para>Nested listener bean declaration.</para>
+         </callout>
+       </calloutlist>
+	</programlistingco>
+
+        <para>The optional <literal>registration-method</literal> and
+        <literal>unregistration-method</literal> attributes specify the names
+        of the methods defined on the listener bean that are to be invoked
+        during registration and unregistration. A registration and unregistration 
+        callback methods must have a signature matching one of the following formats:</para>
+
+        <programlisting language="java"><![CDATA[public void anyMethodName(ServiceType serviceInstance, Map serviceProperties);]]></programlisting>
+        
+        <programlisting language="java"><![CDATA[public void anyMethodName(ServiceType serviceInstance, Dictionary serviceProperties);]]></programlisting>
+
+        <para>where <literal>ServiceType</literal> can be any type compatible
+        with the exported service interface of the service.</para>
+
+        <para>The register callback is invoked when the service is initially
+        registered at startup, and whenever it is subsequently re-registered.
+        The unregister callback is invoked during the service unregistration process, 
+        no matter the cause (such as the owning bundle stopping).</para>
+        
+        <para>Gemini Blueprint/Spring DM will use the declared <literal>ServiceType</literal> argument type
+        and invoke the registration/unregistration method only when a service of a compatible type
+        will be registered/unregistered.</para>
+        
+        <para><literal>serviceProperties</literal> represents a map holding all the properties
+        of the registered/unregistered service. To preserve compatibility with the OSGi specification
+        this argument can be cast, if needed, to a <literal>java.util.Dictionary</literal>.</para>
+        
+        <section id="service-registry:export:lifecycle:interface">
+        <title>Using <interfacename>OsgiServiceRegistrationListener</interfacename> Interface</title>
+        <para>
+        While we discourage, it is possible to implement a Gemini Blueprint/Spring DM specific interface, namely 
+        <interfacename>org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener</interfacename> which avoids the need
+        to declare the <literal>registration-method</literal> and <literal>unregistration-method</literal>.
+        However, by implementing <interfacename>OsgiServiceRegistrationListener</interfacename>, your code
+        becomes Gemini Blueprint/Spring DM aware (which goes against the POJO philosophy).
+        </para>
+        
+        <para>It is possible for a listener to implement <interfacename>OsgiServiceRegistrationListener</interfacename> interface and
+        declare custom methods. In this case, the Gemini Blueprint/Spring DM interface methods will be called first, followed by the custom methods.
+        </para>
+      </section>
+      
+      <section id="service-registry:export:blueprint">
+       <title>Blueprint <literal>service</literal> Comparison</title>
+       
+       <para>The Blueprint Container offers a <literal>service</literal> element, identical in functionality with the one in Gemini Blueprint/Spring DM. In most cases,
+       the configuration should be identical. Below is a summary of the configuration options available in Gemini Blueprint/Spring DM and Blueprint:</para>
+       
+       <table id="service-registry:export:blueprint:comparison" pgwide="1" align="center">
+          <title>Spring DM / Blueprint <literal><![CDATA[<service>]]></literal> Configuration Comparison</title>
+          <tgroup cols="2">
+           <thead>
+              <row>
+                <entry align="center">Gemini Blueprint/Spring DM</entry>
+                <entry align="center">Blueprint</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>interface</entry>
+                <entry>interface</entry>
+              </row>
+              <row>
+                <entry>ref</entry>
+                <entry>ref</entry>
+              </row>
+              <row>
+                <entry>auto-export</entry>
+                <entry>auto-export</entry>
+              </row>
+              <row>
+                <entry>ranking</entry>
+                <entry>ranking</entry>
+              </row>
+              <row>
+                <entry>context-class-loader</entry>
+                <entry>-</entry>
+              </row>
+              <row>
+                <entry>cache-target</entry>
+                <entry>- (caching is always enabled)</entry>
+              </row>
+            </tbody>            
+          </tgroup>
+        </table>
+        
+        <para>Since the <literal>registration-listener</literal> declaration is identical in declaration and functionality between Blueprint 
+        and Gemini Blueprint/Spring DM, this section does not mention it.</para>
+      </section>
+        
+      </section>
+    </section>
+
+    <section id="service-registry:refs">
+      <title>Defining References To OSGi Services</title>
+
+      <para>To use services, clients need to look for them inside the OSGi service registry.
+      If found, the platform returns a reference which can be used to get the actual service instance.
+      Consumers should return the service instance as soon as possible and not hold on to it since
+      the service provider can unpublish the service at any point.
+      Since there is no mechanism in Java to force such cleanup, the OSGi specification uses the service
+      references and the aforementioned <emphasis>protocol</emphasis> to decouple service providers from
+      service consumers. Please see chapter 5, the Service Layer inside the OSGi Core spec for an in-depth
+      discussion.
+      </para>
+      
+      <para>Gemini Blueprint facilitates the consumption of OSGi services by taking care of not 
+      just of the retrieval of service references and instances but also considering the service dynamics.
+      With Gemini Blueprint/Spring DM, imported OSGi services become Spring beans which can be injected, as usual, 
+      into other application components. The service lookup is made using the service interface type
+      that the service is required to support, plus an optional filter
+      expression that matches against the service properties published in the
+      registry. The service instance retrieval is done on demand, on the first request. Once the service
+      becomes unavailable, Gemini Blueprint/Spring DM automatically unregisters the service to avoid using <emphasis>stale</emphasis>
+      references.</para>
+
+      <para>As a consumer, one can find zero, one or multiple services matching the desired description.
+      In most scenarios, a single matching service is all that is needed; for those the
+      <literal>reference</literal> element defines a reference to a single
+      service that meets the required specification. 
+      In other cases, especially when using the OSGi <ulink
+      url="http://www.osgi.org/documents/osgi_technology/whiteboard.pdf">whiteboard
+      pattern</ulink>, references to <emphasis>all available</emphasis>
+      matching services are required. Gemini Blueprint supports the
+      management of this group of references as either a <interfacename>List</interfacename> or a
+      <interfacename>Set</interfacename> collection.</para>
+
+	  <section id="service-registry:refs:availability">
+	  	<title>Imported Service Availability</title>
+	  	
+	  	<sidebar>
+	  	<title>What happened to <literal>cardinality</literal>?</title>
+	  	<para>
+	  	Since Spring DM 2.x/Gemini Blueprint, the <literal>cardinality</literal> notion has been deprecated in favour
+	  	of <literal>availability</literal>. The main reasons behind it were aligning the terminology
+	  	with the Blueprint spec and eliminating the repetition of specifying the number of imported
+	  	services: as <literal>osgi</literal> elements already specify whether one or multiple services
+	  	are imported, the <literal>cardinality</literal> right side (<literal>..N/..1</literal>) was
+	  	redundant.
+	  	</para>
+	  	</sidebar>
+	  	
+	  	<para>Due to the dynamic nature of OSGi, services can come and go, be available or unavailable
+	  	at certain points in time. Depending on the type of service, this can have a negative impact
+	  	on the consumers. Gemini Blueprint/Spring DM alleviates this problem by introducing the
+	  	notion of <literal>availability</literal> (formerly known as <literal>cardinality</literal>)
+	  	which indicates whether an imported service is <literal>mandatory</literal> or 
+	  	<literal>optional</literal>.</para>
+	  	
+	  	<para>As the name implies, a <literal>mandatory</literal> service implies a crucial application dependency:
+	  	the service is <emphasis>required</emphasis> and its presence can heavily impact the application, in
+	  	a negative way.
+	  	</para>
+	  	<para>An <literal>optional</literal> service means just the opposite. The service is tracked and bound 
+	  	(if present), just like a <literal>mandatory</literal> reference, but its presence is not required. It is
+	  	fine, from an application perspective if the service is not available - its existence (or lack of) does
+	  	not impact the application functionality.</para>
+	  	
+	  	<para>As an example, an application could have a <literal>mandatory</literal> dependency on a <literal>
+	  	DataSource</literal> and an <literal>optional</literal> one for a logging service: the application can run fine
+	  	if it cannot log (it does not impact the runtime) but it fails if the backing database is not available.</para>
+	  	
+	  	<para>In Gemini Blueprint/Spring DM, a <literal>mandatory</literal> service import that is unsatisfied (there are no services
+	  	matching the description) can either prevent an application context from starting up or, if already started,
+	  	cause the unregistration of the exported services dependent on it.</para>
+	  	
+	  	<section id="service-registry:refs:availability:startup">
+	  	<title>Mandatory Services and Application Startup</title>
+	  	<para>
+	  	The availability of a service impacts the startup of an Spring-powered application and 
+	  	the publication of any exported services that depend on it.
+	  	As mentioned in <xref linkend="bnd-app-ctx:app-creation:mandatory-deps"/>, a SpringDM application will not start 
+	  	unless <emphasis>all</emphasis> <literal>mandatory</literal> services are available, at the same time.
+
+	  	Before initializing the context, Gemini Blueprint/Spring DM discovers all the <literal>mandatory</literal> service
+	  	declarations and waits for a period of time (5 minutes by default unless otherwise specified by
+	  	each bundle - see the <literal>timeout</literal> directive in <xref linkend="app-deploy:headers"/>) for all imports
+	  	to be satisfied, at the same time.
+	  	If the timeout occurs, the application initialization fails (since the required or mandatory services
+	  	are not available) or succeeds, meaning the application context is being initialized.
+	  	</para>
+	  	
+	  	<para>This way, the framework prevents the application from starting up only to fail since its required
+	  	services are unavailable. This feature avoids the need for ordering the bundle startup sequence as the 
+	  	configuration already acts as a service <emphasis>barrier</emphasis> blueprint: no matter the order of the services
+	  	started, on whether they come and go, only when all of them are present, will the context initialization
+	  	commence.</para>
+	  	
+	  	<note>The fact that an application has mandatory service references, gives no guarantee 
+	  	that a valid service object is available when the service reference is used, since services can 
+	  	get unregistered at any time. Gemini Blueprint/Spring DM guarantees that all the mandatory services were present, at
+	  	the same time, before the application was started but it cannot prevent or guarantee that this services
+	  	will not be disappear during the application life span.</note>
+
+        <warning>
+          It is an error to declare a mandatory reference to a
+          service that is also exported by the same bundle, this behaviour can
+          cause application context creation to fail through either deadlock
+          or timeout.
+        </warning>
+	  	
+	  	</section>
+	  	
+	  	<!-- keep the old name in case the old chapter in 1.2 is still referred to -->
+    	<section id="service-registry:export-import-relationship">
+     	<title>Relationship Between The Service Exporter And Service Importer</title>
+       	
+        <para>An exported service may depend, either directly or indirectly,
+        on other (imported) services in order to perform its function. If one of these
+        services is marked as a <emphasis>mandatory</emphasis> dependency and the 
+        dependency can no longer be satisfied
+        (because the backing service has gone away and there is no suitable
+        replacement available), then the exported service that depends on it
+        will be automatically unregistered from the service registry - meaning
+        that it is no longer available to clients. If the mandatory dependency
+        becomes satisfied once more (by registration of a suitable service),
+        then the exported service will be re-registered in the service
+        registry.</para>
+
+		<para>This automatic publication management ensures that only when the exported service can work reliable,
+		it is made available for potential OSGi clients. This behaviour takes advantage of the OSGi dynamic nature
+		allowing an application to cope with the ongoing changing without being restarted. 
+		</para>
+
+        <para>This automatic unregistering and re-registering of exported
+        services based on the availability of mandatory dependencies only
+        takes into account declarative dependencies. If exported service
+        <literal>S</literal> depends on bean <literal>A</literal>, which in
+        turn depends on mandatory imported service <literal>M</literal>, and
+        these dependencies are explicit in the Spring configuration file as
+        per the example below, then when <literal>M</literal> becomes
+        unsatisfied <literal>S</literal> will be unregistered. When
+        <literal>M</literal> becomes satisfied again, <literal>S</literal>
+        will be re-registered.</para>
+
+        <programlisting language="xml"><![CDATA[<osgi:service id="S" ref="A" interface="SomeInterface"/>
+
+<bean id="A" class="SomeImplementation">
+   <property name="helperService" ref="M"/>
+</bean> 
+
+<!-- the reference element is used to refer to a service
+     in the service registry -->
+<osgi:reference id="M" interface="HelperService" availability="mandatory"/>]]></programlisting>
+
+        <para>If however the dependency from <literal>A</literal> on
+        <literal>M</literal> is not established through configuration as shown
+        above, but instead at runtime through for example passing a reference
+        to <literal>M</literal> to <literal>A</literal> without any
+        involvement from the Spring container, then Gemini Blueprint
+        will <emphasis>not</emphasis> track this dependency.</para>
+        </section>	  	
+	  </section>
+	  
+      <section id="service-registry:refs:singular">
+        <title>Referencing An Individual Service</title>
+
+      	<para>The <literal>reference</literal> element is used to define a
+        reference to a service in the service registry.</para>
+         
+        <para>Since there can be multiple service matching a given description,
+        the service returned is the service that would be returned by a call to
+        <literal>BundleContext.getServiceReference</literal>. This means that
+        the service with the highest ranking will be returned, or if there is
+        a tie in ranking, the service with the lowest service id (the service
+        registered first with the framework) is returned (please see Section 5
+        from the OSGi spec for more information on the service selection algorithm).</para>
+        
+        <section id="service-registry:refs:singular:interface">
+          <title>Controlling The Set Of Advertised Interfaces For The Imported Service</title>
+          
+	        <para>The <literal>interface</literal> attribute identifies the service
+	        interface that a matching service must implement. For example, the
+	        following declaration creates a bean
+	        <literal>messageService</literal>, which is backed by the service
+	        returned from the service registry when querying it for a service
+	        offering the <interfacename>MessageService</interfacename> interface.</para>
+	
+	        <programlisting language="xml"><![CDATA[<reference id="messageService" interface="com.xyz.MessageService"/>]]></programlisting>
+	        
+	        <para>Just like the <literal>service</literal> declaration, when specifying
+	        multiple interfaces, use the nested <literal>interfaces</literal> element instead
+	        of <literal>interface</literal> attribute:
+	        </para>
+	        
+	        <programlisting language="xml"><![CDATA[<osgi:reference id="importedOsgiService">
+  <osgi:interfaces>
+     <value>com.xyz.MessageService</value>
+     <value>com.xyz.MarkerInterface</value>
+  </osgi:interfaces>
+</osgi:reference>]]></programlisting>
+
+			<para>It is illegal to use both <literal>interface</literal> attribute and
+			<literal>interfaces</literal> element at the same time - use only one of them.
+			</para>
+
+	        <para>The bean defined by reference element implements all of the
+	        advertised interfaces of the service that are visible to the bundle (called
+	        <emphasis>greedy proxying</emphasis>).
+	        If the registered service interfaces include Java class types (as
+	        opposed to interface types) then support for these types is subject to
+	        the restrictions of Spring's AOP implementation (see the Spring
+	        Reference Guide). In short, if the specified interfaces are classes
+	        (rather then interfaces), then <literal>cglib</literal> library must be
+	        available, and <literal>final</literal> methods are not
+	        supported.</para>
+        </section>
+        
+          
+        <section id="service-registry:refs:singular:filter">
+          <title>The <literal>filter</literal> Attribute</title>
+
+          <para>The optional <literal>filter</literal> attribute can be used
+          to specify an OSGi filter expression and constrains the service
+          registry lookup to only those services that match the given
+          filter.</para>
+
+          <para>For example:</para>
+
+          <programlisting language="xml"><![CDATA[<reference id="asyncMessageService" interface="com.xyz.MessageService"
+  filter="(asynchronous-delivery=true)"/>]]></programlisting>
+  
+  		  <para>will match only OSGi services that advertise <interfacename>MessageService</interfacename>
+  		  interface and have the property named <literal>asynchronous-delivery</literal> set to value <literal>true</literal>.
+  		  </para>
+        </section>
+
+        <section id="service-registry:refs:singular:bean-name">
+          <title>The <literal>bean-name</literal> Attribute</title>
+
+          <para>The <literal>bean-name</literal> attribute is a convenient
+          short-cut for specifying a filter expression that matches on the
+          <literal>bean-name</literal> property automatically set when exporting a bean using the
+          <literal>service</literal> element (see <xref linkend="service-registry:export"/>).</para>
+
+          <para>Consider the following exporter/importer declarations:</para>
+          
+         <programlistingco>
+		   <areaspec>
+		   	  <areaset id="service-registry:refs:bean-name" coords="">
+		   	  	<area id="service-registry:refs:bean-name.1" coords="1 11"/>
+		   	  	<area id="service-registry:refs:bean-name.2" coords="3 48"/>
+		   	  </areaset>
+		   </areaspec>
+           <programlisting language="xml"><![CDATA[<bean id="messageServiceBean" scope="bundle" class="com.xyz.MessageServiceImpl"/>
+<!-- service exporter -->
+<osgi:service id="messageServiceExporter" ref="messageServiceBean" interface="com.xyz.MessageService"/>]]>
+</programlisting>
+          </programlistingco>
+		  <programlistingco>
+		   <areaspec>
+		   	  <area id="service-registry:refs:bean-name" coords="2 15"/>
+		   </areaspec>
+           <programlisting language="xml"><![CDATA[<osgi:reference id="messageService" interface="com.xyz.MessageService"
+   bean-name="messageServiceBean"/>
+]]></programlisting>
+   		  </programlistingco>
+   		  <calloutlist>
+   		  	<callout arearefs="service-registry:refs:bean-name">
+   		  		<para>the name used with <literal>bean-name</literal> attribute</para>
+   		  	</callout>
+   		  </calloutlist>
+   		  
+   		  <para>will match only OSGi services that advertise <interfacename>MessageService</interfacename>
+   		  interface and have the property named <literal>org.eclipse.gemini.blueprint.bean.name</literal> set
+   		  to value <literal>messageServiceBean</literal>. In short, this means finding all Gemini Blueprint/Spring DM exported
+   		  beans that implement interface <interfacename>MessageService</interfacename> and are named
+   		  <literal>messageServiceBean</literal>.</para>
+   		  
+        </section>
+
+        <section id="service-registry:refs:singular:cardinality">
+          <title>The <literal>availability</literal> Attribute</title>
+
+		  <sidebar>
+		    <title><![CDATA[Nested <reference> declarations]]></title>
+		    <para>In order for Gemini Blueprint/Spring DM to detect mandatory dependencies, any
+		    <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/beans.html#beans-inner-beans">nested/inner</ulink>
+		    reference declaration will be transformed into top-level
+		    one with a generated name.</para>
+		  </sidebar>
+
+          <para>The <literal>availability</literal> attribute is used to
+          specify whether or not a matching service is required at all times.
+          An <literal>mandatory</literal> availability (the default)
+          indicates that a matching service must always be present. A
+          value of <literal>optional</literal> indicates that a
+          matching service is not required at all times (see 
+          <xref linkend="service-registry:refs:singular:dynamics"/>
+          for more details). The differences in behaviour between <literal>mandatory</literal>
+          and <literal>optional</literal> services are explained at length in 
+          <xref linkend="service-registry:refs:availability"/>.
+          </para>
+        </section>
+
+        <section id="service-registry:refs:singular:depends-on">
+          <title>The <literal>depends-on</literal> Attribute</title>
+
+          <para>The <literal>depends-on</literal> attribute is used to specify
+          that the service reference should not be looked up in the service
+          registry until the named dependent bean has been
+          instantiated.</para>
+        </section>
+
+        <section id="service-registry:refs:singular:tccl">
+          <title>The <literal>context-class-loader</literal> Attribute</title>
+
+          <para>The OSGi Service Platform Core Specification (latest
+          version is 4.1 at time of writing) does not specify what types and
+          resources are visible through the context class loader when an
+          operation is invoked on a service obtained via the service registry.
+          Since some services may use libraries that make certain assumptions
+          about the context class loader, Gemini Blueprint enables you
+          to explicitly control the context class loader during service
+          invocation. This is achieved using the option
+          <literal>context-class-loader</literal> attribute of the
+          <literal>reference</literal> element.</para>
+
+		  <sidebar>
+		    <title>context class loader management on the importer and exporter</title>
+		    <para>
+		      Gemini Blueprint/Spring DM has the ability to do context class loader management on both
+		      the importer and exporter side. Normally, if Gemini Blueprint/Spring DM works on both sides,
+		      only one side should have this feature enabled. However, if both sides 
+		      (importer and exporter) take advantage of this capability, the last
+		      entity in the call chain will win. This means that the exporter setting,
+		      if enabled, will always override the importer setting (whatever that is). 
+		    </para>
+		  </sidebar>
+		  
+          <para>The permissible values for the
+          <literal>context-class-loader</literal> attribute are:</para>
+          
+          <itemizedlist>
+          	<listitem>
+          	<para><literal>client</literal> - during the service invocation,
+          	the context	class loader is guaranteed to be
+          	able to see types on the classpath of the invoking bundle.
+          	This is the default option.</para>
+          	</listitem>
+
+          	<listitem>
+          	<para><literal>service-provider</literal> - during the service invocation,
+          	the context	class loader is guaranteed to be
+          	able to see types on the classpath of the bundle exporting
+          	the service.</para>
+          	</listitem>
+
+          	<listitem>
+          	<para><literal>unmanaged</literal> - no context class loader
+          	management will occur during the service invocation</para>
+          	</listitem>
+          </itemizedlist>
+        </section>
+        
+        <section id="service-registry:refs:singular:sticky">
+          <title>The <literal>sticky</literal> Attribute</title>
+          
+          <para>Newly introduced in DM 2.x, the <literal>sticky</literal> attribute specifies whether an importer will use
+          a backing service until it becomes unavailable or whether it will consider other <emphasis>better</emphasis> candidates 
+          (defined as services matching the importer criteria but with a higher ranking or a lower service id) that might appear.
+          In Spring DM 1.x, the importer would always select the best service available at any point in time. Thus, if a service with
+          a higher ranking id becomes available, the proxy would automatically bind to it. In highly dynamic environments, this lack
+          of service affinity becomes problematic so in DM 2.x/Gemini Blueprint, the behaviour has changed (aligning itself with the Blueprint spec).
+          Thus, service importers become <literal>sticky</literal> by default meaning that a proxy will use the bound backing service
+          until it becomes unavailable, ignoring any other service updates. Only when the backing service goes down, the proxy will
+          look for a replacement selecting the best candidate at that point in time.
+          To revert to the Spring DM 1.x behaviour, mark the importers as being non-sticky.</para>
+		</section>        
+        
+      	<section id="service-registry:refs:singular:reference:attributes">
+      	<title><literal>reference</literal> Element Attributes</title>
+       	<para>
+       	As a summary, the following table lists the <literal>reference</literal> element 
+       	attributes names, possible values and a short description for each of them.
+        </para>
+       	<table id="reference-import-options" pgwide="1">
+          <title><![CDATA[OSGi <reference> attributes]]></title>
+          <tgroup cols="5">
+           	<colspec colname="c1"/>
+          	<colspec colname="c2" align="center"/>
+          	<colspec colname="c3" align="center"/>
+          	<colspec colname="c4" align="center"/>
+          	<colspec colname="c5" align="center"/>
+          	<colspec colname="c6" align="justify"/>
+          	<spanspec namest="c2" nameend="c5" spanname="values" align="center"/>
+          
+            <thead>
+              <row>
+                <entry>Name</entry>
+                <entry spanname="values">Values</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>interface</entry>
+                <entry spanname="values">fully qualified class name (such as <classname>java.lang.Thread</classname>)</entry>
+                <entry>The fully qualified name of the class under which the object will be exported.</entry>
+              </row>
+              <row>
+                <entry>filter</entry>
+                <entry spanname="values">OSGi filter expression (such as <literal>((asynchronous-delivery=true)</literal>)</entry>
+                <entry>OSGi filter expression that is used to constrain the set of matching services
+                in the service registry.</entry>
+              </row>
+              <row>
+                <entry>bean-name</entry>
+                <entry spanname="values">any string value</entry>
+                <entry>Convenient shortcut for specifying a filter expression that matches on the bean-name property 
+                that is automatically advertised for beans published using the &lt;service&gt; element.</entry>
+              </row>
+              <row>
+                <entry>context-class-loader</entry>
+                <entry>client</entry>
+                <entry namest="c3" nameend="c4" align="center">service-provider</entry>
+                <entry>unmanaged</entry>
+                <entry>Defines how the context class loader is managed when invoking operations on a service
+                backing this service reference. The default value is <literal>client</literal> which means that the context
+                class loader has visibility of the resources on this bundle's classpath. Alternate
+                options are <literal>service-provider</literal> which means that the context class loader has visibility of 
+                resources on the bundle classpath of the bundle that exported the service, and <literal>unmanaged</literal>
+               	which does not do any management of the context class loader.</entry>
+              </row>
+              <row>
+                <entry>availability</entry>
+                <entry namest="c2" nameend="c3" align="center">optional</entry>
+                <entry namest="c4" nameend="c5" align="center">mandatory</entry>
+                <entry>Defines the desired availability of the relationship to the backing service. If not specified, 
+                the <literal>default-availability</literal> attribute will apply. 'mandatory' value (the default) means that a backing service 
+                must exist at all times. The 'optional' value indicates that it is acceptable to be for an importer to have no 
+                backing service.</entry>
+              </row>
+              <row>
+                <entry>timeout</entry>
+                <entry spanname="values">any positive long</entry>
+                <entry>The amount of time (in milliseconds) to wait for a backing service to be 
+				available when an operation is invoked. If not specified, the <literal>default-timeout</literal> attribute will apply.
+                </entry>
+              </row>
+              <row>
+                <entry>sticky</entry>
+                <entry namest="c2" nameend="c3" align="center">true</entry>
+                <entry namest="c4" nameend="c5" align="center">false</entry>
+                <entry>Indicates the <emphasis>stickiness</emphasis> of the service import. If 'true' (default), the proxy will rebind only if the
+                backing service is no longer available. If 'false' (Spring DM 1.x behaviour), the rebind will occur every time a 'better' candidate
+                appears. A better service is defined by having either a higher ranking or the same ranking and a lower service id.
+                </entry>
+              </row>              
+            </tbody>
+          </tgroup>
+	     </table>
+       </section>
+	     
+	          
+       <section id="service-registry:refs:singular:dynamics">
+         <title><literal>reference</literal> And OSGi Service Dynamics</title>
+         <para>
+	      The bean defined by the <literal>reference</literal> element
+	      is unchanged throughout the lifetime of the application context
+	      (the object reference remains constant). However, the OSGi service
+	      that backs the reference may come and go at any time. For a
+	      mandatory service reference, the creation of the application context will block until a matching
+	      service is available. <xref linkend="service-registry:refs:availability"/> provides
+	      more details.</para>
+	
+	      <para>When the service backing a <literal>reference</literal> bean
+	      goes away, Gemini Blueprint tries to replace the backing
+	      service with another service matching the reference criteria. An
+	      application may be notified of a change in backing service by
+	      registering a <literal>reference-listener</literal>. If no matching service is
+	      available, then the <literal>reference</literal> is said to be
+	      <emphasis>unsatisfied</emphasis>. An unsatisfied mandatory service
+	      causes any exported service (<literal>service</literal> bean) that
+	      depends on it to be unregistered from the service registry until
+	      such time as the reference is satisfied again. See
+	      <xref linkend="service-registry:export-import-relationship"/> for more information.</para>
+	
+	      <para>When an operation is invoked on an unsatisfied
+	      <literal>reference</literal> bean (either optional or mandatory),
+	      the invocation blocks until the reference becomes satisfied. The
+	      optional <literal>timeout</literal> attribute of the
+	      <literal>reference</literal> element enables a timeout value (in
+	      milliseconds) to be specified. If no matching service becomes available 
+	      within the timeout period, an unchecked <classname>ServiceUnavailableException</classname> is
+	      thrown.</para>
+	      
+        </section>        
+
+		<section id="service-registry:refs:singular:property-editor">
+		<title>Getting A Hold Of The Managed Service Reference</title>
+        
+        <para>Gemini Blueprint/Spring DM can automatically convert a managed OSGi service to 
+        service reference. That is, if the property into which a reference bean 
+        is to be injected, has type <interfacename>ServiceReference</interfacename> (instead of the service
+        interface supported by the reference), then the managed OSGi
+        <interfacename>ServiceReference</interfacename> for the service will be injected
+        in place of the service itself:</para>
+
+
+		<programlisting language="java"><![CDATA[public class BeanWithServiceReference {
+	private ServiceReference serviceReference;
+	private SomeService service;
+			
+	// getters/setters ommitted
+}]]></programlisting>
+	
+	<programlistingco>
+	   <areaspec>
+	   	  <area id="service-registry.importer.single.ref.conversion" coords="4"/>
+          <area id="service-registry.importer.single.ref.normal.injection" coords="5"/>
+       </areaspec>
+       	
+		<programlisting language="xml"><![CDATA[<reference id="service" interface="com.xyz.SomeService"/>
+		
+<bean id="someBean" class="BeanWithServiceReference">
+  <property name="serviceReference" ref="service"/> 
+  <property name="service" ref="service"/>
+</bean>]]></programlisting>
+       <calloutlist>
+         <callout arearefs="service-registry.importer.single.ref.conversion">
+            <para>Automatic managed service to <interfacename>ServiceReference</interfacename> conversion.
+            </para>
+         </callout>
+       
+         <callout arearefs="service-registry.importer.single.ref.normal.injection">
+            <para>Managed service is injected without any conversion</para>
+         </callout>
+       </calloutlist>
+	</programlistingco>
+		
+		<note>
+		The injected <interfacename>ServiceReference</interfacename> is managed by Gemini Blueprint/Spring DM and will change
+		at the same time as the referenced backing OSGi service instance.
+		</note>
+		
+		<para>There are cases when the managed <interfacename>ServiceReference</interfacename> is needed to get a hold of the OSGi service. Unfortunately,
+		most of the OSGi frameworks expect their own <interfacename>ServiceReference</interfacename> classes and will fail when the
+		Gemini Blueprint/Spring DM managed reference is used. For such cases, one can get a hold of the native <interfacename>ServiceReference</interfacename> bound
+		at that moment, by casting the reference object to <interfacename>ServiceReferenceProxy</interfacename> and then calling 
+		<methodname>getTargetServiceReference</methodname>. Using the example context above, one might use the following code:</para>
+		
+		<programlisting language="java"><![CDATA[ServiceReference nativeReference = ((ServiceReferenceProxy)serviceReference).getTargetServiceReference()]]></programlisting>
+		
+		<para>The returned <literal>nativeReference</literal> can be safely passed to the OSGi framework however, since it is not managed by Gemini Blueprint/Spring DM,
+		in time, it might refer to a service different then the one backing the imported OSGi service.</para>
+		<para>To avoid this desynchronization, consider using managed <interfacename>ServiceReference</interfacename> objects mainly for reading the
+		bound OSGi service properties rather then getting a hold of OSGi services (which can be simply injected by Gemini Blueprint/Spring DM).</para>
+		</section>
+   	</section>
+
+      <section id="service-registry:refs:collection">
+        <title>Referencing A Collection Of Services</title>
+
+		<sidebar>
+		 <title>Natural vs custom ordering</title>
+		 <para>
+		 Java collection API defines two interfaces for ordering objects -
+		 <interfacename>Comparable</interfacename> and <interface>Comparator</interface>.
+		 The first is meant to be implemented by objects for providing <emphasis>natural 
+		 ordering</emphasis>. <classname>String</classname>, <classname>Long</classname>
+		 or <classname>Date</classname> are good examples of objects that implement the
+		 <interfacename>Comparable</interfacename> interface.</para>
+		 <para>
+		 However, there are cases where sorting is different then the natural ordering or,
+		 the objects meant to be sort do not implement <interface>Comparable</interface>. To
+		 address this cases, <interfacename>Comparator</interfacename> interface was designed. 
+		 </para>
+		 <para>For more information on this subject, please consult the <ulink url="http://java.sun.com/docs/books/tutorial/collections/interfaces/order.html">
+		 Object ordering</ulink> chapter from Java 
+		 <ulink url="http://java.sun.com/docs/books/tutorial/collections/">collection</ulink> tutorial,
+		 </para>
+		</sidebar>
+		
+        <para>Sometimes an application needs access not simply to any service
+        meeting some criteria, but to <emphasis>all</emphasis> services
+        meeting some criteria. Gemini Blueprint/Spring DM allows the matching services may be held in a
+        <interfacename>List</interfacename> or <interfacename>Set</interfacename> 
+        (optionally sorted).</para>
+
+        <para>The difference between using a <interfacename>List</interfacename> and a
+        <interfacename>Set</interfacename> to manage the collection is one of equality.
+        Two or more services published in the registry (and with distinct
+        service ids) may be "equal" to each other, depending on the
+        implementation of equals used by the service implementations. Only one
+        such service will be present in a set, whereas all services returned
+        from the registry will be present in a list. For more details on collections,
+        see <ulink url="http://java.sun.com/docs/books/tutorial/collections/interfaces/index.html">this</ulink> 
+        tutorial.</para>
+        
+        <para>The <literal>set</literal> and <literal>list</literal> schema elements
+        are used to define collections of services with set or list semantics
+        respectively.</para>
+
+        <para>These elements support the attributes
+        <literal>interface</literal>, <literal>filter</literal>,
+        <literal>bean-name</literal>, <literal>availability</literal>, and
+        <literal>context-class-loader</literal>, with the same semantics as for
+        the <literal>reference</literal> element. The allowable values for the
+        <literal>availability</literal> attribute are <literal>mandatory</literal>
+        and <literal>optional</literal>.</para>
+        
+        <para>An availability value of
+        <literal>optional</literal> indicates that it is permissible to
+        be no matching services. An availability value of
+        <literal>mandatory</literal> indicates that at least one matching service
+        is required at all times. Such a reference is considered a
+        <emphasis>required</emphasis> reference and any exported services
+        from the same bundle (<literal>service</literal> defined beans) that
+        depend on a mandatory reference will automatically be unregistered
+        when the reference becomes unsatisfied, and reregistered when the
+        reference becomes satisfied again. See <xref linkend="service-registry:refs:availability"/>
+        for more details.</para>
+
+        <para>The bean defined by a <literal>list</literal> element is of type
+        <interfacename>java.util.List</interfacename>. The bean defined by a
+        <literal>set</literal> element is of type
+        <interfacename>java.util.Set</interfacename>.</para>
+        
+        <note>Make sure the Gemini Blueprint/Spring DM collections are injected into properties of compatible types (
+        for example <literal>set</literal> into <interfacename>Set</interfacename> or <interfacename>
+        Collection</interfacename>) since otherwise the container will automatically perform 
+        <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/validation.html#beans-beans-conversion">type conversion</ulink>,
+        transforming the Gemini Blueprint/Spring DM managed collection into a 'normal' one, unaware of the OSGi dynamics.
+        </note>
+
+        <para>The following example defines a bean of type <interfacename>List</interfacename> that 
+        will contain all registered services supporting the
+        <literal>EventListener</literal> interface:</para>
+
+        <programlisting language="xml"><![CDATA[<list id="myEventListeners" interface="com.xyz.EventListener"/>]]></programlisting>
+
+        <para>The members of the collection defined by the bean are managed
+        dynamically by Spring. As matching services are registered and
+        unregistered in the service registry, the collection membership will
+        be kept up to date. Each member of the collection supports the service
+        interfaces that the corresponding service was registered with and that
+        are visible to the bundle.</para>
+
+		<para>Gemini Blueprint/Spring DM supports sorted collections as well, both for set and list.</para>
+        <para>It is possible to specify a sorting order using either the
+        <literal>comparator-ref</literal> attribute, or the nested
+        <literal>comparator</literal> element. The
+        <literal>comparator-ref</literal> attribute is used to refer to a
+        named bean implementing <interfacename>java.util.Comparator</interfacename>. The
+        <literal>comparator</literal> element can be used to define an inline
+        bean. For example:</para>
+
+        <programlisting language="xml"><![CDATA[<set id="myServices" interface="com.xyz.MyService"
+  comparator-ref="someComparator"/>
+
+<list id="myOtherServices" 
+  interface="com.xyz.OtherService">
+  <comparator>
+     <beans:bean class="MyOtherServiceComparator"/>
+  </comparator>
+</list>]]></programlisting>
+
+	
+        <para>To sort using a natural ordering instead of an explicit
+        comparator, you can use the <literal>natural</literal>
+        element inside of <literal>comparator</literal>. You need to specify
+        the basis for the natural ordering: based on the service references,
+        following the <interfacename>ServiceReference</interfacename> natural ordering
+        defined in the OSGi Core Specification release 4, version 4.1, section 6.1.23; 
+        or based on the services themselves (in which case the services must be
+        <interfacename>Comparable</interfacename>).</para>
+
+        <programlisting language="xml"><![CDATA[<list id="myServices" interface="com.xyz.MyService">
+  <comparator><natural basis="services"/></comparator>
+</list>
+
+<set id="myOtherServices"interface="com.xyz.OtherService">
+  <comparator><natural basis="service-references"/></comparator>
+</set>]]></programlisting>
+
+		<note>For a sorted set, a <interfacename>SortedSet</interfacename> implementation will be created.
+		However, since the JDK API does not provide a dedicated <interfacename>SortedList</interfacename>interface, 
+		the sorted list will implement only the <interfacename>List</interfacename> interface.</note>
+
+
+		<section id="service-registry:refs:collection:greedy-proxying">
+			<title>Greedy Proxying</title>
+			
+			<para>All OSGi services imported by a Gemini Blueprint/Spring DM service collection publish and are type-compatible with the classes
+			declared by the <literal>interfaces</literal> property. However, some services might expose additional (optional) 
+			classes that could be relevant to your application.</para>
+			
+			<para>For these cases, Gemini Blueprint/Spring DM collections offer a dedicated attribute called <literal>greedy-proxying</literal> which
+			will cause the creates proxies to use <emphasis>all</emphasis> the classes advertised by the imported services, visible to the consuming
+			importing bundle. Thus, it is possible to cast the imported proxies to classes different then those specified in the
+			<literal>interfaces</literal>. For example, with the following list definition:
+			</para>
+
+        	<programlisting language="xml"><![CDATA[<list id="services" interface="com.xyz.SomeService" greedy-proxying="true"/>]]></programlisting>
+			
+			<para>one can do the following iteration (assuming <classname>MessageDispatcher</classname> type is imported by the bundle):</para>	
+        <programlisting language="java"><![CDATA[for (Iterator iterator = services.iterator(); iterator.hasNext();) {
+	SomeService service = (SomeService) iterator.next();
+	service.executeOperation();
+	// if the service implements an additional type
+	// do something extra
+	if (service instanceof MessageDispatcher) {
+		((MessageDispatcher)service).sendAckMessage();
+	}
+}]]></programlisting>
+
+			
+			<note>Before using greedy proxies and <literal>instanceof</literal> statements, consider using a different
+			interface/class for your services which provides better 
+			<ulink url="http://en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming">polymorphism</ulink> 
+			and is more 
+			<ulink url="http://en.wikipedia.org/wiki/Object_oriented">object-oriented</ulink>.</note>
+			
+		</section>
+		
+		<section id="service-registry:refs:collection:member-type">
+			<title>Member Type</title>
+			
+			<para>Since Spring DM 2.x/Gemini Blueprint, service collections can contain either service instances (default) or service references. The latter is useful if
+			the services themselves are not relevant but rather their properties and availability. For example, to track the service references,
+			the following configuration can be used:</para>
+			
+			<programlisting language="xml"><![CDATA[<list id="services" interface="com.xyz.SomeService" member-type="service-reference"/>]]></programlisting>
+			
+			<para>Note that the collection contains <emphasis>native</emphasis> service references which can be used by client to retrieve the backing
+			service (if needed). However, when using Gemini Blueprint/Spring DM this use case is discouraged since one can let the framework track the services instead
+			and get the (native) associated service reference from the proxy directly (see <xref linkend="service-registry:refs:singular:property-editor"/> 
+			for more details).</para>
+		</section>	
+		
+		<section id="service-registry:refs:collection:attributes">
+			<title>Collection (<literal>list</literal> And <literal>set</literal>) Element Attributes</title>
+		<para>
+		<literal>list</literal> and <literal>set</literal> elements support all the attributes available to
+		<literal>reference</literal> element except the <literal>timeout</literal> attribute.
+		
+       	See the following table as a summary of the <literal>list</literal> and <literal>set</literal> element 
+       	attribute names, possible values and a short description for each of them.
+        </para>
+       	<table id="collection-import-options" pgwide="1">
+          <title><![CDATA[<list>/<set> attributes]]></title>
+          <tgroup cols="6">
+			<colspec colname="c1"/>
+        	<colspec colname="c2" align="center"/>
+        	<colspec colname="c3" align="center"/>
+        	<colspec colname="c4" align="center"/>
+        	<colspec colname="c5" align="center"/>
+        	<colspec colname="c6" align="justify"/>
+        	<spanspec spanname="values" namest="c2" nameend="c5" align="justify"/>
+
+            <thead>
+              <row>
+                <entry>Name</entry>
+                <entry spanname="values">Values</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>interface</entry>
+                <entry spanname="values">fully qualified class name (such as <classname>java.lang.Thread</classname>)</entry>
+                <entry>The fully qualified name of the class under which the object will be exported.</entry>
+              </row>
+              <row>
+                <entry>filter</entry>
+                <entry spanname="values">OSGi filter expression (such as <literal>((asynchronous-delivery=true)</literal>)</entry>
+                <entry>OSGi filter expression that is used to constrain the set of matching services
+                in the service registry.</entry>
+              </row>
+              <row>
+                <entry>bean-name</entry>
+                <entry spanname="values">any string value</entry>
+                <entry>Convenient shortcut for specifying a filter expression that matches on the bean-name property 
+                that is automatically advertised for beans published using the &lt;service&gt; element.</entry>
+              </row>
+              <row>
+                <entry>context-class-loader</entry>
+                
+                <entry>client</entry>
+                <entry namest="c3" nameend="c4" align="center">service-provider</entry>
+                <entry>unmanaged</entry>
+                
+                <entry>Defines how the context class loader is managed when invoking operations on a service
+                backing this service reference. The default value is <literal>client</literal> which means that the context
+                class loader has visibility of the resources on this bundle's classpath. Alternate
+                options are <literal>service-provider</literal> which means that the context class loader has visibility of 
+                resources on the bundle classpath of the bundle that exported the service, and <literal>unmanaged</literal>
+               	which does not do any management of the context class loader.</entry>
+              </row>
+              <row>
+                <entry>availability</entry>
+                <entry namest="c2" nameend="c3" align="center">optional</entry>
+                <entry namest="c4" nameend="c5" align="center">mandatory</entry>
+                <entry>Defines the desired availability of the relationship to the backing service. If not specified, 
+                the <literal>default-availability</literal> attribute will apply. 'mandatory' value (the default) means that a backing service 
+                must exist at all times. The 'optional' value indicates that it is acceptable to be for an importer to have no 
+                backing service.</entry>
+              </row>
+              <row>
+                <entry>comparator-ref</entry>
+                <entry spanname="values">any string value</entry>
+                <entry>Named reference to a bean acting as comparator for the declaring collection. Declaring a comparator automatically
+                makes the declaring collection sorted.</entry>
+              </row>
+              <row>
+                <entry>greedy-proxying</entry>
+                <entry namest="c2" nameend="c3" align="center">true</entry>
+                <entry namest="c4" nameend="c5" align="center">false</entry>
+                <entry>Indicates whether the proxies created for the imported OSGi services will be generated using 
+                just the classes specified (<literal>false</literal>) or all the classes exported by the service and visible to
+                the importing bundle (<literal>true</literal>). The default value is <literal>false</literal>.</entry>
+              </row>
+              <row>
+                <entry>member-type</entry>
+                <entry namest="c2" nameend="c3" align="center">service-object</entry>
+                <entry namest="c4" nameend="c5" align="center">service-reference</entry>
+                <entry>Indicates the type of object that will be placed within the reference collection.  
+    <literal>service-object</literal> (the default) indicates the collection contains service proxies for imported services.
+    <literal>service-reference</literal> indicates the collection contains <literal>ServiceReference</literal> objects matching the 
+    target service type.</entry>
+              </row>              
+            </tbody>
+          </tgroup>
+	     </table>
+	     
+	     <para>The table below lists the attributes available for the <literal>comparator/natural</literal> sub element.</para>
+
+       	 <table id="collection-import-comparator-options" pgwide="1">
+          <title><![CDATA[collection <comparator> attributes]]></title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+        	<colspec colname="c2"/>
+        	<colspec colname="c3"/>
+        	<colspec colname="c4"/>
+        	<spanspec spanname="values" namest="c2" nameend="c3"/>
+        	
+            <thead>
+              <row>
+                <entry>Name</entry>
+                <entry spanname="values">Values</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>basis</entry>
+                <entry>service</entry>
+                <entry>service-reference</entry>
+                <entry>Indicate the element on which <emphasis>natural ordering</emphasis> should apply - <literal>service</literal> for considering
+                the service instance and <literal>service-reference</literal> for considering the service reference instead of the service.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+	     </table>	          
+		</section>
+		
+		<section id="service-registry:refs:collection:dynamics">
+         <title><literal>list</literal> / <literal>set</literal> And OSGi Service Dynamics</title>
+         <para>
+          A collection of OSGi services will change its content during the lifetime
+          of the application context since it needs to reflect the state of the OSGi
+          space. As service are registered and unregistered, they will be added or
+          removed from the collection.</para>
+          
+          <para>While a <literal>reference</literal> declaration will try to
+          find a replacement if the backing service is unregistered, the collection
+          will simply remove the service from the collection. 
+          Like <literal>reference</literal>, a collection of services can have a specified <literal>availability</literal>.
+          As opposed to <literal>reference</literal>s though, since Spring DM 2.x/Gemini Blueprint, a collection content can be queried, no matter
+          its availability and the number of services held.</para>
+          <para>Just like <literal>reference</literal>, mandatory collections
+          will trigger the unregistration of any exported service that depends
+          upon it. See
+	      <xref linkend="service-registry:export-import-relationship"/> for more information.
+          </para>   
+          
+        </section> 
+		
+		<section id="service-registry:refs:collection:iterator">
+		  <title><interfacename>Iterator</interfacename> Contract And Service Collections</title>
+
+		  <para>The recommend way of traversing a collection is by using an <interfacename>Iterator</interfacename>.
+		  However, since OSGi services can come and go, the content of the managed service collection will be adjusted
+		  accordingly. Gemini Blueprint/Spring DM will transparently update all <interfacename>Iterator</interfacename>s held by 
+		  the user so it is possible to safely traverse the collection while it is being modified. Moreover, the 
+		  <interfacename>Iterator</interfacename>s will reflect all the changes made to the collection, even if 
+		  they occurred after the <interfacename>Iterator</interfacename>s were created (that is during the iteration).
+		  Consider a case where a collection shrinks significantly (for example a big number of OSGi
+		  services are shutdown) right after an iteration started.
+		  To avoid dealing with the resulting 'dead' service references,
+		  Gemini Blueprint/Spring DM iterators do not take collection snapshots (that can be inaccurate) 
+		  but rather are updated on each service event so they reflect the latest collection state, 
+		  no matter how fast or slow the iteration is.</para>
+		  
+		  <para>It is important to note that a service update will only influence <interfacename>Iterator</interfacename>
+		  operations that are executed after the event occurred. Services already returned by the iterator will not be
+		  updated even if the backing service has been unregistered. As a side note, if an operation is invoked on
+          such a service that has been unregistered, a <literal>ServiceUnavailableException</literal> will be thrown. 
+		  </para>
+		  
+		  <para>To conclude, while a <literal>reference</literal> declaration will search for candidates in case the
+		  backing service has been unregistered, a service collections will not replace unregistered services returned
+		  to the user. However, it will remove the unregistered services from the collection so future iterations will not
+		  encounter them.
+		  </para>
+		  
+		  
+		  <para>Please note that the <interfacename>Iterator</interfacename> contract is guaranteed meaning that 
+		  <literal>next()</literal> method <emphasis>always</emphasis> obey the result of the previous 
+		  <literal>hasNext()</literal> invocation.</para>
+
+		  <table id="collection-iterator-contract" pgwide="1">
+           <title>Dynamic service collection <interfacename>Iterator</interfacename> contract</title>
+           <tgroup cols="2">
+            <thead>
+              <row>
+                <entry>hasNext() returned value</entry>
+                <entry>next() behaviour</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>true</entry>
+                <entry><emphasis>Always</emphasis> return a non-null value, even when the collection has shrunk as services when away.
+                </entry>
+              </row>
+              <row>
+                <entry>false</entry>
+                <entry>per <interfacename>Iterator</interfacename> contract, <classname>NoSuchElementException</classname> is thrown.
+                This applies even if other services are added to the collection</entry>
+              </row>
+            </tbody>
+           </tgroup>
+	      </table>
+	      
+	      <para>
+	      The behaviour described above, offers a consistent view over the collection even if its structure changes during iteration.
+	      To simply <emphasis>refresh</emphasis> the iterator, call <literal>hasNext()</literal> again. This will force the
+	      <literal>Iterator</literal> to check again the collection status for its particular entry in the iteration.</para>
+	      
+	      
+	      	
+	 	  <para>
+	 	  In addition, any elements added to the collection during iteration over a <emphasis>sorted</emphasis>
+          collection will only be visible if the iterator has not already passed
+          their sort point.</para>
+        </section>
+        
+      </section>
+
+     <section id="service-registry:refs:dynamics">
+      <title>Dealing With The Dynamics Of OSGi Imported Services</title>
+
+	  <sidebar>
+	  	<title>Where is the <literal>listener</literal> element ?</title>
+	  	<para>Since Spring DM 2.x/Gemini Blueprint, the <literal>reference-listener</literal> replaced
+	  	the <literal>listener</literal> element which has been deprecated. The main reasons
+	  	behind the decisions were to align the configuration format closer with the Blueprint
+	  	spec and to avoid some of the confusion regarding the type of listener declared (service or reference
+	  	based). Note that <literal>listener</literal> element is still supported.</para>
+	  </sidebar>
+	  
+      <para>Whether you are using <literal>reference</literal>
+      or <literal>set</literal> or <literal>list</literal>, Spring Dynamic
+      Modules will manage the backing service. However there are cases
+      where the application needs to be aware when the backing service
+      is updated.</para>
+         
+      <para>Such applications, that need to be aware of when the service
+      backing a <literal>reference</literal> bean is bound and unbound, can
+      register one or more listeners using the nested
+      <literal>reference-listener</literal> (or <literal>listener</literal>) element.
+      This element is available on both <literal>reference</literal> and
+      <literal>set</literal>, <literal>list</literal> declarations.
+      In many respects, the service importer listener declaration 
+      is similar to the service exporter listener declaration 
+      (<xref linkend="service-registry:export:lifecycle"/>).
+      
+      The <literal>reference-listener</literal> element refers to a bean (either by name, 
+      or by defining one inline)
+      that will receive bind and unbind notifications. If this bean
+      implements Gemini Blueprint/Spring DM's
+      <interfacename>org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener</interfacename>
+      interface, then the <literal>bind</literal> and
+      <literal>unbind</literal> operations in this interface will be
+      invoked. Instead of implementing this interface (or in addition),
+      custom bind and unbind callback methods may be named.</para>
+
+      <para>An example of declaring a listener that implements
+      <interfacename>OsgiServiceLifecycleListener</interfacename>:</para>
+
+      <programlisting language="xml"><![CDATA[<reference id="someService" interface="com.xyz.MessageService">
+  <reference-listener ref="aListenerBean"/>
+</reference>]]></programlisting>
+
+      <para>An example of declaring an inline listener bean with custom
+      bind and unbind methods:</para>
+
+      <programlisting language="xml"><![CDATA[<reference id="someService" interface="com.xyz.MessageService">
+  <reference-listener bind-method="onBind" unbind-method="onUnbind">
+     <beans:bean class="MyCustomListener"/>
+  </reference-listener>
+</reference>]]></programlisting>
+
+      <para>If the listener bean implements the
+      <interfacename>OsgiServiceLifecycleListener</interfacename> interface
+      <emphasis>and</emphasis> the listener definition specifies custom
+      bind and unbind operations then both the
+      <literal>OsgiServiceLifecycleListener</literal> operation and the
+      custom operation will be invoked, in that order.</para>
+
+      <para>The signature of a custom bind or unbind method must be one
+      of:</para>
+
+      <programlisting language="java"><![CDATA[public void anyMethodName(ServiceType service, Dictionary properties);
+
+public void anyMethodName(ServiceType service, Map properties);
+
+public void anyMethodName(ServiceReference ref);]]></programlisting>
+
+      <para>where <literal>ServiceType</literal> can be any type. Please note that
+      bind and unbind callbacks are invoked <emphasis>only</emphasis>
+      if the backing service matches the type declared in the method signature(
+      <classname>ServiceType</classname>). If you want the callbacks to be called 
+      no matter the type, use <classname>java.lang.Object</classname> as a 
+      <literal>ServiceType</literal>.</para>
+      
+      <para>
+      The <literal>properties</literal> parameter contains the set of properties 
+      that the service was registered with.</para>
+      
+      <para>If the method signature has a single argument of type
+      <interfacename>ServiceReference</interfacename> then the
+      <interfacename>ServiceReference</interfacename> of the service will be passed to
+      the callback in place of the service object itself.</para>
+      
+	  
+      <para>When the listener is used with a <literal>reference</literal> declaration:</para>
+      	<itemizedlist>
+      		<listitem>A <emphasis>bind</emphasis> callback is invoked 
+      when the reference is initially bound to a backing service, 
+      and whenever the backing service is replaced by a new backing service.
+      </listitem>
+      
+      		<listitem>An <emphasis>unbind</emphasis> callback is only 
+      invoked when the current backing service is unregistered, and no 
+      replacement service is immediately available 
+      (i.e., the <literal>reference</literal> becomes unsatisfied).</listitem>
+      	</itemizedlist>
+     
+
+	  <para>When the listener is used with a collection declaration (<literal>set</literal> or 
+	  <literal>list</literal>):</para>
+	
+      	<itemizedlist>
+      		<listitem>A <emphasis>bind</emphasis> callback is invoked 
+      		when a new service is added to the collection.
+      		</listitem>
+      
+      		<listitem>An <emphasis>unbind</emphasis> callback is 
+      		invoked when a service is unregistered and is removed
+      		from the collection.</listitem>
+      	</itemizedlist>
+     
+      <para>Again note that service collections there is <emphasis>no</emphasis> 
+      notion of <emphasis>service rebind</emphasis>:
+      services are added or removed from the collection.</para>
+
+
+      <para>Bind and unbind callbacks are made synchronously as part of
+      processing an OSGi <literal>serviceChanged</literal> event for the
+      backing OSGi service, and are invoked on the OSGi thread that
+      delivers the corresponding OSGi
+      <classname>ServiceEvent</classname>.</para>
+      
+	     <para>The table below lists the attributes available for the <literal>reference</literal> <literal>listener</literal> sub element.</para>
+
+       	 <table id="reference-import-listener-options" pgwide="1">
+          <title><![CDATA[OSGi <reference-listener> attributes]]></title>
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry>Name</entry>
+                <entry>Values</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>ref</entry>
+                <entry>bean name reference</entry>
+                <entry>Name based reference to another bean acting as listener.</entry>
+              </row>
+              <row>
+                <entry>bind-method</entry>
+                <entry>string representing a valid method name</entry>
+                <entry>The name of the method to be invoked when a backing service is bound.</entry>
+              </row>
+              <row>
+                <entry>unbind-method</entry>
+                <entry>string representing a valid method name</entry>
+                <entry>The name of the method to be invoked when a backing service is bound.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+	     </table>      
+      
+    </section>
+
+
+    <section id="service-registry:refs:blueprint">
+       <title>Blueprint <literal>reference</literal> Comparison</title>
+       
+       <para>Similar to Gemini Blueprint/Spring DM, the Blueprint Container offers a <literal>reference</literal> and <literal>list</literal> elements, 
+       identical in functionality with the those in Gemini Blueprint/Spring DM. Below is a summary of the configuration options available in Gemini Blueprint/Spring DM and Blueprint:</para>
+       
+       <table id="service-registry:refs:blueprint:comparison" pgwide="1" align="center">
+          <title>Spring DM / Blueprint Service Importer Configuration Comparison</title>
+          <tgroup cols="2">
+           <colspec colnum="c1"/>
+           <colspec colnum="c2"/>
+           <spanspec spanname="wide" namest="c1" nameend="c2" align="center"/>
+           <thead>
+              <row>
+                <entry align="center">Gemini Blueprint/Spring DM</entry>
+                <entry align="center">Blueprint</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry spanname="wide">Common Elements/Attributes</entry>
+              </row>
+              <row>
+                <entry>interface</entry>
+                <entry>interface</entry>
+              </row>
+              <row>
+                <entry>interfaces</entry>
+                <entry>- (multiple interfaces not supported)</entry>
+              </row>
+              <row>
+                <entry>ref</entry>
+                <entry>ref</entry>
+              </row>
+              <row>
+                <entry>filter</entry>
+                <entry>filter</entry>
+              </row>
+              <row>
+                <entry>bean-name</entry>
+                <entry>component-name</entry>
+              </row>
+              <row>
+                <entry>availability</entry>
+                <entry>availability</entry>
+              </row>
+              <row>
+                <entry>context-class-loader</entry>
+                <entry>-</entry>
+              </row>
+              <row>
+                <entry spanname="wide"><literal><![CDATA[<reference>]]></literal></entry>
+              </row>
+              <row>
+                <entry>timeout</entry>
+                <entry>timeout</entry>
+              </row>
+              <row>
+                <entry>sticky</entry>
+                <entry>- (the importer is always sticky)</entry>
+              </row>
+              <row>
+                <entry spanname="wide"><literal><![CDATA[<list>]]></literal></entry>
+              </row>
+              <row>
+                <entry>member-type</entry>
+                <entry>member-type</entry>
+              </row>
+              <row>
+                <entry>comparator-ref</entry>
+                <entry>-</entry>
+              </row>
+              <row>
+                <entry>greedy-proxying</entry>
+                <entry>-</entry>
+              </row>
+            </tbody>            
+          </tgroup>
+        </table>
+        
+        <para>Since the <literal>registration-listener</literal> declaration is identical in declaration and functionality between Blueprint 
+        and Gemini Blueprint/Spring DM, this section does not mention it.</para>
+      </section>
+        
+    </section>
+        
+    <section id="service-registry:refs:listener-and-proxies">
+       <title>Listener And Service Proxies</title>
+       <para>While the importer listener provides access to the OSGi service bound at a certain point, it is important to note that the given argument is <emphasis>not</emphasis> 
+       the actual service but a <emphasis>proxy</emphasis>. This can have subtle side effects especially with regards to service class name 
+       and identity. The reason behind using a proxy is to prevent the listener from holding strong reference to the service (which can disappear
+       at any point). Listeners interested in tracking certain services should not rely on instance equality (<literal>==</literal>). Object equality
+       (<methodname>equals</methodname>/<methodname>hashcode</methodname>) can be used but only if the backing service has exposed the aforementioned methods
+       as part of its contract (normally by declaring them on a certain published interface/class). If these methods are not published, the proxy will invoke its own method, not the targets. This is on purpose since, 
+       while the proxy tries to be as transparent as possible, it is up to the developer to define the desired semantics. 
+       </para>
+       <para>Thus, it is recommended (especially for <literal>reference</literal> importers) to do tracking based on just the service interface/contract 
+       (not identity), service properties (see <constant>org.osgi.framework.Constants#SERVICE_ID</constant>) or service notification (bind/unbind).</para>
+    </section>
+    
+    <section id="service-registry:refs:invoker-bundle-context">
+      <title>Accessing The Caller <interfacename>BundleContext</interfacename></title>
+      
+      <para>It is sometimes useful for an imported service to know which bundle is using it
+      at a certain time. To help with this scenario, in Gemini Blueprint/Spring DM imported services publish
+      the importing bundle <interfacename>BundleContext</interfacename> through 
+      <classname>LocalBundleContext</classname> class. Each time a method on the importer is invoked,
+      the caller <interfacename>BundleContext</interfacename> will be made available, using
+      a <classname>ThreadLocal</classname>, through <methodname>getInvokerBundleContext()</methodname>.
+      </para>
+      <para>Please be careful when using this class since it ties your code to Gemini Blueprint/Spring DM API.</para>
+    </section>
+    
+    <section id="service-registry:refs:listener-best-practices">
+      <title>Exporter/Importer Listener Best Practices</title>
+      
+      <para>As mentioned above, Gemini Blueprint/Spring DM exporter and importer allow listeners to be
+      used for receiving notifications on when services are bound, unbound, registered or 
+      unregistered. Below you can find some guidance advices when working with listeners:
+      </para>
+      
+      <itemizedlist>
+       	<listitem>
+       	Do <emphasis>not</emphasis> execute long activity tasks inside the listener. If you really
+       	have to, use a separate thread for executing the work. The listener are called synchronously
+       	and so try to be as fast as possible. Doing work inside the listener prevents other the event
+       	to be sent to other listeners and the OSGi service to resume activity. 
+      	</listitem>
+      
+      
+      	<listitem>Use listener custom declaration as much as possible - it doesn't tie your code
+      	to Gemini Blueprint/Spring DM API and it doesn't enforce certain signature names.</listitem>
+      	
+      	<listitem>If find yourself repeating bind/unbind method declarations for your listener definitions,
+      	consider using Spring <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/beans.html#beans-child-bean-definitions">
+      	bean definition inheritance</ulink> to define a common definition that can be reused and customized
+      	accordingly.
+      	</listitem>
+      	
+      	<listitem>Prefer <interfacename>java.util.Map</interfacename> instead of <classname>java.util.Dictionary</classname>
+      	class. The first is an interface while the latter is a deprecated, abstract class. To preserve compatibility, Gemini Blueprint/Spring DM
+      	will pass to the listeners a <interfacename>Map</interfacename> implementation that can be casted, if needed, to a 
+      	<classname>Dictionary</classname>.</listitem>
+      	
+      	<listitem>Be careful when using overloaded methods: all methods matching a certain service type will be called which is not
+      	always expected. Consider the following listener:
+      	<programlistingco>
+      		<programlisting language="java"><![CDATA[public class MyListener {
+    void register(Object service, Map properties);
+    void register(Collection dataService, Map properties);
+    void register(SortedSet orderedDataService , Map properties);
+}]]></programlisting>
+		
+		<areaspec>
+			<area id="service-registry:refs:listener:type.1" coords="2 19" />
+			<area id="service-registry:refs:listener:type.2" coords="3 19" />
+			<area id="service-registry:refs:listener:type.3" coords="4 19" />
+		</areaspec>
+				
+		<calloutlist>
+			<callout arearefs="service-registry:refs:listener:type.1">
+				<anchor id="service-registry:refs:listener:type.1"/>
+				<para><classname>Object</classname> type - will match all services for which the listener is triggered. This method will be always called.</para>
+			</callout>
+			<callout arearefs="service-registry:refs:listener:type.2">
+				<anchor id="service-registry:refs:listener:type.2"/>
+				<para><classname>Collection</classname> type - if this method is called, the <link linkend="service-registry:refs:listener:type.1">
+				<classname>Object</classname> method</link> is also called.
+				</para>
+			</callout>
+			<callout arearefs="service-registry:refs:listener:type.3">
+				<anchor id="service-registry:refs:listener:type.3"/>
+				<para><classname>SortedSet</classname> type - if this method is called, then both the <link linkend="service-registry:refs:listener:type.1">
+				<classname>Object</classname></link> and <link linkend="service-registry:refs:listener:type.2"><classname>Collection</classname></link> 
+				methods are called.</para>
+			</callout>
+		</calloutlist>
+		
+      	</programlistingco>
+      	
+      	</listitem>
+      	
+      </itemizedlist>
+      
+      <section id="service-registry:refs:listener-best-practices:cycles">
+         <title>Listener And Cyclic Dependencies</title>
+         
+         <para>There are cases where an exporter/importer listener needs a reference back to the bean it is defined on:</para>
+         
+         <programlistingco>
+         
+          <areaspec>
+	   	  	<area id="service-registry.listener.cycles.listener" coords="1"/>
+	   	  	<area id="service-registry.listener.cycles.listener.cycle" coords="2"/>
+          	<area id="service-registry.listener.cycles.bean" coords="5"/>
+          	<area id="service-registry.listener.cycles.bean.cycle" coords="6"/>
+       	  </areaspec>
+          <programlisting language="xml"><![CDATA[<bean id="listener" class="cycle.Listener">
+    <property name="target" ref="importer" />
+</bean>
+	
+<osgi:reference id="importer" interface="SomeService">
+    <osgi:listener bind-method="bind" ref="listener" />
+</osgi:reference>]]></programlisting>
+
+		  <calloutlist>
+			<callout arearefs="service-registry.listener.cycles.listener">
+				<para>Listener bean</para>
+			</callout>
+			<callout arearefs="service-registry.listener.cycles.listener.cycle">
+				<para>Dependency listener -> importer</para>
+			</callout>
+			<callout arearefs="service-registry.listener.cycles.bean">
+				<para>Importer declaration</para>
+			</callout>
+			<callout arearefs="service-registry.listener.cycles.bean.cycle">
+				<para>Dependency importer -> listener</para>
+			</callout>
+		  </calloutlist>	         
+	    </programlistingco>
+
+         <para>
+         The declaration above while valid, creates a dependecy between the <literal>listener</literal> and the importer it is defined upon. 
+         In order to create the importer, the <literal>listener</literal> has to be resolved and created but in order to do that, 
+         the importer called <literal>service</literal> needs to be retrieved (instantiated and configured). This cycle needs to be broken
+         down so that at least one bean can be fully created and configured. This scenario is supported by Gemini Blueprint/Spring DM
+         for both exporter and importers however, if the listener is defined as a nested bean, the cycle cannot be resolved:</para> 
+
+        <programlistingco>
+         
+          <areaspec>
+	   	  	<area id="service-registry.listener.bad.cycles.bean" coords="1"/>
+	   	  	<area id="service-registry.listener.bad.cycles.bean.cycle" coords="2"/>
+          	<area id="service-registry.listener.bad.cycles.listener" coords="3"/>
+          	<area id="service-registry.listener.bad.cycles.listener.cycle" coords="4"/>
+       	  </areaspec>
+       	  
+          <programlisting language="xml"><![CDATA[<osgi:reference id="importer" interface="SomeService">
+    <osgi:listener bind-method="bind">
+        <bean class="cycle.Listener">
+            <property name="target" ref="importer" />
+        </bean>
+    </osgi:listener>
+</osgi:reference>]]></programlisting>
+	         
+		  <calloutlist>
+			<callout arearefs="service-registry.listener.bad.cycles.bean">
+				<para>OSGi service importer</para>
+			</callout>
+			<callout arearefs="service-registry.listener.bad.cycles.bean.cycle">
+				<para>Dependency between importer -> listener</para>
+			</callout>
+			<callout arearefs="service-registry.listener.bad.cycles.listener">
+				<para>Nested listener declaration</para>
+			</callout>
+			<callout arearefs="service-registry.listener.bad.cycles.listener.cycle">
+				<para>Dependency nested listener -> importer</para>
+			</callout>
+			
+		  </calloutlist>
+		</programlistingco>
+
+		<sidebar>
+		 <title>Beans and Cycles</title>		
+		 <para>
+         Cyclic dependencies (A depends on B which depends back on A) increase the complexity of your configuration
+         and in most cases indicate a design issue. What beans should be created and destroyed first for example? 
+         While they are a bad practice, the Spring container makes a best attempt to solve the cyclic configurations 
+         when singletons are involved (since the instances can be cached). However this does not work all the time and
+         depends heavily on your specific configuration (Can the bean class be partially initialized ? Does it rely on
+         special <interfacename>Aware</interfacename> interfaces?  Are <interfacename>BeanPostProcessor</interfacename>s involved?)
+         </para>
+		</sidebar>
+				
+		<para>The example above will fail since <literal>service</literal> bean cannot be initialized as it depends on the 
+		listener. The same cycle was seen before but in this case there is subtle yet big different from
+		the container perspective - the listener is declared as a nested/inner-bean (hence the missing bean <literal>id</literal>).
+		Inner beans have the same life cycle as their declaring parents and do not have any name. By definition, they are not tracked
+		by the container and are simply created on demand. Since the importer cannot be partially created and the nested listener cannot
+		be cached, the container cannot break the cycle and create the beans. While the two configurations shown above seem similar, one works
+		while the other does not. Another reason to not use cycles unless you really, really have to.</para>
+		
+		<para>To conclude, if you need inside the listener to hold a reference to the exporter/importer on which the listener is declared,
+		either declare the listener as a <emphasis>top-level</emphasis> bean (as shown before) or consider doing <emphasis>dependency lookup</emphasis>.
+		However, the latter approach requires extra contextual information such as the <interfacename>BeanFactory</interfacename> to use and the bean
+		name and is more fragile then <emphasis>dependency injection</emphasis>.</para>
+
+		<note>
+			<para>For those interested in the technical details, neither the exporter and importer cannot be partially initialized since 
+			they require the application context <classname>ClassLoader</classname> which is requested through the 
+			<interfacename>BeanClassLoaderAware</interfacename> which relies on a buit-in <interfacename>BeanPostProcessor</interfacename>
+			which is applied only after the bean has been configured and is ready for initialization. If the <classname>ClassLoader</classname>
+			was not required then the exporter/importer could have been partially initialized and the case above supported.</para>
+		</note>
+	    	                  
+      </section>
+    </section> 
+    
+    <section id="service-registry:refs:global-defaults">
+      <title>Service Importer Global Defaults</title>
+
+  	  <para>The <literal>osgi</literal> namespace offers two
+  	  global attributes for specifying default behaviours for all
+  	  importers declared in that file.</para>
+  	        
+      <para>Thus, when using the <literal>osgi</literal> namespace to enclose
+      <literal>set</literal>, <literal>list</literal> or 
+      <literal>reference</literal> elements, one can use:</para>
+      
+      <itemizedlist>
+        <listitem>
+        <para><literal>default-timeout</literal> - 
+      can be used to specify the default timeout (in milliseconds) for all
+      importer elements that do not explicitly specify one. For
+      example:</para>
+
+	<programlistingco>
+	   <areaspec>
+	   	  <area id="service-registry.global.ns.defaults.osgi.ns" coords="3"/>
+          <area id="service-registry.global.ns.defaults.timeout" coords="4"/>
+          <area id="service-registry.global.ns.default.serv.wo.timeout" coords="6"/>
+          <area id="service-registry.global.ns.default.serv.w.timeout" coords="9"/>
+       </areaspec>
+       
+      <programlisting language="xml"><![CDATA[<beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:osgi="http://www.springframework.org/schema/osgi"
+          osgi:default-timeout="5000">
+
+  <reference id="someService" interface="com.xyz.AService"/>
+
+  <reference id="someOtherService" interface="com.xyz.BService"
+       timeout="1000"/>
+
+</beans:beans>]]></programlisting>
+
+	<calloutlist>
+		<callout arearefs="service-registry.global.ns.defaults.osgi.ns">
+			<para>Declare <literal>osgi</literal> namespace prefix.</para>
+		</callout>
+
+		<callout arearefs="service-registry.global.ns.defaults.timeout">
+			<para>Declare <literal>default-timeout</literal>(in miliseconds) on the root element. 
+			If the default is not set, it will have a value of 5 minutes. In this example, the 
+			default value is 5 seconds.</para>
+		</callout>
+
+		<callout arearefs="service-registry.global.ns.default.serv.wo.timeout">
+			<para>This <literal>reference</literal> will inherit the default timeout value since 
+			it does not specify one. 
+			This service reference will have a timeout of 5 seconds.</para>
+		</callout>
+
+		<callout arearefs="service-registry.global.ns.default.serv.w.timeout">
+			<para>This <literal>reference</literal> declares a timeout, overriding the default value.
+			 This service reference will have a timeout of 1 second.</para>
+		</callout>	
+	</calloutlist>
+
+	</programlistingco>
+
+		</listitem>
+
+		<listitem>
+		<para><literal>default-availability</literal> -
+		can be used to specify the default availability for all
+      	importer elements that do not explicitly specify one.
+      	Possible values are <literal>optional</literal> and <literal>mandatory</literal>.
+      	The <literal>default-cardinality</literal> attribute, used by Spring DM 1.x, is still
+      	available but it has been deprecated.
+      	</para>
+      	
+      	<para>Consider the following example:</para>
+	
+	<programlistingco>
+	   <areaspec>
+	   	  <area id="service-registry.global.ns.defaults.osgi" coords="2"/>
+          <area id="service-registry.global.ns.defaults.osgi.beans.ns" coords="4"/>
+          <area id="service-registry.global.ns.defaults.osgi.ns.again" coords="5"/>
+          <area id="service-registry.global.ns.defaults.osgi.cardinality" coords="6"/>
+          <area id="service-registry.global.ns.defaults.osgi.beans.defaults" coords="7"/>
+
+          <area id="service-registry.global.ns.defaults.osgi.ref.wo.cardinality" coords="9"/>
+          <area id="service-registry.global.ns.defaults.osgi.collection.wo.cardinality" coords="11"/>
+         
+          <area id="service-registry.global.ns.defaults.osgi.collection.w.cardinality" coords="14"/>
+       </areaspec>      	
+      <programlisting language="xml"><![CDATA[<beans:beans
+      xmlns="http://www.springframework.org/schema/osgi"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:beans="http://www.springframework.org/schema/beans"
+      xmlns:osgi="http://www.springframework.org/schema/osgi"
+         osgi:default-availability="optional"
+         default-lazy-init="false">
+
+  <reference id="someService" interface="com.xyz.AService"/>
+
+  <set id="someSetOfService" interface="com.xyz.BService"/>
+
+  <list id="anotherListOfServices" interface="com.xyz.CService" 
+               availability="mandatory"/>
+
+</beans:beans>]]></programlisting>
+
+		<calloutlist>
+		
+		<callout arearefs="service-registry.global.ns.defaults.osgi">
+			<para>Declare Gemini Blueprint schema as the default namespace.</para>
+		</callout>
+
+		<callout arearefs="service-registry.global.ns.defaults.osgi.beans.ns">
+		    <para>Import Spring Framework beans schema and associate a prefix with its namespace 
+		    (<literal>beans</literal> in this example).</para>  
+		</callout>
+
+		<callout arearefs="service-registry.global.ns.defaults.osgi.ns.again">
+		    <para>Import Gemini Blueprint schema and associate a prefix with its namespace 
+		    (<literal>osgi</literal> in this example). This is required since the global attributes
+		    have to be declared to an element (<literal>beans</literal>) belonging to another schema.
+		    To avoid ambiguity, the Gemini Blueprint/Spring DM schema is imported under a specified prefix as well.</para>  
+		</callout>
+
+		<callout arearefs="service-registry.global.ns.defaults.osgi.cardinality">
+			<para>Declare <literal>default-availability</literal> on the root element. 
+			If the default is not set, it will have a value of <literal>mandatory</literal>. In this example, the 
+			default value is <literal>optional</literal>. Note the <literal>osgi</literal> prefix added to
+			the global attribute.</para>
+		</callout>
+
+		<callout arearefs="service-registry.global.ns.defaults.osgi.beans.defaults">
+			<para><literal>beans</literal> element attributes (such as <literal>default-lazy-init</literal>) 
+			do not need a prefix since they are declared as being local and unqualified 
+			(see the beans schema for more information).</para>
+		</callout>	
+
+		<callout arearefs="service-registry.global.ns.defaults.osgi.ref.wo.cardinality">
+			<para>
+			The <literal>reference</literal> declaration will inherit the default availability value since it does not specify one.
+			</para>
+		</callout>	
+
+		<callout arearefs="service-registry.global.ns.defaults.osgi.collection.wo.cardinality">
+			<para>
+			The <literal>set</literal> declaration will inherit the default availability value since it does not specify one.
+			</para>
+		</callout>	
+		
+		<callout arearefs="service-registry.global.ns.defaults.osgi.collection.w.cardinality">
+			<para>The <literal>list</literal> declaration specifies its availability (<literal>mandatory</literal>),
+			 overriding the default value.</para>
+		</callout>	
+		</calloutlist>
+	</programlistingco>
+	
+		</listitem>
+      </itemizedlist>
+      
+      <para>The <literal>default-*</literal> attributes allow for concise and shorter declarations as well
+      as easy propagation of changes (such as increasing or decreasing the timeout).</para>
+    </section>
+  </chapter>

@@ -60,8 +60,8 @@
 		<section id="dm-1.2.x:sym-name-change">
 			<title>Changed Spring DM Symbolic Names</title>
 			<para>Since 1.2.0 M2, the Spring DM bundles symbolic names have been aligned with Spring's 2.5.6+. Thus the prefix 
-			<literal>org.springframework.bundle.osgi</literal> has been changed to <literal>org.springframework.osgi</literal>; for example
-			Spring DM extender symbolic name was changed from <literal>org.springframework.bundle.osgi.extender</literal> to <literal>org.springframework.osgi.extender</literal> 
+			<literal>org.springframework.bundle.osgi</literal> has been changed to <literal>org.eclipse.gemini.blueprint</literal>; for example
+			Spring DM extender symbolic name was changed from <literal>org.springframework.bundle.osgi.extender</literal> to <literal>org.eclipse.gemini.blueprint.extender</literal> 
 			(notice the missing <literal>bundle</literal> word). Additionally, the documentation has been updated to reflect Spring 2.5.6+ symbolic names.</para>
 		</section>
         <section id="dm-1.2.x:ebr-usage">

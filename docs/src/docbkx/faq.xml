@@ -480,12 +480,12 @@
      </section>
      
      <section id="update-to-1.2">
-     	<title>I have upgraded to Spring DM 1.2 but my custom extender/web extender configuration doesn't work anymore. What has changed?</title>
+     	<title>I have upgraded to Gemini Blueprint but my custom extender/web extender configuration doesn't work anymore. What has changed?</title>
      	
-     	<para>Since Spring 2.5.6, the symbolic names of the artifacts have changed slightly. Spring DM aligned its symbolic names as well with the 
-     	new patter since 1.2.0 M2. Thus the prefix <literal>org.springframework.bundle.osgi</literal> has been changed to 
-     	<literal>org.springframework.osgi</literal>; for example Spring DM extender symbolic name was changed from 
-     	<literal>org.springframework.bundle.osgi.extender</literal> to <literal>org.springframework.osgi.extender</literal> 
+     	<para>Since Spring 2.5.6, the symbolic names of the artifacts have changed slightly. Spring DM/Gemini Blueprint aligned its symbolic names as well with the 
+     	new patter since Spring DM 1.2.0 M2. Thus the prefix <literal>org.springframework.bundle.osgi</literal> has been changed to 
+     	<literal>org.eclipse.gemini.blueprint</literal>; for example Gemini BLueprint extender symbolic name was changed from 
+     	<literal>org.springframework.bundle.osgi.extender</literal> to <literal>org.eclipse.gemini.blueprint.extender</literal> 
 		(notice the missing <literal>bundle</literal> word).
 		To fix this problem, change the reference to the old symbolic name (usually inside the fragments manifests or LDAP filters) to the new one.</para>
      </section>

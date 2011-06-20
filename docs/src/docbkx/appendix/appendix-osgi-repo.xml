@@ -36,17 +36,17 @@
 		content can change. This allows clients to download possible manifest updates made to the libraries. We foresee that, as the library usage
 		increases, several popular items will have the <literal>SNAPSHOT</literal> marker remove.
 		Additionally, to differentiate the <emphasis>OSGi</emphasis>-enabled artifacts from the original ones, all libraries are placed under
-		<literal>org.springframework.osgi</literal> group and their names contains a <literal>.osgi</literal> suffix.</para>
+		<literal>org.eclipse.gemini.blueprint</literal> group and their names contains a <literal>.osgi</literal> suffix.</para>
 		
 		<para>So for example, an OSGi version of <literal>mx4j-3.0.2</literal> jar is available in the Gemini Blueprint OSGi repository under at:
-		<literal>org/springframework/osgi/mx4j.osgi/3.0.2-SNAPSHOT/mx4j.osgi-3.0.2-SNAPSHOT.jar</literal></para>
+		<literal>org.eclipse.gemini.blueprint/mx4j.osgi/3.0.2-SNAPSHOT/mx4j.osgi-3.0.2-SNAPSHOT.jar</literal></para>
 	</section>
 	
 	<section id="appendix-osgi-repo:browsing">
 		<title>Browsing The Repository Content</title>
 		
 		<para>The repository is currently hosted at Amazon <ulink url="http://aws.amazon.com/s3">S3</ulink>. To browse the repository structure,
-		use a S3 compatible browser (such as <ulink url="http://s3browse.com/explore/maven.springframework.org/osgi/org/springframework/osgi/">this</ulink> one)
+		use a S3 compatible browser (such as <ulink url="http://s3browse.com/explore/maven.springframework.org/osgi/org.eclipse.gemini.blueprint/">this</ulink> one)
 		since a vanilla web browse will not be suitable. 
 		</para>
 	</section>

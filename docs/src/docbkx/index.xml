@@ -72,7 +72,6 @@
       <xi:include href="reference/deployment.xml"/>
       <xi:include href="reference/service-registry.xml"/>
       <xi:include href="reference/bundles.xml"/>
-      <xi:include href="reference/web/web.xml"/>
       <xi:include href="reference/compendium/compendium.xml"/>
       <xi:include href="reference/testing.xml"/>
   </part>

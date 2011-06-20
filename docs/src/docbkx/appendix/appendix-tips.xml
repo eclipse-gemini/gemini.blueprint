@@ -62,7 +62,7 @@ Bundle-Description: Fragment attached to Gemini Blueprint extender
          </callout>
          <callout arearefs="appendix-tips:fragments.example.fh">
          	<para>The symbolic name of the bundle to which this fragment should be attached to. In this case, the value 
-         	<literal>org.springframework.osgi.extender</literal> points to the <literal>spring-osgi-extender.jar</literal>.
+         	<literal>org.eclipse.gemini.blueprint.extender</literal> points to the <literal>spring-osgi-extender.jar</literal>.
          	<literal>Fragment-Host</literal> is the <emphasis>key</emphasis> entry which tells the OSGi platform that the containing bundle is a of a 
          	special kind - it's a fragment.</para>
          </callout>
