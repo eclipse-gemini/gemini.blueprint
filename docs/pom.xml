@@ -19,18 +19,11 @@
 						<id>single-page</id>
 						<goals>
 							<goal>generate-html</goal>
-							<goal>generate-pdf</goal>
 						</goals>
 						<configuration>
 							<chunkedOutput>false</chunkedOutput>
 							<htmlCustomization>src/docbkx/resources/xsl/html.xsl</htmlCustomization>
-							<foCustomization>src/docbkx/resources/xsl/fopdf.xsl</foCustomization>
 							<postProcess>	
-								<copy todir="${basedir}/target/site/reference">
-									<fileset dir="${basedir}/target/docbkx">
-										<include name="**/*.pdf" />
-									</fileset>
-								</copy>
 								<copy todir="${basedir}/target/site/reference/html-single">
 									<fileset dir="${basedir}/target/docbkx/html">
 										<include name="**/*.html" />
@@ -88,13 +81,12 @@
                     <htmlStylesheet>css/html.css</htmlStylesheet>
                     <xincludeSupported>true</xincludeSupported>
                     <sourceDirectory>${basedir}/src/docbkx</sourceDirectory>
-					<!-- use extensions -->
+                    <!-- use extensions -->
                     <useExtensions>1</useExtensions>
                     <highlightSource>1</highlightSource>
-					<highlightDefaultLanguage></highlightDefaultLanguage>
-					<!-- callouts -->
+                    <highlightDefaultLanguage></highlightDefaultLanguage>
+                    <!-- callouts -->
                     <calloutsExtension>1</calloutsExtension>
-                    
                     <entities>
                         <entity>
                             <name>version</name>

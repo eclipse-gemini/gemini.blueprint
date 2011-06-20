@@ -72,7 +72,7 @@
 			We apologize for any inconvenience created to users relying on these naming conventions.</para>
 		</section>
 	</section>
-    
+    <!--
     <section id="dm-1.1.x">
 		<title>1.1.x</title>
 		
@@ -111,5 +111,6 @@
 			</para>
 		</section>
     </section>
+    -->
     
 </chapter>
