@@ -4,7 +4,7 @@
   <groupId>org.eclipse.gemini.blueprint</groupId>
   <artifactId>gemini-blueprint</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.0.M2-SNAPSHOT</version>
+  <version>1.0.0.RC1</version>
   <name>Eclipse Gemini Blueprint</name>
   <url>http://www.eclipse.org/gemini/blueprint/</url>
    

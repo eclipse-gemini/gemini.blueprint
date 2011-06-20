@@ -3,7 +3,7 @@
   <parent>
     <artifactId>gemini-blueprint</artifactId>
     <groupId>org.eclipse.gemini.blueprint</groupId>
-    <version>1.0.0.M2-SNAPSHOT</version>
+    <version>1.0.0.RC1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
