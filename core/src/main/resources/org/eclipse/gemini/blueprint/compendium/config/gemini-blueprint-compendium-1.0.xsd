@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema xmlns="http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            xmlns:osgi="http://www.eclipse.org/gemini/blueprint/schema/blueprint"
+            xmlns:tool="http://www.springframework.org/schema/tool"
+            targetNamespace="http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0.0">
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+    <xsd:import namespace="http://www.springframework.org/schema/tool"/>
+    <xsd:import namespace="http://www.eclipse.org/gemini/blueprint/schema/blueprint" 
+    	schemaLocation="http://www.eclipse.org/gemini/blueprint/schema/blueprint/gemini-blueprint.xsd"/> 
+    
+
+    <xsd:annotation>
+        <xsd:documentation><![CDATA[
+    Namespace support for the compendium services provided by Eclipse Gemini Blueprint.
+        ]]></xsd:documentation>
+    </xsd:annotation>
+
+	<!-- internal reusable type -->
+	<xsd:attributeGroup name="updateAttributes">
+		<xsd:attribute name="autowire-on-update" use="optional" type="xsd:boolean" default="false">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	Whether or not the container should autowire the target bean everytime an update occurs.
+	When 'true' is specified, the container will perform autowire (by name) the bean instance with the
+	newly set properties. In case 'update-method' attribute is used as well, the autowiring process will
+	take precedence.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="update-method" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	The update-method to invoke whenever an update occurs in the configuration data. Allows the target
+	bean to process the update information itself. In case 'autowire-on-update' is also used, the 'update-method'
+	will be invoked after the autowiring takes place.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+    
+    
+    <xsd:element name="managed-properties">
+    	<xsd:annotation>
+    		<xsd:documentation><![CDATA[
+    Defines a bean based on the given class name and configuration, with properties autowired-by-name 
+    based on the configuration stored under the given persistent id.
+    		]]></xsd:documentation>
+    	</xsd:annotation>
+    	<xsd:complexType>
+		    <xsd:attribute name="persistent-id" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	The persistent-id under which the configuration for this bean is stored in 
+	the Configuration Admin service.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+	       	<xsd:attributeGroup ref="updateAttributes"/>
+		</xsd:complexType>
+	</xsd:element>
+	
+    <!--  managed-service-factory -->
+
+    <xsd:element name="managed-service-factory">
+       	<xsd:annotation>
+    		<xsd:documentation><![CDATA[
+    Defines a collection of beans based on the given class name, with properties autowired-by-name based
+    on the configuration sets stored under the given factory persistent id.
+    		]]></xsd:documentation>
+    	</xsd:annotation>
+        <xsd:complexType>
+        	<xsd:complexContent>
+	            <xsd:extension base="osgi:TbaseService">
+	            	<xsd:sequence>
+	                    <xsd:element name="interfaces" type="beans:listOrSetType" minOccurs="0" maxOccurs="1">
+	                    	<xsd:annotation>
+	                    		<xsd:documentation><![CDATA[
+    The set of service interfaces to advertise in the service registry.
+	                    		]]></xsd:documentation>
+	                    	</xsd:annotation>
+	                    </xsd:element>
+	                    <xsd:element name="registration-listener" type="osgi:TserviceRegistrationListener" minOccurs="0" maxOccurs="unbounded">
+	                    	<xsd:annotation>
+	                    		<xsd:documentation><![CDATA[
+    Defines a listener that will be notified when this service is registered or unregistered in the
+    OSGi service registry.
+	                    		]]></xsd:documentation>
+	                    	</xsd:annotation>
+	                	</xsd:element>
+	                    <xsd:element name="service-properties" type="osgi:TserviceProperties" minOccurs="0" maxOccurs="1"/>
+		            	<!-- the bean definition template -->
+	                    <xsd:any namespace="##other" minOccurs="1" maxOccurs="1" processContents="skip">
+	   				       	<xsd:annotation>
+	                    		<xsd:documentation><![CDATA[
+	Defines the service definition template.
+	                    		]]></xsd:documentation>
+	                    	</xsd:annotation>
+	                    </xsd:any>
+		           	</xsd:sequence>
+		           	<xsd:attribute name="factory-pid" type="xsd:string" use="required">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[
+	The persistent-id under which the configuration for this bean is stored in 
+	the Configuration Admin service.
+							]]></xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attributeGroup ref="updateAttributes"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+    
+    <!-- cm-properties -->
+    <xsd:element name="cm-properties">
+    	<xsd:annotation>
+    		<xsd:documentation source="java:org.eclipse.gemini.blueprint.compendium.cm.ConfigAdminPropertiesFactoryBean"><![CDATA[
+    Exposes the properties found in the Configuration Admin service under the given persistent id.
+    		]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="java.util.Properties"/>
+				</tool:annotation>
+			</xsd:appinfo>
+    	</xsd:annotation>
+    	<xsd:complexType>
+	    	<xsd:complexContent>
+	    		<xsd:extension base="beans:propsType">
+	    			<xsd:attribute name="id" type="xsd:ID"/>
+	    		    <xsd:attribute name="persistent-id" type="xsd:string" use="required">
+			        	<xsd:annotation>
+	        				<xsd:documentation><![CDATA[
+	The persistent id under which the properties reside.
+	        				]]></xsd:documentation>
+	        			</xsd:annotation>
+	        		</xsd:attribute>
+					<xsd:attribute name="local-override" type="xsd:boolean" default="false">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[
+	Specifies whether local properties override properties from the Configuration Admin service.
+	Default is "false": properties from Configuration Admin service override local defaults.
+	If set to "true", local properties will override properties from Configuration Admin service.
+							]]></xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="dynamic" type="xsd:boolean" default="false">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[
+	Specifies whether changes to the Configuration Admin service will be reflected by the properties.
+	Default is "false": once resolved from the Configuration Admin, the properties will not change.
+	If set to "true", the properties object content will update accordingly (after initialization) to the changes in the Configuration Admin.
+							]]></xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="init-lazy" type="xsd:boolean" default="true">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[
+	Specifies whether the properties reflecting the Configuration Admin service entry will be initialized lazy or not.
+	Default is "true": meaning the properties will be initialized just before being requested (from the factory) for the first time. This is
+	the common case as it allows the most recent entry to be used.
+	If set to "false", the properties object will be initialized at startup, along with the bean factory.
+							]]></xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="init-timeout" type="xsd:nonNegativeInteger" default="0">
+						<xsd:annotation>
+							<xsd:documentation><![CDATA[
+	Specifies the amount of time (in milliseconds) the bean factory will wait for the Configuration Admin entry to
+	be initialized (return a non-null value). If the entry is not null at startup, no waiting will be performed.
+	Similar to the other timeout options, a value of '0' means no waiting. By default, no waiting (0) is performed.
+							]]></xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+	    		</xsd:extension>
+	    	</xsd:complexContent>
+    	</xsd:complexType>
+    </xsd:element>
+</xsd:schema>
