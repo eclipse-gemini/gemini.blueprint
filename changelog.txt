@@ -2,8 +2,29 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
-Changes in version 1.0.0 RC1 (2011-06-dd)
+Changes in version 1.0.0 RC1 (2011-06-20)
 -----------------------------------------
+
+General
+* upgraded to Spring Framework 3.0.4
+* upgraded to Equinox 3.6.2
+* upgraded to Felix 2.0.5
+* upgraded to Knopflerfish 3.1.0
+* migrated Spring DM documentation to Eclipse Gemini Blueprint
+* introduced Gemini Blueprint schemas (gemini-blueprint.xsd and gemini-blueprint-compendium.xsd)
+
+Package org.eclipse.gemini.blueprint.context
+* reintroduced Spring DM specific properties on exported services
+* fixed bug occuring in context service publication when a Java security manager is enabled
+
+Package org.eclipse.gemini.blueprint.extender
+* introduced system property for filtering the state of namespace bundles scanned by the extender
+* reverted the filtering of namespace bundles to RESOLVED (instead of STARTED - which can still be selected)
+* fixed bug preventing custom timeouts to be configured on the extender
+
+Package org.eclipse.gemini.blueprint.service
+* reintroduced Spring DM specific properties on exported services
+
 
 Changes in version 1.0.0 M1 (2010-06-30)
 ----------------------------------------
