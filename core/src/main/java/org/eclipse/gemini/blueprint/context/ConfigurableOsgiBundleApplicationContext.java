@@ -35,7 +35,13 @@ public interface ConfigurableOsgiBundleApplicationContext extends ConfigurableAp
 	 * Service entry used for specifying the application context name when
 	 * published as an OSGi service
 	 */
-	static final String APPLICATION_CONTEXT_SERVICE_PROPERTY_NAME = "org.springframework.context.service.name";
+	static final String APPLICATION_CONTEXT_SERVICE_PROPERTY_NAME = "org.eclipse.gemini.blueprint.context.service.name";
+	
+	/**
+	 * Compatibility (with Spring DM) service entry used for specifying the application context name when
+	 * published as an OSGi service
+	 */
+	static final String SPRING_DM_APPLICATION_CONTEXT_SERVICE_PROPERTY_NAME = "org.springframework.context.service.name";
 
 	/**
 	 * Name of the bundle context bean

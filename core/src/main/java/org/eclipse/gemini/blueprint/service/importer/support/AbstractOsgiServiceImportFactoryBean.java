@@ -122,6 +122,10 @@ public abstract class AbstractOsgiServiceImportFactoryBean implements FactoryBea
 			nsFilter.append("=");
 			nsFilter.append(serviceBeanName);
 			nsFilter.append(")(");
+			nsFilter.append(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY);
+			nsFilter.append("=");
+			nsFilter.append(serviceBeanName);
+			nsFilter.append(")(");
 			nsFilter.append(OsgiServicePropertiesResolver.BLUEPRINT_COMP_NAME);
 			nsFilter.append("=");
 			nsFilter.append(serviceBeanName);

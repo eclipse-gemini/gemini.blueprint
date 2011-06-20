@@ -398,6 +398,7 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 	 */
 	protected void customizeApplicationContextServiceProperties(Map<Object, Object> serviceProperties) {
 		serviceProperties.put(APPLICATION_CONTEXT_SERVICE_PROPERTY_NAME, getBundleSymbolicName());
+		serviceProperties.put(SPRING_DM_APPLICATION_CONTEXT_SERVICE_PROPERTY_NAME, getBundleSymbolicName());
 		serviceProperties.put(Constants.BUNDLE_SYMBOLICNAME, getBundleSymbolicName());
 		serviceProperties.put(Constants.BUNDLE_VERSION, OsgiBundleUtils.getBundleVersion(bundle));
 	}

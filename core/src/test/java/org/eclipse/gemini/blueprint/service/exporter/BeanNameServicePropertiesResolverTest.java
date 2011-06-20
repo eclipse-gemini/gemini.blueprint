@@ -69,10 +69,11 @@ public class BeanNameServicePropertiesResolverTest extends TestCase {
 		bundleControl.verify();
 		bundleContextControl.verify();
 
-		assertEquals("4 properties", 4, ret.size());
+		assertEquals("5 properties", 5, ret.size());
 		assertEquals("symbolic-name", ret.get("Bundle-SymbolicName"));
 		assertEquals("1.0.0", ret.get("Bundle-Version"));
 		assertEquals("myBean", ret.get("org.eclipse.gemini.blueprint.bean.name"));
+		assertEquals("myBean", ret.get("org.springframework.osgi.bean.name"));
 		assertEquals("myBean", ret.get("osgi.service.blueprint.compname"));
 	}
 }

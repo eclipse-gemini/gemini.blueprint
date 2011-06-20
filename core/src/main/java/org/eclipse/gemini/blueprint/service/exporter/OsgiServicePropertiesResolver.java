@@ -28,6 +28,11 @@ import java.util.Map;
 public interface OsgiServicePropertiesResolver {
 
 	/**
+	 * Compatibility (with Spring DM) Predefined property indicating the bean name of an exported Spring managed object.
+	 */
+	String SPRING_DM_BEAN_NAME_PROPERTY_KEY = "org.springframework.osgi.bean.name";
+
+	/**
 	 * Predefined property indicating the bean name of an exported Spring managed object.
 	 */
 	String BEAN_NAME_PROPERTY_KEY = "org.eclipse.gemini.blueprint.bean.name";

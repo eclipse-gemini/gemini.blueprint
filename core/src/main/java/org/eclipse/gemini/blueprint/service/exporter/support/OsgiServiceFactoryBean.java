@@ -289,6 +289,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 
 		// eliminate any property that might clash with the official ones
 		props.remove(OsgiServicePropertiesResolver.BEAN_NAME_PROPERTY_KEY);
+		props.remove(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY);
 		props.remove(OsgiServicePropertiesResolver.BLUEPRINT_COMP_NAME);
 		props.remove(Constants.SERVICE_RANKING);
 

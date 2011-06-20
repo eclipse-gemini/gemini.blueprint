@@ -51,6 +51,7 @@ public class BeanNameServicePropertiesResolver implements OsgiServicePropertiesR
 		Map p = new MapBasedDictionary();
 		if (StringUtils.hasText(beanName)) {
 			p.put(BEAN_NAME_PROPERTY_KEY, beanName);
+			p.put(SPRING_DM_BEAN_NAME_PROPERTY_KEY, beanName);
 			p.put(BLUEPRINT_COMP_NAME, beanName);
 		}
 
