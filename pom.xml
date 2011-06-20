@@ -543,7 +543,6 @@ Implementation-Version: ${pom.version}
 Implementation-Vendor: Eclipse Foundation
 Implementation-Vendor-Id: org.eclipse.gemini.blueprint
 Gemini-Blueprint-Version: ${pom.version}
-Spring-DM-Version: ${pom.version}
 Spring-Version: ${spring.maven.artifact.version}
 Build-Jdk: ${java.version}
 Build-Plan: ${env.buildPlan}
