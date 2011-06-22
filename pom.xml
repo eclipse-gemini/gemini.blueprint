@@ -530,7 +530,7 @@
         </executions>
         <configuration>
            <manifestTemplatePath>${basedir}/template.mf</manifestTemplatePath>
-           <manifestHeaders><![CDATA[Bundle-Name: ${artifactId} (Incubation)
+           <manifestHeaders><![CDATA[Bundle-Name: ${artifactId}
 Bundle-Version: ${gemini.blueprint.bundle.version}
 Bundle-SymbolicName: ${spring.osgi.symbolic.name}
 Bundle-Vendor: Eclipse Foundation

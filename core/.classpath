@@ -23,8 +23,8 @@
 	<classpathentry kind="var" path="M2_REPO/org/springframework/org.springframework.expression/3.0.4.RELEASE/org.springframework.expression-3.0.4.RELEASE.jar" sourcepath="M2_REPO/org/springframework/org.springframework.expression/3.0.4.RELEASE/org.springframework.expression-3.0.4.RELEASE-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/antlr/com.springsource.org.antlr/3.0.1/com.springsource.org.antlr-3.0.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/log4j/com.springsource.org.apache.log4j/1.2.15/com.springsource.org.apache.log4j-1.2.15.jar"/>
-	<classpathentry kind="var" path="M2_REPO/knopflerfish/framework/3.0.0.alpha1/framework-3.0.0.alpha1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/osgi/org.eclipse.osgi/3.5.1.R35x_v20090827/org.eclipse.osgi-3.5.1.R35x_v20090827.jar" sourcepath="/M2_REPO/org/eclipse/osgi/org.eclipse.osgi/3.5.0.v20090513/org.eclipse.osgi.source_3.5.0.v20090520.jar"/>
+	<classpathentry kind="var" path="M2_REPO/knopflerfish/framework/3.1.0/framework-3.1.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/osgi/org.eclipse.osgi/3.6.2.R36x_v20110210/org.eclipse.osgi-3.6.2.R36x_v20110210.jar" sourcepath="/M2_REPO/org/eclipse/osgi/org.eclipse.osgi/3.6.2.v20110210/org.eclipse.osgi.source_3.6.2.v20110210.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/gemini-blueprint-io"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/gemini-blueprint-mock"/>
 	<classpathentry kind="output" path="target/classes"/>

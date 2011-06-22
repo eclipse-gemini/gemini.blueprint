@@ -10,6 +10,6 @@
   <classpathentry kind="var" path="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3.jar" sourcepath="M2_REPO/easymock/easymock/1.2_Java1.3/easymock-1.2_Java1.3-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/osgi/log4j.osgi/1.2.15-SNAPSHOT/log4j.osgi-1.2.15-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/osgi/org.eclipse.osgi/3.5.1.R35x_v20090827/org.eclipse.osgi-3.5.1.R35x_v20090827.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/simple.service/1.0.0.M2-SNAPSHOT/simple.service-1.0.0.M2-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/gemini/blueprint/iandt/simple.service/1.0.0.RC1/simple.service-1.0.0.RC1.jar"/>
   <classpathentry kind="src" path="/simple.service"/>
 </classpath>

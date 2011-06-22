@@ -15,9 +15,9 @@
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/com.springsource.slf4j.log4j/1.5.6/com.springsource.slf4j.log4j-1.5.6.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/objectweb/asm/com.springsource.org.objectweb.asm/2.2.3/com.springsource.org.objectweb.asm-2.2.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="var" path="M2_REPO/org/eclipse/osgi/org.eclipse.osgi/3.5.1.R35x_v20090827/org.eclipse.osgi-3.5.1.R35x_v20090827.jar" sourcepath="/EQUINOX_SRC"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/felix/org.apache.felix.main/2.0.2/org.apache.felix.main-2.0.2.jar" sourcepath="/FELIX_SRC"/>
-	<classpathentry kind="var" path="M2_REPO/knopflerfish/framework/3.0.0.beta3/framework-3.0.0.beta3.jar" sourcepath="/KF3_SRC"/>
+	<classpathentry kind="var" path="M2_REPO/org/eclipse/osgi/org.eclipse.osgi/3.6.2.R36x_v20110210/org.eclipse.osgi-3.6.2.R36x_v20110210.jar" sourcepath="/EQUINOX_SRC"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/felix/org.apache.felix.main/2.0.5/org.apache.felix.main-2.0.5.jar" sourcepath="/FELIX_SRC"/>
+	<classpathentry kind="var" path="M2_REPO/knopflerfish/framework/3.1.0/framework-3.1.0.jar" sourcepath="/KF3_SRC"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/gemini-blueprint-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/gemini-blueprint-extender"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/gemini-blueprint-io"/>
