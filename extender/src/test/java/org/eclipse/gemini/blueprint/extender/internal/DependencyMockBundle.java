@@ -79,6 +79,7 @@ public class DependencyMockBundle extends MockBundle {
 		if (id >= 0)
 			props.put(Constants.SERVICE_ID, new Long(id));
 
+		props.put(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY, new Long(id));
 		props.put(OsgiServicePropertiesResolver.BEAN_NAME_PROPERTY_KEY, new Long(id));
 
 		return props;
@@ -143,6 +144,9 @@ public class DependencyMockBundle extends MockBundle {
 			}
 
 			Properties props = new Properties();
+
+			props.put(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY, new Long(System
+					.identityHashCode(dependencyBundle)));
 
 			props.put(OsgiServicePropertiesResolver.BEAN_NAME_PROPERTY_KEY, new Long(System
 					.identityHashCode(dependencyBundle)));
