@@ -345,14 +345,15 @@ public class ContextLoaderListener implements BundleActivator {
 		// are not lost
 		
 		// if the property is defined and true, consider bundles in STARTED/LAZY-INIT state, otherwise use RESOLVED
-		nsListener = new NamespaceBundleLister(!Boolean.getBoolean("org.eclipse.gemini.blueprint.ns.bundles.started"));
+		boolean nsResolved = !Boolean.getBoolean("org.eclipse.gemini.blueprint.ns.bundles.started");
+		nsListener = new NamespaceBundleLister(nsResolved);
 		context.addBundleListener(nsListener);
 
 		Bundle[] previousBundles = context.getBundles();
 
 		for (Bundle bundle : previousBundles) {
 			// special handling for uber bundle being restarted
-			if (OsgiBundleUtils.isBundleActive(bundle) || bundleId == bundle.getBundleId()) {
+			if ((nsResolved && OsgiBundleUtils.isBundleResolved(bundle)) || (!nsResolved && OsgiBundleUtils.isBundleActive(bundle)) || bundleId == bundle.getBundleId()) {
 				maybeAddNamespaceHandlerFor(bundle, false);
 			} else if (OsgiBundleUtils.isBundleLazyActivated(bundle)) {
 				maybeAddNamespaceHandlerFor(bundle, true);
