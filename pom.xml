@@ -538,7 +538,7 @@ Bundle-DocURL: http://www.eclipse.org/gemini/blueprint/
 Bundle-Description: ${pom.description}
 Bundle-License: http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php
 Bundle-ManifestVersion: 2
-Implementation-Title: Eclipse Gemini Blueprint (Incubation)
+Implementation-Title: Eclipse Gemini Blueprint
 Implementation-Version: ${pom.version}
 Implementation-Vendor: Eclipse Foundation
 Implementation-Vendor-Id: org.eclipse.gemini.blueprint
