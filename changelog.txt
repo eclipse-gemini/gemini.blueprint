@@ -2,8 +2,15 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
-Changes in version 1.0.0 GA (2011-06-20)
-----------------------------------------
+Changes in version 1.0.0 RELEASE (2011-08-22)
+---------------------------------------------
+
+General
+* upgraded to Spring Framework 3.0.6
+* Improved Javadoc documentation
+
+Package org.eclipse.gemini.blueprint.service
+* reintroduced Spring DM specific properties on imported services
 
 
 Changes in version 1.0.0 RC1 (2011-06-20)
