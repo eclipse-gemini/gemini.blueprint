@@ -5,7 +5,7 @@
     <parent>
         <artifactId>config.bundle</artifactId>
         <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-        <version>1.0.0.RC1</version>
+        <version>1.0.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.gemini.blueprint.iandt</groupId>

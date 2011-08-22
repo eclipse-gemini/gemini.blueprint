@@ -6,7 +6,7 @@
     <title>Gemini Blueprint Schema</title>
 
 	<para>Gemini Blueprint Core Schema</para>	
-    <programlisting><xi:include href="../../../../core/src/main/resources/org/eclipse/gemini/blueprint/config/gemini-blueprint-1.0.xsd" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <programlisting language="xml"><xi:include href="../../../../core/src/main/resources/org/eclipse/gemini/blueprint/config/gemini-blueprint-1.0.xsd" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude">
        <xi:fallback>
     	<para><emphasis>FIXME: CORE SCHEMA LOCATION/NAME CHANGED</emphasis></para>
   	   </xi:fallback>
@@ -14,7 +14,7 @@
     </programlisting>
     
     <para>Gemini Blueprint Compendium Schema</para>
-    <programlisting><xi:include href="../../../../core/src/main/resources/org/eclipse/gemini/blueprint/compendium/config/gemini-blueprint-compendium-1.0.xsd" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <programlisting language="xml"><xi:include href="../../../../core/src/main/resources/org/eclipse/gemini/blueprint/compendium/config/gemini-blueprint-compendium-1.0.xsd" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude">
        <xi:fallback>
     	<para><emphasis>FIXME: COMPENDIUM SCHEMA LOCATION/NAME CHANGED</emphasis></para>
   	   </xi:fallback>
