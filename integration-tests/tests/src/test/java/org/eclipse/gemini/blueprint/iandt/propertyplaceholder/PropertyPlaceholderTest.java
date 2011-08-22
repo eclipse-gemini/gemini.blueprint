@@ -72,7 +72,7 @@ public class PropertyPlaceholderTest extends BaseIntegrationTest {
 	protected String[] getTestBundlesNames() {
 		return new String[] {
 		// required by cm_all for logging
-		"org.apache.felix, org.apache.felix.configadmin, 1.0.10" };
+		"org.apache.felix, org.apache.felix.configadmin, 1.2.4" };
 	}
 
 	protected void onSetUp() throws Exception {

@@ -26,7 +26,7 @@ import org.osgi.framework.ServiceRegistration;
 public abstract class ServiceBaseTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.1.3" };
+		return new String[] { "net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.2.0" };
 	}
 
 	protected ServiceRegistration publishService(Object obj, String name) throws Exception {

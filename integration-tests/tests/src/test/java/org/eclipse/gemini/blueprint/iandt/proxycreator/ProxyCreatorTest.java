@@ -37,7 +37,7 @@ public class ProxyCreatorTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt,proxy.creator," + getSpringDMVersion(),
-			"net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.1.3" };
+			"net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.2.0" };
 	}
 
 	public void testNewProxiesCreatedOnBundleRefresh() throws Exception {

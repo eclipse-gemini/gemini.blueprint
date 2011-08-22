@@ -9,6 +9,9 @@ General
 * upgraded to Spring Framework 3.0.6
 * Improved Javadoc documentation
 
+Package org.eclipse.gemini.blueprint.extender
+* fixed bug that prevented namespaces of bundles already resolved to be considered
+
 Package org.eclipse.gemini.blueprint.service
 * reintroduced Spring DM specific properties on imported services
 
