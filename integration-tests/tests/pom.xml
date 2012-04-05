@@ -1,111 +1,105 @@
-<?xml version="1.0"?>
-<project>
-    <parent>
-        <artifactId>gemini-blueprint</artifactId>
-        <groupId>org.eclipse.gemini.blueprint</groupId>
-        <version>1.0.1.BUILD-SNAPSHOT</version>
-    </parent>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.eclipse.gemini.blueprint</groupId>
+
+    <parent>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <artifactId>gemini-blueprint-integration-tests-parent</artifactId>
+        <version>1.0.1.BUILD-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <artifactId>gemini-blueprint-integration-tests</artifactId>
     <packaging>jar</packaging>
     <name>Eclipse Gemini Blueprint Integration Tests</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
 
-    <properties>
-       <bundlor.enabled>false</bundlor.enabled>
-    </properties>
-  
     <dependencies>
         <!-- config admin (from Felix) -->
         <dependency>
-		   <groupId>org.apache.felix</groupId>
-		   <artifactId>org.apache.felix.configadmin</artifactId>
-		   <version>1.2.4</version>
-		   <scope>provided</scope>
-		   <exclusions>
-            <exclusion>
-  			  <groupId>org.apache.felix</groupId>
-			  <artifactId>org.osgi.core</artifactId>
-            </exclusion>          
-            <exclusion>
-  			  <groupId>org.apache.felix</groupId>
-			  <artifactId>org.osgi.compendium</artifactId>
-            </exclusion>          
-		   </exclusions>
-		</dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.configadmin</artifactId>
+            <version>1.2.4</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.osgi.core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- metatype service -->
+        <!-- metatype service -->
         <dependency>
-		   <groupId>org.apache.felix</groupId>
-		   <artifactId>org.apache.felix.metatype</artifactId>
-		   <version>1.0.2</version>
-		   <scope>provided</scope>
-		   <exclusions>
-            <exclusion>
-  			  <groupId>org.apache.felix</groupId>
-			  <artifactId>org.osgi.core</artifactId>
-            </exclusion>          
-            <exclusion>
-  			  <groupId>org.apache.felix</groupId>
-			  <artifactId>org.osgi.compendium</artifactId>
-            </exclusion>          
-		   </exclusions>
-		</dependency>
-  
-  
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.metatype</artifactId>
+            <version>1.0.2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.osgi.core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <dependency>
-		   <groupId>org.apache.felix</groupId>
-		   <artifactId>org.apache.felix.eventadmin</artifactId>
-		   <version>1.0.0</version>
-		   <scope>provided</scope>
-		   <exclusions>
-            <exclusion>
-  			  <groupId>org.apache.felix</groupId>
-			  <artifactId>org.osgi.core</artifactId>
-            </exclusion>          
-            <exclusion>
-  			  <groupId>org.apache.felix</groupId>
-			  <artifactId>org.osgi.compendium</artifactId>
-            </exclusion>          
-		   </exclusions>
-		</dependency>
-		
-	    <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.eventadmin</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.osgi.core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>net.sourceforge.cglib</groupId>
             <artifactId>com.springsource.net.sf.cglib</artifactId>
             <version>2.2.0</version>
             <scope>provided</scope>
-        </dependency> 
-        
+        </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint</groupId>
             <artifactId>gemini-blueprint-core</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint</groupId>
             <artifactId>gemini-blueprint-extender</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint</groupId>
             <artifactId>gemini-blueprint-test</artifactId>
             <scope>provided</scope>
-        </dependency> 
-<!--
+        </dependency>
+
         <dependency>
-            <groupId>org.eclipse.gemini.blueprint</groupId>
-            <artifactId>gemini-blueprint-annotation</artifactId>
+            <groupId>org.aopalliance</groupId>
+            <artifactId>com.springsource.org.aopalliance</artifactId>
             <scope>provided</scope>
         </dependency>
--->    	
-    	<dependency>
-      		<groupId>org.aopalliance</groupId>
-      		<artifactId>com.springsource.org.aopalliance</artifactId>
-      		<scope>provided</scope>
-    	</dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
@@ -113,68 +107,77 @@
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>lifecycle</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>reference.proxy</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>simple.service</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>simple.service2</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>cardinality0to1</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>scoped.bundle.a</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>scoped.bundle.b</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>scoped.bundle.common</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>configuration</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>dependencies</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>tccl.intf</artifactId>
@@ -189,123 +192,24 @@
             <scope>provided</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>osgi_R4_compendium</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-
-
-		<!-- this dependency exists only to test clogging 1.0.4 behaviour -->
-		<!-- slf4j is strongly recommended as a replacement for clogging at least for OSGi environments
-		<dependency>
-			<groupId>org.eclipse.bundles</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>20070611</version>
-			<scope>provided</scope>
-		</dependency>
-		 -->
-
-		<!--
-		  web artifacts
-		  -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>com.springsource.javax.servlet</artifactId>
-			<version>2.4.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.osgi</groupId>
-			<artifactId>jsp-api.osgi</artifactId>
-			<version>2.0-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-				
-		<dependency>
-		  <groupId>net.sourceforge.mx4j</groupId>
-		  <artifactId>com.springsource.mx4j</artifactId>
-		  <version>3.0.2</version>
-		  <scope>test</scope>
-		</dependency>		
-
-		<dependency>
-		  <groupId>org.springframework.osgi</groupId>
-		  <artifactId>jasper.osgi</artifactId>
-		  <version>5.5.23-SNAPSHOT</version>
-		  <scope>test</scope>
-		</dependency>		
-
-		<dependency>
-		  <groupId>org.springframework.osgi</groupId>
-		  <artifactId>commons-el.osgi</artifactId>
-		  <version>1.0-SNAPSHOT</version>
-		  <scope>test</scope>
-		</dependency>		
-
-		<dependency>
-		  <groupId>org.springframework.osgi</groupId>
-		  <artifactId>jstl.osgi</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
-		  <scope>test</scope>
-		</dependency>		
-
-		<dependency>
-		  <groupId>org.springframework.osgi</groupId>
-		  <artifactId>catalina.osgi</artifactId>
-		  <version>5.5.23-SNAPSHOT</version>
-		  <scope>test</scope>
-		</dependency>		
-
-		<dependency>
-		  <groupId>org.springframework.osgi</groupId>
-		  <artifactId>catalina.start.osgi</artifactId>
-		  <version>1.0.0</version>
-		  <scope>test</scope>
-		</dependency>		
-    <!--
-
-		<dependency>
-		  <groupId>org.eclipse.gemini.blueprint</groupId>
-		  <artifactId>gemini-blueprint-web</artifactId>
-		  <scope>test</scope>
-		</dependency>
         <dependency>
-           <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-           <artifactId>annotation.proxy</artifactId>
-           <version>${project.parent.version}</version>                    
-           <scope>provided</scope>
+            <groupId>org.osgi</groupId>
+           	<artifactId>org.osgi.compendium</artifactId>
+            <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-            <artifactId>annotation.proxy</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    -->
-        
+
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>component.scan.bundle</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
-			
-    </dependencies>
 
+    </dependencies>
 
 
     <build>
         <plugins>
-			  <plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-				  <skip>true</skip>
-				</configuration>
-			  </plugin>
-        
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -317,14 +221,14 @@
                             <name>com.gatespace.bundle.cm.store</name>
                             <value>test-config</value>
                         </property>
-						<property>
-							<name>org.springframework.osgi.test.framework</name>
-							<value>${osgi.test.platform}</value>
-						</property>
-						<property>
-							<name>org.springframework.osgi.integration.testing.clover</name>
-							<value>${clover.enabled}</value>
-						</property>
+                        <property>
+                            <name>org.eclipse.gemini.blueprint.test.framework</name>
+                            <value>${osgi.test.platform}</value>
+                        </property>
+                        <property>
+                            <name>org.springframework.osgi.integration.testing.clover</name>
+                            <value>${clover.enabled}</value>
+                        </property>
                     </systemProperties>
                     <argLine>${clover.argLine} ${security.argLine}</argLine>
                     <!--argLine>-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=2111,server=y,suspend=y</argLine-->

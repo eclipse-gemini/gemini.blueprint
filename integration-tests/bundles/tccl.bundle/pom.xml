@@ -1,14 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
-        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-        <version>1.0.1.BUILD-SNAPSHOT</version>
-    </parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+
+    <parent>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
+        <version>1.0.1.BUILD-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <artifactId>tccl</artifactId>
     <packaging>jar</packaging>
     <name>Gemini Blueprint Test Bundle: Spring service TCCL management test bundle</name>
@@ -19,7 +21,7 @@
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>tccl.intf</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -1,61 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
-  <parent>
-    <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
-    <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-    <version>1.0.1.BUILD-SNAPSHOT</version>
-  </parent>
-  
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.gemini.blueprint.iandt.blueprint</groupId>
-  <artifactId>bundles</artifactId>
-  <packaging>pom</packaging>
-  <name>Gemini Blueprint Integration Testing Bundles</name>
-  <url>http://www.eclipse.org/gemini/blueprint/</url>
-  
-  <properties>
-    <!-- root, empty package -->
-    <!-- plugin not yet enabled to avoid further problems -->
-	<spring.osgi.import.pkg>!org.springframework.osgi.blueprint.iandt, *</spring.osgi.import.pkg>
-	<spring.osgi.export.pkg>${pom.artifactId}*</spring.osgi.export.pkg>
-  	<clover.skip>true</clover.skip>
-  </properties>
-  
-  <!-- shared dependencies -->
-  <dependencies>
-        <dependency>
-            <groupId>org.eclipse.gemini.blueprint</groupId>
-            <artifactId>gemini-blueprint-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  </dependencies>
-  
-  <modules>
-    <module>simple.bundle</module>
-    <module>error.bundle</module>
-    <module>waiting.bundle</module>
-    <module>config.bundle</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
- <build>
-    <plugins>
-	   <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>    
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-    
- </build>
+    <parent>
+        <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <version>1.0.1.BUILD-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.eclipse.gemini.blueprint.iandt.blueprint</groupId>
+    <artifactId>bundles</artifactId>
+    <packaging>pom</packaging>
+    <name>Gemini Blueprint Integration Testing Bundles</name>
+    <url>http://www.eclipse.org/gemini/blueprint/</url>
+
+    <modules>
+        <module>simple.bundle</module>
+        <module>error.bundle</module>
+        <module>waiting.bundle</module>
+        <module>config.bundle</module>
+    </modules>
 
 </project>

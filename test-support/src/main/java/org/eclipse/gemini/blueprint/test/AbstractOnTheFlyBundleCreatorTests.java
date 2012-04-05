@@ -541,10 +541,10 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		boolean debug = logger.isDebugEnabled();
 
 		if (debug)
-			logger.debug("Test bundle [" + bundleString + "] succesfully installed");
+			logger.debug("Test bundle [" + bundleString + "] successfully installed");
 		bundle.start();
 		if (debug)
-			logger.debug("Test bundle [" + bundleString + "] succesfully started");
+			logger.debug("Test bundle [" + bundleString + "] successfully started");
 	}
 
 }

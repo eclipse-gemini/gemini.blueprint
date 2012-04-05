@@ -1,73 +1,76 @@
- <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.gemini.blueprint</groupId>
-  <artifactId>gemini-blueprint</artifactId>
-  <packaging>pom</packaging>
-  <version>1.0.1.BUILD-SNAPSHOT</version>
-  <name>Eclipse Gemini Blueprint</name>
-  <url>http://www.eclipse.org/gemini/blueprint/</url>
-   
-  <build>
-    <plugins>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.eclipse.gemini.blueprint</groupId>
+    <artifactId>gemini-blueprint</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.1.BUILD-SNAPSHOT</version>
+    <name>Eclipse Gemini Blueprint</name>
+    <url>http://www.eclipse.org/gemini/blueprint/</url>
+
+    <build>
+        <plugins>
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-maven-plugin</artifactId>
                 <version>2.0.7</version>
-				<executions>
-					<execution>
-						<id>single-page</id>
-						<goals>
-							<goal>generate-html</goal>
-						</goals>
-						<configuration>
-							<chunkedOutput>false</chunkedOutput>
-							<htmlCustomization>src/docbkx/resources/xsl/html.xsl</htmlCustomization>
-							<postProcess>	
-								<copy todir="${basedir}/target/site/reference/html-single">
-									<fileset dir="${basedir}/target/docbkx/html">
-										<include name="**/*.html" />
-									</fileset>
-								</copy>
-								<copy todir="${basedir}/target/site/reference/html-single">
-									<fileset dir="${basedir}/src/docbkx/resources">
-										<include name="**/*.css" />
-										<include name="**/*.png" />
-										<include name="**/*.gif" />
-										<include name="**/*.jpg" />										
-									</fileset>
-								</copy>
-							</postProcess>							
-						</configuration>
-						<phase>pre-site</phase>
-					</execution>
-					<execution>
-						<id>multi-page</id>
-						<goals>
-							<goal>generate-html</goal>
-						</goals>
-						<configuration>
-							<chunkedOutput>true</chunkedOutput>
-							<htmlCustomization>src/docbkx/resources/xsl/html_chunk.xsl</htmlCustomization>
-							<postProcess>
-								<copy todir="${basedir}/target/site/reference">
-									<fileset dir="${basedir}/target/docbkx">
-										<include name="**/*.html" />
-									</fileset>
-								</copy>
-								<copy todir="${basedir}/target/site/reference/html">
-									<fileset dir="${basedir}/src/docbkx/resources">
-										<include name="**/*.css" />
-										<include name="**/*.png" />
-										<include name="**/*.gif" />
-										<include name="**/*.jpg" />
-									</fileset>
-								</copy>
-							</postProcess>							
-						</configuration>
-						<phase>pre-site</phase>
-					</execution>
-				</executions>
+                <executions>
+                    <execution>
+                        <id>single-page</id>
+                        <goals>
+                            <goal>generate-html</goal>
+                        </goals>
+                        <configuration>
+                            <chunkedOutput>false</chunkedOutput>
+                            <htmlCustomization>src/docbkx/resources/xsl/html.xsl</htmlCustomization>
+                            <postProcess>
+                                <copy todir="${basedir}/target/site/reference/html-single">
+                                    <fileset dir="${basedir}/target/docbkx/html">
+                                        <include name="**/*.html"/>
+                                    </fileset>
+                                </copy>
+                                <copy todir="${basedir}/target/site/reference/html-single">
+                                    <fileset dir="${basedir}/src/docbkx/resources">
+                                        <include name="**/*.css"/>
+                                        <include name="**/*.png"/>
+                                        <include name="**/*.gif"/>
+                                        <include name="**/*.jpg"/>
+                                    </fileset>
+                                </copy>
+                            </postProcess>
+                        </configuration>
+                        <phase>pre-site</phase>
+                    </execution>
+                    <execution>
+                        <id>multi-page</id>
+                        <goals>
+                            <goal>generate-html</goal>
+                        </goals>
+                        <configuration>
+                            <chunkedOutput>true</chunkedOutput>
+                            <htmlCustomization>src/docbkx/resources/xsl/html_chunk.xsl</htmlCustomization>
+                            <postProcess>
+                                <copy todir="${basedir}/target/site/reference">
+                                    <fileset dir="${basedir}/target/docbkx">
+                                        <include name="**/*.html"/>
+                                    </fileset>
+                                </copy>
+                                <copy todir="${basedir}/target/site/reference/html">
+                                    <fileset dir="${basedir}/src/docbkx/resources">
+                                        <include name="**/*.css"/>
+                                        <include name="**/*.png"/>
+                                        <include name="**/*.gif"/>
+                                        <include name="**/*.jpg"/>
+                                    </fileset>
+                                </copy>
+                            </postProcess>
+                        </configuration>
+                        <phase>pre-site</phase>
+                    </execution>
+                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.docbook</groupId>
@@ -95,22 +98,22 @@
                     </entities>
                 </configuration>
             </plugin>
-   </plugins>            
-</build>
+        </plugins>
+    </build>
 
-  <pluginRepositories>
-	<pluginRepository>
-      <id>agilejava</id>
-      <url>http://agilejava.com/maven/</url>
-    </pluginRepository>
-  </pluginRepositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>agilejava</id>
+            <url>http://agilejava.com/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
-  <distributionManagement>
-      <downloadUrl>http://www.springframework.org/osgi/</downloadUrl>
-      <site>
-          <id>static.springframework.org</id>
-          <name>SpringFramework.org</name>
-          <url>scp://static.springframework.org/var/www/domains/springframework.org/static/htdocs/spring-osgi/snapshot-site/</url>
-      </site>
-  </distributionManagement>
+    <distributionManagement>
+        <downloadUrl>http://www.springframework.org/osgi/</downloadUrl>
+        <site>
+            <id>static.springframework.org</id>
+            <name>SpringFramework.org</name>
+            <url>scp://static.springframework.org/var/www/domains/springframework.org/static/htdocs/spring-osgi/snapshot-site/</url>
+        </site>
+    </distributionManagement>
 </project>

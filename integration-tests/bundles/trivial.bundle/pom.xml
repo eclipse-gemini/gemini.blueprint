@@ -1,16 +1,20 @@
-<?xml version="1.0"?><project>
-  <parent>
-    <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
-    <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-    <version>1.0.1.BUILD-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-  <artifactId>trivial</artifactId>
-  <packaging>jar</packaging>
-  <name>Gemini Blueprint Test Bundle: Trivial OSGi bundle</name>
-  <description>An OSGi bundle that contains and exports just one class
-  </description>
-  <url>http://www.eclipse.org/gemini/blueprint/</url>
-  
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
+        <version>1.0.1.BUILD-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>trivial</artifactId>
+    <packaging>jar</packaging>
+    <name>Gemini Blueprint Test Bundle: Trivial OSGi bundle</name>
+    <description>An OSGi bundle that contains and exports just one class</description>
+    <url>http://www.eclipse.org/gemini/blueprint/</url>
+
 </project>

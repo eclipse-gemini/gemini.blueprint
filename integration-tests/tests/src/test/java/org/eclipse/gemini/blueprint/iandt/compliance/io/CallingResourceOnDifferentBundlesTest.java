@@ -69,7 +69,7 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 	}
 
 	public void testCallGetResourceOnADifferentBundleRetrievedThroughBundleEvent() throws Exception {
-		String EXTRA_BUNDLE = "org.springframework.core";
+		String EXTRA_BUNDLE = "spring-core";
 
 		Bundle[] bundles = bundleContext.getBundles();
 		Bundle bundle = null;

@@ -17,12 +17,8 @@ distribution/website before using any of them in your own applications.
 - required for building the testing framework
 - required for running the framework's test suite
 
-* catalina.jar
-- Apache Tomcat 5.5.23 (http://tomcat.apache.org)
-- required for building and (optionally) running Spring-DM web support
-
-* cglib-nodep-2.1_3.jar
-- CGLIB 2.1_3 with ObjectWeb ASM 1.5.3 (http://cglib.sourceforge.net)
+* cglib-2.2.0.jar
+- CGLIB 2.2.0 with ObjectWeb ASM 2.2.3 (http://cglib.sourceforge.net)
 - required at runtime when proxying full target classes via Spring AOP
 
 * easymock.jar
@@ -33,24 +29,16 @@ distribution/website before using any of them in your own applications.
 - Knopflerfish 3.x OSGi platform implementation (http://www.knopflerfish.org) 
 - required for building and running the framework's test suite
  
-* jcl104-over-slf4j.jar
-- SLF4J 1.5.6 Jakarta Commons Logging wrapper (http://www.slf4j.org)
+* jcl-over-slf4j.jar
+- SLF4J 1.6.4 Jakarta Commons Logging wrapper (http://www.slf4j.org)
 - required for building and running the framework's test suite
 
-* jetty-6.1.9.jar
-- Jetty 6.1.9 (http://jetty.mortbay.org)
-- required for building and (optionally) running Spring-DM web support
-
-* jetty-util-6.1.9.jar
-- Jetty Util 6.1.9 (http://jetty.mortbay.org)
-- required for building and (optionally) running Spring-DM web support
-  
-* junit-3.8.2.jar
-- JUnit 3.8.2 (http://www.junit.org)
+* junit-4.9.0.jar
+- JUnit 4.9.0 (http://www.junit.org)
 - required for building and running the framework's test suite
 
-* log4j-1.2.15.jar
-- Log4J 1.2.15 (http://logging.apache.org/log4j)
+* log4j-1.2.16.jar
+- Log4J 1.2.16 (http://logging.apache.org/log4j)
 - required for building running the framework's test suite
 
 * multithreadedtc.jar
@@ -69,17 +57,12 @@ distribution/website before using any of them in your own applications.
 - OSGi Compendium API 1.0 (http://www.osgi.org)
 - required for building and running the framework's test suite
 
-* servlet-api-2.5.jar
-- Servlet API version 2.5 (http://java.sun.com/products/servlet/)
-- required for building and running Spring-DM web support
-- compiled against JDK 1.4
-
 * slf4j-api.jar
-- SLF4J API 1.5.6 (http://www.slf4j.org)
+- SLF4J API 1.6.4 (http://www.slf4j.org)
 - required for building and running the framework's test suite
 
 * slf4j-log4j.jar
-- SLF4J 1.5.6 adapter for log4j (http://www.slf4j.org) 
+- SLF4J 1.6.4 adapter for log4j (http://www.slf4j.org)
 - required for running the framework's test suite
 
 * spring-aop.jar
@@ -105,11 +88,3 @@ distribution/website before using any of them in your own applications.
 * spring-test.jar
 - Spring Framework 3.0.x test library (http://www.springframework.org)
 - required for building and running the framework's test suite
-
-* spring-web.jar
-- Spring Framework 3.0.x web library (http://www.springframework.org)
-- required for running the samples and the framework's test suite
-
-* spring-webmvc.jar
-- Spring Framework 3.0.x mvc library (http://www.springframework.org)
-- required for running the samples and the framework's test suite

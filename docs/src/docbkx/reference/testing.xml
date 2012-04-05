@@ -263,7 +263,7 @@ Reason: Missing Constraint: Import-Package: org.apache.commons.lang.time; versio
      
      <para>Let's fix our integration test by installing the required bundle (and some extra osgi libraries):</para>
      <programlisting language="java"><![CDATA[protected String[] getTestBundlesNames() {
-	 return new String[] { "net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.1.3",
+	 return new String[] { "net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.2.0",
 	 	"javax.transaction, com.springsource.javax.transaction, 1.1.0",
 	 	"commons-lang, commons-lang, 2.4" };
 	 };

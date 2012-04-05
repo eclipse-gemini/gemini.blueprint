@@ -1,19 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <artifactId>spring-osgi-jdk5-integration-test-bundles</artifactId>
-        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-        <version>1.0.1.BUILD-SNAPSHOT</version>
-    </parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+
+    <parent>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <artifactId>spring-osgi-jdk5-integration-test-bundles</artifactId>
+        <version>1.0.1.BUILD-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <artifactId>component.scan.bundle</artifactId>
     <packaging>jar</packaging>
     <name>Gemini Blueprint Test Bundle: @Component beans bundle</name>
     <description>An OSGi bundle with Spring annotated components</description>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
-
 </project>
-

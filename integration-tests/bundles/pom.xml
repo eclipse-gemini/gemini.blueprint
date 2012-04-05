@@ -1,104 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
-  <parent>
-    <artifactId>gemini-blueprint</artifactId>
-    <groupId>org.eclipse.gemini.blueprint</groupId>
-    <version>1.0.1.BUILD-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
-  <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-  <packaging>pom</packaging>
-  <name>Eclipse Gemini Blueprint Integration Testing Bundles</name>
-  <url>http://www.eclipse.org/gemini/blueprint/</url>
-  
-  <properties>
-    <!-- root, empty package -->
-    <!-- plugin not yet enabled to avoid further problems -->
-	<spring.osgi.import.pkg>!org.eclipse.gemini.blueprint.iandt, *</spring.osgi.import.pkg>
-	<spring.osgi.export.pkg>${pom.artifactId}*</spring.osgi.export.pkg>
-  	<clover.skip>true</clover.skip>
-    <bundlor.enabled>false</bundlor.enabled>  	
-  </properties>
-  
-  <!-- shared dependencies -->
-  <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <artifactId>gemini-blueprint-integration-tests-parent</artifactId>
+        <version>1.0.1.BUILD-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
+    <packaging>pom</packaging>
+    <name>Eclipse Gemini Blueprint Integration Testing Bundles</name>
+    <url>http://www.eclipse.org/gemini/blueprint/</url>
+
+    <properties>
+        <!-- root, empty package -->
+        <!-- plugin not yet enabled to avoid further problems -->
+        <spring.osgi.import.pkg>!org.eclipse.gemini.blueprint.iandt, *</spring.osgi.import.pkg>
+        <spring.osgi.export.pkg>${project.artifactId}*</spring.osgi.export.pkg>
+        <clover.skip>true</clover.skip>
+        <bundlor.enabled>false</bundlor.enabled>
+    </properties>
+
+    <!-- shared dependencies -->
+    <dependencies>
         <dependency>
             <groupId>org.eclipse.gemini.blueprint</groupId>
             <artifactId>gemini-blueprint-core</artifactId>
             <scope>provided</scope>
         </dependency>
-  </dependencies>
-  
-  <modules>
-    <module>simple.service.bundle</module>
-    <module>simple.service.bundle.identical</module>
-    <module>simple.service.bundle.2.identical</module>
-    <module>simple.service.2.bundle</module>
-    <module>simple.service.3.bundle</module>
-    <module>dependency.factory.bundle</module>
-    <module>trivial.bundle</module>
-    <module>trivial.test.bundle</module>
-    <module>lifecycle.test.bundle</module>
-    <module>service.listener.bundle</module>
-    <module>reference.test.bundle</module>
-    <module>proxy.destruction.test.bundle</module>
-    <module>dependency.test.bundle</module>
-    <module>cardinality.0to1.bundle</module>
-    <module>scoped.a.bundle</module>    
-    <module>scoped.b.bundle</module>    
-    <module>scoped.common.bundle</module>
-    <module>io.fragment.1.bundle</module>    
-    <module>io.fragment.2.bundle</module>
-    <module>error.bundle</module>
-    <module>deadlock.bundle</module>
-    <module>configuration.test.bundle</module>
-    <module>extender.version.bundle</module>
-    <module>config.bundle</module>
-    <module>tccl.intf.bundle</module>    
-    <module>tccl.bundle</module>
-    <module>config.file.with.dots.bundle</module>
-    <module>proxy.creator.bundle</module>
-    <module>extender.fragment.bundle</module>
-    <module>jdk.proxy.bundle</module>
-    <module>extender.listener.bundle</module>
-    <module>namespace.own.consumer.bundle</module>
-    <module>proxy.listener</module>
-    <module>export.import.dependency.bundle</module>
-    <!--
-    <module>web.bundles</module>
-    -->
-    <module>jdk5</module>
+    </dependencies>
 
-    <!-- lazy bundles 
-    <module>lazy.companion.bundle</module>
-    <module>lazy.basic</module>
-    <module>lazy.export.no.import</module>
-    <module>lazy.export.import</module>
-    -->
-    <!-- blueprint bundles  -->
-    <module>blueprint</module>
-  </modules>
+    <modules>
+        <module>simple.service.bundle</module>
+        <module>simple.service.bundle.identical</module>
+        <module>simple.service.bundle.2.identical</module>
+        <module>simple.service.2.bundle</module>
+        <module>simple.service.3.bundle</module>
+        <module>dependency.factory.bundle</module>
+        <module>trivial.bundle</module>
+        <module>trivial.test.bundle</module>
+        <module>lifecycle.test.bundle</module>
+        <module>service.listener.bundle</module>
+        <module>reference.test.bundle</module>
+        <module>proxy.destruction.test.bundle</module>
+        <module>dependency.test.bundle</module>
+        <module>cardinality.0to1.bundle</module>
+        <module>scoped.a.bundle</module>
+        <module>scoped.b.bundle</module>
+        <module>scoped.common.bundle</module>
+        <module>io.fragment.1.bundle</module>
+        <module>io.fragment.2.bundle</module>
+        <module>error.bundle</module>
+        <module>deadlock.bundle</module>
+        <module>configuration.test.bundle</module>
+        <module>extender.version.bundle</module>
+        <module>config.bundle</module>
+        <module>tccl.intf.bundle</module>
+        <module>tccl.bundle</module>
+        <module>config.file.with.dots.bundle</module>
+        <module>proxy.creator.bundle</module>
+        <module>extender.fragment.bundle</module>
+        <module>jdk.proxy.bundle</module>
+        <module>extender.listener.bundle</module>
+        <module>namespace.own.consumer.bundle</module>
+        <module>proxy.listener</module>
+        <module>export.import.dependency.bundle</module>
+        <module>jdk5</module>
 
- <build>
-    <plugins>
-	   <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>    
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-    
- </build>
+        <!-- blueprint bundles  -->
+        <module>blueprint</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

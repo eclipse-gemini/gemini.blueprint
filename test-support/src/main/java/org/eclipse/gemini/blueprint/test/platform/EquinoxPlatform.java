@@ -46,9 +46,9 @@ public class EquinoxPlatform extends AbstractOsgiPlatform {
 
 		// local temporary folder for running tests
 		// prevents accidental rewrites
-		props.setProperty("osgi.configuration.area", "eclipse_config");
-		props.setProperty("osgi.instance.area", "eclipse_config");
-		props.setProperty("osgi.user.area", "eclipse_config");
+		props.setProperty("osgi.configuration.area", "./target/eclipse_config");
+		props.setProperty("osgi.instance.area", "./target/eclipse_config");
+		props.setProperty("osgi.user.area", "./target/eclipse_config");
 
 		// props.setProperty("eclipse.consoleLog", "true");
 		// props.setProperty("osgi.debug", "");
