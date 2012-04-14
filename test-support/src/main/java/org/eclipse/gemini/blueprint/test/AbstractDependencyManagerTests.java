@@ -22,7 +22,6 @@ import org.eclipse.gemini.blueprint.test.internal.util.PropertiesUtil;
 import org.eclipse.gemini.blueprint.test.provisioning.ArtifactLocator;
 import org.eclipse.gemini.blueprint.test.provisioning.internal.LocalFileSystemMavenRepository;
 import org.osgi.framework.BundleContext;
-import org.springframework.core.JdkVersion;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
@@ -189,20 +188,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 			logger.trace("Excluded ignored properties " + excluded);
 		}
 
-		// filter bundles which are Tiger/JDK 1.5 specific
-		String sign = null;
-		if (JdkVersion.isAtLeastJava15()) {
-			sign = "-15";
-		}
-		else {
-			sign = "+15";
-		}
-
-		excluded = PropertiesUtil.filterValuesStartingWith(props, sign);
-		if (trace)
-			logger.trace("JDK " + JdkVersion.getJavaVersion() + " excluded bundles " + excluded);
-
-		String[] bundles = (String[]) props.keySet().toArray(new String[props.size()]);
+		String[] bundles = props.keySet().toArray(new String[props.size()]);
 		// sort the array (as the Properties file doesn't respect the order)
 		//bundles = StringUtils.sortStringArray(bundles);
 
