@@ -1,20 +1,14 @@
-.svn
-target
-*.log
+.svn/
+.git/
 *.bak*
+
+# Maven
+target/
+
+# Eclipse
 eclipse_config
-# /
-/.git
-/target
 
-# /core/
-/core/target
-
-# /docs/
-/docs/target
-
-# /extender/
-/extender/target
-
-# /integration-tests/tests/
-/integration-tests/tests/target
+# Intelli-J
+*.iml
+*.ipl
+.idea/
