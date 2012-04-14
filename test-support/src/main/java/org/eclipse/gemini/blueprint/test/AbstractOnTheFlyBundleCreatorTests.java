@@ -106,13 +106,18 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 	/**
 	 * Returns the root path used for locating the resources that will be packed
 	 * in the test bundle (the root path does not become part of the jar).
-	 * <p/>By default, the Maven2 test layout is used:
-	 * <code>"file:./target/test-classes"</code>
-	 * 
+	 *
+     * <p/>By default, the current threads context ClassLoader is used to locate
+     * the root of the classpath. Because unit tests will either be run from Maven
+     * or an IDE this will resolve a test classes directory of sorts.
+     *
+     * <p/>For example when invoked from Maven <code>"file:./target/test-classes"</code>
+     * will be resolved and used.
+     *
 	 * @return root path given as a String
 	 */
 	protected String getRootPath() {
-		return "file:./target/test-classes/";
+		return Thread.currentThread().getContextClassLoader().getResource(".").toString();
 	}
 
 	/**

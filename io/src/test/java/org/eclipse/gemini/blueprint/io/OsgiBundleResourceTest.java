@@ -123,7 +123,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	}
 
 	public void testFileWithSpecialCharsInTheNameBeingResolved() throws Exception {
-		String name = "file:./target/test-classes/test-file";
+        String name = Thread.currentThread().getContextClassLoader().getResource( "test-file" ).toString();
 		FileSystemResourceLoader fileLoader = new FileSystemResourceLoader();
 		fileLoader.setClassLoader(getClass().getClassLoader());
 
@@ -134,7 +134,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	}
 
 	public void testFileWithEmptyCharsInTheNameBeingResolved() throws Exception {
-		String name = "file:./target/test-classes/test file";
+		String name = Thread.currentThread().getContextClassLoader().getResource( "test file" ).toString();
 		FileSystemResourceLoader fileLoader = new FileSystemResourceLoader();
 		fileLoader.setClassLoader(getClass().getClassLoader());
 
@@ -145,7 +145,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	}
 
 	public void testFileWithNormalCharsInTheNameBeingResolved() throws Exception {
-		String name = "file:.project";
+		String name = Thread.currentThread().getContextClassLoader().getResource( "normal" ).toString();
 		FileSystemResourceLoader fileLoader = new FileSystemResourceLoader();
 		fileLoader.setClassLoader(getClass().getClassLoader());
 

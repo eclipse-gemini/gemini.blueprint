@@ -30,9 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.test.internal.util.jar.storage.MemoryStorage;
 import org.eclipse.gemini.blueprint.test.internal.util.jar.storage.Storage;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.StringUtils;
@@ -48,19 +46,9 @@ public class JarCreator {
 
 	private static final Log log = LogFactory.getLog(JarCreator.class);
 
-	public static final String CLASS_PATTERN = "/**/*.class";
-
-	public static final String XML_PATTERN = "/**/*.xml";
-
-	public static final String PROPS_PATTERN = "/**/*.properties";
-
 	public static final String EVERYTHING_PATTERN = "/**/*";
 
-	private static final String[] LIMITED_PATTERN = new String[] { CLASS_PATTERN, XML_PATTERN, PROPS_PATTERN };
-
 	private static final String CLASS_EXT = ".class";
-
-	private static final String TEST_CLASSES_DIR = "test-classes";
 
 	private String[] contentPattern = new String[] { EVERYTHING_PATTERN };
 
@@ -82,27 +70,14 @@ public class JarCreator {
 	 * @return the root path
 	 */
 	public String determineRootPath() {
-		// load file using absolute path. This seems to be necessary in IntelliJ
-		try {
-			ResourceLoader fileLoader = new DefaultResourceLoader();
-			Resource res = fileLoader.getResource(getClass().getName().replace('.', '/').concat(".class"));
-			String fileLocation = "file://" + res.getFile().getAbsolutePath();
-			fileLocation = fileLocation.substring(0, fileLocation.indexOf(TEST_CLASSES_DIR)) + TEST_CLASSES_DIR;
-			if (res.exists()) {
-				return fileLocation;
-			}
-		}
-		catch (Exception e) {
-		}
-
-		return "file:./target/" + TEST_CLASSES_DIR;
+		return Thread.currentThread().getContextClassLoader().getResource(".").toString();
 	}
 
 	/**
 	 * Actual jar creation.
 	 * 
 	 * @param manifest to use
-	 * @param content array of resource to include in the jar
+	 * @param entries array of resource to include in the jar
 	 * @return the number of bytes written to the underlying stream.
 	 * 
 	 * @throws IOException
