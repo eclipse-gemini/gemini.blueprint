@@ -38,6 +38,7 @@ import org.springframework.context.Lifecycle;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.AbstractRefreshableApplicationContext;
+import org.springframework.core.env.EnvironmentCapable;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -80,7 +81,7 @@ public class ClassUtilsTest extends TestCase {
 		Class<?>[] clazz = ClassUtils.getAllInterfaces(DelegatedExecutionOsgiBundleApplicationContext.class);
 		Class<?>[] expected =
 				{ ConfigurableOsgiBundleApplicationContext.class, ConfigurableApplicationContext.class,
-						ApplicationContext.class, Lifecycle.class, ListableBeanFactory.class,
+						ApplicationContext.class, Lifecycle.class, EnvironmentCapable.class, ListableBeanFactory.class,
 						HierarchicalBeanFactory.class, MessageSource.class, ApplicationEventPublisher.class,
 						ResourcePatternResolver.class, BeanFactory.class, ResourceLoader.class };
 
@@ -98,7 +99,7 @@ public class ClassUtilsTest extends TestCase {
 						DefaultResourceLoader.class, ResourceLoader.class,
 						DelegatedExecutionOsgiBundleApplicationContext.class,
 						ConfigurableOsgiBundleApplicationContext.class, ConfigurableApplicationContext.class,
-						ApplicationContext.class, Lifecycle.class, ListableBeanFactory.class,
+						ApplicationContext.class, Lifecycle.class, EnvironmentCapable.class, ListableBeanFactory.class,
 						HierarchicalBeanFactory.class, ApplicationEventPublisher.class, ResourcePatternResolver.class,
 						MessageSource.class, BeanFactory.class, DisposableBean.class };
 

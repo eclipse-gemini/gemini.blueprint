@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.osgi.service.blueprint.container.ReifiedType;
-import org.springframework.core.GenericTypeResolver;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
@@ -49,7 +47,7 @@ class TypeFactory {
 		}
 
 		GenericsReifiedType(TypeDescriptor descriptor) {
-			super(((descriptor==TypeDescriptor.NULL) || (descriptor == null)) ? Object.class: ClassUtils.resolvePrimitiveIfNecessary(descriptor.getType()));
+			super((descriptor == null) ? Object.class: ClassUtils.resolvePrimitiveIfNecessary(descriptor.getType()));
 			arguments = getArguments(descriptor);
 			size = arguments.size();
 		}
@@ -70,7 +68,7 @@ class TypeFactory {
 		public int size() {
 			return size;
 		}
-	};
+	}
 
 	static ReifiedType getType(TypeDescriptor targetType) {
 		return new GenericsReifiedType(targetType);
@@ -79,38 +77,37 @@ class TypeFactory {
 	private static List<ReifiedType> getArguments(TypeDescriptor type) {
 		List<ReifiedType> arguments;
 
-		if (type== null || type == TypeDescriptor.NULL) {
+		if (type == null) {
 			return Collections.emptyList();
 		}
 		
-		// is it an array/map
-		if (type.isCollection()) {
+		// is it a collection or an array
+		if (type.isCollection() || type.isArray()) {
 			arguments = new ArrayList<ReifiedType>(1);
-			Class<?> elementType = type.getElementType();
+			Class<?> elementType = type.getElementTypeDescriptor() == null ? null : type.getElementTypeDescriptor().getType();
 			arguments.add(elementType != null ? new GenericsReifiedType(elementType) : OBJECT);
 			return arguments;
 		}
 
+        // is it a map
 		if (type.isMap()) {
 			arguments = new ArrayList<ReifiedType>(2);
-			Class<?> elementType = type.getMapKeyType();
-			arguments.add(elementType != null ? new GenericsReifiedType(elementType) : OBJECT);
-			elementType = type.getMapValueType();
-			arguments.add(elementType != null ? new GenericsReifiedType(elementType) : OBJECT);
+			Class<?> keyType = type.getMapKeyTypeDescriptor() == null ? null : type.getMapKeyTypeDescriptor().getType();
+			arguments.add(keyType != null ? new GenericsReifiedType(keyType) : OBJECT);
+            Class<?> valueType = type.getMapValueTypeDescriptor() == null ? null : type.getMapValueTypeDescriptor().getType();
+			arguments.add(valueType != null ? new GenericsReifiedType(valueType) : OBJECT);
 			return arguments;
 		}
 
-		// check if the class is parameterized
-		MethodParameter mp = type.getMethodParameter();
-		if (mp != null) {
-			Type targetType = GenericTypeResolver.getTargetType(mp);
-			if (!(targetType instanceof Class)) {
-				ReifiedType rType = getReifiedType(targetType);
-				arguments = new ArrayList<ReifiedType>(1);
-				arguments.add(rType);
-				return arguments;
-			}
-		}
+        // some other generic type
+        if (type.getType().getTypeParameters() != null) {
+            arguments = new ArrayList<ReifiedType>(1);
+            for (TypeVariable tv : type.getType().getTypeParameters()) {
+                ReifiedType rType = getReifiedType(tv);
+                arguments.add(rType);
+            }
+            return arguments;
+        }
 
 		return Collections.emptyList();
 	}

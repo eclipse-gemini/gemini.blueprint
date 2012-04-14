@@ -27,7 +27,6 @@ import org.osgi.service.blueprint.container.Converter;
 import org.osgi.service.blueprint.container.ReifiedType;
 import org.springframework.beans.SimpleTypeConverter;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
@@ -90,13 +89,13 @@ public class SpringBlueprintConverterService implements ConversionService {
 	}
 
 	public Object convert(final Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-		if (targetType == TypeDescriptor.NULL)
+		if (targetType == null)
 			return source;
 		
 		final ReifiedType type = TypeFactory.getType(targetType);
 		boolean hasSecurity = (System.getSecurityManager() != null);
 		AccessControlContext acc = (hasSecurity ? SecurityUtils.getAccFrom(cbf) : null);
-		Object result = null;
+		Object result;
 
 		if (hasSecurity) {
 			result = AccessController.doPrivileged(new PrivilegedAction<Object>() {
@@ -112,9 +111,6 @@ public class SpringBlueprintConverterService implements ConversionService {
 			return result;
 		}
 
-		MethodParameter mp = targetType.getMethodParameter();
-		Class<?> tType = (mp != null && mp.getNestingLevel() > 1 ? null : targetType.getType());
-
 		if (!targetType.isCollection() && !targetType.isArray() && !targetType.isMap()) {
 			if (type.size() > 0) {
 				for (int i = 0; i < type.size(); i++) {
@@ -122,7 +118,7 @@ public class SpringBlueprintConverterService implements ConversionService {
 					if (!Object.class.equals(arg.getRawClass())) {
 						throw new BlueprintConverterException(
 								"No conversion found for generic argument(s) for reified type " + arg.getRawClass()
-										+ "source type " + sourceType + "| targetType =" + tType, null);
+										+ "source type " + sourceType + "| targetType =" + targetType.getType(), null);
 					}
 				}
 			}
@@ -133,7 +129,7 @@ public class SpringBlueprintConverterService implements ConversionService {
 		}
 
 		lazyInitConverter();
-		return typeConverter.convertIfNecessary(source, tType, targetType.getMethodParameter());
+		return typeConverter.convertIfNecessary(source, targetType.getType());
 	}
 
 	private void lazyInitConverter() {

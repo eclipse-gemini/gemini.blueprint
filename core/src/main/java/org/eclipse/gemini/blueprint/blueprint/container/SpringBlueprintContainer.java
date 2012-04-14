@@ -31,11 +31,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Default {@link BlueprintContainer} implementation. Wraps a Spring's {@link ConfigurableListableBeanFactory} to the
+ * Default {@link BlueprintContainer} implementation. Wraps Spring's {@link ConfigurableListableBeanFactory} in the
  * BlueprintContainer interface.
  * 
  * <b>Note</b>: This class does not fully implements the Blueprint contract: for example it does not fire any of the
- * Blueprint events nor performs exception handling - these concerned are left to the Blueprint extender.
+ * Blueprint events nor performs exception handling - these concerns are left to the Blueprint extender.
  * 
  * @author Adrian Colyer
  * @author Costin Leau
