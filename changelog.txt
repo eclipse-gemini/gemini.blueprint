@@ -2,6 +2,14 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+Changes in version 1.0.1.M01 (2012-05-29)
+-----------------------------------------
+
+General
+* Bug 375225: Support Spring 3.1.x.
+* Bug 379384: Make optional imports of essential packages mandatory in extender
+
+
 Changes in version 1.0.0 RELEASE (2011-08-22)
 ---------------------------------------------
 
