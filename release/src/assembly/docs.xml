@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component>
+    <fileSets>
+		<!-- License/Changelog/Readme -->
+        <fileSet>
+            <directory>../</directory>
+            <outputDirectory/>
+            <includes>
+                <include>changelog.txt</include>
+                <include>license.txt</include>
+                <include>notice.txt</include>
+                <include>readme.txt</include>                                
+            </includes>
+			<lineEnding>dos</lineEnding>
+			<filtered>true</filtered>
+        </fileSet>
+        
+        <!-- Documentation -->
+        <fileSet>
+            <directory>../target/site/apidocs</directory>
+            <outputDirectory>docs/api</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../docs/target/site/reference</directory>
+            <outputDirectory>docs/reference</outputDirectory>
+        </fileSet>
+    </fileSets>
+</component>

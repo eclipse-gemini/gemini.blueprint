@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component>
+	<!-- dependency libs
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<scope>runtime</scope>
+			<useProjectArtifact>false</useProjectArtifact>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<scope>provided</scope>
+			<useProjectArtifact>false</useProjectArtifact>
+		</dependencySet>
+	</dependencySets>
+	
+	the above doesn't work for some reason and when dependencySet is specified
+	on binaries, duplicate jars results.
+	To overcome this problem, the copy-dependencies plugin is being used. However,
+	it has to be run manually from the command line from the root folder to include
+	all dependencies.
+	-->
+	
+	<fileSets>
+		
+		<!-- libs -->
+		<fileSet>
+			 <directory>../target/libs</directory>
+			 <outputDirectory>lib</outputDirectory>
+			 <excludes>
+				<exclude>spring-osgi*</exclude>
+			 </excludes>
+		</fileSet>
+
+	
+		<!-- readme -->
+		<!--
+		<fileSet>
+			 <directory>../</directory>
+			 <outputDirectory/>
+			 <includes>
+				 <include>readme-building.txt</include>
+			 </includes>
+			 <lineEnding>dos</lineEnding>
+		</fileSet>
+		-->
+		<fileSet>
+			 <directory>../lib</directory>
+			 <outputDirectory>lib</outputDirectory>
+			 <includes>
+				 <include>readme.txt</include>
+			 </includes>
+			 <lineEnding>dos</lineEnding>
+		</fileSet>
+
+		<!-- actual sources
+		
+		We do this by hand to make sure only what's on the SVN gets exported
+		and any local change is ignored/discarded
+		
+		<fileSet>
+			 <directory>../</directory>
+			 <outputDirectory>src</outputDirectory>
+			 <excludes>
+			    <exclude>**/target</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>**/bin</exclude>
+                <exclude>**/bin/**</exclude>
+			 </excludes>
+		</fileSet>
+		-->
+	</fileSets>
+</component>

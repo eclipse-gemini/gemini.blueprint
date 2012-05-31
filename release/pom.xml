@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.springframework.osgi.release</groupId>
+	<artifactId>gemini-bp</artifactId>
+	<name>Gemini Blueprint Distribution</name>
+    <packaging>pom</packaging>
+	<description>
+		<!--  Use CDATA to keep it on a single line in the manifest -->
+		<![CDATA[Gemini Blueprint Distribution - used to create a .zip package for distribution of the main sub modules.]]>
+	</description>
+
+	<parent>
+		<groupId>org.eclipse.gemini.blueprint</groupId>
+		<artifactId>gemini-bp</artifactId>
+		<version>1.0.1.M01</version>
+		<relativePath>..</relativePath>
+	</parent>
+	
+	<modules>
+		<module>../mock</module>	
+		<module>../io</module>		
+		<module>../core</module>
+		<module>../extender</module>
+		<module>../test-support</module>		
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-2</version>
+				<inherited>false</inherited>
+				<executions>
+					<!-- w/o dependencies -->
+					<execution>
+						<id>wo-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<descriptor>src/assembly/no-dependencies.xml</descriptor>
+							</descriptors>
+							<attach>false</attach>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+		</plugins>
+	</build>
+
+</project>
