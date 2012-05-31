@@ -7,8 +7,9 @@
             <outputDirectory/>
             <includes>
                 <include>changelog.txt</include>
-                <include>license.txt</include>
-                <include>notice.txt</include>
+                <include>epl-v10.html</include>
+ 				<include>license-apache.txt</include>
+                <include>notice.html</include>
                 <include>readme.txt</include>                                
             </includes>
 			<lineEnding>dos</lineEnding>
