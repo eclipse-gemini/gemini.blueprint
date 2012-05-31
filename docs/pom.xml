@@ -7,7 +7,7 @@
     <groupId>org.eclipse.gemini.blueprint</groupId>
     <artifactId>gemini-blueprint</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1.BUILD-SNAPSHOT</version>
+    <version>1.0.1.M01</version>
     <name>Eclipse Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
 
@@ -109,11 +109,11 @@
     </pluginRepositories>
 
     <distributionManagement>
-        <downloadUrl>http://www.springframework.org/osgi/</downloadUrl>
+        <downloadUrl>http://www.eclipse.org/gemini/blueprint/download/</downloadUrl>
         <site>
-            <id>static.springframework.org</id>
-            <name>SpringFramework.org</name>
-            <url>scp://static.springframework.org/var/www/domains/springframework.org/static/htdocs/spring-osgi/snapshot-site/</url>
+            <id>gemini.blueprint.home</id>
+            <name>www.eclipse.org/gemini/blueprint</name>
+            <url>http://www.eclipse.org/gemini/blueprint/</url>
         </site>
     </distributionManagement>
 </project>

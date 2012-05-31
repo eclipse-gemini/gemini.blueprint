@@ -956,13 +956,13 @@ Ignored-Existing-Headers:
     <!-- ======================================= -->
 
     <distributionManagement>
-        <!-- TODO: Update this with eclipse foundation specific data -->
-        <downloadUrl>http://www.springframework.org/osgi/</downloadUrl>
+        <downloadUrl>http://www.eclipse.org/gemini/blueprint/download/</downloadUrl>
         <site>
-            <id>static.springframework.org</id>
-            <name>SpringFramework.org</name>
-            <url>scp://static.springframework.org/var/www/domains/springframework.org/static/htdocs/spring-osgi/snapshot-site/</url>
+            <id>gemini.blueprint.home</id>
+            <name>www.eclipse.org/gemini/blueprint</name>
+            <url>http://www.eclipse.org/gemini/blueprint/</url>
         </site>
+        <!-- TODO: Need to participate in Gemini maven repo 
         <repository>
             <id>zodiac-milestone</id>
             <name>Zodiac Milestone Repository</name>
@@ -972,7 +972,7 @@ Ignored-Existing-Headers:
             <id>zodiac-snapshot</id>
             <name>Zodiac Snapshot Repository</name>
             <url>s3://zodiac.springsource.com/maven/bundles/snapshot</url>
-        </snapshotRepository>
+        </snapshotRepository> -->
     </distributionManagement>
 
 
