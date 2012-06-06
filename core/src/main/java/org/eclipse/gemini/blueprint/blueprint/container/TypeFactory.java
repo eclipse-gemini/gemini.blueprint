@@ -100,16 +100,14 @@ class TypeFactory {
 		}
 
         // some other generic type
-        if (type.getType().getTypeParameters() != null) {
-            arguments = new ArrayList<ReifiedType>(1);
-            for (TypeVariable tv : type.getType().getTypeParameters()) {
-                ReifiedType rType = getReifiedType(tv);
-                arguments.add(rType);
-            }
-            return arguments;
+        @SuppressWarnings("rawtypes")
+        TypeVariable[] tvs = type.getType().getTypeParameters();
+        arguments = new ArrayList<ReifiedType>(tvs.length);
+        for (@SuppressWarnings("rawtypes") TypeVariable tv : tvs) {
+            ReifiedType rType = getReifiedType(tv);
+            arguments.add(rType);
         }
-
-		return Collections.emptyList();
+        return arguments;
 	}
 
 	private static ReifiedType getReifiedType(Type targetType) {
