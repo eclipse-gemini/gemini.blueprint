@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.eclipse.gemini.blueprint</groupId>
 		<artifactId>gemini-blueprint</artifactId>
-		<version>1.0.2.BUILD-SNAPSHOT</version>
+		<version>1.0.1.BUILD-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	

@@ -11,7 +11,7 @@
     <groupId>org.eclipse.gemini.blueprint</groupId>
     <artifactId>gemini-blueprint</artifactId>
     <!-- Note: When updating the version, ensure it is a valid OSGi version -->
-    <version>1.0.2.BUILD-SNAPSHOT</version>
+    <version>1.0.1.BUILD-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
@@ -354,6 +354,12 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.log4j</groupId>
+            <artifactId>com.springsource.org.apache.log4j</artifactId>
+            <version>1.2.16</version>
         </dependency>
 
         <dependency>
