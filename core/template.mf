@@ -4,6 +4,8 @@ Export-Template:
 Excluded-Exports: 
  *.internal*
 Import-Package: 
+ org.osgi.service.blueprint.container;version="[1.0.0,1.1)",
+ org.osgi.service.blueprint.reflect;version="[1.0.0,1.1)",
  org.springframework.aop;version="${spring.version.range.nq}",
  org.springframework.beans.propertyeditors;version="${spring.version.range.nq}"
 Import-Template: 
