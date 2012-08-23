@@ -2,6 +2,13 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+Changes in version 1.0.1.RELEASE (2012-08-23)
+---------------------------------------------
+
+General:
+* Bug 385307 - Substitutable exports
+* Bug 381871 - Testcase pom error
+
 Changes in version 1.0.1.M01 (2012-05-29)
 -----------------------------------------
 
