@@ -62,7 +62,9 @@ public abstract class ShutdownSorter {
 			}
 			return returned;
 		} finally {
-			managedBundles.removeAll(returned);
+		    if (returned != null) {
+		        managedBundles.removeAll(returned);
+		    }
 		}
 	}
 
