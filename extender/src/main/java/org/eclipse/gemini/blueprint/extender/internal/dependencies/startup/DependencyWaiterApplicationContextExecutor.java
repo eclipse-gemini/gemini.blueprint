@@ -409,7 +409,7 @@ public class DependencyWaiterApplicationContextExecutor implements OsgiBundleApp
 		StringBuilder buf = new StringBuilder();
 
 		synchronized (monitor) {
-			if (dependencyDetector == null || dependencyDetector.getUnsatisfiedDependencies().isEmpty()) {
+			if (dependencyDetector == null || dependencyDetector.isSatisfied()) {
 				buf.append("none");
 			} else {
 				for (Iterator<MandatoryServiceDependency> iterator =

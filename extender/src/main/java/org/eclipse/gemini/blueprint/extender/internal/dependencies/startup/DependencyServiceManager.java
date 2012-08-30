@@ -22,6 +22,8 @@ import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,13 +65,15 @@ import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
  */
 public class DependencyServiceManager {
 
-	private static final Log log = LogFactory.getLog(DependencyServiceManager.class);
+	private static final Map<MandatoryServiceDependency, String> UNMODIFIABLE_DEPENDENCY_MAP = Collections.unmodifiableMap(new HashMap<MandatoryServiceDependency, String>(0));
 
-	protected final Map<MandatoryServiceDependency, String> dependencies =
-			Collections.synchronizedMap(new LinkedHashMap<MandatoryServiceDependency, String>());
+    private static final Log log = LogFactory.getLog(DependencyServiceManager.class);
+	
+	private final Object monitor = new Object();
 
-	protected final Map<MandatoryServiceDependency, String> unsatisfiedDependencies =
-			Collections.synchronizedMap(new LinkedHashMap<MandatoryServiceDependency, String>());
+	protected final Map<MandatoryServiceDependency, String> dependencies = new LinkedHashMap<MandatoryServiceDependency, String>();
+
+	protected final Map<MandatoryServiceDependency, String> unsatisfiedDependencies = new LinkedHashMap<MandatoryServiceDependency, String>();
 
 	private final ContextExecutorAccessor contextStateAccessor;
 
@@ -108,7 +112,7 @@ public class DependencyServiceManager {
 			boolean trace = log.isTraceEnabled();
 
 			try {
-				if (unsatisfiedDependencies.isEmpty()) {
+				if (isSatisfied()) {
 
 					// already completed but likely called due to threading
 					if (trace) {
@@ -136,7 +140,7 @@ public class DependencyServiceManager {
 				}
 
 				// Good to go!
-				if (unsatisfiedDependencies.isEmpty()) {
+				if (isSatisfied()) {
 					deregister();
 					// context.listener = null;
 					log.info("No unsatisfied OSGi service dependencies; completing initialization for "
@@ -155,7 +159,7 @@ public class DependencyServiceManager {
 			}
 		}
 
-		private void updateDependencies(ServiceEvent serviceEvent) {
+ 		private void updateDependencies(ServiceEvent serviceEvent) {
 			boolean trace = log.isTraceEnabled();
 			boolean debug = log.isDebugEnabled();
 
@@ -167,7 +171,12 @@ public class DependencyServiceManager {
 				contextToString = context.getDisplayName();
 			}
 
-			for (MandatoryServiceDependency dependency : dependencies.keySet()) {
+			Set<MandatoryServiceDependency> mandatoryServiceDependencies;
+			synchronized (monitor) {                
+			    mandatoryServiceDependencies = new HashSet<MandatoryServiceDependency>(dependencies.keySet());
+            }
+			
+            for (MandatoryServiceDependency dependency : mandatoryServiceDependencies) {
 				// check all dependencies (there might be multiple imports for the same service)
 				if (dependency.matches(serviceEvent)) {
 					if (trace) {
@@ -179,18 +188,24 @@ public class DependencyServiceManager {
 					case ServiceEvent.REGISTERED:
 					case ServiceEvent.MODIFIED:
 						dependency.increment();
-						if (unsatisfiedDependencies.remove(dependency) != null) {
-							if (debug) {
-								log.debug("Registered dependency for " + contextToString + "; eliminating "
-										+ dependency + ", remaining [" + unsatisfiedDependencies + "]");
-							}
+						String removedDependency;
+						synchronized (monitor) {
+						    removedDependency = unsatisfiedDependencies.remove(dependency);
+						}
+						if (removedDependency != null) {
+						    Map<MandatoryServiceDependency, String> unsatisfiedDependenciesSnapshot = getUnsatisfiedDependencies();
+						    if (debug) {
+                                log.debug("Registered dependency for " + contextToString + "; eliminating "
+						            + dependency + ", remaining [" + unsatisfiedDependenciesSnapshot + "]");
+						    }
 
-							sendDependencySatisfiedEvent(dependency);
-							sendBootstrappingDependenciesEvent(unsatisfiedDependencies.keySet());
+						    sendDependencySatisfiedEvent(dependency);
+						    sendBootstrappingDependenciesEvent(unsatisfiedDependenciesSnapshot.keySet());
 						} else {
 							if (debug) {
+							    Map<MandatoryServiceDependency, String> unsatisfiedDependenciesSnapshot = getUnsatisfiedDependencies();
 								log.debug("Increasing the number of matching services for " + contextToString + "; "
-										+ dependency + ", remaining [" + unsatisfiedDependencies + "]");
+										+ dependency + ", remaining [" + unsatisfiedDependenciesSnapshot + "]");
 							}
 						}
 
@@ -199,14 +214,17 @@ public class DependencyServiceManager {
 					case ServiceEvent.UNREGISTERING:
 						int count = dependency.decrement();
 						if (count == 0) {
-							unsatisfiedDependencies.put(dependency, dependency.getBeanName());
-							if (debug) {
+							synchronized (monitor) {
+                                unsatisfiedDependencies.put(dependency, dependency.getBeanName());
+                            }
+							Map<MandatoryServiceDependency, String> unsatisfiedDependenciesSnapshot = getUnsatisfiedDependencies();
+                            if (debug) {
 								log.debug("Unregistered dependency for " + contextToString + " adding " + dependency
-										+ "; total unsatisfied [" + unsatisfiedDependencies + "]");
+										+ "; total unsatisfied [" + unsatisfiedDependenciesSnapshot + "]");
 							}
 
 							sendDependencyUnsatisfiedEvent(dependency);
-							sendBootstrappingDependenciesEvent(unsatisfiedDependencies.keySet());
+							sendBootstrappingDependenciesEvent(unsatisfiedDependenciesSnapshot.keySet());
 						} else {
 							if (debug) {
 								log.debug("Decreasing the number of matching services for " + contextToString + "; "
@@ -227,6 +245,7 @@ public class DependencyServiceManager {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -280,19 +299,31 @@ public class DependencyServiceManager {
 			throw (Error) th;
 		}
 
-		if (log.isDebugEnabled()) {
-			log.debug(dependencies.size() + " OSGi service dependencies, " + unsatisfiedDependencies.size()
-					+ " unsatisfied (for beans " + unsatisfiedDependencies.values() + ") in "
+		Collection<String> unsatisfiedDependencyValues = getUnsatisfiedDependencies().values();
+		
+        if (log.isDebugEnabled()) {
+			int numDependencies;
+			int numUnsatisfiedDependencies;
+			synchronized (monitor) {
+                numDependencies = dependencies.size();
+                numUnsatisfiedDependencies = unsatisfiedDependencies.size();
+            }
+            log.debug(numDependencies + " OSGi service dependencies, " + numUnsatisfiedDependencies
+					+ " unsatisfied (for beans " + unsatisfiedDependencyValues + ") in "
 					+ context.getDisplayName());
 		}
 
-		if (!unsatisfiedDependencies.isEmpty()) {
+		if (!isSatisfied()) {
 			log.info(context.getDisplayName() + " is waiting for unsatisfied dependencies ["
-					+ unsatisfiedDependencies.values() + "]");
+					+ unsatisfiedDependencyValues + "]");
 		}
 		if (log.isTraceEnabled()) {
-			log.trace("Total OSGi service dependencies beans " + dependencies.values());
-			log.trace("Unsatified OSGi service dependencies beans " + unsatisfiedDependencies.values());
+			Collection<String> dependencyValues;
+			synchronized (monitor) {
+                dependencyValues = new ArrayList<String>(dependencies.values());
+            }
+            log.trace("Total OSGi service dependencies beans " + dependencyValues);
+			log.trace("Unsatified OSGi service dependencies beans " + unsatisfiedDependencyValues);
 		}
 	}
 
@@ -333,12 +364,16 @@ public class DependencyServiceManager {
 				for (OsgiServiceDependency dependency : discoveredDependencies) {
 					if (dependency.isMandatory()) {
 						MandatoryServiceDependency msd = new MandatoryServiceDependency(bundleContext, dependency);
-						dependencies.put(msd, dependency.getBeanName());
+						synchronized (monitor) {
+						    dependencies.put(msd, dependency.getBeanName());
+						}
 
 						if (!msd.isServicePresent()) {
 							log.info("Adding OSGi service dependency for importer [" + msd.getBeanName()
 									+ "] matching OSGi filter [" + msd.filterAsString + "]");
-							unsatisfiedDependencies.put(msd, dependency.getBeanName());
+							synchronized (monitor) {
+                                unsatisfiedDependencies.put(msd, dependency.getBeanName());
+                            }
 						} else {
 							if (debug)
 								log.debug("OSGi service dependency for importer [" + msd.getBeanName()
@@ -349,12 +384,20 @@ public class DependencyServiceManager {
 		}
 	}
 
-	protected boolean isSatisfied() {
-		return unsatisfiedDependencies.isEmpty();
+	public boolean isSatisfied() {
+		synchronized (monitor) {
+            return unsatisfiedDependencies.isEmpty();
+        }
 	}
 
 	public Map<MandatoryServiceDependency, String> getUnsatisfiedDependencies() {
-		return unsatisfiedDependencies;
+	    if (isSatisfied()) {
+	        return UNMODIFIABLE_DEPENDENCY_MAP;
+	    } else {
+	        synchronized (monitor) {
+	            return Collections.unmodifiableMap(new HashMap<MandatoryServiceDependency, String>(unsatisfiedDependencies));
+	        }
+		}
 	}
 
 	protected void register() {
@@ -365,7 +408,7 @@ public class DependencyServiceManager {
 		}
 
 		// send dependency event before registering the filter
-		sendInitialBootstrappingEvents(unsatisfiedDependencies.keySet());
+		sendInitialBootstrappingEvents(getUnsatisfiedDependencies().keySet());
 
 		if (System.getSecurityManager() != null) {
 			AccessControlContext acc = getAcc();
@@ -387,11 +430,15 @@ public class DependencyServiceManager {
 	 * @return
 	 */
 	private String createDependencyFilter() {
-		return createDependencyFilter(dependencies.keySet());
+	    synchronized (monitor) {            
+	        return createDependencyFilter(dependencies.keySet());
+        }
 	}
 
 	String createUnsatisfiedDependencyFilter() {
-		return createDependencyFilter(unsatisfiedDependencies.keySet());
+		synchronized (monitor) {
+            return createDependencyFilter(unsatisfiedDependencies.keySet());
+        }
 	}
 
 	private String createDependencyFilter(Collection<MandatoryServiceDependency> dependencies) {
@@ -425,7 +472,9 @@ public class DependencyServiceManager {
 	}
 
 	List<OsgiServiceDependencyEvent> getUnsatisfiedDependenciesAsEvents() {
-		return getUnsatisfiedDependenciesAsEvents(unsatisfiedDependencies.keySet());
+		synchronized (monitor) {
+            return getUnsatisfiedDependenciesAsEvents(unsatisfiedDependencies.keySet());
+        }
 	}
 
 	private List<OsgiServiceDependencyEvent> getUnsatisfiedDependenciesAsEvents(
@@ -498,4 +547,11 @@ public class DependencyServiceManager {
 		}
 		return null;
 	}
+	
+    public boolean allDependenciesSatisfied() {
+        synchronized (monitor) {
+            return unsatisfiedDependencies.isEmpty();
+        }
+    }
+
 }
