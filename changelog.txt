@@ -2,6 +2,13 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+Changes in version 1.0.2.RELEASE (2012-08-31)
+---------------------------------------------
+
+General:
+* Bug 384748 - ConcurrentModificationException in DependencyServiceManager
+* Bug 388496 - ShutdownSorter produces IllegalStateException
+
 Changes in version 1.0.1.RELEASE (2012-08-23)
 ---------------------------------------------
 

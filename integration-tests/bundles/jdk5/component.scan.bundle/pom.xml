@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
         <artifactId>spring-osgi-jdk5-integration-test-bundles</artifactId>
-        <version>1.0.2.BUILD-SNAPSHOT</version>
+        <version>1.0.2.RELEASE</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
