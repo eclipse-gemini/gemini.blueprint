@@ -17,32 +17,18 @@ package org.eclipse.gemini.blueprint.extender.internal.activator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.ServiceReference;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.core.task.SyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticaster;
 import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
 import org.eclipse.gemini.blueprint.extender.OsgiBeanFactoryPostProcessor;
-import org.eclipse.gemini.blueprint.extender.internal.dependencies.shutdown.BundleDependencyComparator;
-import org.eclipse.gemini.blueprint.extender.internal.dependencies.shutdown.ComparatorServiceDependencySorter;
-import org.eclipse.gemini.blueprint.extender.internal.dependencies.shutdown.ServiceDependencySorter;
 import org.eclipse.gemini.blueprint.extender.internal.dependencies.shutdown.ShutdownSorter;
 import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor;
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
@@ -52,6 +38,12 @@ import org.eclipse.gemini.blueprint.extender.internal.util.concurrent.RunnableTi
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.core.task.SyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 
 /**
  * Manager handling the startup/shutdown threading issues regarding OSGi contexts. Used by {@link ContextLoaderListener}
@@ -93,9 +85,6 @@ class LifecycleManager implements DisposableBean {
 	 * Task executor which uses the same thread for running tasks. Used when doing a synchronous wait-for-dependencies.
 	 */
 	private final TaskExecutor sameThreadTaskExecutor = new SyncTaskExecutor();
-
-	/** Service-based dependency sorter for shutdown */
-	private final ServiceDependencySorter shutdownDependencySorter = new ComparatorServiceDependencySorter();
 
 	private final OsgiBundleApplicationContextEventMulticaster multicaster;
 
@@ -360,9 +349,7 @@ class LifecycleManager implements DisposableBean {
 			final Object[] contextClosingDown = new Object[1];
 
 			for (Bundle shutdownBundle : candidates) {
-				Long id = new Long(shutdownBundle.getBundleId());
-				final ConfigurableOsgiBundleApplicationContext context =
-						(ConfigurableOsgiBundleApplicationContext) managedContexts.get(id);
+				final ConfigurableOsgiBundleApplicationContext context = getManagedContext(shutdownBundle);
 				if (context != null) {
 					closedContexts.add(context);
 					// add a new runnable
@@ -404,6 +391,17 @@ class LifecycleManager implements DisposableBean {
 		// the task executor
 		stopTaskExecutor();
 	}
+
+    public ConfigurableOsgiBundleApplicationContext getManagedContext(Bundle bundle) {
+        ConfigurableOsgiBundleApplicationContext context = null;
+        try {
+            Long id = new Long(bundle.getBundleId());
+            context = (ConfigurableOsgiBundleApplicationContext) managedContexts.get(id);
+        } catch (IllegalStateException _) {
+            // ignore
+        }
+        return context;
+    }
 
 	/**
 	 * Do some additional waiting so the service dependency listeners detect the shutdown.

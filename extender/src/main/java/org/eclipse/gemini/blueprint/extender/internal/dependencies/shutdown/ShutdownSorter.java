@@ -47,7 +47,7 @@ public abstract class ShutdownSorter {
 	 * called after all the returned bundles have been destroyed until the list is empty.
 	 * 
 	 * @param managedBundles
-	 * @return
+	 * @return sorted collection of Bundles
 	 */
 	public static Collection<Bundle> getBundles(Collection<Bundle> managedBundles) {
 
@@ -74,37 +74,41 @@ public abstract class ShutdownSorter {
 		boolean trace = log.isTraceEnabled();
 
 		for (Bundle bundle : unsorted) {
-			String bundleToString = null;
-			if (trace) {
-				bundleToString = OsgiStringUtils.nullSafeSymbolicName(bundle);
-			}
-			ServiceReference[] services = bundle.getRegisteredServices();
-			if (ObjectUtils.isEmpty(services)) {
-				if (trace) {
-					log.trace("Bundle " + bundleToString + " has no registered services; added for shutdown");
-				}
-				unused.add(bundle);
-			} else {
-				boolean unusedBundle = true;
-				for (ServiceReference serviceReference : services) {
-					Bundle[] usingBundles = serviceReference.getUsingBundles();
-					if (!ObjectUtils.isEmpty(usingBundles)) {
-						if (trace)
-							log.trace("Bundle " + bundleToString
-									+ " has registered services in use; postponing shutdown. The using bundles are "
-									+ Arrays.toString(usingBundles));
-						unusedBundle = false;
-						break;
-					}
+		    try {
+                String bundleToString = null;
+                if (trace) {
+                    bundleToString = OsgiStringUtils.nullSafeSymbolicName(bundle);
+                }
+                ServiceReference[] services = bundle.getRegisteredServices();
+                if (ObjectUtils.isEmpty(services)) {
+                    if (trace) {
+                        log.trace("Bundle " + bundleToString + " has no registered services; added for shutdown");
+                    }
+                    unused.add(bundle);
+                } else {
+                    boolean unusedBundle = true;
+                    for (ServiceReference serviceReference : services) {
+                        Bundle[] usingBundles = serviceReference.getUsingBundles();
+                        if (!ObjectUtils.isEmpty(usingBundles)) {
+                            if (trace)
+                                log.trace("Bundle " + bundleToString + " has registered services in use; postponing shutdown. The using bundles are "
+                                    + Arrays.toString(usingBundles));
+                            unusedBundle = false;
+                            break;
+                        }
 
-				}
-				if (unusedBundle) {
-					if (trace) {
-						log.trace("Bundle " + bundleToString + " has unused registered services; added for shutdown");
-					}
-					unused.add(bundle);
-				}
-			}
+                    }
+                    if (unusedBundle) {
+                        if (trace) {
+                            log.trace("Bundle " + bundleToString + " has unused registered services; added for shutdown");
+                        }
+                        unused.add(bundle);
+                    }
+                }
+            }
+		    catch (IllegalStateException _) {
+		        unused.add(bundle);
+		    }
 		}
 
 		Collections.sort(unused, ReverseBundleIdSorter.INSTANCE);
@@ -220,7 +224,11 @@ public abstract class ShutdownSorter {
 		private static Comparator<Bundle> INSTANCE = new ReverseBundleIdSorter();
 
 		public int compare(Bundle o1, Bundle o2) {
-			return (int) (o2.getBundleId() - o1.getBundleId());
+		    try {
+		        return (int) (o2.getBundleId() - o1.getBundleId());
+		    } catch (IllegalStateException _) {
+		        return o1 == o2 ? 0 : 1; // cannot tell which is larger, but must provide a total ordering
+		    }
 		}
 	}
 }
