@@ -9,6 +9,8 @@ integration-tests/tests/fwdir/
 # Eclipse
 eclipse_config
 .project
+.classpath
+.settings
 
 # Intelli-J
 *.iml
