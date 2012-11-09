@@ -14,14 +14,6 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.activator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
@@ -44,6 +36,9 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manager handling the startup/shutdown threading issues regarding OSGi contexts. Used by {@link ContextLoaderListener}
@@ -100,13 +95,13 @@ class LifecycleManager implements DisposableBean {
 	private final TypeCompatibilityChecker typeChecker;
 
 	LifecycleManager(ExtenderConfiguration extenderConfiguration, VersionMatcher versionMatcher,
-			ApplicationContextConfigurationFactory appCtxCfgFactory, OsgiContextProcessor processor,
-			TypeCompatibilityChecker checker, BundleContext context) {
+                     ApplicationContextConfigurationFactory appCtxCfgFactory, OsgiApplicationContextCreator osgiApplicationContextCreator, OsgiContextProcessor processor,
+                     TypeCompatibilityChecker checker, BundleContext context) {
 
 		this.versionMatcher = versionMatcher;
 		this.extenderConfiguration = extenderConfiguration;
 		this.contextConfigurationFactory = appCtxCfgFactory;
-
+        this.contextCreator = osgiApplicationContextCreator;
 		this.processor = processor;
 
 		this.taskExecutor = extenderConfiguration.getTaskExecutor();
@@ -114,7 +109,6 @@ class LifecycleManager implements DisposableBean {
 
 		this.multicaster = extenderConfiguration.getEventMulticaster();
 
-		this.contextCreator = extenderConfiguration.getContextCreator();
 		this.postProcessors = extenderConfiguration.getPostProcessors();
 		this.typeChecker = checker;
 

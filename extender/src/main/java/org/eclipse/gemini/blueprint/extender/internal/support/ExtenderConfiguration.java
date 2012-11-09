@@ -14,24 +14,8 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
-import java.util.Timer;
-
 import org.apache.commons.logging.Log;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.context.event.SimpleApplicationEventMulticaster;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticaster;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticasterAdapter;
@@ -41,12 +25,24 @@ import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
 import org.eclipse.gemini.blueprint.extender.OsgiBeanFactoryPostProcessor;
 import org.eclipse.gemini.blueprint.extender.OsgiServiceDependencyFactory;
 import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
-import org.eclipse.gemini.blueprint.extender.support.DefaultOsgiApplicationContextCreator;
 import org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils;
 import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.context.event.SimpleApplicationEventMulticaster;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.timer.TimerTaskExecutor;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.*;
 
 /**
  * Configuration class for the extender. Takes care of locating the extender specific configurations and merging the
@@ -54,12 +50,12 @@ import org.springframework.util.ObjectUtils;
  * 
  * @author Costin Leau
  */
-public class ExtenderConfiguration implements DisposableBean {
+public class ExtenderConfiguration implements BundleActivator {
 
 	/** logger */
-	private final Log log;
+    protected final Log log = LogFactory.getLog(getClass());
 
-	private static final String TASK_EXECUTOR_NAME = "taskExecutor";
+    private static final String TASK_EXECUTOR_NAME = "taskExecutor";
 
 	private static final String SHUTDOWN_TASK_EXECUTOR_NAME = "shutdownTaskExecutor";
 
@@ -118,10 +114,10 @@ public class ExtenderConfiguration implements DisposableBean {
 
 	private boolean forceThreadShutdown;
 
-	private OsgiApplicationContextCreator contextCreator;
+	private OsgiApplicationContextCreator contextCreator = null;
 
 	/** bundle wrapped class loader */
-	private final ClassLoader classLoader;
+	private ClassLoader classLoader;
 	/** List of context post processors */
 	private final List<OsgiBeanFactoryPostProcessor> postProcessors =
 			Collections.synchronizedList(new ArrayList<OsgiBeanFactoryPostProcessor>(0));
@@ -136,25 +132,21 @@ public class ExtenderConfiguration implements DisposableBean {
 	 * Constructs a new <code>ExtenderConfiguration</code> instance. Locates the extender configuration, creates an
 	 * application context which will returned the extender items.
 	 * 
-	 * @param bundleContext extender OSGi bundle context
+	 * @param extenderBundleContext extender OSGi bundle context
 	 */
-	public ExtenderConfiguration(BundleContext bundleContext, Log log) {
-		this.log = log;
-		Bundle bundle = bundleContext.getBundle();
+	public void start(BundleContext extenderBundleContext) {
+		Bundle bundle = extenderBundleContext.getBundle();
 		Properties properties = new Properties(createDefaultProperties());
 
 		Enumeration<?> enm = bundle.findEntries(EXTENDER_CFG_LOCATION, XML_PATTERN, false);
 
 		if (enm == null) {
 			log.info("No custom extender configuration detected; using defaults...");
-
 			synchronized (lock) {
 				taskExecutor = createDefaultTaskExecutor();
 				shutdownTaskExecutor = createDefaultShutdownTaskExecutor();
 				eventMulticaster = createDefaultEventMulticaster();
-				contextCreator = createDefaultApplicationContextCreator();
 				contextEventListener = createDefaultApplicationContextListener();
-
 			}
 			classLoader = BundleDelegatingClassLoader.createBundleClassLoaderFor(bundle);
 		} else {
@@ -163,7 +155,7 @@ public class ExtenderConfiguration implements DisposableBean {
 			log.info("Detected extender custom configurations at " + ObjectUtils.nullSafeToString(configs));
 			// create OSGi specific XML context
 			ConfigurableOsgiBundleApplicationContext extenderAppCtx = new OsgiBundleXmlApplicationContext(configs);
-			extenderAppCtx.setBundleContext(bundleContext);
+			extenderAppCtx.setBundleContext(extenderBundleContext);
 			extenderAppCtx.refresh();
 
 			synchronized (lock) {
@@ -187,7 +179,7 @@ public class ExtenderConfiguration implements DisposableBean {
 				contextCreator =
 						extenderConfiguration.containsBean(CONTEXT_CREATOR_NAME) ? (OsgiApplicationContextCreator) extenderConfiguration
 								.getBean(CONTEXT_CREATOR_NAME, OsgiApplicationContextCreator.class)
-								: createDefaultApplicationContextCreator();
+								: null;
 
 				contextEventListener =
 						extenderConfiguration.containsBean(CONTEXT_LISTENER_NAME) ? (OsgiBundleApplicationContextListener) extenderConfiguration
@@ -243,7 +235,7 @@ public class ExtenderConfiguration implements DisposableBean {
 	 * 
 	 * Cleanup the configuration items.
 	 */
-	public void destroy() {
+	public void stop(BundleContext extenderBundleContext) {
 
 		synchronized (lock) {
 			if (isMulticasterManagedInternally) {
@@ -386,10 +378,6 @@ public class ExtenderConfiguration implements DisposableBean {
 	private OsgiBundleApplicationContextEventMulticaster createDefaultEventMulticaster() {
 		isMulticasterManagedInternally = true;
 		return new OsgiBundleApplicationContextEventMulticasterAdapter(new SimpleApplicationEventMulticaster());
-	}
-
-	private OsgiApplicationContextCreator createDefaultApplicationContextCreator() {
-		return new DefaultOsgiApplicationContextCreator();
 	}
 
 	private OsgiBundleApplicationContextListener createDefaultApplicationContextListener() {

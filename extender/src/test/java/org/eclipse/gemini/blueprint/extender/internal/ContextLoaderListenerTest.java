@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 
 import org.easymock.MockControl;
 import org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener;
+import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.eclipse.gemini.blueprint.extender.internal.support.TestTaskExecutor;
 import org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils;
 import org.eclipse.gemini.blueprint.mock.EntryLookupControllingMockBundle;
@@ -40,13 +41,13 @@ import org.springframework.core.io.ClassPathResource;
  * 
  */
 public abstract class ContextLoaderListenerTest extends TestCase {
-
 	private ContextLoaderListener listener;
+    // TODO: mock & train once there are any applications of this base class.
+    private ExtenderConfiguration configuration;
 
-
-	protected void setUp() throws Exception {
+    protected void setUp() throws Exception {
 		super.setUp();
-		this.listener = new ContextLoaderListener();
+		this.listener = new ContextLoaderListener(this.configuration);
 	}
 
 	public void testStart() throws Exception {

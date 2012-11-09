@@ -21,10 +21,9 @@ import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextLi
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextClosedEvent;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextFailedEvent;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextRefreshedEvent;
-import org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener;
 
 /**
- * Default application context event logger. Logs (using the {@link ContextLoaderListener} logger, the events received.
+ * Default application context event logger. Logs (using the {@link org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener} logger, the events received.
  * 
  * @author Costin Leau
  * @author Andy Piper

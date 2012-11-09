@@ -16,18 +16,19 @@ package org.eclipse.gemini.blueprint.extender.internal.boot;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.gemini.blueprint.extender.internal.activator.*;
+import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.BlueprintLoaderListener;
 import org.eclipse.gemini.blueprint.util.OsgiPlatformDetector;
 import org.springframework.util.ClassUtils;
 
 /**
  * Bundle activator that simply the lifecycle callbacks to other activators.
- * 
+ *
  * @author Costin Leau
- * 
+ *
  */
 public class ChainActivator implements BundleActivator {
 
@@ -40,19 +41,51 @@ public class ChainActivator implements BundleActivator {
 	private final BundleActivator[] CHAIN;
 
 	public ChainActivator() {
-		if (OsgiPlatformDetector.isR42()) {
+        final LoggingActivator logStatus = new LoggingActivator();
+        final JavaBeansCacheActivator activateJavaBeansCache = new JavaBeansCacheActivator();
+        final NamespaceHandlerActivator activateCustomNamespaceHandling = new NamespaceHandlerActivator();
+        final NamespaceHandlerActivator activateBlueprintspecificNamespaceHandling = new BlueprintNamespaceHandlerActivator();
+        final ExtenderConfiguration initializeExtenderConfiguration = new ExtenderConfiguration();
+        final ListenerServiceActivator activateListeners = new ListenerServiceActivator(initializeExtenderConfiguration);
+        final ContextLoaderListener listenForSpringDmBundles = new ContextLoaderListener(initializeExtenderConfiguration);
+        final BlueprintLoaderListener listenForBlueprintBundles = new BlueprintLoaderListener(initializeExtenderConfiguration, activateListeners);
+
+        if (OsgiPlatformDetector.isR42()) {
 			if (BLUEPRINT_AVAILABLE) {
 				log.info("Blueprint API detected; enabling Blueprint Container functionality");
-				CHAIN = new BundleActivator[] { new ContextLoaderListener(), new BlueprintLoaderListener() };
+				CHAIN = new BundleActivator[] {
+                        logStatus,
+                        activateJavaBeansCache,
+                        activateCustomNamespaceHandling,
+                        activateBlueprintspecificNamespaceHandling,
+                        initializeExtenderConfiguration,
+                        activateListeners,
+                        listenForSpringDmBundles,
+                        listenForBlueprintBundles
+                };
 			}
 			else {
 				log.warn("Blueprint API not found; disabling Blueprint Container functionality");
-				CHAIN = new BundleActivator[] { new ContextLoaderListener() };	
+				CHAIN = new BundleActivator[] {
+                        logStatus,
+                        activateJavaBeansCache,
+                        activateCustomNamespaceHandling,
+                        initializeExtenderConfiguration,
+                        activateListeners,
+                        listenForSpringDmBundles
+                };
 			}
 		} else {
 			log.warn("Pre-4.2 OSGi platform detected; disabling Blueprint Container functionality");
-			CHAIN = new BundleActivator[] { new ContextLoaderListener() };
-		}
+            CHAIN = new BundleActivator[] {
+                    logStatus,
+                    activateJavaBeansCache,
+                    activateCustomNamespaceHandling,
+                    initializeExtenderConfiguration,
+                    activateListeners,
+                    listenForSpringDmBundles
+            };
+        }
 	}
 
 	public void start(BundleContext context) throws Exception {

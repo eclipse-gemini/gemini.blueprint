@@ -14,23 +14,20 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.List;
-
 import junit.framework.TestCase;
-
-import org.apache.commons.logging.LogFactory;
+import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticasterAdapter;
+import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
+import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
+import org.eclipse.gemini.blueprint.mock.MockBundle;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticasterAdapter;
-import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
-import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
-import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
-import org.eclipse.gemini.blueprint.mock.MockBundle;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * @author Costin Leau
@@ -51,11 +48,12 @@ public class ExtenderConfigurationCustomSettingsTest extends TestCase {
 		};
 
 		bundleContext = new MockBundleContext(bundle);
-		config = new ExtenderConfiguration(bundleContext, LogFactory.getLog(ExtenderConfiguration.class));
+		config = new ExtenderConfiguration();
+        config.start(this.bundleContext);
 	}
 
 	protected void tearDown() throws Exception {
-		config.destroy();
+		config.stop(this.bundleContext);
 		config = null;
 	}
 

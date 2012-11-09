@@ -14,20 +14,16 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
-import java.util.List;
-
 import junit.framework.TestCase;
-
-import org.apache.commons.logging.LogFactory;
+import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticasterAdapter;
+import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.framework.BundleContext;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticasterAdapter;
-import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
-import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
-import org.eclipse.gemini.blueprint.extender.support.DefaultOsgiApplicationContextCreator;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.springframework.scheduling.timer.TimerTaskExecutor;
+
+import java.util.List;
 
 /**
  * @author Costin Leau
@@ -39,11 +35,12 @@ public class ExtenderConfigurationDefaultSettingsTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		bundleContext = new MockBundleContext();
-		config = new ExtenderConfiguration(bundleContext, LogFactory.getLog(ExtenderConfiguration.class));
+		config = new ExtenderConfiguration();
+        this.config.start(this.bundleContext);
 	}
 
 	protected void tearDown() throws Exception {
-		config.destroy();
+		config.start(this.bundleContext);
 		config = null;
 	}
 
@@ -61,7 +58,7 @@ public class ExtenderConfigurationDefaultSettingsTest extends TestCase {
 	}
 
 	public void testApplicationContextCreator() throws Exception {
-		assertTrue(config.getContextCreator() instanceof DefaultOsgiApplicationContextCreator);
+        assertNull(config.getContextCreator());
 	}
 
 	public void testShutdownWaitTime() throws Exception {

@@ -14,19 +14,16 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.blueprint.activator;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticaster;
-import org.eclipse.gemini.blueprint.extender.internal.activator.ApplicationContextConfigurationFactory;
-import org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener;
-import org.eclipse.gemini.blueprint.extender.internal.activator.OsgiContextProcessor;
-import org.eclipse.gemini.blueprint.extender.internal.activator.TypeCompatibilityChecker;
+import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
+import org.eclipse.gemini.blueprint.extender.internal.activator.*;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintConfigUtils;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintContainerConfig;
-import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintExtenderConfiguration;
+import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintContainerCreator;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.event.EventAdminDispatcher;
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  * RFC124 extension to the Spring DM extender.
@@ -34,21 +31,24 @@ import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfigura
  * @author Costin Leau
  */
 public class BlueprintLoaderListener extends ContextLoaderListener {
-
-	private volatile EventAdminDispatcher dispatcher;
-	private volatile BlueprintListenerManager listenerManager;
-	private volatile Bundle bundle;
-	private volatile BlueprintContainerProcessor contextProcessor;
+    private volatile BlueprintListenerManager listenerManager;
+    private volatile BlueprintContainerProcessor contextProcessor;
 	private volatile TypeCompatibilityChecker typeChecker;
+    private ListenerServiceActivator listenerServiceActivator;
 
-	@Override
+    public BlueprintLoaderListener(ExtenderConfiguration extenderConfiguration, ListenerServiceActivator listenerServiceActivator) {
+        super(extenderConfiguration);
+        this.listenerServiceActivator = listenerServiceActivator;
+    }
+
+    @Override
 	public void start(BundleContext context) throws Exception {
 		this.listenerManager = new BlueprintListenerManager(context);
-		this.dispatcher = new EventAdminDispatcher(context);
-		this.bundle = context.getBundle();
+        EventAdminDispatcher dispatcher = new EventAdminDispatcher(context);
+        Bundle bundle = context.getBundle();
 		this.contextProcessor = new BlueprintContainerProcessor(dispatcher, listenerManager, bundle);
 		this.typeChecker = new BlueprintTypeCompatibilityChecker(bundle);
-
+        this.listenerServiceActivator.getMulticaster().addApplicationListener(this.contextProcessor);
 		super.start(context);
 	}
 
@@ -56,11 +56,6 @@ public class BlueprintLoaderListener extends ContextLoaderListener {
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		listenerManager.destroy();
-	}
-
-	@Override
-	protected ExtenderConfiguration initExtenderConfiguration(BundleContext bundleContext) {
-		return new BlueprintExtenderConfiguration(bundleContext, log);
 	}
 
 	@Override
@@ -73,7 +68,18 @@ public class BlueprintLoaderListener extends ContextLoaderListener {
 		};
 	}
 
-	@Override
+    /**
+     * Always use the {@link BlueprintContainerCreator}, never the configured creator.
+     * Rationale: Backwards compatibility. Both DM and Blueprint extenders are available simultaneously,
+     * however Blueprint extender support is new and must not be broken by existing configurations. Otherwise, existing
+     * users would have to make their creators aware of the difference between blueprint and dm containers.
+     */
+    @Override
+    protected OsgiApplicationContextCreator getOsgiApplicationContextCreator() {
+        return new BlueprintContainerCreator();
+    }
+
+    @Override
 	protected OsgiContextProcessor createContextProcessor() {
 		return contextProcessor;
 	}
@@ -86,16 +92,5 @@ public class BlueprintLoaderListener extends ContextLoaderListener {
 	@Override
 	protected String getManagedBundleExtenderVersionHeader() {
 		return BlueprintConfigUtils.EXTENDER_VERSION;
-	}
-
-	@Override
-	protected void addApplicationListener(OsgiBundleApplicationContextEventMulticaster multicaster) {
-		super.addApplicationListener(multicaster);
-		// monitor bootstrapping events
-		multicaster.addApplicationListener(contextProcessor);
-	}
-
-	protected ApplicationContextConfiguration createContextConfig(Bundle bundle) {
-		return new BlueprintContainerConfig(bundle);
 	}
 }

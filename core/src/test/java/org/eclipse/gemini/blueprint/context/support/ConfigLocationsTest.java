@@ -44,7 +44,6 @@ public class ConfigLocationsTest extends TestCase {
 		context.setConfigLocations(cfgs);
 		String[] returned =
 				(String[]) invokeMethod("expandLocations", new Class[] { String[].class }, new Object[] { cfgs });
-		System.out.println("returned " + Arrays.toString(returned));
 		assertTrue(Arrays.equals(new String[] { "cnf/*.xml", "/cnf/*.xml" }, returned));
 	}
 

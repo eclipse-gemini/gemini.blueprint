@@ -14,19 +14,16 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.activator;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.Map;
-import java.util.WeakHashMap;
-
+import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
+import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.GenericTypeResolver;
-import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
-import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextListener;
+
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Listener interface that delegates to a list of listener. This is useful in OSGi environments when dealing with
@@ -45,8 +42,6 @@ class ListListenerAdapter implements OsgiBundleApplicationContextListener<OsgiBu
 
 	/**
 	 * Constructs a new <code>ListListenerAdapter</code> instance.
-	 * 
-	 * @param listeners
 	 */
 	public ListListenerAdapter(BundleContext bundleContext) {
 		this.tracker = new ServiceTracker(bundleContext, OsgiBundleApplicationContextListener.class.getName(), null);

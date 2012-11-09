@@ -96,7 +96,6 @@ public class ChainedClassLoaderTest extends TestCase {
 	}
 
 	public void testGetResourceString() throws Exception {
-		System.out.println(chainedLoader.getResource("java/lang/Object.class"));
 		assertNull(chainedLoader.getResource("java/lang/Object.class"));
 		chainedLoader.addClassLoader(Object.class);
 		assertNotNull(chainedLoader.getResource("java/lang/Object.class"));
