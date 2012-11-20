@@ -83,14 +83,6 @@ public class ContextLoaderListener implements BundleActivator {
 			}
 
 			switch (event.getType()) {
-			case LAZY_ACTIVATION_EVENT_TYPE: {
-				// activate bundle
-				try {
-					bundle.loadClass("org.osgi.service.blueprint.container.BlueprintContainer");
-				} catch (Exception ex) {
-				}
-				break;
-			}
 			case BundleEvent.STARTED: {
 				lifecycleManager.maybeCreateApplicationContextFor(bundle);
 				break;
