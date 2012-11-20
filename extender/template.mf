@@ -17,3 +17,5 @@ Import-Template:
  org.springframework.*;version=${spring.version.range},
  *;resolution:=optional
 Bundle-Activator: org.eclipse.gemini.blueprint.extender.internal.boot.ChainActivator
+Export-Package:
+ org.osgi.service.blueprint;version=1
