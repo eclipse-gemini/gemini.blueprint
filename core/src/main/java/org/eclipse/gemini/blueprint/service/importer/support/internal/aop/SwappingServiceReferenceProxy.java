@@ -32,6 +32,8 @@ import org.springframework.util.Assert;
 class SwappingServiceReferenceProxy implements ServiceReferenceProxy {
 
 	private static final int HASH_CODE = SwappingServiceReferenceProxy.class.hashCode() * 13;
+	
+	private static final Object TIE_MONITOR = new Object();
 
 	private ServiceReference delegate;
 
@@ -67,13 +69,50 @@ class SwappingServiceReferenceProxy implements ServiceReferenceProxy {
 		return delegate;
 	}
 
-	public synchronized boolean equals(Object obj) {
-		if (obj instanceof SwappingServiceReferenceProxy) {
-			SwappingServiceReferenceProxy other = (SwappingServiceReferenceProxy) obj;
-			return (delegate == null ? other.delegate == null : delegate.equals(other.delegate));
-		}
-		return false;
+	public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        if (!(obj instanceof SwappingServiceReferenceProxy)) {
+            return false;
+        }
+        SwappingServiceReferenceProxy other = (SwappingServiceReferenceProxy) obj;
+        
+	    int thisHash = System.identityHashCode(this);
+        int otherHash = System.identityHashCode(other);
+        if (thisHash > otherHash) {
+            synchronized (this) {
+                synchronized (obj) {
+                    return delegateEquals(other);                    
+                }
+            }
+	    } else if (thisHash < otherHash) {
+	        synchronized (obj) {
+                synchronized (this) {
+                    return delegateEquals(other);                    
+                }
+            }
+	    } else {
+	        synchronized (TIE_MONITOR) {
+	            synchronized (this) {
+	                synchronized (obj) {
+	                    return delegateEquals(other);                    
+	                }
+	            }
+	        }
+	    }
 	}
+
+    public boolean delegateEquals(SwappingServiceReferenceProxy other) {
+        return (delegate == null ? other.delegate == null : delegate.equals(other.delegate));
+    }
 
 	public synchronized int hashCode() {
 		return HASH_CODE + (delegate == null ? 0 : delegate.hashCode());
