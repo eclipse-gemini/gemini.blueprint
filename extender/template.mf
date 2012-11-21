@@ -18,4 +18,4 @@ Import-Template:
  *;resolution:=optional
 Bundle-Activator: org.eclipse.gemini.blueprint.extender.internal.boot.ChainActivator
 Export-Package:
- org.osgi.service.blueprint;version=1
+ org.osgi.service.blueprint;version=1;uses:="org.osgi.service.blueprint.container,org.osgi.service.blueprint.reflect"
