@@ -103,6 +103,9 @@ public class TypeFactoryTest {
 	private static class MutuallyRecursiveGenericType<T extends Comparable<U>, U extends Comparable<T>> {
 	    // Must T always equal U?
 	}
+	
+	private static class ComplexRecursiveGenericType<T extends Comparable<? super T>> {
+	}
 
 	@Test
 	public void testJdk4Classes() throws Exception {
@@ -268,6 +271,11 @@ public class TypeFactoryTest {
     @Test
     public void testMutuallyRecursiveGenericType() throws Exception {
         assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(MutuallyRecursiveGenericType.class)));
+    }
+
+    @Test
+    public void testComplexRecursiveGenericType() throws Exception {
+        assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(ComplexRecursiveGenericType.class)));
     }
 
 	private ReifiedType getReifiedTypeFor(String methodName) {
