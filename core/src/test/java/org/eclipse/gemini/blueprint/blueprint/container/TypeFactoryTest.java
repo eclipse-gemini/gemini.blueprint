@@ -99,6 +99,10 @@ public class TypeFactoryTest {
 
 	private static class MultipleRecursiveGenericType<T extends Comparable<T>, U extends T> {
 	}
+	
+	private static class MutuallyRecursiveGenericType<T extends Comparable<U>, U extends Comparable<T>> {
+	    // Must T always equal U?
+	}
 
 	@Test
 	public void testJdk4Classes() throws Exception {
@@ -246,15 +250,25 @@ public class TypeFactoryTest {
 		assertEquals(Object.class, type.getRawClass());
 	}
 
-	@Test
-	public void testRecursiveGenericsType() throws Exception {
-		ReifiedType type = TypeFactory.getType(TypeDescriptor.valueOf(RecursiveGenericType.class));
-		assertNotNull(type);
-		ReifiedType type2 = TypeFactory.getType(TypeDescriptor.valueOf(SingleAndRecursiveGenericType.class));
-		assertNotNull(type2);
-		ReifiedType type3 = TypeFactory.getType(TypeDescriptor.valueOf(MultipleRecursiveGenericType.class));
-		assertNotNull(type3);
+    @Test
+	public void testRecursiveGenericType() throws Exception {
+		assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(RecursiveGenericType.class)));
 	}
+
+    @Test
+    public void testSingleAndRecursiveGenericType() throws Exception {
+        assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(SingleAndRecursiveGenericType.class)));
+    }
+
+    @Test
+    public void testMultipleRecursiveGenericType() throws Exception {
+        assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(MultipleRecursiveGenericType.class)));
+    }
+
+    @Test
+    public void testMutuallyRecursiveGenericType() throws Exception {
+        assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(MutuallyRecursiveGenericType.class)));
+    }
 
 	private ReifiedType getReifiedTypeFor(String methodName) {
 		Method mt = BeanUtils.findDeclaredMethodWithMinimalParameters(TestSet.class, methodName);
