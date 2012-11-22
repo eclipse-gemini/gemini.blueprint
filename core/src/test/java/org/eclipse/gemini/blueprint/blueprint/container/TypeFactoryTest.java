@@ -106,7 +106,11 @@ public class TypeFactoryTest {
 	
 	private static class ComplexRecursiveGenericType<T extends Comparable<? super T>> {
 	}
-
+	
+	private static class MultiBoundedRecursiveGenericType<T extends Comparable<T> & Cloneable> {
+	    // Cloneable could be replaced by any interface
+	}
+	
 	@Test
 	public void testJdk4Classes() throws Exception {
 		ReifiedType tp = getReifiedTypeFor("rawList");
@@ -276,6 +280,11 @@ public class TypeFactoryTest {
     @Test
     public void testComplexRecursiveGenericType() throws Exception {
         assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(ComplexRecursiveGenericType.class)));
+    }
+
+    @Test
+    public void testMultiBoundedRecursiveGenericType() throws Exception {
+        assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(MultiBoundedRecursiveGenericType.class)));
     }
 
 	private ReifiedType getReifiedTypeFor(String methodName) {
