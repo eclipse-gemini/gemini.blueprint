@@ -1,15 +1,16 @@
 /******************************************************************************
- * Copyright (c) 2006, 2010 VMware Inc.
+ * Copyright (c) 2006, 2010 VMware Inc.; 2012 Elastic Path, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
- * and Apache License v2.0 which accompanies this distribution. 
- * The Eclipse Public License is available at 
+ * and Apache License v2.0 which accompanies this distribution.
+ * The Eclipse Public License is available at
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
- * You may elect to redistribute this code under either of these licenses. 
- * 
+ * You may elect to redistribute this code under either of these licenses.
+ *
  * Contributors:
  *   VMware Inc.
+ *   Elastic Path, Inc.
  *****************************************************************************/
 
 package org.eclipse.gemini.blueprint.blueprint.container;
@@ -32,6 +33,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.TypeDescriptor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Costin Leau
@@ -84,12 +86,21 @@ public class TypeFactoryTest {
 
 		public void typeVariable(AtomicReference<A> arg) {
 		}
-		
+
 		public void customDictionary(MyCustomDictionary customDict) {
 		}
 	}
 
-    @Test
+	private static class RecursiveGenericType<T extends Comparable<T>> {
+	}
+
+	private static class SingleAndRecursiveGenericType<S extends String, T extends Comparable<T>> {
+	}
+
+	private static class MultipleRecursiveGenericType<T extends Comparable<T>, U extends T> {
+	}
+
+	@Test
 	public void testJdk4Classes() throws Exception {
 		ReifiedType tp = getReifiedTypeFor("rawList");
 		assertEquals(1, tp.size());
@@ -228,11 +239,21 @@ public class TypeFactoryTest {
 		assertEquals(Object.class, tp.getActualTypeArgument(0).getRawClass());
 		assertEquals(Object.class, tp.getActualTypeArgument(1).getRawClass());
 	}
-	
+
     @Test
 	public void testUnknownType() throws Exception {
 		ReifiedType type = TypeFactory.getType(TypeDescriptor.forObject(null));
 		assertEquals(Object.class, type.getRawClass());
+	}
+
+	@Test
+	public void testRecursiveGenericsType() throws Exception {
+		ReifiedType type = TypeFactory.getType(TypeDescriptor.valueOf(RecursiveGenericType.class));
+		assertNotNull(type);
+		ReifiedType type2 = TypeFactory.getType(TypeDescriptor.valueOf(SingleAndRecursiveGenericType.class));
+		assertNotNull(type2);
+		ReifiedType type3 = TypeFactory.getType(TypeDescriptor.valueOf(MultipleRecursiveGenericType.class));
+		assertNotNull(type3);
 	}
 
 	private ReifiedType getReifiedTypeFor(String methodName) {

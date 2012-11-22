@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+		<artifactId>gemini-blueprint-integration-test-bundles</artifactId>
+		<version>2.0.0.BUILD-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>recursive</artifactId>
+	<packaging>jar</packaging>
+    <name>Eclipse Gemini Blueprint Test Bundle: Recursive Type test bundle</name>
+    <description>An OSGi bundle that consumes a bean with a recursive Generics type definition.</description>
+    <url>http://www.eclipse.org/gemini/blueprint/</url>
+</project>
+

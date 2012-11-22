@@ -1,0 +1,6 @@
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.gemini.blueprint.iandt.recursive
+Bundle-Name: Recursive-Type-Sample
+Bundle-Vendor: SpringSource
+Export-Package: org.eclipse.gemini.blueprint.iandt.recursive
