@@ -13,8 +13,8 @@
       </para>
       <para>
       We test against <ulink
-      url="http://www.eclipse.org/equinox/">Equinox</ulink> 3.6.x, <ulink
-      url="http://felix.apache.org/">Felix</ulink> 2.0.0+, and <ulink
-      url="http://www.knopflerfish.org/">Knopflerfish</ulink> 3.0.x as part of our
-      continuous integration process.</para>
+      url="http://www.eclipse.org/equinox/">Equinox</ulink> and <ulink
+      url="http://felix.apache.org/">Felix</ulink> as part of our
+      release process.
+      </para>
   </chapter>
