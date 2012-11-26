@@ -4,7 +4,7 @@
 <chapter id="get-started">
     <title>Getting Started</title>
 
-    <para>Learning a new framework is not always straight forward. In this section, we (the Spring DM/Gemini Blueprint team) 
+    <para>Learning a new framework is not always straightforward. In this section, we (the Spring DM/Gemini Blueprint team) 
     tried to provide, what we think is, an easy to follow guide for starting with Gemini Blueprint. 
     Of course, feel free to create your own learning 'path' as you see fit and, if possible, please report back
     any improvements to the documentation that can help others.</para>
@@ -21,12 +21,12 @@
 			<title>Knowing Spring</title>
 			<para>Gemini Blueprint uses heavily Spring framework's <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/spring-core.html">core</ulink> functionalty, 
 			such as the <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/beans.html">IoC</ulink> container,
-			<ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/resources.html">resource</ulink> abstract or
+			<ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/resources.html">resource</ulink> abstraction and
 			<ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/aop.html">AOP</ulink> infrastructure. While it is not important
-			to know the Spring APIs, understanding the concepts behind them is. At a minimum, the idea behind IoC should be familiar.
-			These being said, the more knowledge one has about the Spring, the faster she will pick Gemini Blueprint.
-			Besides the very comprehensive (and sometimes disarming) documentation that explains in detail the Spring Framework,
-			there are a lot of articles, blog entries and books on the matter - take a look at the Spring framework
+			to know the Spring framework APIs, understanding the concepts behind them is. At a minimum, the idea behind IoC should be familiar.
+			That being said, the more knowledge you have about Spring framework, the faster you will pick Gemini Blueprint.
+			Besides the comprehensive documentation that explains the Spring Framework in detail,
+			there are a lot of articles, blog entries and books on the topic - take a look at the Spring framework
 			<ulink url="http://www.springsource.org/documentation">home page</ulink> for more information. In general, this should be the starting point for 
 			OSGi (or Eclipse plugin) developers wanting to try Gemini Blueprint.</para>
 		</section>
@@ -85,12 +85,12 @@
     <section id="get-started:help">
 		<title>Need Help?</title>
 		
-		<para>If you encounter issues or you are just looking for an advice, feel free to use one of the links below:</para>
+		<para>If you encounter issues or you are just looking for advice, feel free to use one of the links below:</para>
 		
 		<section id="get-started:help:community">
   		    <title>Community Support</title>
 			<para>The Gemini Blueprint <ulink url="http://www.eclipse.org/forums/index.php/f/153/">forum</ulink> 
-			(and Spring DM previous <ulink url="http://forum.springframework.org/forumdisplay.php?f=43">forum</ulink>) is a message board for all Gemini Blueprint users to
+			(and the previous Spring DM <ulink url="http://forum.springframework.org/forumdisplay.php?f=43">forum</ulink>) is a message board for all Gemini Blueprint users to
 			share information and help each other. Note that registration is needed <emphasis>only</emphasis> for posting.
 			</para>
 		</section>

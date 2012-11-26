@@ -1,9 +1,10 @@
   <chapter id="requirements">
       <title>Requirements</title>
 
-      <para>Gemini Blueprint 1.x binaries requires JDK level 5.0 and above, 
+      <para>Gemini Blueprint 2.x binaries require JDK level 6.0 or above, 
       and <ulink url="http://www2.osgi.org/Specifications/HomePage?section=2">OSGi
-      R4.2</ulink> (though R4.1 and even R4.0 might work) and above. For JDK 1.4, consider using Spring Dynamic Modules 1.x.
+      R4.2</ulink> (though R4.1 and even R4.0 might work) or above. For JDK 1.5, consider using Gemini Blueprint 1.x.
+      For JDK 1.4, consider using Spring Dynamic Modules 1.x.
       </para>
       <para>
       Bundles deployed for use with Gemini Blueprint should specify

@@ -3,13 +3,13 @@
 
       <para>
       In late 2009, as a member of the Gemini project <ulink url="http://eclipse.org/proposals/gemini/">proposal</ulink>, 
-      SpringSource <ulink url="http://blog.springsource.com/2009/11/24/gemini-project-proposal-at-eclipse-org/">contributed</ulink> Spring Dynamic Modules 
+      SpringSource <ulink url="http://blog.springsource.com/2009/11/24/gemini-project-proposal-at-eclipse-org/">contributed</ulink> the Spring Dynamic Modules 
       (also known as Spring OSGi) <ulink url="http://www.springframework.org/osgi">project</ulink>
       to the Eclipse Foundation. Spring DM v2 code base has been moved to Eclipse.org along with its issue tracker and forum. The project
       became dual licensed under Apache License and EPL.
       </para>
       <para>
-      While the name has changed, the code and its functionality remained the same. Existing Spring DM applications can be easily migrated to Eclipse Gemini Blueprint
+      While the name has changed, the code and its functionality remain the same. Existing Spring DM applications can be easily migrated to Eclipse Gemini Blueprint
       as mentioned in the migration <ulink url="http://www.eclipse.org/gemini/blueprint/documentation/migration/">guide</ulink>.
       </para>
       <para>While the project name has changed (to Eclipse Gemini Blueprint) and significant efforts have been made to reflect this in the project documentation and resources,

@@ -15,8 +15,8 @@
 	to change this by allowing applications to be divided into <emphasis>modules</emphasis> that can have different
 	life cycles, dependencies and still exist as a whole.</para>
     
-    <para>Eclipse Gemini Blueprint (formerly Spring Dynamic Modules) focuses on integrating Spring Framework powerful, non-invasive programming model and 
-    concepts with the dynamics and modularity of OSGi platform. It allows transparent exporting and importing of OSGi
+    <para>Eclipse Gemini Blueprint (formerly Spring Dynamic Modules) focuses on integrating Spring Framework's powerful, non-invasive programming model and 
+    concepts with the dynamics and modularity of the OSGi platform. It allows transparent exporting and importing of OSGi
     services, life cycle management and control. Moreover, the Spring DM model was standardized in OSGi r4.2, in the form
     of the <ulink url="http://www.osgi.org/Specifications/Drafts">Blueprint</ulink> Container for which Eclipse Gemini Blueprint
     serves as the reference implementation (RI).
