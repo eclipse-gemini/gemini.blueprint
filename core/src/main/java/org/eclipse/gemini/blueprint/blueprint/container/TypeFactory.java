@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -104,13 +105,13 @@ class TypeFactory {
         TypeVariable[] tvs = type.getType().getTypeParameters();
         arguments = new ArrayList<ReifiedType>(tvs.length);
         for (@SuppressWarnings("rawtypes") TypeVariable tv : tvs) {
-            ReifiedType rType = getReifiedType(tv);
+            ReifiedType rType = getReifiedType(tv, null);
             arguments.add(rType);
         }
         return arguments;
 	}
 
-	private static ReifiedType getReifiedType(Type targetType) {
+	private static ReifiedType getReifiedType(Type targetType, Collection<Type> variableTypes) {
 		if (targetType instanceof Class) {
 			if (Object.class.equals(targetType)) {
 				return OBJECT;
@@ -119,7 +120,7 @@ class TypeFactory {
 		}
 		if (targetType instanceof ParameterizedType) {
 			Type ata = ((ParameterizedType) targetType).getActualTypeArguments()[0];
-			return getReifiedType(ata);
+			return getReifiedType(ata, variableTypes);
 		}
 		if (targetType instanceof WildcardType) {
 			WildcardType wt = (WildcardType) targetType;
@@ -127,29 +128,37 @@ class TypeFactory {
 			if (ObjectUtils.isEmpty(lowerBounds)) {
 				// there's always an upper bound (Object)
 				Type upperBound = wt.getUpperBounds()[0];
-				return getReifiedType(upperBound);
+				return getReifiedType(upperBound, variableTypes);
 			}
 
-			return getReifiedType(lowerBounds[0]);
+			return getReifiedType(lowerBounds[0], variableTypes);
 		}
 
 		if (targetType instanceof TypeVariable) {
 			TypeVariable<?> typeVariable = (TypeVariable<?>) targetType;
+			if (variableTypes == null) {
+				variableTypes = new ArrayList<Type>(2);
+			} else if (variableTypes.contains(targetType)) {
+				//Looped around on itself via a recursive Generics definition
+				return OBJECT;
+			}
+			variableTypes.add(targetType);
 			Type[] bounds = typeVariable.getBounds();
-			Type boundZero = bounds[0];
-			if (bounds.length == 1 && boundZero instanceof ParameterizedType) {
-				Type ata = ((ParameterizedType) boundZero).getActualTypeArguments()[0];
-				if (targetType.equals(ata)) {
-					//recursive declaration like <T extends Comparable<T>>
-					return OBJECT;
+			for (Type bound : bounds) {
+				if (bound instanceof ParameterizedType) {
+					Type ata = ((ParameterizedType) bound).getActualTypeArguments()[0];
+					if (ata instanceof TypeVariable) {
+						variableTypes.add(ata);
+					}
+					return getReifiedType(bound, variableTypes);
 				}
 			}
 
-			return getReifiedType(boundZero);
+			return getReifiedType(bounds[0], variableTypes);
 		}
 
 		if (targetType instanceof GenericArrayType) {
-			return getReifiedType(((GenericArrayType) targetType).getGenericComponentType());
+			return getReifiedType(((GenericArrayType) targetType).getGenericComponentType(), variableTypes);
 		}
 
 		throw new IllegalArgumentException("Unknown type " + targetType.getClass());
