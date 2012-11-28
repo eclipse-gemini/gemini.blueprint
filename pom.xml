@@ -45,8 +45,8 @@
 
         <!-- platform versions -->
         <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
-        <!--<kf.ver>5.1.6</kf.ver>    &lt;!&ndash; Knopflerfish 3.1 &ndash;&gt;-->
-        <kf.ver>5.1.14</kf.ver>    <!-- Knopflerfish 3.2 -->
+        <!--<kf.ver>5.1.14</kf.ver>    &lt;!&ndash; Knopflerfish 3.2 &ndash;&gt;-->
+        <kf.ver>5.2.4</kf.ver>    <!-- Knopflerfish 3.4 -->
         <felix.ver>2.0.5</felix.ver>
 
         <!-- javadoc configuration -->
