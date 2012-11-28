@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006, 2010 VMware Inc.
+ * Copyright (c) 2006, 2012 VMware Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * and Apache License v2.0 which accompanies this distribution. 
@@ -30,14 +30,14 @@ import java.util.WeakHashMap;
  * dynamic collections which can be updated during iteration.
  * 
  * @author Costin Leau
- * 
  */
 @SuppressWarnings("unchecked")
 class ListListenerAdapter implements OsgiBundleApplicationContextListener<OsgiBundleApplicationContextEvent>,
 		InitializingBean, DisposableBean {
 
 	private final ServiceTracker tracker;
-	private final Map<Class<? extends OsgiBundleApplicationContextListener>, Class<? extends OsgiBundleApplicationContextEvent>> eventCache =
+	@SuppressWarnings("rawtypes")
+    private final Map<Class<? extends OsgiBundleApplicationContextListener>, Class<? extends OsgiBundleApplicationContextEvent>> eventCache =
 			new WeakHashMap<Class<? extends OsgiBundleApplicationContextListener>, Class<? extends OsgiBundleApplicationContextEvent>>();
 
 	/**
@@ -56,13 +56,14 @@ class ListListenerAdapter implements OsgiBundleApplicationContextListener<OsgiBu
 		eventCache.clear();
 	}
 
-	public void onOsgiApplicationEvent(OsgiBundleApplicationContextEvent event) {
+	@SuppressWarnings("rawtypes")
+    public void onOsgiApplicationEvent(OsgiBundleApplicationContextEvent event) {
 		Object[] listeners = tracker.getServices();
 
 		if (listeners != null) {
 			synchronized (eventCache) {
 				for (Object listnr : listeners) {
-					OsgiBundleApplicationContextListener listener = (OsgiBundleApplicationContextListener) listnr;
+                    OsgiBundleApplicationContextListener listener = (OsgiBundleApplicationContextListener) listnr;
 					Class<? extends OsgiBundleApplicationContextListener> listenerClass = listener.getClass();
 					Class<? extends OsgiBundleApplicationContextEvent> eventType = eventCache.get(listenerClass);
 					if (eventType == null) {
@@ -72,7 +73,7 @@ class ListListenerAdapter implements OsgiBundleApplicationContextListener<OsgiBu
 						if (evtType == null) {
 							evtType = OsgiBundleApplicationContextEvent.class;
 						}
-						if (evtType != null && evtType.isAssignableFrom(OsgiBundleApplicationContextEvent.class)) {
+						if (evtType != null && OsgiBundleApplicationContextEvent.class.isAssignableFrom(evtType)) {
 							eventType = (Class<? extends OsgiBundleApplicationContextEvent>) evtType;
 						} else {
 							eventType = OsgiBundleApplicationContextEvent.class;
