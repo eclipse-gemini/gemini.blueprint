@@ -442,6 +442,22 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
 		exporter.afterPropertiesSet();
 	}
 
+	public void testPrototypeServiceFactoryDestruction() throws Exception {
+        ServiceFactory factory = new MockServiceFactory();
+        String beanName = "prototype-sf";
+        beanFactoryControl.expectAndReturn(beanFactory.isSingleton(beanName), false);
+        beanFactoryControl.expectAndReturn(beanFactory.isSingleton(beanName), false);
+        beanFactoryControl.expectAndReturn(beanFactory.containsBean(beanName), true);
+        beanFactoryControl.expectAndReturn(beanFactory.isPrototype(beanName), true);
+        beanFactoryControl.expectAndReturn(beanFactory.getBean(beanName), factory);
+        beanFactoryControl.expectAndReturn(beanFactory.getType(beanName), factory.getClass());
+        exporter.setTargetBeanName(beanName);
+        exporter.setInterfaces(new Class<?>[] { Serializable.class });
+        beanFactoryControl.replay();
+        exporter.afterPropertiesSet();
+        exporter.destroy();
+    }
+	
 	public void testNonSingletonServiceFactoryRegistration() throws Exception {
 		TestRegistrationListener listener = new TestRegistrationListener();
 
