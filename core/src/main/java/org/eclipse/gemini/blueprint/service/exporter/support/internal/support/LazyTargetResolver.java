@@ -48,7 +48,7 @@ public class LazyTargetResolver implements UnregistrationNotifier {
 	}
 
 	public void activate() {
-		if (activated.compareAndSet(false, true)) {
+		if (activated.compareAndSet(false, true) && notifier != null) {
 			// no service registered
 			if (decorator == null) {
 				notifier.callUnregister(null, null);
@@ -92,7 +92,7 @@ public class LazyTargetResolver implements UnregistrationNotifier {
 	}
 
 	public void unregister(Map properties) {
-		if (activated.get()) {
+		if (activated.get() && notifier != null) {
 			Object target = getBeanIfPossible();
 			notifier.callUnregister(target, properties);
 		}
@@ -120,3 +120,4 @@ public class LazyTargetResolver implements UnregistrationNotifier {
 		}
 	}
 }
+
