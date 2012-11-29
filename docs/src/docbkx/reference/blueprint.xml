@@ -5,21 +5,16 @@
     <title>OSGi 4.2 Blueprint Container</title>
 
 	<para>Based on the Gemini Blueprint programming model, the OSGi Alliance introduced in OSGi 4.2 Release
-	the Blueprint Container specification (part of the Compendium Service). Gemini Blueprint 2.0 serves as 
+	the Blueprint Container specification (part of the Compendium Service). Gemini Blueprint 1.0 serves as 
 	the Blueprint Reference <ulink url="http://en.wikipedia.org/wiki/Reference_implementation">Implementation</ulink>
 	- the official, complete implementation of the spec.
 	</para>
-	<para>For this reason, users familiar with Gemini Blueprint, will find Blueprint very familiar and vice versa. 
-	In fact, we recommend that the Blueprint specification is used as a complement to this documentation. It should be
-	mentioned that various aspects of Gemini Blueprint 1.x have been adjusted or slightly changed in 2.0, for consistency reason,
-	to closely follow the Blueprint specification. As a general rule, unless mentioned otherwise, the Gemini Blueprint 2.x and
-	Blueprint behaviour should be the same.</para>
 	<para>Existing and new users have the freedom to mix and match the programming model they want, since Eclipse Gemini Blueprint supports 
-	both the Spring DM 1.x declarations and the Blueprint one, inside the same application.
-	That is, one can declare inside the same configuration, beans using both namespaces, at any point, without 
-	having to make an up-front choice.</para>
+	both the Spring DM 1.x declarations and the Blueprint one, inside the same application, provided the default namespace is Blueprint
+  and the Blueprint files are stored in the folder <literal>META-INF/spring</literal>.
+	</para>
 	
-	<para>Please note that this documentation will focus on Gemini Blueprint specific configurations and option; for Blueprint specific
+	<para>Please note that this documentation will focus on Gemini Blueprint specific configurations and options; for Blueprint specific
 	behaviour please refer to the OSGi 4.2 Compendium spec, section 121.</para>
 	
 	<section id="blueprint:requirements">
@@ -241,37 +236,24 @@
     </bean>
 </beans>]]></programlisting>
 
-		<para>As mentioned before, in Gemini Blueprint one can mix and match the namespaces:</para>
+		<para>As mentioned before, in Gemini Blueprint one can mix and match the namespaces provided the default namespace is Blueprint
+  and the Blueprint files are stored in the folder <literal>META-INF/spring</literal>:</para>
 		
-		<programlisting language="xml"><![CDATA[<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:osgi="http://www.springframework.org/schema/osgi"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
-		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
-		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd		
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+		<programlisting language="xml"><![CDATA[<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       
+    <beans:bean id="anInteger" class="java.lang.Integer">
+      <beans:constructor-arg value="10"/>
+    </beans:bean>
     
-    <util:constant id="thread-priority" static-field="java.lang.Thread.MIN_PRIORITY"/>
-    
-    <bean id="exampleThread" class="java.lang.Thread" p:priority-ref="thread-priority">
-    	<constructor-arg>
-    	   <bp:bean class="org.example.SomeRunnable"/>
-    	</constructor-arg>
-    </bean>
-    
-    <task:executor id="rangeWithBoundedQueue" size="7-42" queue-capacity="#{ T(java.lang.Math).random() * 30.0 }"/>
-
-    <bp:reference-list id="cloneableServices" interface="java.lang.Cloneable" />
-<beans>]]></programlisting>
+    <service ref="anInteger" interface="java.lang.Comparable" />
+</blueprint>]]></programlisting>
 		
-		<para>The example above, uses the Spring <literal>beans</literal>, <literal>util</literal>, <literal>p</literal>, Spring Expression Language (SpEL)
-		and the <literal>task</literal> namespace introduced in Spring 3.x, and Gemini Blueprint namespace.</para>
+		<para>The example above uses the Gemini Blueprint and Spring <literal>beans</literal> namespaces.</para>
 	  </section>
 	
 	  <section id="blueprint:differences:container">
