@@ -380,7 +380,7 @@ public class DynamicCollection<E> extends AbstractCollection<E> {
 	@SuppressWarnings("unchecked")
 	public <T> T[] toArray(T[] a) {
 		synchronized (storage) {
-			return storage.toArray((T[]) new Object[storage.size()]);
+			return storage.toArray(a);
 		}
 	}
 
