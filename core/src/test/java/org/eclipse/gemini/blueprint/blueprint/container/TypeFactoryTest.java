@@ -110,6 +110,11 @@ public class TypeFactoryTest {
 	private static class MultiBoundedRecursiveGenericType<T extends Comparable<T> & Cloneable> {
 		// Cloneable could be replaced by any interface
 	}
+	
+	private static class MutuallyRecursiveThroughSecondBoundGenericType<T extends Comparable<S> & X<U>, U extends Comparable<S> & X<T>, S> {
+    }
+	
+	private static interface X<T>{}
 
 	private static interface Ice {}
 	private static interface Juice {}
@@ -299,7 +304,11 @@ public class TypeFactoryTest {
 		ReifiedType reifiedB = TypeFactory.getType(TypeDescriptor.valueOf(B.class));
 		assertNotNull(reifiedB);
 	}
-
+	
+	@Test
+	public void testMutuallyRecursiveThroughSecondBoundGenericType() throws Exception {
+	    assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(MutuallyRecursiveThroughSecondBoundGenericType.class)));
+	}
 
 	private ReifiedType getReifiedTypeFor(String methodName) {
 		Method mt = BeanUtils.findDeclaredMethodWithMinimalParameters(TestSet.class, methodName);
