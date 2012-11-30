@@ -105,7 +105,7 @@ class TypeFactory {
         TypeVariable[] tvs = type.getType().getTypeParameters();
         arguments = new ArrayList<ReifiedType>(tvs.length);
         for (@SuppressWarnings("rawtypes") TypeVariable tv : tvs) {
-            ReifiedType rType = getReifiedType(tv, null);
+            ReifiedType rType = getReifiedType(tv, new ArrayList<Type>());
             arguments.add(rType);
         }
         return arguments;
@@ -136,9 +136,7 @@ class TypeFactory {
 
 		if (targetType instanceof TypeVariable) {
 			TypeVariable<?> typeVariable = (TypeVariable<?>) targetType;
-			if (variableTypes == null) {
-				variableTypes = new ArrayList<Type>(2);
-			} else if (variableTypes.contains(targetType)) {
+			if (variableTypes.contains(targetType)) {
 				//Looped around on itself via a recursive Generics definition
 				return OBJECT;
 			}
