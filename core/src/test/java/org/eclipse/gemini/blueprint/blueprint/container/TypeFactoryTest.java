@@ -192,18 +192,6 @@ public class TypeFactoryTest {
 		assertEquals(Point.class, tp.getActualTypeArgument(1).getRawClass());
 	}
 
-	// Since spring 3.1 the TypeDescriptor no longer contains any reference to the MethodParameter
-	// class, we we are unable to get the ParameterizedType of a method parameter.
-	// So all actual type arguments just become Object.class.
-	@Test
-	@Ignore
-	public void testTypedReference() throws Exception {
-		ReifiedType tp = getReifiedTypeFor("typedReference");
-		assertEquals(AtomicReference.class, tp.getRawClass());
-		assertEquals(1, tp.size());
-		assertEquals(Boolean.class, tp.getActualTypeArgument(0).getRawClass());
-	}
-
 	@Test
 	public void testObjectTypedReference() throws Exception {
 		ReifiedType tp = getReifiedTypeFor("objectTypedReference");
@@ -218,30 +206,6 @@ public class TypeFactoryTest {
 		assertEquals(AtomicReference.class, tp.getRawClass());
 		assertEquals(1, tp.size());
 		assertEquals(Object.class, tp.getActualTypeArgument(0).getRawClass());
-	}
-
-	// Since spring 3.1 the TypeDescriptor no longer contains any reference to the MethodParameter
-	// class, we we are unable to get the ParameterizedType of a method parameter.
-	// So all actual type arguments just become Object.class.
-	@Test
-	@Ignore
-	public void testSuperReference() throws Exception {
-		ReifiedType tp = getReifiedTypeFor("superTypedReference");
-		assertEquals(AtomicReference.class, tp.getRawClass());
-		assertEquals(1, tp.size());
-		assertEquals(Properties.class, tp.getActualTypeArgument(0).getRawClass());
-	}
-
-	// Since spring 3.1 the TypeDescriptor no longer contains any reference to the MethodParameter
-	// class, we we are unable to get the ParameterizedType of a method parameter.
-	// So all actual type arguments just come Object.class.
-	@Test
-	@Ignore
-	public void testExtendsReference() throws Exception {
-		ReifiedType tp = getReifiedTypeFor("extendsTypedReference");
-		assertEquals(AtomicReference.class, tp.getRawClass());
-		assertEquals(1, tp.size());
-		assertEquals(Properties.class, tp.getActualTypeArgument(0).getRawClass());
 	}
 
 	@Test
