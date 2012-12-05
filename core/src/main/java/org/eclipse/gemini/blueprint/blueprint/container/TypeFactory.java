@@ -142,16 +142,7 @@ class TypeFactory {
 			}
 			variableTypes.add(targetType);
 			Type[] bounds = typeVariable.getBounds();
-			for (Type bound : bounds) {
-				if (bound instanceof ParameterizedType) {
-					Type ata = ((ParameterizedType) bound).getActualTypeArguments()[0];
-					if (ata instanceof TypeVariable) {
-						variableTypes.add(ata);
-					}
-					return getReifiedType(bound, variableTypes);
-				}
-			}
-
+			
 			return getReifiedType(bounds[0], variableTypes);
 		}
 
