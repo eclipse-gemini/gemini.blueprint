@@ -2,12 +2,12 @@
  * Copyright (c) 2006, 2010 VMware Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
- * and Apache License v2.0 which accompanies this distribution. 
- * The Eclipse Public License is available at 
+ * and Apache License v2.0 which accompanies this distribution.
+ * The Eclipse Public License is available at
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
- * You may elect to redistribute this code under either of these licenses. 
- * 
+ * You may elect to redistribute this code under either of these licenses.
+ *
  * Contributors:
  *   VMware Inc.
  *****************************************************************************/
@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import org.springframework.util.ObjectUtils;
 
 /**
  * Adaptor factory between Spring type descriptor and OSGi 4.2 Reified type.
- * 
+ *
  * @author Costin Leau
  */
 class TypeFactory {
@@ -80,7 +81,7 @@ class TypeFactory {
 		if (type == null) {
 			return Collections.emptyList();
 		}
-		
+
 		// is it a collection or an array
 		if (type.isCollection() || type.isArray()) {
 			arguments = new ArrayList<ReifiedType>(1);
@@ -104,13 +105,13 @@ class TypeFactory {
         TypeVariable[] tvs = type.getType().getTypeParameters();
         arguments = new ArrayList<ReifiedType>(tvs.length);
         for (@SuppressWarnings("rawtypes") TypeVariable tv : tvs) {
-            ReifiedType rType = getReifiedType(tv);
+            ReifiedType rType = getReifiedType(tv, new ArrayList<Type>());
             arguments.add(rType);
         }
         return arguments;
 	}
 
-	private static ReifiedType getReifiedType(Type targetType) {
+	private static ReifiedType getReifiedType(Type targetType, Collection<Type> variableTypes) {
 		if (targetType instanceof Class) {
 			if (Object.class.equals(targetType)) {
 				return OBJECT;
@@ -119,7 +120,7 @@ class TypeFactory {
 		}
 		if (targetType instanceof ParameterizedType) {
 			Type ata = ((ParameterizedType) targetType).getActualTypeArguments()[0];
-			return getReifiedType(ata);
+			return getReifiedType(ata, variableTypes);
 		}
 		if (targetType instanceof WildcardType) {
 			WildcardType wt = (WildcardType) targetType;
@@ -127,19 +128,26 @@ class TypeFactory {
 			if (ObjectUtils.isEmpty(lowerBounds)) {
 				// there's always an upper bound (Object)
 				Type upperBound = wt.getUpperBounds()[0];
-				return getReifiedType(upperBound);
+				return getReifiedType(upperBound, variableTypes);
 			}
 
-			return getReifiedType(lowerBounds[0]);
+			return getReifiedType(lowerBounds[0], variableTypes);
 		}
 
 		if (targetType instanceof TypeVariable) {
-			Type[] bounds = ((TypeVariable<?>) targetType).getBounds();
-			return getReifiedType(bounds[0]);
+			TypeVariable<?> typeVariable = (TypeVariable<?>) targetType;
+			if (variableTypes.contains(targetType)) {
+				//Looped around on itself via a recursive Generics definition
+				return OBJECT;
+			}
+			variableTypes.add(targetType);
+			Type[] bounds = typeVariable.getBounds();
+			
+			return getReifiedType(bounds[0], variableTypes);
 		}
 
 		if (targetType instanceof GenericArrayType) {
-			return getReifiedType(((GenericArrayType) targetType).getGenericComponentType());
+			return getReifiedType(((GenericArrayType) targetType).getGenericComponentType(), variableTypes);
 		}
 
 		throw new IllegalArgumentException("Unknown type " + targetType.getClass());

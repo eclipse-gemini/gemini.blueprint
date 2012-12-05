@@ -70,8 +70,9 @@
         <module>proxy.listener</module>
         <module>export.import.dependency.bundle</module>
         <module>jdk5</module>
+        <module>recursive.type.bundle</module>
 
-        <!-- blueprint bundles  -->
+			<!-- blueprint bundles  -->
         <module>blueprint</module>
     </modules>
 
