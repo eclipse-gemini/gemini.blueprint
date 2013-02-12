@@ -2,6 +2,27 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+Changes in version 2.0.0.M01 (2013-02-12)
+-----------------------------------------
+
+The fix to bug 356683 is mildly backwards incompatible and so the version of Gemini Blueprint is bumped to 2.0.
+
+General:
+* Bug 356683 - Construct application contexts defined in extender fragments only once and share across extender instances
+* Bug 393960 - Build using Java 6 instead of Java 5
+* Bug 351755 - Gemini-core should export org.osgi.service.blueprint package
+* Bug 373661 - SwappingServiceReferenceProxy is not thread safe
+* Bug 394116 - Lazy activation by loading of class not contained in bundle depends on Equinox behavior
+* Bug 392396 - Inverted class check logic in org.eclipse.gemini.blueprint.extender.internal.activator.ListListenerAdapter
+* Bug 374717 - OsgiServiceFactoryBean throws NullPointerException in destroy() when no OsgiServiceRegistrationListeners are configured
+* Bug 374712 - DynamicCollection toArray(T[] a) throws ClassCastException
+* Bug 392500 - TypeFactory.getReifiedType(Type) throws StackOverflowError when fed recursive types
+* Bug 395058 - Test with Knopflerfish 3.5
+
+Documentation:
+* Bug 355584 - Minor errors in reference documentation (up to and including Chapter 4)
+* Bug 356681 - XML namespace declarations not as documented in 1.0.0.RELEASE
+
 Changes in version 1.0.2.RELEASE (2012-08-31)
 ---------------------------------------------
 
