@@ -80,7 +80,11 @@ public class ExtenderConfigurationCustomSettingsTest extends TestCase {
 		assertEquals(300, config.getShutdownWaitTime());
 	}
 
-	public void testShouldProcessAnnotation() throws Exception {
+    public void testShutdownAsynchronously() throws Exception {
+        assertFalse(config.shouldShutdownAsynchronously());
+    }
+
+    public void testShouldProcessAnnotation() throws Exception {
 		assertTrue(config.shouldProcessAnnotation());
 	}
 

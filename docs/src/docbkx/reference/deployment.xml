@@ -469,7 +469,17 @@ Blueprint-Bundle: config/account-data-context.xml, config/osgi-*.xml
                 <entry>The amount of time the extender will wait for each application context to shutdown gracefully. Expressed in milliseconds.</entry>
                 <entry>10000 ms (10 s)</entry>
               </row>
-              
+
+              <row>
+                <entry><literal>shutdown.asynchronously</literal></entry>
+                <entry><classname>boolean</classname></entry>
+                <entry>
+                    Whether the extender shall shutdown each application context asynchronously. If <literal>false</literal>,
+                    the <literal>shutdown.wait.time</literal> is ignored. Accordingly, application contexts blocking during close will block the bundle shutdown.
+                </entry>
+                <entry><literal>true</literal></entry>
+              </row>
+
               <row>
                 <entry><literal>dependencies.wait.time</literal></entry>
                 <entry><classname>java.lang.Long</classname></entry>

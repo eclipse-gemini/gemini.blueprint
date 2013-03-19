@@ -24,6 +24,7 @@
 		<prop key="smth">bla</prop>
 		<prop key="dependencies.wait.time">200</prop>
 		<prop key="shutdown.wait.time">300</prop>
+        <prop key="shutdown.asynchronously">false</prop>
 		<prop key="process.annotations">true</prop>
 	</util:properties>
 </beans>

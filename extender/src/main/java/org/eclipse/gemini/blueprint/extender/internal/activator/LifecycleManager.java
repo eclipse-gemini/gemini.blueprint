@@ -271,28 +271,42 @@ class LifecycleManager implements DisposableBean {
 	 * @param bundle
 	 */
 	protected void maybeCloseApplicationContextFor(Bundle bundle) {
-		final ConfigurableOsgiBundleApplicationContext context =
-				(ConfigurableOsgiBundleApplicationContext) managedContexts.remove(Long.valueOf(bundle.getBundleId()));
+		final ConfigurableOsgiBundleApplicationContext context = managedContexts.remove(bundle.getBundleId());
 		if (context == null) {
 			return;
 		}
 
-		RunnableTimedExecution.execute(new Runnable() {
-
-			private final String toString = "Closing runnable for context " + context.getDisplayName();
-
-			public void run() {
-				closeApplicationContext(context);
-			}
-
-			public String toString() {
-				return toString;
-			}
-
-		}, extenderConfiguration.getShutdownWaitTime(), shutdownTaskExecutor);
+        maybeClose(context);
 	}
 
-	/**
+    protected void maybeClose(final ConfigurableOsgiBundleApplicationContext context) {
+        final String displayName = context.getDisplayName();
+        Runnable shutdownTask = new Runnable() {
+
+            private final String toString = "Closing runnable for context " + displayName;
+
+            public void run() {
+                closeApplicationContext(context);
+            }
+
+            public String toString() {
+                return toString;
+            }
+
+        };
+
+        if (extenderConfiguration.shouldShutdownAsynchronously()) {
+            RunnableTimedExecution.execute(shutdownTask, extenderConfiguration.getShutdownWaitTime(), shutdownTaskExecutor);
+        } else {
+            try {
+                shutdownTask.run();
+            } catch (Exception e) {
+                log.error(displayName + " context shutdown failed.", e);
+            }
+        }
+    }
+
+    /**
 	 * Closes an application context. This is a convenience methods that invokes the event notification as well.
 	 * 
 	 * @param ctx

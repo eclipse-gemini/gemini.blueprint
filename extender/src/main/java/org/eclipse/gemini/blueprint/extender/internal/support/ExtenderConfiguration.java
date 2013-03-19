@@ -42,7 +42,12 @@ import org.springframework.util.ObjectUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+import java.util.Timer;
 
 /**
  * Configuration class for the extender. Takes care of locating the extender specific configurations and merging the
@@ -66,6 +71,8 @@ public class ExtenderConfiguration implements BundleActivator {
 	private static final String CONTEXT_LISTENER_NAME = "osgiApplicationContextListener";
 
 	private static final String PROPERTIES_NAME = "extenderProperties";
+
+    private static final String SHUTDOWN_ASYNCHRONOUS_KEY = "shutdown.asynchronously";
 
 	private static final String SHUTDOWN_WAIT_KEY = "shutdown.wait.time";
 
@@ -91,7 +98,9 @@ public class ExtenderConfiguration implements BundleActivator {
 	// default dependency wait time (in milliseconds)
 	private static final long DEFAULT_DEP_WAIT = ConfigUtils.DIRECTIVE_TIMEOUT_DEFAULT * 1000;
 	private static final boolean DEFAULT_NS_BUNDLE_STATE = true;
-	private static final long DEFAULT_SHUTDOWN_WAIT = 10 * 1000;
+	private static final boolean DEFAULT_SHUTDOWN_ASYNCHRONOUS = true;
+    private static final long DEFAULT_SHUTDOWN_WAIT = 10 * 1000;
+
 	private static final boolean DEFAULT_PROCESS_ANNOTATION = false;
 
 	private ConfigurableOsgiBundleApplicationContext extenderConfiguration;
@@ -105,6 +114,8 @@ public class ExtenderConfiguration implements BundleActivator {
 	private boolean isMulticasterManagedInternally;
 
 	private long shutdownWaitTime, dependencyWaitTime;
+
+    private boolean shutdownAsynchronously;
 
 	private boolean processAnnotation, nsBundledResolved;
 
@@ -128,7 +139,7 @@ public class ExtenderConfiguration implements BundleActivator {
 	// fields reading/writing lock
 	private final Object lock = new Object();
 
-	/**
+    /**
 	 * Constructs a new <code>ExtenderConfiguration</code> instance. Locates the extender configuration, creates an
 	 * application context which will returned the extender items.
 	 * 
@@ -209,7 +220,8 @@ public class ExtenderConfiguration implements BundleActivator {
 
 		synchronized (lock) {
 			shutdownWaitTime = getShutdownWaitTime(properties);
-			dependencyWaitTime = getDependencyWaitTime(properties);
+			shutdownAsynchronously = getShutdownAsynchronously(properties);
+            dependencyWaitTime = getDependencyWaitTime(properties);
 			processAnnotation = getProcessAnnotations(properties);
 		}
 
@@ -302,6 +314,7 @@ public class ExtenderConfiguration implements BundleActivator {
 	private Properties createDefaultProperties() {
 		Properties properties = new Properties();
 		properties.setProperty(SHUTDOWN_WAIT_KEY, "" + DEFAULT_SHUTDOWN_WAIT);
+        properties.setProperty(SHUTDOWN_ASYNCHRONOUS_KEY, "" + DEFAULT_SHUTDOWN_ASYNCHRONOUS);
 		properties.setProperty(PROCESS_ANNOTATIONS_KEY, "" + DEFAULT_PROCESS_ANNOTATION);
 		properties.setProperty(WAIT_FOR_DEPS_TIMEOUT_KEY, "" + DEFAULT_DEP_WAIT);
 
@@ -388,6 +401,10 @@ public class ExtenderConfiguration implements BundleActivator {
 		return Long.parseLong(properties.getProperty(SHUTDOWN_WAIT_KEY));
 	}
 
+    private boolean getShutdownAsynchronously(Properties properties) {
+        return Boolean.valueOf(properties.getProperty(SHUTDOWN_ASYNCHRONOUS_KEY));
+    }
+
 	private long getDependencyWaitTime(Properties properties) {
 		return Long.parseLong(properties.getProperty(WAIT_FOR_DEPS_TIMEOUT_KEY));
 	}
@@ -451,6 +468,16 @@ public class ExtenderConfiguration implements BundleActivator {
 			return processAnnotation;
 		}
 	}
+
+    /**
+     * @return whether the application context shutdown during the bundle stop phase shall be
+     *         performed asynchronously.
+     */
+    public boolean shouldShutdownAsynchronously() {
+        synchronized (lock) {
+            return this.shutdownAsynchronously;
+        }
+    }
 
 	/**
 	 * Returns the dependencyWaitTime.
