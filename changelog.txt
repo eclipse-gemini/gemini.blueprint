@@ -2,6 +2,13 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+Changes in version 2.0.0.M02 (2013-03-20)
+-----------------------------------------
+
+General:
+* Bug 403628 - Support optional synchronous application context shutdown
+* Bug 384166 - Extend resource retrieval to both backing bundle and bridge classloader 
+
 Changes in version 2.0.0.M01 (2013-02-12)
 -----------------------------------------
 
