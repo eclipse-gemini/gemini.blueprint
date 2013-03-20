@@ -15,15 +15,16 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import org.apache.commons.logging.Log;
+import org.osgi.framework.Bundle;
+import org.springframework.util.Assert;
+
 import java.io.IOException;
 import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Enumeration;
-
-import org.apache.commons.logging.Log;
-import org.osgi.framework.Bundle;
-import org.springframework.util.Assert;
+import java.util.NoSuchElementException;
 
 /**
  * ClassLoader backed by an OSGi bundle. Provides the ability to use a separate
@@ -39,6 +40,43 @@ import org.springframework.util.Assert;
  * @author Costin Leau
  */
 public class BundleDelegatingClassLoader extends ClassLoader {
+
+    private static final Enumeration<URL>  EMPTY_RESOURCES = new Enumeration<URL>() {
+        public boolean hasMoreElements() {
+            return false;
+        }
+        public URL nextElement() {
+            throw new NoSuchElementException();
+        }
+    };
+
+    /**
+     * Transparently enumerates across two enumerations.
+     */
+    private static class CombinedEnumeration<T> implements Enumeration<T> {
+        private final Enumeration<T> e1;
+        private final Enumeration<T> e2;
+
+        public CombinedEnumeration(Enumeration<T> e1, Enumeration<T> e2) {
+            this.e1 = e1;
+            this.e2 = e2;
+        }
+
+        public boolean hasMoreElements() {
+            return e1.hasMoreElements() || e2.hasMoreElements();
+        }
+
+        public T nextElement() {
+            if (e1.hasMoreElements()) {
+                return e1.nextElement();
+            }
+            if (e2.hasMoreElements()) {
+                return e2.nextElement();
+            }
+
+            throw new NoSuchElementException();
+        }
+    }
 
 	/** use degradable logger */
 	private static final Log log = LogUtils.createLogger(BundleDelegatingClassLoader.class);
@@ -141,7 +179,25 @@ public class BundleDelegatingClassLoader extends ClassLoader {
 		return enm;
 	}
 
-	public URL getResource(String name) {
+    @Override
+    public Enumeration<URL> getResources(String name) throws IOException {
+        @SuppressWarnings("unchecked")
+        Enumeration<URL> resources = this.backingBundle.getResources(name);
+
+        if (this.bridge != null) {
+            Enumeration<URL> bridgeResources = this.bridge.getResources(name);
+            if (resources == null) {
+                resources = bridgeResources;
+            } else if (bridgeResources != null){
+                resources = new CombinedEnumeration<URL>(resources, bridgeResources);
+            }
+        }
+
+        // Classloader contract: Never return null but rather an empty enumeration.
+        return resources != null ? resources : EMPTY_RESOURCES;
+    }
+
+    public URL getResource(String name) {
 		URL resource = findResource(name);
 		if (bridge != null && resource == null) {
 			resource = bridge.getResource(name);

@@ -14,15 +14,16 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import junit.framework.TestCase;
+import org.easymock.MockControl;
+import org.osgi.framework.Bundle;
+import org.springframework.aop.framework.ProxyFactory;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
-import junit.framework.TestCase;
-
-import org.easymock.MockControl;
-import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
-import org.osgi.framework.Bundle;
-import org.springframework.aop.framework.ProxyFactory;
+import static org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader.createBundleClassLoaderFor;
 
 /**
  * @author Costin Leau
@@ -36,11 +37,14 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 
 	private Bundle bundle;
 
+    private ClassLoader bridge;
+
 	protected void setUp() throws Exception {
 		bundleCtrl = MockControl.createStrictControl(Bundle.class);
 		bundle = (Bundle) bundleCtrl.getMock();
-		classLoader =
-				BundleDelegatingClassLoader.createBundleClassLoaderFor(bundle, ProxyFactory.class.getClassLoader());
+		classLoader = createBundleClassLoaderFor(bundle, ProxyFactory.class.getClassLoader());
+        bridge = getClass().getClassLoader();
+
 		bundleCtrl.reset();
 	}
 
@@ -56,8 +60,8 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 
 		assertFalse(classLoader.equals(new Object()));
 		assertEquals(classLoader, classLoader);
-		assertTrue(classLoader.equals(BundleDelegatingClassLoader.createBundleClassLoaderFor(bundle, ProxyFactory.class
-				.getClassLoader())));
+		assertTrue(classLoader.equals(createBundleClassLoaderFor(bundle, ProxyFactory.class
+                .getClassLoader())));
 
 		// assertEquals(bundle.hashCode(), clientClassLoader.hashCode());
 	}
@@ -100,4 +104,76 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 
 		assertSame(enumeration, classLoader.findResources(resource));
 	}
+
+    public void testGetResourcesFromBundleAndBridge() throws Exception {
+        final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
+        final URL bundleURL = new URL("file://bundle/resourceName");
+
+        MockControl bundleResourcesControl = MockControl.createStrictControl(Enumeration.class);
+        Enumeration bundleResources = (Enumeration) bundleResourcesControl.getMock();
+        bundleResourcesControl.expectAndReturn(bundleResources.hasMoreElements(), true, 2);
+        bundleResourcesControl.expectAndReturn(bundleResources.nextElement(), bundleURL);
+        bundleResourcesControl.expectAndReturn(bundleResources.hasMoreElements(), false, 2);
+        bundleResourcesControl.replay();
+
+        bundleCtrl.expectAndReturn(bundle.getResources(resourceName), bundleResources);
+        bundleCtrl.replay();
+
+        Enumeration<URL> resources = createBundleClassLoaderFor(bundle, bridge).getResources(resourceName);
+
+        assertTrue(resources.hasMoreElements());
+        assertSame(bundleURL, resources.nextElement());
+
+        assertTrue(resources.hasMoreElements());
+        URL resource = resources.nextElement();
+        assertNotNull(resource);
+        assertTrue(resource.getFile().endsWith(resourceName));
+    }
+
+    public void testGetResourcesFromBundleOnly() throws Exception {
+        final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
+        final URL bundleURL = new URL("file://bundle/resourceName");
+
+        MockControl bundleResourcesControl = MockControl.createStrictControl(Enumeration.class);
+        Enumeration bundleResources = (Enumeration) bundleResourcesControl.getMock();
+        bundleResourcesControl.expectAndReturn(bundleResources.hasMoreElements(), true);
+        bundleResourcesControl.expectAndReturn(bundleResources.nextElement(), bundleURL);
+        bundleResourcesControl.expectAndReturn(bundleResources.hasMoreElements(), false);
+        bundleResourcesControl.replay();
+
+        bundleCtrl.expectAndReturn(bundle.getResources(resourceName), bundleResources);
+        bundleCtrl.replay();
+
+        Enumeration<URL> resources = createBundleClassLoaderFor(bundle, null).getResources(resourceName);
+
+        assertTrue(resources.hasMoreElements());
+        assertSame(bundleURL, resources.nextElement());
+        assertFalse(resources.hasMoreElements());
+    }
+
+    public void testGetResourcesFromBridgeOnly() throws Exception {
+        final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
+
+        bundleCtrl.expectAndReturn(bundle.getResources(resourceName), null);
+        bundleCtrl.replay();
+
+        Enumeration<URL> resources = createBundleClassLoaderFor(bundle, bridge).getResources(resourceName);
+        assertTrue(resources.hasMoreElements());
+        URL resource = resources.nextElement();
+        assertNotNull(resource);
+        assertTrue(resource.getFile().endsWith(resourceName));
+        assertFalse(resources.hasMoreElements());
+    }
+
+    public void testGetResourcesIsNullSafe() throws IOException {
+        final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
+
+        bundleCtrl.expectAndReturn(bundle.getResources(resourceName), null);
+        bundleCtrl.replay();
+
+        Enumeration<URL> resources = createBundleClassLoaderFor(bundle, null).getResources(resourceName);
+
+        assertNotNull(resources);
+        assertFalse(resources.hasMoreElements());
+    }
 }
