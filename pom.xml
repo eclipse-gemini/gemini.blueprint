@@ -312,6 +312,12 @@
             <version>4.2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+
         <!-- junit -->
         <dependency>
             <groupId>org.junit</groupId>
@@ -324,6 +330,20 @@
             <groupId>easymock</groupId>
             <artifactId>easymock</artifactId>
             <version>1.2_Java1.3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-assert</artifactId>
+            <version>1.4</version>
             <scope>test</scope>
         </dependency>
 
