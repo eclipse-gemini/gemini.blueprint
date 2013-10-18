@@ -46,8 +46,7 @@
 
         <!-- platform versions -->
         <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
-        <kf.ver>5.3.3</kf.ver>
-        <!-- Knopflerfish 3.5 -->
+        <kf.ver>5.3.3</kf.ver>    <!-- Knopflerfish 3.5 -->
         <felix.ver>2.0.5</felix.ver>
 
         <!-- javadoc configuration -->
@@ -949,7 +948,7 @@
             <name>www.eclipse.org/gemini/blueprint</name>
             <url>http://www.eclipse.org/gemini/blueprint/</url>
         </site>
-        <!-- TODO: Need to participate in Gemini maven repo
+        <!-- TODO: Need to participate in Gemini maven repo 
         <repository>
             <id>zodiac-milestone</id>
             <name>Zodiac Milestone Repository</name>
