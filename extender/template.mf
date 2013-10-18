@@ -19,3 +19,34 @@ Import-Template:
 Bundle-Activator: org.eclipse.gemini.blueprint.extender.internal.boot.ChainActivator
 Export-Package:
  org.osgi.service.blueprint;version=1;uses:="org.osgi.service.blueprint.container,org.osgi.service.blueprint.reflect"
+Bundle-Name: ${project.artifactId}
+Bundle-Version: ${project.version}
+Bundle-SymbolicName: ${spring.osgi.symbolic.name}
+Bundle-Vendor: Eclipse Foundation
+Bundle-DocURL: http://www.eclipse.org/gemini/blueprint/
+Bundle-Description: ${bundle.description}
+Bundle-License: http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php
+Bundle-ManifestVersion: 2
+Implementation-Title: Eclipse Gemini Blueprint
+Implementation-Version: ${project.version}
+Implementation-Vendor: Eclipse Foundation
+Implementation-Vendor-Id: org.eclipse.gemini.blueprint
+Gemini-Blueprint-Version: ${project.version}
+Spring-Version: ${spring.maven.artifact.version}
+Build-Jdk: ${java.version}
+Build-Plan: ${env.buildPlan}
+Build-Number: ${env.buildNumber}
+SVN-Revision: ${env.svnRevision}
+Unversioned-Imports: *
+Excluded-Imports: com_cenqua_clover*
+Ignored-Existing-Headers:
+ Ant-Version,
+ Archiver-Version,
+ Unversioned-Imports,
+ Tool,
+ Ignore-Package,
+ Private-Package,
+ Created-By,
+ Bnd-LastModified,
+ Import-Package,
+ Export-Package

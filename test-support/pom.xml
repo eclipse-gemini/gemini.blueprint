@@ -29,6 +29,8 @@
         <jarjar.run>on</jarjar.run>
         <jarjar.keep>org.eclipse.gemini.blueprint.test.**</jarjar.keep>
         <jarjar.dep>${maven.dependency.org.eclipse.gemini.blueprint.gemini-blueprint-extender.jar.path}</jarjar.dep>
+
+        <bundle.description>${project.description}</bundle.description>
     </properties>
 
     <dependencies>

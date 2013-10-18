@@ -503,12 +503,18 @@
                     <artifactId>maven-clover2-plugin</artifactId>
                     <version>${clover.ver}</version>
                 </plugin>
-                <plugin>
-                    <groupId>com.springsource.bundlor</groupId>
-                    <artifactId>com.springsource.bundlor.maven</artifactId>
-                    <!--<version>1.0.0.RELEASE</version>-->
-                    <version>1.0.0.M6</version>
-                </plugin>
+                <!--<plugin>-->
+                    <!--<groupId>com.springsource.bundlor</groupId>-->
+                    <!--<artifactId>com.springsource.bundlor.maven</artifactId>-->
+                    <!--&lt;!&ndash;<version>1.0.0.RELEASE</version>&ndash;&gt;-->
+                    <!--<version>1.0.0.M6</version>-->
+                <!--</plugin>-->
+              <plugin>
+              <groupId>org.eclipse.virgo.bundlor</groupId>
+                    <artifactId>org.eclipse.virgo.bundlor.maven</artifactId>
+                    <!--<version>1.1.2.RELEASE</version>-->
+                    <version>1.2.0.M02</version>
+              </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
@@ -564,118 +570,25 @@
             </plugin>
 
             <plugin>
-                <groupId>com.springsource.bundlor</groupId>
-                <artifactId>com.springsource.bundlor.maven</artifactId>
-                <executions>
-                    <execution>
-                        <id>bundlor</id>
-                        <goals>
-                            <goal>transform</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-           <manifestTemplatePath>${basedir}/template.mf</manifestTemplatePath>
-           <manifestHeaders><![CDATA[Bundle-Name: ${project.artifactId}
-Bundle-Version: ${project.version}
-Bundle-SymbolicName: ${spring.osgi.symbolic.name}
-Bundle-Vendor: Eclipse Foundation
-Bundle-DocURL: http://www.eclipse.org/gemini/blueprint/
-Bundle-Description: ${project.description}
-Bundle-License: http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php
-Bundle-ManifestVersion: 2
-Implementation-Title: Eclipse Gemini Blueprint
-Implementation-Version: ${project.version}
-Implementation-Vendor: Eclipse Foundation
-Implementation-Vendor-Id: org.eclipse.gemini.blueprint
-Gemini-Blueprint-Version: ${project.version}
-Spring-Version: ${spring.maven.artifact.version}
-Build-Jdk: ${java.version}
-Build-Plan: ${env.buildPlan}
-Build-Number: ${env.buildNumber}
-SVN-Revision: ${env.svnRevision}
-Unversioned-Imports: *
-Excluded-Imports: com_cenqua_clover*
-Ignored-Existing-Headers:
- Ant-Version,
- Archiver-Version,
- Unversioned-Imports,
- Tool,
- Ignore-Package,
- Private-Package,
- Created-By,
- Bnd-LastModified,
- Import-Package,
- Export-Package
-]]></manifestHeaders>
-
-                    <packagings>
-                        <packaging>jar</packaging>
-                    </packagings>
-
-                    <enabled>${bundlor.enabled}</enabled>
-                    <failOnWarnings>false</failOnWarnings>
-                    <removeNullHeaders>true</removeNullHeaders>
-                </configuration>
+              <groupId>org.eclipse.virgo.bundlor</groupId>
+              <artifactId>org.eclipse.virgo.bundlor.maven</artifactId>
+              <executions>
+                <execution>
+                  <id>bundlor</id>
+                  <goals>
+                    <goal>bundlor</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <properties>
+                  <bundle.description>${project.description}</bundle.description>
+                </properties>
+                <manifestTemplatePath>${basedir}/template.mf</manifestTemplatePath>
+                <enabled>${bundlor.enabled}</enabled>
+                <failOnWarnings>false</failOnWarnings>
+              </configuration>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>com.springsource.bundlor</groupId>-->
-                <!--<artifactId>com.springsource.bundlor.maven</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>bundlor</id>-->
-                        <!--<goals>-->
-                            <!--<goal>bundlor</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<configuration>-->
-                    <!--<manifestTemplate><![CDATA[Bundle-Name: ${project.artifactId}-->
-<!--Bundle-Version: ${project.version}-->
-<!--Bundle-SymbolicName: ${spring.osgi.symbolic.name}-->
-<!--Bundle-Vendor: Eclipse Foundation-->
-<!--Bundle-DocURL: http://www.eclipse.org/gemini/blueprint/-->
-<!--Bundle-Description: ${project.description}-->
-<!--Bundle-License: http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php-->
-<!--Bundle-ManifestVersion: 2-->
-<!--Implementation-Title: Eclipse Gemini Blueprint-->
-<!--Implementation-Version: ${project.version}-->
-<!--Implementation-Vendor: Eclipse Foundation-->
-<!--Implementation-Vendor-Id: org.eclipse.gemini.blueprint-->
-<!--Gemini-Blueprint-Version: ${project.version}-->
-<!--Spring-Version: ${spring.maven.artifact.version}-->
-<!--Build-Jdk: ${java.version}-->
-<!--Build-Plan: ${env.buildPlan}-->
-<!--Build-Number: ${env.buildNumber}-->
-<!--SVN-Revision: ${env.svnRevision}-->
-<!--Unversioned-Imports: *-->
-<!--Excluded-Imports: com_cenqua_clover*-->
-<!--Ignored-Existing-Headers:-->
- <!--Ant-Version,-->
- <!--Archiver-Version,-->
- <!--Unversioned-Imports,-->
- <!--Tool,-->
- <!--Ignore-Package,-->
- <!--Private-Package,-->
- <!--Created-By,-->
- <!--Bnd-LastModified,-->
- <!--Import-Package,-->
- <!--Export-Package-->
-<!--]]></manifestTemplate>-->
-
-                    <!--&lt;!&ndash; Apparently this (<packagings/>) is valid config for the bundlor plugin, even through the plugin-->
-                         <!--descriptor disagrees &ndash;&gt;-->
-                    <!--<packagings>-->
-                        <!--<packaging>jar</packaging>-->
-                    <!--</packagings>-->
-
-                    <!--<enabled>${bundlor.enabled}</enabled>-->
-                    <!--<failOnWarnings>false</failOnWarnings>-->
-                    <!--<removeNullHeaders>true</removeNullHeaders>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -987,7 +900,7 @@ Ignored-Existing-Headers:
             <name>www.eclipse.org/gemini/blueprint</name>
             <url>http://www.eclipse.org/gemini/blueprint/</url>
         </site>
-        <!-- TODO: Need to participate in Gemini maven repo 
+        <!-- TODO: Need to participate in Gemini maven repo
         <repository>
             <id>zodiac-milestone</id>
             <name>Zodiac Milestone Repository</name>
@@ -1012,12 +925,13 @@ Ignored-Existing-Headers:
             <url>http://repo1.maven.org/maven2/</url>
         </pluginRepository>
         <!-- clover repository -->
+      <!--
         <pluginRepository>
             <id>atlassian-m2-repository</id>
             <name>Atlassian Maven 2.x Repository</name>
             <url>http://repository.atlassian.com/maven2</url>
         </pluginRepository>
-
+      -->
         <pluginRepository>
             <id>com.springsource.repository.bundles.release</id>
             <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
@@ -1038,6 +952,16 @@ Ignored-Existing-Headers:
                 <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
+        <pluginRepository>
+          <id>com.springsource.repository.bundles.external</id>
+          <name>SpringSource Enterprise Bundle Repository - External Bundle Release</name>
+          <url>http://repository.springsource.com/maven/bundles/external</url>
+        </pluginRepository>
+      <pluginRepository>
+        <id>eclipse.virgo.build.bundles.release</id>
+        <name>Eclipse Virgo Build</name>
+        <url>http://build.eclipse.org/rt/virgo/maven/bundles/release</url>
+      </pluginRepository>
 
     </pluginRepositories>
 
@@ -1110,6 +1034,12 @@ Ignored-Existing-Headers:
             </snapshots>
             <url>http://maven.springframework.org/osgi</url>
         </repository>
+
+      <repository>
+        <id>eclipse.virgo.build.bundles.release</id>
+        <name>Eclipse Virgo Build</name>
+        <url>http://build.eclipse.org/rt/virgo/maven/bundles/release</url>
+      </repository>
     </repositories>
 
 </project>
