@@ -40,6 +40,8 @@ import org.springframework.core.task.TaskExecutor;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.eclipse.gemini.blueprint.extender.internal.util.concurrent.RunnableTimedExecution.execute;
+
 /**
  * Manager handling the startup/shutdown threading issues regarding OSGi contexts. Used by {@link ContextLoaderListener}
  * .
@@ -296,7 +298,7 @@ class LifecycleManager implements DisposableBean {
         };
 
         if (extenderConfiguration.shouldShutdownAsynchronously()) {
-            RunnableTimedExecution.execute(shutdownTask, extenderConfiguration.getShutdownWaitTime(), shutdownTaskExecutor);
+            execute(shutdownTask, extenderConfiguration.getShutdownWaitTime(), shutdownTaskExecutor);
         } else {
             try {
                 shutdownTask.run();
@@ -379,18 +381,25 @@ class LifecycleManager implements DisposableBean {
 				}
 			}
 
-			// tasks
-			final Runnable[] tasks = (Runnable[]) taskList.toArray(new Runnable[taskList.size()]);
+            // tasks
+            final Runnable[] tasks = taskList.toArray(new Runnable[taskList.size()]);
 
-			// start the ripper >:)
-			for (int j = 0; j < tasks.length; j++) {
-				if (RunnableTimedExecution.execute(tasks[j], extenderConfiguration.getShutdownWaitTime(),
-						shutdownTaskExecutor)) {
-					if (debug) {
-						log.debug(contextClosingDown[0] + " context did not close successfully; forcing shutdown...");
-					}
-				}
-			}
+            for (Runnable task : tasks) {
+                if (extenderConfiguration.shouldShutdownAsynchronously()) {
+                    if (execute(task, extenderConfiguration.getShutdownWaitTime(),
+                            shutdownTaskExecutor)) {
+                        if (debug) {
+                            log.debug(contextClosingDown[0] + " context did not close successfully; forcing shutdown...");
+                        }
+                    }
+                } else {
+                    try {
+                        task.run();
+                    } catch (Exception e) {
+                        log.error(contextClosingDown[0] + " context close failed.", e);
+                    }
+                }
+            }
 		}
 
 		this.managedContexts.clear();

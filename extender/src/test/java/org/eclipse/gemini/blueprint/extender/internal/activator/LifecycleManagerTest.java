@@ -13,44 +13,66 @@
  *****************************************************************************/
 package org.eclipse.gemini.blueprint.extender.internal.activator;
 
-import junit.framework.TestCase;
-import org.easymock.MockControl;
-import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
+import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
+import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
+import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 import static java.lang.Thread.yield;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Olaf Otto
  */
-public class LifecycleManagerTest extends TestCase {
-    private MockControl contextControl = MockControl.createControl(ConfigurableOsgiBundleApplicationContext.class);
-    private ConfigurableOsgiBundleApplicationContext context = (ConfigurableOsgiBundleApplicationContext) contextControl.getMock();
+@RunWith(MockitoJUnitRunner.class)
+public class LifecycleManagerTest {
+    @Mock
+    private DelegatedExecutionOsgiBundleApplicationContext context;
+    @Mock
+    private OsgiApplicationContextCreator contextCreator;
+    @Mock
+    private OsgiContextProcessor osgiContextProcessor;
+    @Mock
+    private VersionMatcher versionMatcher;
+    @Mock
+    private ApplicationContextConfigurationFactory factory;
+    @Mock
+    private ApplicationContextConfiguration contextConfiguration;
+    @Mock
+    private ExtenderConfiguration configuration;
 
-    private MockControl osgiContextProcessorControl = MockControl.createControl(OsgiContextProcessor.class);
-    private OsgiContextProcessor osgiContextProcessor = (OsgiContextProcessor) osgiContextProcessorControl.getMock();
+    private BundleContext bundleContext = new MockBundleContext();
 
-    private boolean shouldShutdownAsynchronously;
+    private LifecycleManager testee;
 
-    // Cannot mock a class with easymock 1.2
-    ExtenderConfiguration configuration = new ExtenderConfiguration() {
-        @Override
-        public boolean shouldShutdownAsynchronously() {
-            return shouldShutdownAsynchronously;
-        }
+    @Before
+    public void setUp() throws Exception {
+        this.testee = new LifecycleManager(this.configuration, this.versionMatcher, this.factory, this.contextCreator, this.osgiContextProcessor, null, this.bundleContext);
 
-        @Override
-        public long getShutdownWaitTime() {
-            return 0L;
-        }
-    };
+        doReturn("JUnit test context").when(this.context).getDisplayName();
+        doReturn(this.context).when(this.contextCreator).createApplicationContext(eq(this.bundleContext));
+        doReturn(true).when(this.versionMatcher).matchVersion(isA(Bundle.class));
+        doReturn(this.contextConfiguration).when(this.factory).createConfiguration(isA(Bundle.class));
+        doReturn(this.bundleContext.getBundle()).when(this.context).getBundle();
+        doReturn(SECONDS.toMillis(2)).when(this.configuration).getShutdownWaitTime();
+    }
 
-    private LifecycleManager testee = new LifecycleManager(this.configuration, null, null, null, this.osgiContextProcessor, null, null);
-
+    @Test
     public void testSuccessfulAsynchronousShutdown() throws Exception {
         withAsynchronousShutdownDisabled();
-        withSuccessfulContextClose();
-        withPreAndPostProcessing();
 
         shutdownContext();
 
@@ -58,10 +80,9 @@ public class LifecycleManagerTest extends TestCase {
         verifyOsgiContextProcessorInteractions();
     }
 
+    @Test
     public void testSuccessfulSynchronousShutdown() throws Exception {
         withAsynchronousShutdownEnabled();
-        withSuccessfulContextClose();
-        withPreAndPostProcessing();
 
         shutdownContext();
 
@@ -69,10 +90,10 @@ public class LifecycleManagerTest extends TestCase {
         verifyOsgiContextProcessorInteractions();
     }
 
+    @Test
     public void testFailingAsynchronousShutdown() throws Exception {
         withAsynchronousShutdownEnabled();
         withFailingApplicationContextClose();
-        withPreAndPostProcessing();
 
         shutdownContext();
         yield();
@@ -81,10 +102,10 @@ public class LifecycleManagerTest extends TestCase {
         verifyOsgiContextProcessorInteractions();
     }
 
+    @Test
     public void testFailingSynchronousShutdown() {
         withAsynchronousShutdownDisabled();
         withFailingApplicationContextClose();
-        withPreAndPostProcessing();
 
         shutdownContext();
 
@@ -92,44 +113,60 @@ public class LifecycleManagerTest extends TestCase {
         verifyOsgiContextProcessorInteractions();
     }
 
+    @Test
+    public void testSuccessfulSynchronousDestruction() throws Exception {
+        withAsynchronousShutdownDisabled();
+        addContextToLifecycleManager();
+
+        destroy();
+
+        verifyContextIsClosed();
+        verifyOsgiContextProcessorInteractions();
+    }
+
+    @Test
+    public void testSuccessfulAsynchronousDestruction() throws Exception {
+        withAsynchronousShutdownEnabled();
+        addContextToLifecycleManager();
+
+        destroy();
+        yield();
+
+        verifyContextIsClosed();
+        verifyOsgiContextProcessorInteractions();
+    }
+
+
+    private void addContextToLifecycleManager() throws Exception {
+        this.testee.maybeCreateApplicationContextFor(this.bundleContext.getBundle());
+    }
+
+    private void destroy() {
+        this.testee.destroy();
+    }
+
     private void withFailingApplicationContextClose() {
-        this.context.getDisplayName();
-        this.contextControl.setReturnValue("Display name");
-        this.context.close();
-        this.contextControl.setThrowable(new RuntimeException("THIS IS AN EXPECTED TEST EXCEPTION"));
+        doThrow(new RuntimeException("THIS IS AN EXPECTED TEST EXCEPTION")).when(this.context).close();
     }
 
     private void verifyContextIsClosed() {
-        this.contextControl.verify();
+        verify(this.context).close();
     }
 
     private void verifyOsgiContextProcessorInteractions() {
-        this.osgiContextProcessorControl.verify();
-    }
-
-    private void withPreAndPostProcessing() {
-        this.osgiContextProcessor.preProcessClose(this.context);
-        this.osgiContextProcessor.postProcessClose(this.context);
-    }
-
-    private void withSuccessfulContextClose() {
-        this.context.close();
-        this.context.getDisplayName();
-        this.contextControl.setDefaultReturnValue("Nothing");
+        verify(this.osgiContextProcessor).preProcessClose(eq(this.context));
+        verify(this.osgiContextProcessor).postProcessClose(eq(this.context));
     }
 
     private void shutdownContext() {
-        this.contextControl.replay();
-        this.osgiContextProcessorControl.replay();
-
         this.testee.maybeClose(this.context);
     }
 
     private void withAsynchronousShutdownDisabled() {
-        this.shouldShutdownAsynchronously = false;
+        doReturn(false).when(this.configuration).shouldShutdownAsynchronously();
     }
 
     private void withAsynchronousShutdownEnabled() {
-        this.shouldShutdownAsynchronously = true;
+        doReturn(true).when(this.configuration).shouldShutdownAsynchronously();
     }
 }
