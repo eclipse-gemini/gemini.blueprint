@@ -741,7 +741,7 @@
                     <!-- that's the default value -->
                     <dateFormat>dd.MM.yyyy '@' HH:mm:ss z</dateFormat>
                     <!-- true is default here, it prints some more information during the build -->
-                    <verbose>true</verbose>
+                    <verbose>fasle</verbose>
                     <!--
                         If you'd like to tell the plugin where your .git directory is,
                         use this setting, otherwise we'll perform a search trying to
