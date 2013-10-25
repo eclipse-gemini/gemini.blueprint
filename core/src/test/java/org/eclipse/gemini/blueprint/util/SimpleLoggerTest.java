@@ -7,189 +7,187 @@
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
  * You may elect to redistribute this code under either of these licenses. 
- * 
+ *
  * Contributors:
  *   VMware Inc.
  *****************************************************************************/
 
 package org.eclipse.gemini.blueprint.util;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 
-import junit.framework.TestCase;
-
-import org.apache.commons.logging.Log;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
- * 
  * @author Costin Leau
- * 
+ * @author Olaf Otto
  */
-public class SimpleLoggerTest extends TestCase {
+@RunWith(MockitoJUnitRunner.class)
+public class SimpleLoggerTest {
+    @Mock
+    private PrintStream out;
+    @Mock
+    private PrintStream err;
+    @Mock
+    private Throwable exception;
+    @Mock
+    private Throwable throwable;
 
-	class AssertivePrintStream extends PrintStream {
+    private Object object = new Object();
 
-		public AssertivePrintStream(OutputStream out, boolean autoFlush, String encoding)
-				throws UnsupportedEncodingException {
-			super(out, autoFlush, encoding);
-		}
+    @InjectMocks
+    private SimpleLogger testee;
 
-		public AssertivePrintStream(OutputStream out, boolean autoFlush) {
-			super(out, autoFlush);
-		}
+    @Test
+    public void testDebugObject() {
+        testee.debug(object);
+        assertMessageSendViaSystemOut();
+        assertMessageNotSendViaSystemErr();
+    }
 
-		public AssertivePrintStream(OutputStream out) {
-			super(out);
-		}
+    @Test
+    public void testDebugObjectThrowable() {
+        testee.debug(object, throwable);
+        assertMessageSendViaSystemOut();
+        assertMessageNotSendViaSystemErr();
+    }
 
-		public void println(Object x) {
-			loggingCalled(this, x);
-		}
-	}
+    @Test
+    public void testErrorObject() {
+        testee.error(object);
+        assertMessageNotSendViaSystemOut();
+        assertMessageSendViaSystemErr();
+    }
 
-	class NullOutputStream extends OutputStream {
+    @Test
+    public void testErrorObjectThrowable() {
+        testee.error(object, throwable);
+        assertMessageSendViaSystemErr();
+        assertThrowablePrintedToSystemErr();
+        assertMessageNotSendViaSystemOut();
+    }
 
-		public void write(int b) throws IOException {
-			// do nothing
-		}
-	}
+    @Test
+    public void testFatalObject() {
+        testee.fatal(object);
+        assertMessageSendViaSystemErr();
+        assertMessageNotSendViaSystemOut();
+    }
 
-	class MyThrowable extends Exception {
+    @Test
+    public void testFatalObjectThrowable() {
+        testee.fatal(object, throwable);
+        assertMessageSendViaSystemErr();
+        assertThrowablePrintedToSystemErr();
+        assertMessageNotSendViaSystemOut();
+    }
 
-		public void printStackTrace(PrintStream s) {
-			assertSame("the right stream [" + shouldBeCalled + "] is not called", shouldBeCalled, s);
-			super.printStackTrace(s);
-		}
-	}
+    @Test
+    public void testInfoObject() {
+        testee.info(object);
+        assertMessageSendViaSystemOut();
+        assertMessageNotSendViaSystemErr();
+    }
 
+    @Test
+    public void testInfoObjectThrowable() {
+        testee.info(object, throwable);
+        assertMessageSendViaSystemOut();
+        assertMessageNotSendViaSystemErr();
+        assertThrowablePrintedToSystemOut();
+    }
 
-	private PrintStream outStream, errStream;
-	private PrintStream shouldBeCalled, shouldNotBeCalled;
-	private Log simpleLogger;
-	private Object object;
-	private Throwable throwable;
+    @Test
+    public void testIsDebugEnabled() {
+        assertThat(testee.isDebugEnabled()).isTrue();
+    }
 
+    @Test
+    public void testIsErrorEnabled() {
+        assertThat(testee.isErrorEnabled()).isTrue();
+    }
 
-	protected void setUp() throws Exception {
-		outStream = new AssertivePrintStream(new NullOutputStream());
-		errStream = new AssertivePrintStream(new NullOutputStream());
-		System.setErr(errStream);
-		System.setOut(outStream);
+    @Test
+    public void testIsFatalEnabled() {
+        assertThat(testee.isFatalEnabled()).isTrue();
+    }
 
-		simpleLogger = new SimpleLogger();
-		object = new Object();
-		throwable = new MyThrowable();
-	}
+    @Test
+    public void testIsInfoEnabled() {
+        assertThat(testee.isInfoEnabled()).isTrue();
+    }
 
-	protected void tearDown() throws Exception {
-		System.setErr(null);
-		System.setOut(null);
-		simpleLogger = null;
-		object = null;
-		throwable = null;
-	}
+    @Test
+    public void testIsTraceEnabled() {
+        assertThat(testee.isTraceEnabled()).isTrue();
+    }
 
-	private void loggingCalled(AssertivePrintStream assertivePrintStream, Object x) {
-		assertSame("the right stream [" + shouldBeCalled + "] is not called", shouldBeCalled, assertivePrintStream);
-		assertNotSame("the wrong stream [" + shouldBeCalled + "] is called", shouldNotBeCalled, assertivePrintStream);
-	}
+    @Test
+    public void testIsWarnEnabled() {
+        assertThat(testee.isWarnEnabled()).isTrue();
+    }
 
-	public void testDebugObject() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.debug(object);
-	}
+    @Test
+    public void testTraceObject() {
+        testee.trace(object);
+        assertMessageSendViaSystemOut();
+        assertMessageNotSendViaSystemErr();
+    }
 
-	public void testDebugObjectThrowable() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.debug(object, throwable);
-	}
+    @Test
+    public void testTraceObjectThrowable() {
+        testee.info(object, throwable);
+        assertMessageSendViaSystemOut();
+        assertThrowablePrintedToSystemOut();
+        assertMessageNotSendViaSystemErr();
+    }
 
-	public void testErrorObject() {
-		shouldBeCalled = errStream;
-		shouldNotBeCalled = outStream;
-		simpleLogger.error(object);
-	}
+    @Test
+    public void testWarnObject() {
+        testee.warn(object);
+        assertMessageSendViaSystemOut();
+        assertMessageNotSendViaSystemErr();
+    }
 
-	public void testErrorObjectThrowable() {
-		shouldBeCalled = errStream;
-		shouldNotBeCalled = outStream;
-		simpleLogger.error(object, throwable);
-	}
+    @Test
+    public void testWarnObjectThrowable() {
+        testee.warn(object, throwable);
 
-	public void testFatalObject() {
-		shouldBeCalled = errStream;
-		shouldNotBeCalled = outStream;
-		simpleLogger.fatal(object);
-	}
+        assertMessageSendViaSystemOut();
+        assertThrowablePrintedToSystemOut();
+        assertMessageNotSendViaSystemErr();
+    }
 
-	public void testFatalObjectThrowable() {
-		shouldBeCalled = errStream;
-		shouldNotBeCalled = outStream;
-		simpleLogger.fatal(object, throwable);
-	}
+    private void assertMessageNotSendViaSystemErr() {
+        verify(this.err, never()).println(eq(this.object));
+    }
 
-	public void testInfoObject() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.info(object);
-	}
+    private void assertMessageSendViaSystemOut() {
+        verify(this.out).println(eq(this.object));
+    }
 
-	public void testInfoObjectThrowable() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.info(object, throwable);
-	}
+    private void assertMessageSendViaSystemErr() {
+        verify(this.out, never()).println(eq(this.object));
+    }
 
-	public void testIsDebugEnabled() {
-		assertTrue(simpleLogger.isDebugEnabled());
-	}
+    private void assertMessageNotSendViaSystemOut() {
+        verify(this.err).println(eq(this.object));
+    }
 
-	public void testIsErrorEnabled() {
-		assertTrue(simpleLogger.isErrorEnabled());
-	}
+    private void assertThrowablePrintedToSystemErr() {
+        verify(this.throwable).printStackTrace(eq(this.err));
+    }
 
-	public void testIsFatalEnabled() {
-		assertTrue(simpleLogger.isFatalEnabled());
-	}
-
-	public void testIsInfoEnabled() {
-		assertTrue(simpleLogger.isInfoEnabled());
-	}
-
-	public void testIsTraceEnabled() {
-		assertTrue(simpleLogger.isTraceEnabled());
-	}
-
-	public void testIsWarnEnabled() {
-		assertTrue(simpleLogger.isWarnEnabled());
-	}
-
-	public void testTraceObject() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.trace(object);
-	}
-
-	public void testTraceObjectThrowable() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.info(object, throwable);
-	}
-
-	public void testWarnObject() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.warn(object);
-	}
-
-	public void testWarnObjectThrowable() {
-		shouldBeCalled = outStream;
-		shouldNotBeCalled = errStream;
-		simpleLogger.warn(object, throwable);
-	}
+    private void assertThrowablePrintedToSystemOut() {
+        verify(this.throwable).printStackTrace(eq(this.out));
+    }
 }

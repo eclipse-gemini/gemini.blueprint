@@ -6,6 +6,7 @@ Import-Template:
  org.springframework.*;version=${spring.version.range},
  org.apache.commons.logging.*;version=${logging.version.range},
  *;resolution:=optional
+Excluded-Imports: com_cenqua_clover*
 Bundle-Name: ${project.artifactId}
 Bundle-Version: ${project.version}
 Bundle-SymbolicName: ${spring.osgi.symbolic.name}
@@ -23,9 +24,7 @@ Spring-Version: ${spring.maven.artifact.version}
 Build-Jdk: ${java.version}
 Build-Plan: ${env.buildPlan}
 Build-Number: ${env.buildNumber}
-SVN-Revision: ${env.svnRevision}
-Unversioned-Imports: *
-Excluded-Imports: com_cenqua_clover*
+Git-Revision: ${git.commit.id.describe}
 Ignored-Existing-Headers:
  Ant-Version,
  Archiver-Version,

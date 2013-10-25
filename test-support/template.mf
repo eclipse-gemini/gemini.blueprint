@@ -13,9 +13,10 @@ Import-Template:
  org.apache.felix.*;resolution:=optional,
  junit.*;version=3.8,
  *;resolution:=optional
+Excluded-Imports: com_cenqua_clover*,
+ org.eclipse.gemini.blueprint.extender.internal*,
+ org.eclipse.gemini.blueprint.extender.support.internal*
 Bundle-Activator: org.eclipse.gemini.blueprint.test.internal.support.Activator
-Unversioned-Imports: 
- *
 Bundle-Name: ${project.artifactId}
 Bundle-Version: ${project.version}
 Bundle-SymbolicName: ${spring.osgi.symbolic.name}
@@ -33,8 +34,7 @@ Spring-Version: ${spring.maven.artifact.version}
 Build-Jdk: ${java.version}
 Build-Plan: ${env.buildPlan}
 Build-Number: ${env.buildNumber}
-SVN-Revision: ${env.svnRevision}
-Excluded-Imports: com_cenqua_clover*
+Git-Revision: ${git.commit.id.describe}
 Ignored-Existing-Headers:
  Ant-Version,
  Archiver-Version,

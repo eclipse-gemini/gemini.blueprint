@@ -17,3 +17,7 @@ eclipse_config
 *.iml
 *.ipl
 .idea/
+
+# etc
+dependency-reduced-pom.xml
+**/resources/git.properties

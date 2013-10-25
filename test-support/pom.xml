@@ -26,9 +26,9 @@
 
         <spring.osgi.symbolic.name>${symName.prefix}.test</spring.osgi.symbolic.name>
 
-        <jarjar.run>on</jarjar.run>
-        <jarjar.keep>org.eclipse.gemini.blueprint.test.**</jarjar.keep>
-        <jarjar.dep>${maven.dependency.org.eclipse.gemini.blueprint.gemini-blueprint-extender.jar.path}</jarjar.dep>
+        <!--<jarjar.run>on</jarjar.run>-->
+        <!--<jarjar.keep>org.eclipse.gemini.blueprint.test.**</jarjar.keep>-->
+        <!--<jarjar.dep>${maven.dependency.org.eclipse.gemini.blueprint.gemini-blueprint-extender.jar.path}</jarjar.dep>-->
 
         <bundle.description>${project.description}</bundle.description>
     </properties>
@@ -151,6 +151,41 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+
+                            <finalName>${project.build.finalName}</finalName>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.eclipse.gemini.blueprint:gemini-blueprint-test</include>
+                                    <include>org.eclipse.gemini.blueprint:gemini-blueprint-extender</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

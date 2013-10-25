@@ -49,10 +49,22 @@
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-           	<artifactId>org.osgi.compendium</artifactId>
+            <artifactId>org.osgi.compendium</artifactId>
             <version>4.2.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
