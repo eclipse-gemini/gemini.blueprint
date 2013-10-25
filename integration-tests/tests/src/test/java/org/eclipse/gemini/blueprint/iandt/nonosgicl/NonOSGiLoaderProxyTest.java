@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.iandt.nonosgicl;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.logging.Logger;
@@ -77,7 +78,7 @@ public class NonOSGiLoaderProxyTest extends BaseIntegrationTest {
 			return null;
 		}
 
-        public Logger getParentLogger() throws SQLException {
+        public Logger getParentLogger() throws SQLFeatureNotSupportedException {
             return null;
         }
     }
