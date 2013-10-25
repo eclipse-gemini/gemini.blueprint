@@ -26,7 +26,7 @@ public class DictionaryEditorTest extends AbstractDependencyInjectionSpringConte
 
 
 	/**
-	 * @param dictionary The dictionary to set.
+	 * @param property The dictionary to set.
 	 */
 	public void setDictionary(Dictionary property) {
 		this.dictionary = property;

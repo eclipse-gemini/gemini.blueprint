@@ -87,7 +87,7 @@ public class DifferentParentsInDifferentBundlesTest extends TestCase {
 
 	private Manifest getParsedManifestFor(CaseWithVisibleMethodsBaseTest testCase) throws Exception {
 
-		System.out.println(ObjectUtils.nullSafeToString(testCase.getBundleContentPattern()));
+//		System.out.println(ObjectUtils.nullSafeToString(testCase.getBundleContentPattern()));
 		Field jarSettings = AbstractConfigurableBundleCreatorTests.class.getDeclaredField("jarSettings");
 		// initialize settings
 		jarSettings.setAccessible(true);
