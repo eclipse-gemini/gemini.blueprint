@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d %p [%c] - %m%n</pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>TRACE</level>
+    </filter>
+  </appender>
+  <logger name="org.springframework.osgi" level="INFO"/>
+  <logger name="org.springframework.osgi.util" level="TRACE"/>
+  <root level="INFO">
+    <appender-ref ref="stdout"/>
+  </root>
+</configuration>
