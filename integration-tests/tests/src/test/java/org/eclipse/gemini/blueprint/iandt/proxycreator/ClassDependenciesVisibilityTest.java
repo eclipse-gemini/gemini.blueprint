@@ -23,10 +23,8 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.eclipse.gemini.blueprint.service.importer.support.*;
 import org.osgi.framework.AdminPermission;
-import org.eclipse.gemini.blueprint.service.importer.support.Cardinality;
-import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoader;
-import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
 
 /**
  * Integration test for bug OSGI-597.
@@ -46,8 +44,8 @@ public class ClassDependenciesVisibilityTest extends BaseIntegrationTest {
 		System.out.println(cl);
 		OsgiServiceProxyFactoryBean fb = new OsgiServiceProxyFactoryBean();
 		fb.setBundleContext(bundleContext);
-		fb.setCardinality(Cardinality.C_0__1);
-		fb.setContextClassLoader(ImportContextClassLoader.UNMANAGED);
+        fb.setAvailability(Availability.OPTIONAL);
+		fb.setImportContextClassLoader(ImportContextClassLoaderEnum.UNMANAGED);
 		fb.setInterfaces(new Class<?>[] { DocumentEvent.class });
 		fb.setBeanClassLoader(cl);
 		fb.setApplicationEventPublisher(applicationContext);

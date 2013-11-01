@@ -121,7 +121,7 @@ public class FragmentTest extends BaseIoTest {
 	}
 
 	public void testRootFileOnlyInHostBundle() {
-		Object[] res = copyEnumeration(bundle.findEntries("/", "log4j.properties", false));
+		Object[] res = copyEnumeration(bundle.findEntries("/", "logback.xml", false));
 		assertResourceArray(res, 1);
 	}
 

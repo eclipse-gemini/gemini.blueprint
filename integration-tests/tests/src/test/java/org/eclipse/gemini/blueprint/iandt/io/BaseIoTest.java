@@ -53,7 +53,7 @@ public abstract class BaseIoTest extends BaseIntegrationTest {
 
 
 	protected String[] getBundleContentPattern() {
-		return (String[]) ObjectUtils.addObjectToArray(super.getBundleContentPattern(),
+		return ObjectUtils.addObjectToArray(super.getBundleContentPattern(),
 			"org/eclipse/gemini/blueprint/iandt/io/BaseIoTest.class");
 	}
 
@@ -121,11 +121,10 @@ public abstract class BaseIoTest extends BaseIntegrationTest {
 	}
 
 	protected void printPathWithinContext(Resource[] resources) {
-		for (int i = 0; i < resources.length; i++) {
-			Resource resource = resources[i];
-			assertTrue(resource instanceof ContextResource);
-			// Disabled print out
-			//System.out.println("Path within context " + ((ContextResource) resource).getPathWithinContext());
-		}
+        for (Resource resource : resources) {
+            assertTrue(resource instanceof ContextResource);
+            // Disabled print out
+            //System.out.println("Path within context " + ((ContextResource) resource).getPathWithinContext());
+        }
 	}
 }

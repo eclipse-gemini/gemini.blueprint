@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%r [%t] %-5p: %-15c{2} - %m%n</pattern>
+    </encoder>
+  </appender>
+  <logger name="org.springframework.osgi" level="WARN"/>
+  <logger name="org.springframework" level="WARN"/>
+  <logger name="org.springframework.osgi.config.internal.adapter" level="INFO"/>
+  <logger name="org.springframework.beans.factory.support" level="WARN"/>
+  <root level="warn">
+    <appender-ref ref="stdout"/>
+  </root>
+</configuration>

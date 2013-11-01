@@ -38,7 +38,8 @@
         <spring.osgi.license.loc>..</spring.osgi.license.loc>
 
         <!-- other properties -->
-        <slf4j.version>1.6.4</slf4j.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <logback.version>1.0.13</logback.version>
         <env.buildPlan></env.buildPlan>
         <env.buildNumber></env.buildNumber>
         <!-- change that to gitVersion and add a way to get git version of the build -->
@@ -46,8 +47,8 @@
 
         <!-- platform versions -->
         <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
-        <kf.ver>5.3.3</kf.ver>
         <!-- Knopflerfish 3.5 -->
+        <kf.ver>5.3.3</kf.ver>
         <felix.ver>2.0.5</felix.ver>
 
         <!-- javadoc configuration -->
@@ -362,30 +363,36 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.log4j</groupId>
-            <artifactId>com.springsource.org.apache.log4j</artifactId>
-            <version>1.2.16</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-log4j12</artifactId>-->
+            <!--<version>${slf4j.version}</version>-->
+            <!--<scope>provided</scope>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>log4j</groupId>-->
+                    <!--<artifactId>log4j</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.log4j</groupId>-->
+            <!--<artifactId>com.springsource.org.apache.log4j</artifactId>-->
+            <!--<version>1.2.16</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>log4j</groupId>-->
+            <!--<artifactId>log4j</artifactId>-->
+            <!--<version>1.2.16</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
 
     </dependencies>
 
@@ -562,6 +569,42 @@
                     <target>1.5</target>
                     <debug>true</debug>
                     <fork>true</fork>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+                            <Bundle-Name>${project.artifactId}</Bundle-Name>
+                            <Bundle-Version>${project.version}</Bundle-Version>
+                            <Bundle-SymbolicName>${spring.osgi.symbolic.name}.source</Bundle-SymbolicName>
+                            <Bundle-Vendor>Eclipse Foundation</Bundle-Vendor>
+                            <Bundle-DocURL>http://www.eclipse.org/gemini/blueprint/</Bundle-DocURL>
+                            <Bundle-Description>${bundle.description}</Bundle-Description>
+                            <Bundle-License>http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php</Bundle-License>
+                            <Implementation-Title>Eclipse Gemini Blueprint</Implementation-Title>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Implementation-Vendor>Eclipse Foundation</Implementation-Vendor>
+                            <Implementation-Vendor-Id>org.eclipse.gemini.blueprint</Implementation-Vendor-Id>
+                            <Gemini-Blueprint-Version>${project.version}</Gemini-Blueprint-Version>
+                            <Spring-Version>${spring.maven.artifact.version}</Spring-Version>
+                            <Git-Revision>${git.commit.id.describe}</Git-Revision>
+                            <Eclipse-SourceBundle>${spring.osgi.symbolic.name};version="${project.version}";roots:="."</Eclipse-SourceBundle>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
 
