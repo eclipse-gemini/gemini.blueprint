@@ -593,7 +593,7 @@
                             <Bundle-SymbolicName>${spring.osgi.symbolic.name}.source</Bundle-SymbolicName>
                             <Bundle-Vendor>Eclipse Foundation</Bundle-Vendor>
                             <Bundle-DocURL>http://www.eclipse.org/gemini/blueprint/</Bundle-DocURL>
-                            <Bundle-Description>${bundle.description}</Bundle-Description>
+                            <!--<Bundle-Description>${bundle.description}</Bundle-Description>-->
                             <Bundle-License>http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php</Bundle-License>
                             <Implementation-Title>Eclipse Gemini Blueprint</Implementation-Title>
                             <Implementation-Version>${project.version}</Implementation-Version>
