@@ -368,32 +368,6 @@
             <version>${logback.version}</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-log4j12</artifactId>-->
-            <!--<version>${slf4j.version}</version>-->
-            <!--<scope>provided</scope>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>log4j</groupId>-->
-                    <!--<artifactId>log4j</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.log4j</groupId>-->
-            <!--<artifactId>com.springsource.org.apache.log4j</artifactId>-->
-            <!--<version>1.2.16</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
-            <!--<version>1.2.16</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
     </dependencies>
 
     <build>
@@ -992,17 +966,18 @@
             <name>www.eclipse.org/gemini/blueprint</name>
             <url>http://www.eclipse.org/gemini/blueprint/</url>
         </site>
-        <!-- TODO: Need to participate in Gemini maven repo
         <repository>
-            <id>zodiac-milestone</id>
-            <name>Zodiac Milestone Repository</name>
-            <url>s3://zodiac.springsource.com/maven/bundles/milestone</url>
+            <id>repo.eclipse.org</id>
+            <name>Project Repository - Releases</name>
+            <url>https://repo.eclipse.org/content/repositories/gemini-blueprint-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>zodiac-snapshot</id>
-            <name>Zodiac Snapshot Repository</name>
-            <url>s3://zodiac.springsource.com/maven/bundles/snapshot</url>
-        </snapshotRepository> -->
+            <!-- makes it simpler for virgo to consumer specific snapshots -->
+            <uniqueVersion>true</uniqueVersion>
+            <id>repo.eclipse.org</id>
+            <name>Project Repository - Snapshots</name>
+            <url>https://repo.eclipse.org/content/repositories/gemini-blueprint-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
 
