@@ -545,8 +545,10 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		String bundleString = OsgiStringUtils.nullSafeNameAndSymName(bundle);
 		boolean debug = logger.isDebugEnabled();
 
-		if (debug)
+		if (debug) {
 			logger.debug("Test bundle [" + bundleString + "] successfully installed");
+            logger.debug(Constants.FRAMEWORK_BOOTDELEGATION + " = " + context.getProperty(Constants.FRAMEWORK_BOOTDELEGATION));
+        }
 		bundle.start();
 		if (debug)
 			logger.debug("Test bundle [" + bundleString + "] successfully started");

@@ -162,6 +162,12 @@ public abstract class AbstractConfigurableOsgiTests extends AbstractOsgiTests {
 		List defaults = new ArrayList();
 		// javax packages
 		defaults.add("javax.*");
+
+        // sql + transaction + activation?
+        defaults.add("javax.sql.*");
+        defaults.add("javax.transaction.*");
+        defaults.add("javax.activation.*");
+
 		// XML API available in JDK 1.4
 		defaults.add("org.w3c.*");
 		defaults.add("org.xml.*");

@@ -15,6 +15,15 @@
     <packaging>pom</packaging>
     <name>Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
+    <description>
+        Eclipse Gemini Blueprint project makes it easy to build Java applications that run in an OSGi framework. By
+        using Gemini Blueprint, applications benefit from using a
+        better separation of modules, the ability to dynamically add, remove, and update modules in a running system,
+        the ability to deploy multiple versions of a module
+        simultaneously (and have clients automatically bind to the appropriate one), and a dynamic service model.
+    </description>
+    <inceptionYear>2006</inceptionYear>
+
     <properties>
         <!-- Source file encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,8 +49,7 @@
         <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
         <!-- Knopflerfish 3.5 -->
         <kf.ver>5.3.3</kf.ver>
-        <!-- need this version so we can run against jdk 7 -->
-        <felix.ver>3.2.2</felix.ver>
+        <felix.ver>2.0.5</felix.ver>
 
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -65,15 +73,6 @@
         <gemini.blueprint.version.range>"${gemini.blueprint.version.range.nq}"</gemini.blueprint.version.range>
         <logging.version.range>"[1.0,2.0)"</logging.version.range>
     </properties>
-    <description>
-        Eclipse Gemini Blueprint project makes it easy to build Java applications that run in an OSGi framework. By
-        using Gemini Blueprint, applications benefit from using a
-        better separation of modules, the ability to dynamically add, remove, and update modules in a running system,
-        the ability to deploy multiple versions of a module
-        simultaneously (and have clients automatically bind to the appropriate one), and a dynamic service model.
-    </description>
-
-    <inceptionYear>2006</inceptionYear>
 
     <!-- ============================================= -->
     <!-- Basic configuration: JIRA, SCM, CI, devs etc. -->
@@ -594,7 +593,7 @@
                             <Bundle-SymbolicName>${spring.osgi.symbolic.name}.source</Bundle-SymbolicName>
                             <Bundle-Vendor>Eclipse Foundation</Bundle-Vendor>
                             <Bundle-DocURL>http://www.eclipse.org/gemini/blueprint/</Bundle-DocURL>
-                            <Bundle-Description>${bundle.description}</Bundle-Description>
+                            <!--<Bundle-Description>${bundle.description}</Bundle-Description>-->
                             <Bundle-License>http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php</Bundle-License>
                             <Implementation-Title>Eclipse Gemini Blueprint</Implementation-Title>
                             <Implementation-Version>${project.version}</Implementation-Version>
@@ -993,17 +992,18 @@
             <name>www.eclipse.org/gemini/blueprint</name>
             <url>http://www.eclipse.org/gemini/blueprint/</url>
         </site>
-        <!-- TODO: Need to participate in Gemini maven repo
         <repository>
-            <id>zodiac-milestone</id>
-            <name>Zodiac Milestone Repository</name>
-            <url>s3://zodiac.springsource.com/maven/bundles/milestone</url>
+            <id>repo.eclipse.org</id>
+            <name>Project Repository - Releases</name>
+            <url>https://repo.eclipse.org/content/repositories/gemini-blueprint-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>zodiac-snapshot</id>
-            <name>Zodiac Snapshot Repository</name>
-            <url>s3://zodiac.springsource.com/maven/bundles/snapshot</url>
-        </snapshotRepository> -->
+            <!-- makes it simpler for virgo to consumer specific snapshots -->
+            <uniqueVersion>true</uniqueVersion>
+            <id>repo.eclipse.org</id>
+            <name>Project Repository - Snapshots</name>
+            <url>https://repo.eclipse.org/content/repositories/gemini-blueprint-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
 

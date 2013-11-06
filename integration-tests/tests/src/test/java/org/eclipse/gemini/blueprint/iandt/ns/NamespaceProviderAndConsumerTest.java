@@ -55,7 +55,7 @@ public class NamespaceProviderAndConsumerTest extends BaseIntegrationTest {
 		assertNotNull(nsBean);
 	}
 
-	public void tstNamespaceFilesOnTheClassPath() throws Exception {
+	public void testNamespaceFilesOnTheClassPath() throws Exception {
 		Bundle bundle = OsgiBundleUtils.findBundleBySymbolicName(bundleContext, BND_SYM_NAME);
 		assertNotNull("cannot find handler bundle", bundle);
 		URL handlers = bundle.getResource("META-INF/spring.handlers");
