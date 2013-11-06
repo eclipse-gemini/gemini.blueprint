@@ -5,5 +5,10 @@ Bundle-ManifestVersion: 2
 Bundle-ClassPath: . 
 Import-Package: org.springframework.beans.factory,
  org.eclipse.gemini.blueprint.context,
- org.osgi.framework
+ org.osgi.framework,
+ org.apache.commons.logging,
+ org.springframework.context,
+ org.springframework.context.support,
+ org.springframework.core.io,
+ org.springframework.core.io.support
   

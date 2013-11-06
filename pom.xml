@@ -40,7 +40,8 @@
         <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
         <!-- Knopflerfish 3.5 -->
         <kf.ver>5.3.3</kf.ver>
-        <felix.ver>2.0.5</felix.ver>
+        <!-- need this version so we can run against jdk 7 -->
+        <felix.ver>3.2.2</felix.ver>
 
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -906,18 +907,18 @@
                             <groupId>org.apache.felix</groupId>
                             <artifactId>org.apache.felix.framework</artifactId>
                         </exclusion>
-                        <exclusion>
-                            <groupId>org.apache.felix</groupId>
-                            <artifactId>org.apache.felix.shell</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>org.apache.felix</groupId>
-                            <artifactId>org.apache.felix.shell.tui</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>org.apache.felix</groupId>
-                            <artifactId>org.apache.felix.bundlerepository</artifactId>
-                        </exclusion>
+                        <!--<exclusion>-->
+                            <!--<groupId>org.apache.felix</groupId>-->
+                            <!--<artifactId>org.apache.felix.shell</artifactId>-->
+                        <!--</exclusion>-->
+                        <!--<exclusion>-->
+                            <!--<groupId>org.apache.felix</groupId>-->
+                            <!--<artifactId>org.apache.felix.shell.tui</artifactId>-->
+                        <!--</exclusion>-->
+                        <!--<exclusion>-->
+                            <!--<groupId>org.apache.felix</groupId>-->
+                            <!--<artifactId>org.apache.felix.bundlerepository</artifactId>-->
+                        <!--</exclusion>-->
                     </exclusions>
                 </dependency>
                 <!-- include the OSGi jar to allow PermissionAdmin API to be used -->

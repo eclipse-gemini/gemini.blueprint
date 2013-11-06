@@ -289,6 +289,11 @@ public abstract class BaseIntegrationTest extends AbstractConfigurableBundleCrea
 		platform.getConfigurationProperties().setProperty("org.osgi.framework.storage.clean", "onFirstInit");
 		
 		platform.getConfigurationProperties().setProperty("felix.fragment.validation", "warning");
+        platform.getConfigurationProperties().setProperty("felix.log.level", "4");
+
+        // todo: set system property to point to logback file.
+        // todo: figure out a better way to attach logback includes.xml files.
+
 		
 		// KF 3.1 settings
 		//platform.getConfigurationProperties().setProperty("org.knopflerfish.framework.all_signed", "false");

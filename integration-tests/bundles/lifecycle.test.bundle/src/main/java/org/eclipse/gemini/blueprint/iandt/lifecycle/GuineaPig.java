@@ -15,6 +15,8 @@
 
 package org.eclipse.gemini.blueprint.iandt.lifecycle;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
@@ -31,6 +33,7 @@ public class GuineaPig implements InitializingBean, DisposableBean, BundleContex
     BundleContext bundleContext;
     Listener listener;
 
+    private static final Log log = LogFactory.getLog(GuineaPig.class);
 
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
@@ -52,7 +55,7 @@ public class GuineaPig implements InitializingBean, DisposableBean, BundleContex
 
     static class Listener implements FrameworkListener {
         public void frameworkEvent(FrameworkEvent frameworkEvent) {
-            System.out.println("Eavesdropping on " + frameworkEvent);
+            log.info("Eavesdropping on " + frameworkEvent);
         }
     }
 }
