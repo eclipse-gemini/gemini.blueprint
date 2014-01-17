@@ -21,7 +21,7 @@ import java.util.Hashtable;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
@@ -43,16 +43,13 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 
 	private OsgiServiceProxyFactoryBean serviceFactoryBean;
 
-	private MockControl mockControl;
-
 	private BundleContext bundleContext;
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		this.serviceFactoryBean = new OsgiServiceProxyFactoryBean();
 		this.serviceFactoryBean.setBeanClassLoader(getClass().getClassLoader());
-		this.mockControl = MockControl.createControl(BundleContext.class);
-		this.bundleContext = (BundleContext) this.mockControl.getMock();
+		this.bundleContext = createMock(BundleContext.class);
 	}
 
 	public void testAfterPropertiesSetNoBundle() throws Exception {

@@ -16,7 +16,8 @@ package org.eclipse.gemini.blueprint.context.support;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
+
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.osgi.framework.BundleContext;
@@ -28,38 +29,36 @@ import org.osgi.framework.BundleContext;
  */
 public abstract class BundleContextAwareProcessorTest extends TestCase{
 
-	private MockControl bundleContextControl;
-	private MockControl bundleContextAwareControl;
+    // TODO: is this test still applicable?  Does not look like it is testing anything.
+
 	private BundleContext mockContext;
 	private BundleContextAware mockAware;
 	
 	protected void setUp() throws Exception {
-		this.bundleContextControl = MockControl.createControl(BundleContext.class);
-		this.mockContext = (BundleContext) this.bundleContextControl.getMock();
+		this.mockContext = createMock(BundleContext.class);
 		// no tests should ever call the mockContext, we're really
 		// using it just as a convenient implementation
-		this.bundleContextControl.replay();
-		
-		this.bundleContextAwareControl = MockControl.createControl(BundleContextAware.class);
-		this.mockAware = (BundleContextAware) this.bundleContextAwareControl.getMock();
+		replay(mockContext);
+
+		this.mockAware = createMock(BundleContextAware.class);
 	}
 	
 	protected void tearDown() throws Exception {
-		this.bundleContextControl.verify();
+		verify(mockContext);
 	}
 	
 	public void testBeforeInitializationNoBundleContext() {
 		BundleContextAwareProcessor bcaProcessor = new BundleContextAwareProcessor(null);
-		this.bundleContextAwareControl.replay();
+		replay(mockAware);
 		try {
-			//bcaProcessor.postProcessAfterInstantiation(this.mockAware, "aName");
+//			bcaProcessor.postProcessAfterInstantiation(this.mockAware, "aName");
 			fail("should throw an IllegalStateException when no BundleContext available");
 		} 
 		catch(IllegalStateException ex) {
 			assertEquals("Cannot satisfy BundleContextAware for bean 'aName' without BundleContext",
 					     ex.getMessage());
 		}
-		this.bundleContextAwareControl.verify();
+		verify(mockAware);
 	}
 	
 	public void testBeforeInitializationNonImplementer() {
@@ -72,9 +71,9 @@ public abstract class BundleContextAwareProcessorTest extends TestCase{
 	public void testBeforeInitializationBundleContextImplementer() {
 		BundleContextAwareProcessor bcaProcessor = new BundleContextAwareProcessor(this.mockContext);
 		this.mockAware.setBundleContext(this.mockContext);
-		this.bundleContextAwareControl.replay();
+		replay(mockAware);
 		//boolean ret = bcaProcessor.postProcessAfterInstantiation(this.mockAware, "aName");
-		this.bundleContextAwareControl.verify();
+		verify(mockAware);
 		//assertTrue("should return true",ret);
 	}
 	

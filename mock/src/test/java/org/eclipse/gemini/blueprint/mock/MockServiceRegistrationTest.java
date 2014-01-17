@@ -19,10 +19,9 @@ import java.util.Hashtable;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
-import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
 import org.osgi.framework.ServiceReference;
+
+import static org.easymock.EasyMock.*;
 
 /**
  * @author Costin Leau
@@ -95,7 +94,7 @@ public class MockServiceRegistrationTest extends TestCase {
 		assertNull(mock.getReference().getProperty(key));
 		mock.setProperties(props);
 		assertSame(value, mock.getReference().getProperty(key));
-		mock.setReference((ServiceReference) MockControl.createNiceControl(ServiceReference.class).getMock());
+		mock.setReference(createMock(ServiceReference.class));
 
 		try {
 			mock.setProperties(props);

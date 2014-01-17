@@ -20,7 +20,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.bundle.BundleActionEnum;
 import org.eclipse.gemini.blueprint.bundle.BundleFactoryBean;
@@ -46,8 +46,6 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 	private Bundle startBundle, installBundle, updateBundle, bundleA;
 
-	private MockControl installBundleMC, startBundleMC, updateBundleMC;
-
 	private static List INSTALL_BUNDLE_ACTION;
 
 	private Bundle[] bundleToInstall = new Bundle[1];
@@ -57,17 +55,15 @@ public class BundleFactoryBeanParserTest extends TestCase {
 	protected void setUp() throws Exception {
 		INSTALL_BUNDLE_ACTION = new ArrayList();
 
-		installBundleMC = MockControl.createControl(Bundle.class);
-		installBundle = (Bundle) installBundleMC.getMock();
-		installBundleMC.expectAndReturn(installBundle.getSymbolicName(), "installBundle", MockControl.ZERO_OR_MORE);
+		installBundle = createMock("installBundle", Bundle.class);
+		expect(installBundle.getSymbolicName()).andReturn("installBundle").anyTimes();
 
-		updateBundleMC = MockControl.createControl(Bundle.class);
-		updateBundle = (Bundle) updateBundleMC.getMock();
-		updateBundleMC.expectAndReturn(updateBundle.getSymbolicName(), "updateBundle", MockControl.ONE_OR_MORE);
+		updateBundle = createMock("updateBundle", Bundle.class);
+		expect(updateBundle.getSymbolicName()).andReturn("updateBundle").atLeastOnce();
 
-		startBundleMC = MockControl.createControl(Bundle.class);
-		startBundle = (Bundle) startBundleMC.getMock();
-		startBundleMC.expectAndReturn(startBundle.getSymbolicName(), "startBundle", MockControl.ONE_OR_MORE);
+		startBundle = createMock("startBundle", Bundle.class);
+        expect(startBundle.getSymbolicName()).andReturn("startBundle").atLeastOnce();
+
 
 		bundleA = new MockBundle("bundleA");
 
@@ -106,9 +102,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 	}
 
 	private void refresh() {
-		installBundleMC.replay();
-		startBundleMC.replay();
-		updateBundleMC.replay();
+		replay(installBundle, startBundle, updateBundle);
 
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(appContext);
 		reader.loadBeanDefinitions(new ClassPathResource("bundleBeanFactoryTest.xml", getClass()));
@@ -118,7 +112,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 	public void testWithSymName() throws Exception {
 		refresh();
-		BundleFactoryBean fb = (BundleFactoryBean) appContext.getBean("&wSymName", BundleFactoryBean.class);
+		BundleFactoryBean fb = appContext.getBean("&wSymName", BundleFactoryBean.class);
 		assertSame(bundleA, fb.getObject());
 		assertNull(fb.getLocation());
 		assertNull(fb.getResource());
@@ -127,7 +121,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 	public void testLocationAndResource() throws Exception {
 		refresh();
-		BundleFactoryBean fb = (BundleFactoryBean) appContext.getBean("&wLocation", BundleFactoryBean.class);
+		BundleFactoryBean fb = appContext.getBean("&wLocation", BundleFactoryBean.class);
 		assertEquals("fromServer", fb.getLocation());
 		assertNull(fb.getSymbolicName());
 		assertNotNull(fb.getResource());
@@ -139,14 +133,14 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 		refresh();
 
-		BundleFactoryBean fb = (BundleFactoryBean) appContext.getBean("&start", BundleFactoryBean.class);
+		BundleFactoryBean fb = appContext.getBean("&start", BundleFactoryBean.class);
 
 		BundleActionEnum action = getAction(fb);
 		assertSame(BundleActionEnum.START, action);
 		assertNull(getDestroyAction(fb));
 
 		assertSame(startBundle, appContext.getBean("start"));
-		startBundleMC.verify();
+		verify(startBundle);
 	}
 
 	public void testStopBundle() throws Exception {
@@ -157,13 +151,13 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 		refresh();
 
-		BundleFactoryBean fb = (BundleFactoryBean) appContext.getBean("&stop", BundleFactoryBean.class);
+		BundleFactoryBean fb = appContext.getBean("&stop", BundleFactoryBean.class);
 		assertSame(BundleActionEnum.STOP, getDestroyAction(fb));
 
 		assertSame(startBundle, appContext.getBean("stop"));
 
 		appContext.close();
-		startBundleMC.verify();
+		verify(startBundle);
 	}
 
 	public void testUpdateBundle() throws Exception {
@@ -173,7 +167,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		updateBundle.stop();
 		refresh();
 
-		BundleFactoryBean fb = (BundleFactoryBean) appContext.getBean("&update", BundleFactoryBean.class);
+		BundleFactoryBean fb = appContext.getBean("&update", BundleFactoryBean.class);
 
 		BundleActionEnum action = getAction(fb);
 		assertSame(BundleActionEnum.UPDATE, action);
@@ -181,7 +175,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 		assertSame(updateBundle, appContext.getBean("update"));
 		appContext.close();
-		updateBundleMC.verify();
+		verify(updateBundle);
 	}
 
 	public void testInstall() throws Exception {
@@ -192,14 +186,14 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 		refresh();
 
-		BundleFactoryBean fb = (BundleFactoryBean) appContext.getBean("&install", BundleFactoryBean.class);
+		BundleFactoryBean fb = appContext.getBean("&install", BundleFactoryBean.class);
 		assertEquals("fromClient", fb.getLocation());
 		assertEquals(1, INSTALL_BUNDLE_ACTION.size());
 		assertEquals("fromClient", INSTALL_BUNDLE_ACTION.get(0));
 
 		assertSame(installBundle, appContext.getBean("install"));
 		appContext.close();
-		installBundleMC.verify();
+		verify(installBundle);
 	}
 
 	public void testInstallImpliedByUpdateUsingRealLocation() throws Exception {
@@ -211,7 +205,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		refresh();
 
 		BundleFactoryBean fb =
-				(BundleFactoryBean) appContext.getBean("&updateFromActualLocation", BundleFactoryBean.class);
+                appContext.getBean("&updateFromActualLocation", BundleFactoryBean.class);
 		assertEquals(1, INSTALL_BUNDLE_ACTION.size());
 
 		assertSame(BundleActionEnum.UPDATE, getAction(fb));
@@ -221,22 +215,23 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 		assertSame(installBundle, appContext.getBean("updateFromActualLocation"));
 		appContext.close();
-		installBundleMC.verify();
+		verify(installBundle);
 	}
 
 	public void testNestedBundleDeclaration() throws Exception {
-		MockControl ctrl = MockControl.createControl(Bundle.class);
-		Bundle bnd = (Bundle) ctrl.getMock();
+		Bundle bnd = createMock(Bundle.class);
 
 		bnd.start();
-		ctrl.replay();
+
+        replay(bnd);
+
 		appContext.getBeanFactory().registerSingleton("createdByTheTest", bnd);
 		refresh();
 
 		appContext.getBean("nested");
-		BundleFactoryBean fb = (BundleFactoryBean) appContext.getBean("&nested", BundleFactoryBean.class);
+		BundleFactoryBean fb = appContext.getBean("&nested", BundleFactoryBean.class);
 
-		ctrl.verify();
+		verify(bnd);
 	}
 
 	private BundleActionEnum getAction(BundleFactoryBean fb) {

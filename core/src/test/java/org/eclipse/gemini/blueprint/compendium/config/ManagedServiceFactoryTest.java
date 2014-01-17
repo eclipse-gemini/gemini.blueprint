@@ -22,7 +22,7 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.compendium.internal.cm.ManagedServiceFactoryFactoryBean;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
@@ -47,10 +47,10 @@ public class ManagedServiceFactoryTest extends TestCase {
 
 	protected void setUp() throws Exception {
 
-		MockControl mc = MockControl.createNiceControl(Configuration.class);
-		final Configuration cfg = (Configuration) mc.getMock();
-		mc.expectAndReturn(cfg.getProperties(), new Properties());
-		mc.replay();
+
+		final Configuration cfg = createMock(Configuration.class);
+		expect(cfg.getProperties()).andReturn(new Properties());
+		replay(cfg);
 
 		BundleContext bundleContext = new MockBundleContext() {
 

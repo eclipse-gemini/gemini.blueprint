@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.springframework.aop.framework.ProxyFactory;
@@ -32,15 +32,11 @@ import org.springframework.util.ObjectUtils;
  * @since 2.0
  */
 public class OsgiServiceUtilsTest extends TestCase {
-
-	private MockControl mockControl;
-
 	private BundleContext bundleContext;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		this.mockControl = MockControl.createControl(BundleContext.class);
-		this.bundleContext = (BundleContext) this.mockControl.getMock();
+		this.bundleContext = createMock(BundleContext.class);
 	}
 
 //	public void testGetServiceWithBadFilter() throws InvalidSyntaxException {
@@ -140,8 +136,7 @@ public class OsgiServiceUtilsTest extends TestCase {
 //	}
 
 	private ServiceReference getServiceReference() {
-		MockControl sRefControl = MockControl.createNiceControl(ServiceReference.class);
-		return (ServiceReference) sRefControl.getMock();
+		return createNiceMock(ServiceReference.class);
 	}
 
 	public void testSimpleClassDetermination() throws Exception {

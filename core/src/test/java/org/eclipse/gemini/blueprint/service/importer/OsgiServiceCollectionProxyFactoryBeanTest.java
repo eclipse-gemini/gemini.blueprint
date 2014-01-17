@@ -20,7 +20,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
@@ -80,9 +80,7 @@ public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
 	public void testListenersSetOnCollection() throws Exception {
 		serviceFactoryBean.setAvailability(Availability.OPTIONAL);
 
-		OsgiServiceLifecycleListener[] listeners =
-				{ (OsgiServiceLifecycleListener) MockControl.createControl(OsgiServiceLifecycleListener.class)
-						.getMock() };
+		OsgiServiceLifecycleListener[] listeners = { createMock(OsgiServiceLifecycleListener.class) };
 		serviceFactoryBean.setListeners(listeners);
 		serviceFactoryBean.afterPropertiesSet();
 

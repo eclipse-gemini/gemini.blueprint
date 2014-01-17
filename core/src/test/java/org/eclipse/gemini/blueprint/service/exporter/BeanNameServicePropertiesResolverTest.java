@@ -20,11 +20,14 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
-import org.eclipse.gemini.blueprint.service.exporter.support.BeanNameServicePropertiesResolver;
+import static org.easymock.EasyMock.*;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+
+import org.eclipse.gemini.blueprint.service.exporter.support.BeanNameServicePropertiesResolver;
+
 
 /**
  * @author Adrian Colyer
@@ -43,31 +46,25 @@ public class BeanNameServicePropertiesResolverTest extends TestCase {
 	}
 
 	public void testGetServiceProperties() {
-		MockControl bundleContextControl = MockControl.createControl(BundleContext.class);
-		BundleContext mockContext = (BundleContext) bundleContextControl.getMock();
-		MockControl bundleControl = MockControl.createControl(Bundle.class);
-		Bundle mockBundle = (Bundle) bundleControl.getMock();
+        BundleContext mockContext = createMock(BundleContext.class);
+        Bundle mockBundle = createMock(Bundle.class);
 
-		mockContext.getBundle();
-		bundleContextControl.setReturnValue(mockBundle);
-		mockBundle.getSymbolicName();
-		bundleControl.setReturnValue("symbolic-name");
-		mockContext.getBundle();
-		bundleContextControl.setReturnValue(mockBundle);
-		mockBundle.getHeaders();
-		Properties props = new Properties();
-		props.put(Constants.BUNDLE_VERSION, "1.0.0");
-		bundleControl.setReturnValue(props);
+		expect(mockContext.getBundle()).andReturn(mockBundle);
+		expect(mockBundle.getSymbolicName()).andReturn("symbolic-name");
+        expect(mockContext.getBundle()).andReturn(mockBundle);
 
-		bundleContextControl.replay();
-		bundleControl.replay();
+        Properties props = new Properties();
+        props.put(Constants.BUNDLE_VERSION, "1.0.0");
+
+        expect(mockBundle.getHeaders()).andReturn(props);
+
+        replay(mockBundle, mockContext);
 
 		BeanNameServicePropertiesResolver resolver = new BeanNameServicePropertiesResolver();
 		resolver.setBundleContext(mockContext);
 		Map ret = resolver.getServiceProperties("myBean");
 
-		bundleControl.verify();
-		bundleContextControl.verify();
+		verify(mockBundle, mockContext);
 
 		assertEquals("5 properties", 5, ret.size());
 		assertEquals("symbolic-name", ret.get("Bundle-SymbolicName"));

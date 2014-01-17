@@ -23,7 +23,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.config.internal.adapter.OsgiServiceRegistrationListenerAdapter;
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener;
 import org.eclipse.gemini.blueprint.util.internal.MapBasedDictionary;
@@ -527,13 +527,12 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 	}
 
 	private BeanFactory createMockBF() {
-		MockControl ctrl = MockControl.createNiceControl(BeanFactory.class);
-		BeanFactory cbf = (BeanFactory) ctrl.getMock();
+        BeanFactory cbf = createNiceMock(BeanFactory.class);
 
 		// ctrl.expectAndReturn(cbf.getBean(BEAN_NAME), target);
 		// ctrl.expectAndReturn(cbf.getType(BEAN_NAME), target.getClass());
 
-		ctrl.replay();
+		replay(cbf);
 		return cbf;
 	}
 

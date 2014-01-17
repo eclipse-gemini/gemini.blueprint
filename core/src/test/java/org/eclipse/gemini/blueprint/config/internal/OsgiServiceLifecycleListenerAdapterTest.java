@@ -24,7 +24,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.config.internal.adapter.OsgiServiceLifecycleListenerAdapter;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
@@ -623,13 +623,12 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 	}
 
 	private ConfigurableBeanFactory createMockBF(Object target) {
-		MockControl ctrl = MockControl.createNiceControl(ConfigurableBeanFactory.class);
-		ConfigurableBeanFactory cbf = (ConfigurableBeanFactory) ctrl.getMock();
+		ConfigurableBeanFactory cbf = createNiceMock(ConfigurableBeanFactory.class);
 
-		ctrl.expectAndReturn(cbf.getBean(BEAN_NAME), target);
-		ctrl.expectAndReturn(cbf.getType(BEAN_NAME), target.getClass());
+		expect(cbf.getBean(BEAN_NAME)).andReturn(target);
+		expect(cbf.getType(BEAN_NAME)).andReturn((Class)target.getClass());
 
-		ctrl.replay();
+		replay(cbf);
 		return cbf;
 	}
 }

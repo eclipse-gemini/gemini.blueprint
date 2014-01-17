@@ -49,7 +49,7 @@
         <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
         <!-- Knopflerfish 3.5 -->
         <kf.ver>5.3.3</kf.ver>
-        <felix.ver>2.0.5</felix.ver>
+        <felix.ver>3.2.2</felix.ver>
 
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -327,10 +327,16 @@
         </dependency>
 
         <dependency>
-            <groupId>easymock</groupId>
+            <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-            <version>1.2_Java1.3</version>
+            <version>3.2</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib-nodep</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -367,33 +373,6 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-log4j12</artifactId>-->
-            <!--<version>${slf4j.version}</version>-->
-            <!--<scope>provided</scope>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>log4j</groupId>-->
-                    <!--<artifactId>log4j</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.log4j</groupId>-->
-            <!--<artifactId>com.springsource.org.apache.log4j</artifactId>-->
-            <!--<version>1.2.16</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
-            <!--<version>1.2.16</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
     </dependencies>
 
     <build>
@@ -593,8 +572,9 @@
                             <Bundle-SymbolicName>${spring.osgi.symbolic.name}.source</Bundle-SymbolicName>
                             <Bundle-Vendor>Eclipse Foundation</Bundle-Vendor>
                             <Bundle-DocURL>http://www.eclipse.org/gemini/blueprint/</Bundle-DocURL>
-                            <!--<Bundle-Description>${bundle.description}</Bundle-Description>-->
-                            <Bundle-License>http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php</Bundle-License>
+                            <Bundle-License>http://www.opensource.org/licenses/eclipse-1.0.php,
+                                http://www.opensource.org/licenses/apache2.0.php
+                            </Bundle-License>
                             <Implementation-Title>Eclipse Gemini Blueprint</Implementation-Title>
                             <Implementation-Version>${project.version}</Implementation-Version>
                             <Implementation-Vendor>Eclipse Foundation</Implementation-Vendor>
@@ -602,7 +582,8 @@
                             <Gemini-Blueprint-Version>${project.version}</Gemini-Blueprint-Version>
                             <Spring-Version>${spring.maven.artifact.version}</Spring-Version>
                             <Git-Revision>${git.commit.id.describe}</Git-Revision>
-                            <Eclipse-SourceBundle>${spring.osgi.symbolic.name};version="${project.version}";roots:="."</Eclipse-SourceBundle>
+                            <Eclipse-SourceBundle>${spring.osgi.symbolic.name};version="${project.version}";roots:="."
+                            </Eclipse-SourceBundle>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -869,7 +850,6 @@
             </dependencies>
             <properties>
                 <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.EquinoxPlatform</osgi.test.platform>
-                <log4j.ignoreTCL>true</log4j.ignoreTCL>
             </properties>
         </profile>
 
@@ -886,7 +866,6 @@
             </dependencies>
             <properties>
                 <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.KnopflerfishPlatform</osgi.test.platform>
-                <log4j.ignoreTCL>true</log4j.ignoreTCL>
                 <org.knopflerfish.osgi.setcontextclassloader>true</org.knopflerfish.osgi.setcontextclassloader>
             </properties>
         </profile>
@@ -907,30 +886,23 @@
                             <artifactId>org.apache.felix.framework</artifactId>
                         </exclusion>
                         <!--<exclusion>-->
-                            <!--<groupId>org.apache.felix</groupId>-->
-                            <!--<artifactId>org.apache.felix.shell</artifactId>-->
+                        <!--<groupId>org.apache.felix</groupId>-->
+                        <!--<artifactId>org.apache.felix.shell</artifactId>-->
                         <!--</exclusion>-->
                         <!--<exclusion>-->
-                            <!--<groupId>org.apache.felix</groupId>-->
-                            <!--<artifactId>org.apache.felix.shell.tui</artifactId>-->
+                        <!--<groupId>org.apache.felix</groupId>-->
+                        <!--<artifactId>org.apache.felix.shell.tui</artifactId>-->
                         <!--</exclusion>-->
                         <!--<exclusion>-->
-                            <!--<groupId>org.apache.felix</groupId>-->
-                            <!--<artifactId>org.apache.felix.bundlerepository</artifactId>-->
+                        <!--<groupId>org.apache.felix</groupId>-->
+                        <!--<artifactId>org.apache.felix.bundlerepository</artifactId>-->
                         <!--</exclusion>-->
                     </exclusions>
-                </dependency>
-                <!-- include the OSGi jar to allow PermissionAdmin API to be used -->
-                <dependency>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.osgi.core</artifactId>
-                    <version>1.0.1</version>
-                    <scope>test</scope>
                 </dependency>
             </dependencies>
             <properties>
                 <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.FelixPlatform</osgi.test.platform>
-                <log4j.ignoreTCL>true</log4j.ignoreTCL>
+                <!-- <log4j.ignoreTCL>true</log4j.ignoreTCL> -->
             </properties>
         </profile>
 
@@ -1054,6 +1026,12 @@
     </pluginRepositories>
 
     <repositories>
+        <repository>
+            <id>maven-repo</id>
+            <name>maven repo</name>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+
         <repository>
             <id>com.springsource.repository.bundles.release</id>
             <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>

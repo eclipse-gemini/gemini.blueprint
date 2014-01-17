@@ -20,7 +20,7 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener;
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.eclipse.gemini.blueprint.extender.internal.support.TestTaskExecutor;
@@ -51,44 +51,32 @@ public abstract class ContextLoaderListenerTest extends TestCase {
 	}
 
 	public void testStart() throws Exception {
-		MockControl bundleContextControl = MockControl.createControl(BundleContext.class);
-		BundleContext context = (BundleContext) bundleContextControl.getMock();
+		BundleContext context = createMock(BundleContext.class);
 		// platform determination
 
 		// extracting bundle id from bundle
-		bundleContextControl.expectAndReturn(context.getBundle(), new MockBundle());
+		expect(context.getBundle()).andReturn(new MockBundle());
 
 		// look for existing resolved bundles
-		bundleContextControl.expectAndReturn(context.getBundles(), new Bundle[0], 2);
-
-		// register namespace and entity resolving service
-		// context.registerService((String[]) null, null, null);
-		// bundleContextControl.setMatcher(MockControl.ALWAYS_MATCHER);
-		// bundleContextControl.setReturnValue(null);
+		expect(context.getBundles()).andReturn(new Bundle[0]).times(2);
 
 		// register context service
-		context.registerService((String[]) null, null, null);
-		bundleContextControl.setMatcher(MockControl.ALWAYS_MATCHER);
-		bundleContextControl.setReturnValue(null, MockControl.ONE_OR_MORE);
+		expect(context.registerService((String[]) null, null, null)).andReturn(null).atLeastOnce();
 
 		// create task executor
 		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(null);
 		aBundle.setEntryReturnOnNextCallToGetEntry(null);
-		bundleContextControl.expectAndReturn(context.getBundle(), aBundle, MockControl.ONE_OR_MORE);
+		expect(context.getBundle()).andReturn(aBundle).atLeastOnce();
 
 		// listen for bundle events
 		context.addBundleListener(null);
-		bundleContextControl.setMatcher(MockControl.ALWAYS_MATCHER);
-		bundleContextControl.setVoidCallable(2);
+        expectLastCall().times(2);
 
-		bundleContextControl.expectAndReturn(context.registerService(new String[0], null, new Properties()),
-			new MockServiceRegistration(), MockControl.ONE_OR_MORE);
-		bundleContextControl.setMatcher(MockControl.ALWAYS_MATCHER);
-
-		bundleContextControl.replay();
+		expect(context.registerService(new String[0], null, new Properties())).andReturn(new MockServiceRegistration()).atLeastOnce();
+		replay(context);
 
 		this.listener.start(context);
-		bundleContextControl.verify();
+		verify(context);
 	}
 
 	public void tstTaskExecutor() throws Exception {

@@ -24,7 +24,9 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
+
+import org.easymock.IMocksControl;
 import org.eclipse.gemini.blueprint.compendium.config.MockConfigurationAdmin;
 import org.eclipse.gemini.blueprint.compendium.internal.cm.ManagedServiceBeanManager;
 import org.osgi.framework.Constants;
@@ -46,9 +48,9 @@ public class ConfigurationAdminManagerTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		services = new LinkedHashMap();
-		MockControl mc = MockControl.createNiceControl(Configuration.class);
-		cfg = (Configuration) mc.getMock();
-		mc.expectAndReturn(cfg.getProperties(), new Properties());
+		IMocksControl mc = createNiceControl();
+		cfg = mc.createMock(Configuration.class);
+		expect(cfg.getProperties()).andReturn(new Properties());
 		mc.replay();
 		bundleContext = new MockBundleContext() {
 

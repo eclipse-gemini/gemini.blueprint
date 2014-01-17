@@ -19,8 +19,9 @@ import java.util.Hashtable;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
-import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
+import static org.easymock.EasyMock.*;
+import org.easymock.IMocksControl;
+
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -35,7 +36,7 @@ public class AbstractBundleXmlApplicationContextTest extends TestCase {
 
 	OsgiBundleXmlApplicationContext xmlContext;
 
-	MockControl bundleCtxCtrl, bundleCtrl;
+	IMocksControl bundleCtxCtrl, bundleCtrl;
 
 	BundleContext context;
 
@@ -44,17 +45,17 @@ public class AbstractBundleXmlApplicationContextTest extends TestCase {
 	Dictionary dictionary;
 
 	protected void setUp() throws Exception {
-		bundleCtxCtrl = MockControl.createNiceControl(BundleContext.class);
-		context = (BundleContext) bundleCtxCtrl.getMock();
-		bundleCtrl = MockControl.createNiceControl(Bundle.class);
-		bundle = (Bundle) bundleCtrl.getMock();
+		bundleCtxCtrl = createNiceControl();
+		context = bundleCtxCtrl.createMock(BundleContext.class);
+		bundleCtrl = createNiceControl();
+		bundle = bundleCtrl.createMock(Bundle.class);
 
-		bundleCtxCtrl.expectAndReturn(context.getBundle(), bundle, MockControl.ONE_OR_MORE);
+        expect(context.getBundle()).andReturn(bundle).atLeastOnce();
 
 		dictionary = new Hashtable();
 
 		// allow headers to be taken multiple times
-		bundleCtrl.expectAndReturn(bundle.getHeaders(), dictionary, MockControl.ONE_OR_MORE);
+        expect(bundle.getHeaders()).andReturn(dictionary).atLeastOnce();
 	}
 
 	private void createContext() {
@@ -67,8 +68,6 @@ public class AbstractBundleXmlApplicationContextTest extends TestCase {
     }
 
 	protected void tearDown() throws Exception {
-		// bundleCtxCtrl.verify();
-		// bundleCtrl.verify();
 		context = null;
 		bundleCtxCtrl = null;
 		xmlContext = null;
@@ -78,8 +77,7 @@ public class AbstractBundleXmlApplicationContextTest extends TestCase {
 
 	public void testGetBundleName() {
 		String symbolicName = "symbolic";
-		// bundleCtrl.reset();
-		bundleCtrl.expectAndReturn(bundle.getSymbolicName(), symbolicName, MockControl.ONE_OR_MORE);
+        expect(bundle.getSymbolicName()).andReturn(symbolicName).atLeastOnce();
 		bundleCtxCtrl.replay();
 		bundleCtrl.replay();
 
@@ -105,8 +103,7 @@ public class AbstractBundleXmlApplicationContextTest extends TestCase {
 
 	public void testGetServiceName() {
 		String symbolicName = "symbolic";
-		// bundleCtrl.reset();
-		bundleCtrl.expectAndReturn(bundle.getSymbolicName(), symbolicName, MockControl.ONE_OR_MORE);
+        expect(bundle.getSymbolicName()).andReturn(symbolicName).atLeastOnce();
 		bundleCtxCtrl.replay();
 		bundleCtrl.replay();
 

@@ -18,7 +18,7 @@ import java.net.URL;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
 import org.osgi.framework.Bundle;
 import org.springframework.core.io.Resource;
@@ -31,20 +31,16 @@ public class OsgiBundleResourceLoaderTest extends TestCase {
 
 	OsgiBundleResourceLoader loader;
 
-	MockControl control;
-
 	Bundle bundle;
 
 	protected void setUp() throws Exception {
-		control = MockControl.createStrictControl(Bundle.class);
-		bundle = (Bundle) control.getMock();
+		bundle = createMock(Bundle.class);
 		loader = new OsgiBundleResourceLoader(bundle);
 	}
 
 	protected void tearDown() throws Exception {
 		loader = null;
 		bundle = null;
-		control = null;
 	}
 
 	/**
@@ -54,47 +50,47 @@ public class OsgiBundleResourceLoaderTest extends TestCase {
 	public void testGetClasspathResource() throws Exception {
 		String res = "foo.txt";
 		URL expected = new URL("file://" + res);
-		control.expectAndReturn(bundle.getResource(res), expected);
-		control.replay();
+		expect(bundle.getResource(res)).andReturn(expected);
+		replay(bundle);
 
 		Resource resource = loader.getResource("classpath:" + res);
 		assertNotNull(resource);
 		assertSame(expected, resource.getURL());
-		control.verify();
+		verify(bundle);
 	}
 
 	public void testGetBundleResource() throws Exception {
 		String res = "foo.txt";
 		URL url = new URL("file:/" + res);
-		control.expectAndReturn(bundle.findEntries("/", res, false), new ArrayEnumerator(new URL[] {url}));
-		control.replay();
+		expect(bundle.findEntries("/", res, false)).andReturn(new ArrayEnumerator(new URL[] {url}));
+		replay(bundle);
 
 		Resource resource = loader.getResource("osgibundle:/" + res);
 		assertNotNull(resource);
 		assertSame(url, resource.getURL());
-		control.verify();
+		verify(bundle);
 	}
 
 	public void testGetRelativeResource() throws Exception {
 		String res = "foo.txt";
 		URL expected = new URL("file:/" + res);
-		control.replay();
+		replay(bundle);
 
 		Resource resource = loader.getResource("file:/" + res);
 		assertNotNull(resource);
 		assertEquals(expected, resource.getURL());
-		control.verify();
+		verify(bundle);
 	}
 
 	public void testGetFallbackResource() throws Exception {
 		String res = "foo.txt";
 		URL expected = new URL("http:/" + res);
-		control.replay();
+		replay(bundle);
 
 		Resource resource = loader.getResource("http:/" + res);
 		assertNotNull(resource);
 		assertEquals(expected, resource.getURL());
-		control.verify();
+		verify(bundle);
 	}
 
 	public void testGetResourceByPath() throws Exception {

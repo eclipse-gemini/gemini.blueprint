@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
  * You may elect to redistribute this code under either of these licenses. 
- * 
+ *
  * Contributors:
  *   VMware Inc.
  *****************************************************************************/
@@ -21,7 +21,9 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
+
+import org.easymock.IMocksControl;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.eclipse.gemini.blueprint.service.exporter.support.ServicePropertiesChangeEvent;
 import org.eclipse.gemini.blueprint.service.exporter.support.ServicePropertiesChangeListener;
@@ -43,270 +45,268 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  */
 public class ConfigPropertiesHandlerTest extends TestCase {
 
-	private GenericApplicationContext appContext;
+    private GenericApplicationContext appContext;
 
-	private BundleContext bundleContext;
+    private BundleContext bundleContext;
 
-	private MockControl adminControl;
-
-	private ConfigurationAdmin admin;
-
-	private Dictionary<String, String> config;
-
-	private String persistentId = "foo.bar";
-	private Configuration cfg;
-	private ManagedService msCallback;
+    private IMocksControl adminControl;
+    private ConfigurationAdmin admin;
 
 
-	protected void setUp() throws Exception {
+    private Dictionary<String, String> config;
 
-		adminControl = MockControl.createControl(ConfigurationAdmin.class);
-		admin = (ConfigurationAdmin) adminControl.getMock();
-		MockControl configMock = MockControl.createControl(Configuration.class);
-		cfg = (Configuration) configMock.getMock();
+    private String persistentId = "foo.bar";
+    private Configuration cfg;
+    private ManagedService msCallback;
 
-		config = new Hashtable<String, String>();
 
-		adminControl.expectAndReturn(admin.getConfiguration(persistentId), cfg, MockControl.ONE_OR_MORE);
-		configMock.expectAndReturn(cfg.getProperties(), config, MockControl.ONE_OR_MORE);
+    protected void setUp() throws Exception {
+        adminControl = createControl();
+        admin = adminControl.createMock(ConfigurationAdmin.class);
+        cfg = createMock(Configuration.class);
 
-		adminControl.replay();
-		configMock.replay();
+        config = new Hashtable<String, String>();
 
-		bundleContext = new MockBundleContext() {
+        expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
+        expect(cfg.getProperties()).andReturn(config).atLeastOnce();
 
-			// add Configuration admin support
-			@Override
-			public Object getService(ServiceReference reference) {
-				return admin;
-			}
+        adminControl.replay();
+        replay(cfg);
 
-			// ManagedService registration
-			@Override
-			public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
-				// save the callback
-				if (ManagedService.class.getName().equals(clazz)) {
-					msCallback = (ManagedService) service;
-				}
-				return super.registerService(clazz, service, properties);
-			}
-		};
+        bundleContext = new MockBundleContext() {
 
-		appContext = new GenericApplicationContext();
-		appContext.getBeanFactory().addBeanPostProcessor(new BundleContextAwareProcessor(bundleContext));
+            // add Configuration admin support
+            @Override
+            public Object getService(ServiceReference reference) {
+                return admin;
+            }
 
-		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(appContext);
-		// reader.setEventListener(this.listener);
-		reader.loadBeanDefinitions(new ClassPathResource("configProperties.xml", getClass()));
-		appContext.refresh();
-	}
+            // ManagedService registration
+            @Override
+            public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
+                // save the callback
+                if (ManagedService.class.getName().equals(clazz)) {
+                    msCallback = (ManagedService) service;
+                }
+                return super.registerService(clazz, service, properties);
+            }
+        };
 
-	protected void tearDown() throws Exception {
-		adminControl.verify();
-	}
+        appContext = new GenericApplicationContext();
+        appContext.getBeanFactory().addBeanPostProcessor(new BundleContextAwareProcessor(bundleContext));
 
-	public void testPropertiesLazyInit() throws Exception {
-		adminControl.reset();
-		adminControl.replay();
-	}
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(appContext);
+        // reader.setEventListener(this.listener);
+        reader.loadBeanDefinitions(new ClassPathResource("configProperties.xml", getClass()));
+        appContext.refresh();
+    }
 
-	public void testBlankConfigProperties() throws Exception {
-		config.put("Spring", "Source");
-		Object bean = appContext.getBean("named");
-		assertTrue(bean instanceof Properties);
-		assertEquals(config, bean);
-	}
+    protected void tearDown() throws Exception {
+        adminControl.verify();
+    }
 
-	public void testPropertiesWithDefaultsAndNoOverride() throws Exception {
-		persistentId = "noLocalOverride";
+    public void testPropertiesLazyInit() throws Exception {
+        adminControl.reset();
+        adminControl.replay();
+    }
 
-		adminControl.reset();
-		adminControl.expectAndReturn(admin.getConfiguration(persistentId), cfg, MockControl.ONE_OR_MORE);
-		adminControl.replay();
+    public void testBlankConfigProperties() throws Exception {
+        config.put("Spring", "Source");
+        Object bean = appContext.getBean("named");
+        assertTrue(bean instanceof Properties);
+        assertEquals(config, bean);
+    }
 
-		config.put("foo", "foo");
-		config.put("Spring", "Source");
-		Object bean = appContext.getBean(persistentId);
-		assertTrue(bean instanceof Properties);
-		Properties props = (Properties) bean;
-		assertFalse(config.equals(bean));
-		// the local property has been replaced
-		assertEquals("foo", props.getProperty("foo"));
-		// but the one not present on the CM are still present
-		assertTrue(props.containsKey("kry"));
-		assertTrue(props.containsKey("Spring"));
-		assertEquals(3, props.entrySet().size());
-	}
+    public void testPropertiesWithDefaultsAndNoOverride() throws Exception {
+        persistentId = "noLocalOverride";
 
-	public void testPropertiesWithDefaultsAndOverride() throws Exception {
-		persistentId = "localOverride";
+        adminControl.reset();
+        expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
+        adminControl.replay();
 
-		adminControl.reset();
-		adminControl.expectAndReturn(admin.getConfiguration(persistentId), cfg, MockControl.ONE_OR_MORE);
-		adminControl.replay();
+        config.put("foo", "foo");
+        config.put("Spring", "Source");
+        Object bean = appContext.getBean(persistentId);
+        assertTrue(bean instanceof Properties);
+        Properties props = (Properties) bean;
+        assertFalse(config.equals(bean));
+        // the local property has been replaced
+        assertEquals("foo", props.getProperty("foo"));
+        // but the one not present on the CM are still present
+        assertTrue(props.containsKey("kry"));
+        assertTrue(props.containsKey("Spring"));
+        assertEquals(3, props.entrySet().size());
+    }
 
-		config.put("foo", "foo");
-		config.put("Spring", "Source");
-		Object bean = appContext.getBean(persistentId);
-		assertTrue(bean instanceof Properties);
-		Properties props = (Properties) bean;
-		assertFalse(config.equals(bean));
-		// the local property is still present
-		assertEquals("bar", props.getProperty("foo"));
-		// the CM props are still there
-		assertTrue(props.containsKey("kry"));
-		// and so are the local props
-		assertTrue(props.containsKey("Spring"));
-		assertEquals(3, props.entrySet().size());
-	}
+    public void testPropertiesWithDefaultsAndOverride() throws Exception {
+        persistentId = "localOverride";
 
-	// disabled until custom attributes are enabled again
-	public void tstPropertiesWithPropRef() throws Exception {
-		persistentId = "custom-attributes";
+        adminControl.reset();
+        expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
+        adminControl.replay();
 
-		adminControl.reset();
-		adminControl.expectAndReturn(admin.getConfiguration(persistentId), cfg, MockControl.ONE_OR_MORE);
-		adminControl.replay();
+        config.put("foo", "foo");
+        config.put("Spring", "Source");
+        Object bean = appContext.getBean(persistentId);
+        assertTrue(bean instanceof Properties);
+        Properties props = (Properties) bean;
+        assertFalse(config.equals(bean));
+        // the local property is still present
+        assertEquals("bar", props.getProperty("foo"));
+        // the CM props are still there
+        assertTrue(props.containsKey("kry"));
+        // and so are the local props
+        assertTrue(props.containsKey("Spring"));
+        assertEquals(3, props.entrySet().size());
+    }
 
-		config.put("foo", "foo");
-		config.put("Spring", "Source");
-		Object bean = appContext.getBean(persistentId);
-		BeanDefinition bd = appContext.getBeanDefinition(persistentId);
-		System.out.println(bd.getScope());
-		assertTrue(bean instanceof Properties);
-		Properties props = (Properties) bean;
-		assertFalse(config.equals(bean));
-		// the local property is still present
-		assertEquals("bar", props.getProperty("foo"));
-		// the CM props are still there
-		assertTrue(props.containsKey("kry"));
-		// and so are the local props
-		assertTrue(props.containsKey("Spring"));
-		assertEquals(3, props.entrySet().size());
-	}
+    // disabled until custom attributes are enabled again
+    public void tstPropertiesWithPropRef() throws Exception {
+        persistentId = "custom-attributes";
 
-	public void testDynamicNoOverride() throws Exception {
-		persistentId = "noLocalOverride";
-		String beanId = "dynamic-noOverride";
+        adminControl.reset();
+        expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
+        adminControl.replay();
 
-		adminControl.reset();
-		adminControl.expectAndReturn(admin.getConfiguration(persistentId), cfg, MockControl.ONE_OR_MORE);
-		adminControl.replay();
+        config.put("foo", "foo");
+        config.put("Spring", "Source");
+        Object bean = appContext.getBean(persistentId);
+        BeanDefinition bd = appContext.getBeanDefinition(persistentId);
+        System.out.println(bd.getScope());
+        assertTrue(bean instanceof Properties);
+        Properties props = (Properties) bean;
+        assertFalse(config.equals(bean));
+        // the local property is still present
+        assertEquals("bar", props.getProperty("foo"));
+        // the CM props are still there
+        assertTrue(props.containsKey("kry"));
+        // and so are the local props
+        assertTrue(props.containsKey("Spring"));
+        assertEquals(3, props.entrySet().size());
+    }
 
-		// initial config
-		config.put("bo", "bozo");
-		config.put("Spring", "Source");
-		Object bean = appContext.getBean(beanId);
-		assertTrue(bean instanceof Properties);
-		Properties props = (Properties) bean;
-		assertFalse(config.equals(bean));
-		// the local property has been replaced
-		assertEquals("bozo", props.getProperty("bo"));
-		// but the one not present on the CM are still present
-		assertTrue(props.containsKey("kry"));
-		assertEquals("pton", props.getProperty("kry"));
-		assertEquals("Source", props.getProperty("Spring"));
-		assertEquals(3, props.entrySet().size());
+    public void testDynamicNoOverride() throws Exception {
+        persistentId = "noLocalOverride";
+        String beanId = "dynamic-noOverride";
 
-		// CM updates
-		assertNotNull(msCallback);
+        adminControl.reset();
+        expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
+        adminControl.replay();
 
-		Dictionary<String, String> newProps = new Hashtable<String, String>();
-		newProps.put("bo", "b0z0");
-		newProps.put("new", "prop");
-		// trigger update
-		msCallback.updated(newProps);
+        // initial config
+        config.put("bo", "bozo");
+        config.put("Spring", "Source");
+        Object bean = appContext.getBean(beanId);
+        assertTrue(bean instanceof Properties);
+        Properties props = (Properties) bean;
+        assertFalse(config.equals(bean));
+        // the local property has been replaced
+        assertEquals("bozo", props.getProperty("bo"));
+        // but the one not present on the CM are still present
+        assertTrue(props.containsKey("kry"));
+        assertEquals("pton", props.getProperty("kry"));
+        assertEquals("Source", props.getProperty("Spring"));
+        assertEquals(3, props.entrySet().size());
 
-		// verify properties
-		assertSame(props, appContext.getBean(beanId));
-		assertEquals("b0z0", props.getProperty("bo"));
-		assertEquals("prop", props.getProperty("new"));
-		assertNull(props.getProperty("Spring"));
-		// verify local properties
-		assertEquals("pton", props.getProperty("kry"));
-	}
+        // CM updates
+        assertNotNull(msCallback);
 
-	public void testDynamicOverride() throws Exception {
-		persistentId = "localOverride";
-		String beanId = "dynamic-override";
+        Dictionary<String, String> newProps = new Hashtable<String, String>();
+        newProps.put("bo", "b0z0");
+        newProps.put("new", "prop");
+        // trigger update
+        msCallback.updated(newProps);
 
-		adminControl.reset();
-		adminControl.expectAndReturn(admin.getConfiguration(persistentId), cfg, MockControl.ONE_OR_MORE);
-		adminControl.replay();
+        // verify properties
+        assertSame(props, appContext.getBean(beanId));
+        assertEquals("b0z0", props.getProperty("bo"));
+        assertEquals("prop", props.getProperty("new"));
+        assertNull(props.getProperty("Spring"));
+        // verify local properties
+        assertEquals("pton", props.getProperty("kry"));
+    }
 
-		// initial config
-		config.put("bo", "bozo");
-		config.put("Spring", "Source");
-		Object bean = appContext.getBean(beanId);
-		assertTrue(bean instanceof Properties);
-		Properties props = (Properties) bean;
-		assertFalse(config.equals(bean));
-		// the local property has been replaced
-		assertEquals("zo", props.getProperty("bo"));
-		// but the one not present on the CM are still present
-		assertEquals("pton", props.getProperty("kry"));
-		assertEquals("Source", props.getProperty("Spring"));
-		assertEquals(3, props.entrySet().size());
+    public void testDynamicOverride() throws Exception {
+        persistentId = "localOverride";
+        String beanId = "dynamic-override";
 
-		// CM updates
-		assertNotNull(msCallback);
+        adminControl.reset();
+        expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
+        adminControl.replay();
 
-		Dictionary<String, String> newProps = new Hashtable<String, String>();
-		newProps.put("bo", "b0z0");
-		newProps.put("new", "prop");
-		// trigger update
-		msCallback.updated(newProps);
+        // initial config
+        config.put("bo", "bozo");
+        config.put("Spring", "Source");
+        Object bean = appContext.getBean(beanId);
+        assertTrue(bean instanceof Properties);
+        Properties props = (Properties) bean;
+        assertFalse(config.equals(bean));
+        // the local property has been replaced
+        assertEquals("zo", props.getProperty("bo"));
+        // but the one not present on the CM are still present
+        assertEquals("pton", props.getProperty("kry"));
+        assertEquals("Source", props.getProperty("Spring"));
+        assertEquals(3, props.entrySet().size());
 
-		// verify properties
-		assertSame(props, appContext.getBean(beanId));
-		assertEquals("zo", props.getProperty("bo"));
-		assertEquals("prop", props.getProperty("new"));
-		assertNull(props.getProperty("Spring"));
-		// verify local properties
-		assertEquals("pton", props.getProperty("kry"));
-	}
+        // CM updates
+        assertNotNull(msCallback);
 
-	public void testExtendedProperties() throws Exception {
-		persistentId = "noLocalOverride";
-		String beanId = "dynamic-noOverride";
+        Dictionary<String, String> newProps = new Hashtable<String, String>();
+        newProps.put("bo", "b0z0");
+        newProps.put("new", "prop");
+        // trigger update
+        msCallback.updated(newProps);
 
-		adminControl.reset();
-		adminControl.expectAndReturn(admin.getConfiguration(persistentId), cfg, MockControl.ONE_OR_MORE);
-		adminControl.replay();
+        // verify properties
+        assertSame(props, appContext.getBean(beanId));
+        assertEquals("zo", props.getProperty("bo"));
+        assertEquals("prop", props.getProperty("new"));
+        assertNull(props.getProperty("Spring"));
+        // verify local properties
+        assertEquals("pton", props.getProperty("kry"));
+    }
 
-		// initial config
-		config.put("bo", "bozo");
-		config.put("Spring", "Source");
-		Object bean = appContext.getBean(beanId);
-		assertTrue(bean instanceof Properties);
-		assertTrue(bean instanceof ServicePropertiesListenerManager);
-		Properties props = (Properties) bean;
-		ServicePropertiesListenerManager manager = (ServicePropertiesListenerManager) bean;
+    public void testExtendedProperties() throws Exception {
+        persistentId = "noLocalOverride";
+        String beanId = "dynamic-noOverride";
 
-		final Map<?, ?>[] updatedProps = new Map<?, ?>[1];
-		manager.addListener(new ServicePropertiesChangeListener() {
+        adminControl.reset();
+        expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
+        adminControl.replay();
 
-			public void propertiesChange(ServicePropertiesChangeEvent event) {
-				updatedProps[0] = event.getServiceProperties();
-			}
-		});
+        // initial config
+        config.put("bo", "bozo");
+        config.put("Spring", "Source");
+        Object bean = appContext.getBean(beanId);
+        assertTrue(bean instanceof Properties);
+        assertTrue(bean instanceof ServicePropertiesListenerManager);
+        Properties props = (Properties) bean;
+        ServicePropertiesListenerManager manager = (ServicePropertiesListenerManager) bean;
 
-		// CM updates
-		assertNotNull(msCallback);
+        final Map<?, ?>[] updatedProps = new Map<?, ?>[1];
+        manager.addListener(new ServicePropertiesChangeListener() {
 
-		Dictionary<String, String> newProps = new Hashtable<String, String>();
-		newProps.put("bo", "b0z0");
-		newProps.put("new", "prop");
-		// trigger update
-		msCallback.updated(newProps);
+            public void propertiesChange(ServicePropertiesChangeEvent event) {
+                updatedProps[0] = event.getServiceProperties();
+            }
+        });
 
-		// verify listener properties
-		assertNotNull(updatedProps[0]);
-		// the properties contains both the CM props
-		assertEquals("b0z0", updatedProps[0].get("bo"));
-		assertEquals("prop", updatedProps[0].get("new"));
-		// and the local defined ones
-		assertEquals("pton", updatedProps[0].get("kry"));
-		assertEquals(3, updatedProps[0].size());
-	}
+        // CM updates
+        assertNotNull(msCallback);
+
+        Dictionary<String, String> newProps = new Hashtable<String, String>();
+        newProps.put("bo", "b0z0");
+        newProps.put("new", "prop");
+        // trigger update
+        msCallback.updated(newProps);
+
+        // verify listener properties
+        assertNotNull(updatedProps[0]);
+        // the properties contains both the CM props
+        assertEquals("b0z0", updatedProps[0].get("bo"));
+        assertEquals("prop", updatedProps[0].get("new"));
+        // and the local defined ones
+        assertEquals("pton", updatedProps[0].get("kry"));
+        assertEquals(3, updatedProps[0].size());
+    }
 }

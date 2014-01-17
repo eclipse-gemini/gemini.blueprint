@@ -20,7 +20,7 @@ import java.net.URL;
 
 import junit.framework.TestCase;
 
-import org.easymock.MockControl;
+import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
 import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.osgi.framework.Bundle;
@@ -170,19 +170,18 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getResourceFromBundleSpace(java.lang.String)}.
 	 */
 	public void testGetResourceFromBundle() throws Exception {
-		MockControl control = MockControl.createControl(Bundle.class);
-		Bundle mock = (Bundle) control.getMock();
+		Bundle mock = createMock(Bundle.class);
 
 		String location = "foo";
 		URL result = new URL("file:/" + location);
 
-		control.expectAndReturn(mock.findEntries("/", "foo", false), new ArrayEnumerator(new URL[] { result }));
-		control.replay();
+		expect(mock.findEntries("/", "foo", false)).andReturn(new ArrayEnumerator(new URL[] { result }));
+		replay(mock);
 
 		resource = new OsgiBundleResource(mock, location);
 
 		assertEquals(result, resource.getResourceFromBundleSpace(location).getURL());
-		control.verify();
+		verify(mock);
 	}
 
 	/**
@@ -190,19 +189,18 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getResourceFromBundleClasspath(java.lang.String)}.
 	 */
 	public void testGetResourceFromBundleClasspath() throws Exception {
-		MockControl control = MockControl.createControl(Bundle.class);
-		Bundle mock = (Bundle) control.getMock();
+		Bundle mock = createMock(Bundle.class);
 
 		String location = "file://foo";
 		URL result = new URL(location);
 
-		control.expectAndReturn(mock.getResource(location), result);
-		control.replay();
+		expect(mock.getResource(location)).andReturn(result);
+		replay(mock);
 
 		resource = new OsgiBundleResource(mock, location);
 
 		assertSame(result, resource.getResourceFromBundleClasspath(location));
-		control.verify();
+		verify(mock);
 	}
 
 	/**
