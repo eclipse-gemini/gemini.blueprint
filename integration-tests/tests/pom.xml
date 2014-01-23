@@ -199,17 +199,17 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.osgi</groupId>-->
+            <!--<artifactId>org.osgi.compendium</artifactId>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>component.scan.bundle</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
@@ -227,6 +227,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <!--<includes>-->
+                        <!--<include>**/ScopingTest.java</include>-->
+                    <!--</includes>-->
                     <forkMode>pertest</forkMode>
                     <forkedProcessTimeoutInSeconds>2700</forkedProcessTimeoutInSeconds>
                     <systemProperties>
@@ -241,6 +244,10 @@
                         <property>
                             <name>org.springframework.osgi.integration.testing.clover</name>
                             <value>${clover.enabled}</value>
+                        </property>
+                        <property>
+                            <name>logback.configurationFile</name>
+                            <value>${project.build.testOutputDirectory}/logback-test.xml</value>
                         </property>
                     </systemProperties>
                     <argLine>${clover.argLine} ${security.argLine}</argLine>

@@ -23,6 +23,14 @@
         <bundlor.enabled>true</bundlor.enabled>
         <bundle.description>${project.description}</bundle.description>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>

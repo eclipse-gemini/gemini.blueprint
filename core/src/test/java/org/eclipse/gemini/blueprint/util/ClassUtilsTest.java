@@ -14,6 +14,7 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import java.io.Closeable;
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -78,6 +79,7 @@ public class ClassUtilsTest extends TestCase {
 	}
 
 	public void testInterfacesHierarchy() {
+        //Closeable.class,
 		Class<?>[] clazz = ClassUtils.getAllInterfaces(DelegatedExecutionOsgiBundleApplicationContext.class);
 		Class<?>[] expected =
 				{ ConfigurableOsgiBundleApplicationContext.class, ConfigurableApplicationContext.class,
@@ -92,6 +94,7 @@ public class ClassUtilsTest extends TestCase {
 		Class<?>[] clazz =
 				ClassUtils.getClassHierarchy(OsgiBundleXmlApplicationContext.class, ClassUtils.ClassSet.ALL_CLASSES);
 
+        //Closeable.class,
 		Class<?>[] expected =
 				new Class<?>[] { OsgiBundleXmlApplicationContext.class,
 						AbstractDelegatedExecutionApplicationContext.class, AbstractOsgiBundleApplicationContext.class,

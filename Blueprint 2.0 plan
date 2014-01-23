@@ -1,0 +1,10 @@
+Blueprint 2.0 plan
+
+1. upgrade to R4.3 OSGi release.
+	Not r5.0 because Felix is stil on R4.3
+2. Fix bugs.
+3. Add an ability to specify extra intercaces to proxy on import
+	Those interfaces are not to be used in filter criteria. Useful in situations where dealing with frameworks that add aditional interfaces to proxys, i.e. ecf.
+4. Publish p2 update site
+5. Publish releases to maven repo.
+

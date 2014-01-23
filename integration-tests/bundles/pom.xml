@@ -32,6 +32,11 @@
             <artifactId>gemini-blueprint-core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <modules>
@@ -72,7 +77,7 @@
         <module>jdk5</module>
         <module>recursive.type.bundle</module>
 
-			<!-- blueprint bundles  -->
+        <!-- blueprint bundles  -->
         <module>blueprint</module>
     </modules>
 

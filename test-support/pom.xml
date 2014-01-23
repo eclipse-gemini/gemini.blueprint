@@ -38,24 +38,11 @@
         <dependency>
             <groupId>org.junit</groupId>
             <artifactId>com.springsource.org.junit</artifactId>
-            <version>4.9.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.maven.artifact.version}</version>
-            <exclusions>
-                <!-- exclude spring-test junit (3.8.1) -->
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>org.springframework.test</artifactId>
         </dependency>
 
         <dependency>
@@ -81,10 +68,10 @@
         <dependency>
             <groupId>org.eclipse.osgi</groupId>
             <artifactId>org.eclipse.osgi</artifactId>
-            <version>${equinox.ver}</version>
-            <type>jar</type>
-            <scope>provided</scope>
-            <optional>true</optional>
+            <!--<version>${equinox.ver}</version>-->
+            <!--<type>jar</type>-->
+            <!--<scope>provided</scope>-->
+            <!--<optional>true</optional>-->
         </dependency>
         <dependency>
             <groupId>org.knopflerfish</groupId>
@@ -173,7 +160,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-
                             <finalName>${project.build.finalName}</finalName>
                             <artifactSet>
                                 <includes>

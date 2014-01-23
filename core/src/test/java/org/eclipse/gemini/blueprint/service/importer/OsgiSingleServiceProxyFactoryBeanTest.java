@@ -25,6 +25,7 @@ import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
+import org.junit.Ignore;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.springframework.aop.SpringProxy;
@@ -103,18 +104,19 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 				.isAssignableFrom(this.serviceFactoryBean.getObjectType()));
 	}
 
-	public void testObjectTypeWOCompositeInterface() {
-		this.serviceFactoryBean.setInterfaces(new Class<?>[] { AbstractApplicationContext.class });
-		this.serviceFactoryBean.setBundleContext(this.bundleContext);
-		this.serviceFactoryBean.afterPropertiesSet();
-
-		try {
-			this.serviceFactoryBean.getObjectType();
-			fail("should not be able to create composite interface when a class is specified since CGLIB is not in the classpath");
-		} catch (Exception ex) {
-
-		}
-	}
+//    @Ignore("Ignored for spring 3.2.2 as cglib is inlined in spring-core in now.")
+//	public void testObjectTypeWOCompositeInterface() {
+//		this.serviceFactoryBean.setInterfaces(new Class<?>[] { AbstractApplicationContext.class });
+//		this.serviceFactoryBean.setBundleContext(this.bundleContext);
+//		this.serviceFactoryBean.afterPropertiesSet();
+//
+//		try {
+//			this.serviceFactoryBean.getObjectType();
+//			fail("should not be able to create composite interface when a class is specified since CGLIB is not in the classpath");
+//		} catch (Exception ex) {
+//
+//		}
+//	}
 
 	// OsgiServiceUtils are tested independently in error cases, here we
 	// test the

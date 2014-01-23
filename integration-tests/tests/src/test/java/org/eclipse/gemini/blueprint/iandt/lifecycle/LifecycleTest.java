@@ -103,7 +103,7 @@ public class LifecycleTest extends BaseIntegrationTest {
 //            logger.info("tracking count = " + tracker.getTrackingCount());
 //            AbstractRefreshableApplicationContext appContext = (AbstractRefreshableApplicationContext) tracker.getService();
 
-            ServiceReference[] refs = bundleContext.getServiceReferences(null, filter.toString());
+            ServiceReference[] refs = bundleContext.getServiceReferences((String)null, filter.toString());
             assertEquals("Should have a single service matched", 1, refs.length);
 
             AbstractRefreshableApplicationContext appContext = (AbstractRefreshableApplicationContext)bundleContext.getService(refs[0]);

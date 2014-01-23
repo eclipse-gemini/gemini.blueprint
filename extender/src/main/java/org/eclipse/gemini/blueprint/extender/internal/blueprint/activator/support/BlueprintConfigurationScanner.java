@@ -54,27 +54,27 @@ public class BlueprintConfigurationScanner implements ConfigurationScanner {
 		boolean debug = log.isDebugEnabled();
 
 		if (debug)
-			log.debug("Scanning bundle " + bundleName + " for blueprint configurations...");
+			log.debug("Scanning bundle '" + bundleName + "' for blueprint configurations...");
 
 		String[] locations = BlueprintConfigUtils.getBlueprintHeaderLocations(bundle.getHeaders());
 
 		// if no location is specified in the header, try the defaults
 		if (locations == null) {
 			if (trace) {
-				log.trace("Bundle " + bundleName + " has no declared locations; trying default " + DEFAULT_CONFIG);
+				log.trace("Bundle '" + bundleName + "' has no declared locations; trying default " + DEFAULT_CONFIG);
 			}
 			locations = new String[] { DEFAULT_CONFIG };
 		} else {
 			// check whether the header is empty
 			if (ObjectUtils.isEmpty(locations)) {
-				log.info("Bundle " + bundleName + " has an empty blueprint header - ignoring bundle...");
+				log.info("Bundle '" + bundleName + "' has an empty blueprint header - ignoring bundle...");
 				return new String[0];
 			}
 		}
 
 		String[] configs = findValidBlueprintConfigs(bundle, locations);
 		if (debug)
-			log.debug("Discovered in bundle" + bundleName + " blueprint configurations=" + Arrays.toString(configs));
+			log.debug("Discovered in bundle '" + bundleName + "' blueprint configurations=" + Arrays.toString(configs));
 		return configs;
 	}
 

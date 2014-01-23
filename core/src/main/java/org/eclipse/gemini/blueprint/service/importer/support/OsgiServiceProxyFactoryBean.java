@@ -73,12 +73,9 @@ public final class OsgiServiceProxyFactoryBean extends AbstractServiceImporterPr
 		}
 
 		public boolean isSatisfied() {
-			if (!mandatory)
-				return true;
-			else
-				return (proxy == null ? true : proxy.getServiceReference().getBundle() != null);
+            return !mandatory || (proxy == null || proxy.getServiceReference().getBundle() != null);
 		}
-	};
+	}
 
 	private static final Log log = LogFactory.getLog(OsgiServiceProxyFactoryBean.class);
 
@@ -147,9 +144,7 @@ public final class OsgiServiceProxyFactoryBean extends AbstractServiceImporterPr
 		lookupAdvice.setUseBlueprintExceptions(isUseBlueprintExceptions());
 		lookupAdvice.setSticky(sticky);
 
-		OsgiServiceLifecycleListener[] listeners =
-				(serviceTccl ? (OsgiServiceLifecycleListener[]) ObjectUtils.addObjectToArray(getListeners(),
-						tcclListener) : getListeners());
+		OsgiServiceLifecycleListener[] listeners = (serviceTccl ? ObjectUtils.addObjectToArray(getListeners(), tcclListener) : getListeners());
 
 		lookupAdvice.setListeners(listeners);
 		synchronized (monitor) {
@@ -197,7 +192,6 @@ public final class OsgiServiceProxyFactoryBean extends AbstractServiceImporterPr
 				}
 			};
 		}
-
 		return proxy;
 	}
 

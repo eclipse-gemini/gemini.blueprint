@@ -42,14 +42,19 @@
         <logback.version>1.0.13</logback.version>
         <env.buildPlan></env.buildPlan>
         <env.buildNumber></env.buildNumber>
-        <!-- change that to gitVersion and add a way to get git version of the build -->
-        <env.svnRevision></env.svnRevision>
 
+        <!-- compiled against osgi Revision -->
+        <osgi.ver>4.2.0</osgi.ver>
         <!-- platform versions -->
-        <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
-        <!-- Knopflerfish 3.5 -->
-        <kf.ver>5.3.3</kf.ver>
-        <felix.ver>3.2.2</felix.ver>
+        <!-- equinox 3.7 is R4.3 impl -->
+        <equinox.ver>3.7.2.v20120110-1415</equinox.ver>
+        <!--<equinox.ver>3.6.2.R36x_v20110210</equinox.ver>-->
+        <!-- Knopflerfish 4.0.1 -->
+        <kf.ver>6.0.4</kf.ver>
+        <!-- Felix 4.x supports OSGi R4.3 -->
+        <felix.ver>4.0.3</felix.ver>
+        <!--<kf.ver>5.3.3</kf.ver>-->
+        <!--<felix.ver>3.2.2</felix.ver>-->
 
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -103,9 +108,9 @@
     <!--</ciManagement>-->
 
     <scm>
-        <connection>scm:git://git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</connection>
+        <connection>scm:git:git//git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</connection>
         <developerConnection>
-            ssh://${user.name}@git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git
+            ssh://{user.name}@git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git
         </developerConnection>
     </scm>
 
@@ -214,76 +219,72 @@
             <!-- Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
+                <artifactId>org.springframework.aop</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>aopalliance</groupId>
-                        <artifactId>aopalliance</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
+                <artifactId>org.springframework.beans</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
+                <artifactId>org.springframework.core</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
+                <artifactId>org.springframework.context</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
+                <artifactId>org.springframework.expression</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
+                <artifactId>org.springframework.test</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -296,8 +297,32 @@
 
             <dependency>
                 <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.core</artifactId>
+                <version>${osgi.ver}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.compendium</artifactId>
-                <version>4.2.0</version>
+                <version>${osgi.ver}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>com.springsource.org.junit</artifactId>
+                <version>4.9.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.osgi</groupId>
+                <artifactId>org.eclipse.osgi</artifactId>
+                <version>${equinox.ver}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+                <!--<scope>system</scope>-->
+                <!--<systemPath>-->
+                    <!--/Users/dsklyut/Projects/sources/osgi/gemini/blueprint/lib/org.eclipse.osgi_3.7.2.v20120110-1415.jar-->
+                <!--</systemPath>-->
             </dependency>
 
         </dependencies>
@@ -306,11 +331,10 @@
 
     <!-- shared dependencies across modules -->
     <dependencies>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>4.2.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.osgi</groupId>-->
+            <!--<artifactId>org.osgi.core</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>javax.inject</groupId>
@@ -322,7 +346,6 @@
         <dependency>
             <groupId>org.junit</groupId>
             <artifactId>com.springsource.org.junit</artifactId>
-            <version>4.9.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -376,14 +399,6 @@
     </dependencies>
 
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.springframework.build.aws</groupId>
-                <artifactId>org.springframework.build.aws.maven</artifactId>
-                <version>2.0.0.RELEASE</version>
-            </extension>
-        </extensions>
-
         <resources>
             <resource>
                 <filtering>true</filtering>
@@ -833,7 +848,7 @@
         </plugins>
     </build>
 
-    <!-- profiles for equinox, knoplerfish, and felix                 -->
+    <!-- profiles for equinox, knopflerfish, and felix                 -->
     <!-- to use these profiles invoke maven with -Pprofile-name, e.g. -->
     <!-- mvn -Pfelix test                                             -->
     <profiles>
@@ -843,9 +858,6 @@
                 <dependency>
                     <groupId>org.eclipse.osgi</groupId>
                     <artifactId>org.eclipse.osgi</artifactId>
-                    <version>${equinox.ver}</version>
-                    <type>jar</type>
-                    <scope>provided</scope>
                 </dependency>
             </dependencies>
             <properties>
@@ -879,30 +891,16 @@
                     <version>${felix.ver}</version>
                     <type>jar</type>
                     <scope>provided</scope>
-                    <!-- required to prevent felix to pull in stuff -->
                     <exclusions>
                         <exclusion>
                             <groupId>org.apache.felix</groupId>
                             <artifactId>org.apache.felix.framework</artifactId>
                         </exclusion>
-                        <!--<exclusion>-->
-                        <!--<groupId>org.apache.felix</groupId>-->
-                        <!--<artifactId>org.apache.felix.shell</artifactId>-->
-                        <!--</exclusion>-->
-                        <!--<exclusion>-->
-                        <!--<groupId>org.apache.felix</groupId>-->
-                        <!--<artifactId>org.apache.felix.shell.tui</artifactId>-->
-                        <!--</exclusion>-->
-                        <!--<exclusion>-->
-                        <!--<groupId>org.apache.felix</groupId>-->
-                        <!--<artifactId>org.apache.felix.bundlerepository</artifactId>-->
-                        <!--</exclusion>-->
                     </exclusions>
                 </dependency>
             </dependencies>
             <properties>
                 <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.FelixPlatform</osgi.test.platform>
-                <!-- <log4j.ignoreTCL>true</log4j.ignoreTCL> -->
             </properties>
         </profile>
 
@@ -1030,6 +1028,18 @@
             <id>maven-repo</id>
             <name>maven repo</name>
             <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+
+        <repository>
+            <id>knopflerfish</id>
+            <name>knopflerfish repo</name>
+            <url>http://www.knopflerfish.org/maven2/</url>
+        </repository>
+
+        <repository>
+            <id>dmitry-local</id>
+            <name>Just Cause equinox 3.7.2 is not in central</name>
+            <url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>
         </repository>
 
         <repository>

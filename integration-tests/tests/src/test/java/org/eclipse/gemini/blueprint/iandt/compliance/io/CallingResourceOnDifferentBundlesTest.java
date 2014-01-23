@@ -16,6 +16,7 @@ package org.eclipse.gemini.blueprint.iandt.compliance.io;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.Permission;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -69,14 +70,14 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 	}
 
 	public void testCallGetResourceOnADifferentBundleRetrievedThroughBundleEvent() throws Exception {
-		String EXTRA_BUNDLE = "spring-core";
+		String EXTRA_BUNDLE = "org.springframework.core";
 
 		Bundle[] bundles = bundleContext.getBundles();
 		Bundle bundle = null;
 		// find cglib library as we don't use it
 		for (int i = 1; bundle == null && i < bundles.length; i++) {
 			String location = bundles[i].getLocation();
-			if (location != null && location.indexOf(EXTRA_BUNDLE) > -1)
+			if (location != null && location.contains(EXTRA_BUNDLE))
 				bundle = bundles[i];
 		}
 
@@ -117,15 +118,15 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 	private boolean isFelix() {
 		String platformName = getPlatformName();
 		System.out.println("Platform name is " + platformName);
-		return (platformName.indexOf("Felix") > -1);
+		return (platformName.contains("Felix"));
 	}
 
 	private boolean isKF() {
-		return (getPlatformName().indexOf("Knopflerfish") > -1);
+		return (getPlatformName().contains("Knopflerfish"));
 	}
 
-	protected List getTestPermissions() {
-		List list = super.getTestPermissions();
+	protected List<Permission> getTestPermissions() {
+		List<Permission> list = super.getTestPermissions();
 		list.add(new AdminPermission("*", AdminPermission.METADATA));
 		list.add(new AdminPermission("*", AdminPermission.LISTENER));
 		list.add(new AdminPermission("*", AdminPermission.EXECUTE));

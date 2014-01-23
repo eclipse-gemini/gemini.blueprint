@@ -61,7 +61,7 @@ abstract class ServiceCollectionTest extends BaseIntegrationTest {
 	public void testCollectionListener() throws Exception {
 		Collection collection = createCollection();
 
-		ServiceReference[] refs = bundleContext.getServiceReferences(null, null);
+		ServiceReference[] refs = bundleContext.getServiceReferences((String)null, null);
 
 		assertEquals(refs.length, collection.size());
 		int size = collection.size();
@@ -80,7 +80,7 @@ abstract class ServiceCollectionTest extends BaseIntegrationTest {
 
 	public void testCollectionContent() throws Exception {
 		Collection collection = createCollection();
-		ServiceReference[] refs = bundleContext.getServiceReferences(null, null);
+		ServiceReference[] refs = bundleContext.getServiceReferences((String)null, null);
 
 		assertEquals(refs.length, collection.size());
 		int size = collection.size();
