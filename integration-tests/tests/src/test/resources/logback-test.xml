@@ -27,23 +27,13 @@
             <MaxFileSize>10MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
-    <!--<logger name="org.eclipse.gemini.blueprint.test.AbstractOnTheFlyBundleCreatorTests" level="WARN"/>-->
-    <!--<logger name="org.apache.felix" level="DEBUG"/>-->
     <logger name="org.springframework" level="INFO"/>
-    <!--<logger name="org.eclipse.gemini.blueprint.context.support.DelegatedNamespaceHandlerResolver" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.service.exporter.support.internal.support" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.service.dependency.internal" level="WARN"/>-->
-    <!--<logger name="org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.iandt" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.test" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.extender.internal.activator" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.service.exporter.support" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.service.importer.support.internal.aop" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.extender.internal.support" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.extender.internal.blueprint" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.extender.internal.support.NamespaceManager" level="WARN"/>-->
-    <!--<logger name="org.eclipse.gemini.blueprint.extender.internal.support.NamespacePlugins" level="WARN"/>-->
+    <logger name="org.eclipse.gemini.blueprint.context.support.DelegatedNamespaceHandlerResolver" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.service.dependency.internal" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.extender.internal.support.NamespaceManager" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.extender.internal.support.NamespacePlugins" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.context.support.ChainedEntityResolver" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader" level="INFO"/>
     <root level="TRACE">
         <appender-ref ref="stdout"/>
         <appender-ref ref="file"/>

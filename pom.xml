@@ -317,12 +317,26 @@
                 <groupId>org.eclipse.osgi</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
                 <version>${equinox.ver}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.knopflerfish</groupId>
+                <artifactId>framework</artifactId>
+                <version>${kf.ver}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.main</artifactId>
+                <version>${felix.ver}</version>
                 <type>jar</type>
                 <scope>provided</scope>
-                <!--<scope>system</scope>-->
-                <!--<systemPath>-->
-                    <!--/Users/dsklyut/Projects/sources/osgi/gemini/blueprint/lib/org.eclipse.osgi_3.7.2.v20120110-1415.jar-->
-                <!--</systemPath>-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.felix</groupId>
+                        <artifactId>org.apache.felix.framework</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
         </dependencies>
@@ -331,11 +345,6 @@
 
     <!-- shared dependencies across modules -->
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>org.osgi</groupId>-->
-            <!--<artifactId>org.osgi.core</artifactId>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -848,6 +857,7 @@
         </plugins>
     </build>
 
+
     <!-- profiles for equinox, knopflerfish, and felix                 -->
     <!-- to use these profiles invoke maven with -Pprofile-name, e.g. -->
     <!-- mvn -Pfelix test                                             -->
@@ -858,6 +868,7 @@
                 <dependency>
                     <groupId>org.eclipse.osgi</groupId>
                     <artifactId>org.eclipse.osgi</artifactId>
+                    <scope>provided</scope>
                 </dependency>
             </dependencies>
             <properties>
@@ -872,7 +883,6 @@
                     <groupId>org.knopflerfish</groupId>
                     <artifactId>framework</artifactId>
                     <version>${kf.ver}</version>
-                    <type>jar</type>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -889,7 +899,6 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.main</artifactId>
                     <version>${felix.ver}</version>
-                    <type>jar</type>
                     <scope>provided</scope>
                     <exclusions>
                         <exclusion>
