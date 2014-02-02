@@ -21,8 +21,8 @@
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.configadmin</artifactId>
-            <version>1.2.8</version>
-            <scope>provided</scope>
+            <version>1.4.0</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- metatype service -->
@@ -76,105 +76,105 @@
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>service.listener</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>lifecycle</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>recursive</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>reference.proxy</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>simple.service</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>simple.service2</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>cardinality0to1</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>scoped.bundle.a</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>scoped.bundle.b</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>scoped.bundle.common</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>configuration</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>dependencies</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>tccl.intf</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>proxy.listener</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
             <artifactId>component.scan.bundle</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -191,12 +191,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                  <!--
-                  <includes>
-                        <include>**/ScopingTest.java</include>
-                    </includes>
-                    -->
-                    <forkMode>pertest</forkMode>
+                    <forkCount>1</forkCount>
+                    <reuseForks>false</reuseForks>
                     <forkedProcessTimeoutInSeconds>2700</forkedProcessTimeoutInSeconds>
                     <systemProperties>
                         <property>

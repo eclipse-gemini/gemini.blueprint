@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.test.platform;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -27,6 +28,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
@@ -69,7 +71,7 @@ public class KnopflerfishPlatform extends AbstractOsgiPlatform {
 
 		public BundleContext start() {
 			framework = BeanUtils.instantiateClass(CONSTRUCTOR, monitor);
-			ReflectionUtils.invokeMethod(LAUNCH, framework, Integer.valueOf(0));
+			ReflectionUtils.invokeMethod(LAUNCH, framework, 0);
 			return (BundleContext) ReflectionUtils.invokeMethod(GET_BUNDLE_CONTEXT, framework);
 		}
 
@@ -83,11 +85,11 @@ public class KnopflerfishPlatform extends AbstractOsgiPlatform {
 
 	private static class KF3Platform implements Platform {
 		private Bundle framework;
-		private final Map properties;
+		private final Map<String, String> properties;
 		private final Log log;
 		private FrameworkTemplate fwkTemplate;
 
-		KF3Platform(Map properties, Log log) {
+		KF3Platform(Map<String, String> properties, Log log) {
 			this.properties = properties;
 			this.log = log;
 		}
@@ -110,7 +112,6 @@ public class KnopflerfishPlatform extends AbstractOsgiPlatform {
 	}
 
 	private static final String KF_2X_BOOT_CLASS = "org.knopflerfish.framework.Framework";
-	private static final String KF_3X_BOOT_CLASS = "org.knopflerfish.framework.FrameworkContext";
 	private static final boolean KF_2X =
 			ClassUtils.isPresent(KF_2X_BOOT_CLASS, KnopflerfishPlatform.class.getClassLoader());
 
@@ -136,7 +137,7 @@ public class KnopflerfishPlatform extends AbstractOsgiPlatform {
 		props.setProperty("org.osgi.framework.dir", kfStorageDir.getAbsolutePath());
 		props.setProperty("org.knopflerfish.framework.bundlestorage", "file");
 		props.setProperty("org.knopflerfish.framework.bundlestorage.file.reference", "true");
-		props.setProperty("org.knopflerfish.framework.bundlestorage.file.unpack", "false");
+		props.setProperty("org.knopflerfish.framework.bundlestorage.file.unpack", "true");
 		props.setProperty("org.knopflerfish.startlevel.use", "true");
 		props.setProperty("org.knopflerfish.osgi.setcontextclassloader", "true");
 		// embedded mode
@@ -163,7 +164,9 @@ public class KnopflerfishPlatform extends AbstractOsgiPlatform {
 		if (framework == null) {
 			// copy configuration properties to sys properties
 			System.getProperties().putAll(getConfigurationProperties());
-			framework = (KF_2X ? new KF2Platform(this) : new KF3Platform(getPlatformProperties(), log));
+            Map<String, String> props = new HashMap<String, String>();
+            CollectionUtils.mergePropertiesIntoMap(getPlatformProperties(), props);
+			framework = (KF_2X ? new KF2Platform(this) : new KF3Platform(props, log));
 			context = framework.start();
 		}
 	}

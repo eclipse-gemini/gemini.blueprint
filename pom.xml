@@ -50,7 +50,7 @@
         <equinox.ver>3.7.2.v20120110-1415</equinox.ver>
         <!--<equinox.ver>3.6.2.R36x_v20110210</equinox.ver>-->
         <!-- Knopflerfish 4.0.1 -->
-        <kf.ver>6.0.4</kf.ver>
+        <kf.ver>6.0.2</kf.ver>
         <!-- Felix 4.x supports OSGi R4.3 -->
         <felix.ver>4.0.3</felix.ver>
         <!--<kf.ver>5.3.3</kf.ver>-->
@@ -404,6 +404,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -906,6 +907,11 @@
                             <artifactId>org.apache.felix.framework</artifactId>
                         </exclusion>
                     </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.core</artifactId>
+                    <scope>compile</scope>
                 </dependency>
             </dependencies>
             <properties>
