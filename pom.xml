@@ -47,8 +47,11 @@
         <osgi.ver>4.2.0</osgi.ver>
         <!-- platform versions -->
         <!-- equinox 3.7 is R4.3 impl -->
-        <equinox.ver>3.7.2.v20120110-1415</equinox.ver>
-        <!--<equinox.ver>3.6.2.R36x_v20110210</equinox.ver>-->
+        <!-- todo: would like to use this version -->
+        <!--<equinox.ver>3.7.2.v20120110-1415</equinox.ver>-->
+        <!-- todo: only found this in public repos -->
+        <!-- note - another reason why ebr is so important -->
+        <equinox.ver>3.7.1</equinox.ver>
         <!-- Knopflerfish 4.0.1 -->
         <kf.ver>6.0.2</kf.ver>
         <!-- Felix 4.x supports OSGi R4.3 -->
@@ -1051,11 +1054,11 @@
             <url>http://www.knopflerfish.org/maven2/</url>
         </repository>
 
-        <repository>
-            <id>dmitry-local</id>
-            <name>Just Cause equinox 3.7.2 is not in central</name>
-            <url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>dmitry-local</id>-->
+            <!--<name>Just Cause equinox 3.7.2 is not in central</name>-->
+            <!--<url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>-->
+        <!--</repository>-->
 
         <repository>
             <id>com.springsource.repository.bundles.release</id>
