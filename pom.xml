@@ -1047,13 +1047,13 @@
             <name>knopflerfish repo</name>
             <url>http://www.knopflerfish.org/maven2/</url>
         </repository>
-
+        <!--
         <repository>
             <id>dmitry-local</id>
             <name>Just Cause equinox 3.7.2 is not in central</name>
             <url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>
         </repository>
-
+        -->
         <repository>
             <id>com.springsource.repository.bundles.release</id>
             <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
