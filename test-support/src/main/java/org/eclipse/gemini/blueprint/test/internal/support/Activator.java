@@ -29,21 +29,22 @@ import org.osgi.framework.ServiceRegistration;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration registration;
+	private ServiceRegistration<TestRunnerService> registration;
 
 
 	public void start(BundleContext context) throws Exception {
-		registration = context.registerService(TestRunnerService.class.getName(), new OsgiJUnitService(), null);
+		registration = context.registerService(TestRunnerService.class, new OsgiJUnitService(), null);
 
 		// add also the bundle id so that AbstractOsgiTest can determine its BundleContext when used in an environment
 		// where the system bundle is treated as a special case.
-		HolderLoader.INSTANCE.getHolder().setTestBundleId(new Long(context.getBundle().getBundleId()));
+		HolderLoader.INSTANCE.getHolder().setTestBundleId(context.getBundle().getBundleId());
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		// unregister the service even though the framework should do this automatically
-		if (registration != null)
+		if (registration != null) {
 			registration.unregister();
+        }
 	}
 
 }

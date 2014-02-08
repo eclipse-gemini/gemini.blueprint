@@ -113,7 +113,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 
 		Dictionary props = new Hashtable();
 		// increase service ranking
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, 10);
 
 		ServiceReference ref = new MockServiceReference(null, props, null);
 
@@ -152,7 +152,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 
 		Dictionary props = new Hashtable();
 		// increase service ranking
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, 10);
 
 		ServiceReference ref = new MockServiceReference(null, props, null);
 		ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, ref);
@@ -174,12 +174,12 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 
 		Dictionary props = new Hashtable();
 		// increase service ranking
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, 10);
 
 		ServiceReference higherRankingRef = new MockServiceReference(null, props, null);
 		refs = new ServiceReference[] { new MockServiceReference(), higherRankingRef };
 
-		assertTrue(Arrays.equals(bundleContext.getServiceReferences(null, null), refs));
+		assertTrue(Arrays.equals(bundleContext.getServiceReferences((String)null, null), refs));
 
 		assertEquals(1, SimpleTargetSourceLifecycleListener.BIND);
 		assertEquals(0, SimpleTargetSourceLifecycleListener.UNBIND);

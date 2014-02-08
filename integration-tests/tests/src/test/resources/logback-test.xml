@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- For assistance related to logback-translator or configuration  -->
-<!-- files in general, please contact the logback user mailing list -->
-<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
-<!--                                                                -->
-<!-- For professional support please see                            -->
-<!--    http://www.qos.ch/shop/products/professionalSupport         -->
-<!--                                                                -->
 <configuration debug="true">
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%-30(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{32} : %line - %msg %ex%n</pattern>
+            <pattern>%-30(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{32}:%line - %msg %ex%n</pattern>
         </encoder>
     </appender>
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -19,22 +12,31 @@
         <encoder>
             <pattern>%-30(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{32}:%line - %msg %ex%n</pattern>
         </encoder>
+        <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+            <!--<level>TRACE</level>-->
+        <!--</filter>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <maxIndex>2</maxIndex>
+            <maxIndex>10</maxIndex>
             <FileNamePattern>./target/out.log.%i</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
-    <logger name="org.springframework" level="INFO"/>
-    <logger name="org.eclipse.gemini.blueprint.context.support.DelegatedNamespaceHandlerResolver" level="WARN"/>
-    <logger name="org.eclipse.gemini.blueprint.service.dependency.internal" level="WARN"/>
-    <logger name="org.eclipse.gemini.blueprint.extender.internal.support.NamespaceManager" level="WARN"/>
-    <logger name="org.eclipse.gemini.blueprint.extender.internal.support.NamespacePlugins" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.util" level="TRACE"/>
+    <logger name="org.eclipse.gemini.blueprint" level="TRACE"/>
     <logger name="org.eclipse.gemini.blueprint.context.support.ChainedEntityResolver" level="WARN"/>
-    <logger name="org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader" level="INFO"/>
-    <root level="TRACE">
+    <logger name="org.eclipse.gemini.blueprint.context.support.DelegatedNamespaceHandlerResolver" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.extender.internal.activator.listeners" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener$ContextBundleListener" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support" level="INFO"/>
+    <logger name="org.eclipse.gemini.blueprint.io" level="WARN"/>
+    <logger name="org.eclipse.gemini.blueprint.test.provisioning.internal" level="INFO"/>
+    <logger name="org.eclipse.gemini.blueprint.extender.internal.support" level="WARN"/>
+    <logger name="org.springframework.test" level="TRACE"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.eclipse.gemini.blueprint.iandt" level="TRACE"/>
+    <root level="WARN">
         <appender-ref ref="stdout"/>
         <appender-ref ref="file"/>
     </root>

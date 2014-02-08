@@ -29,7 +29,7 @@ public abstract class OsgiServiceUtils {
 	 * true if the unregistration process succeeded, false otherwise.
 	 * 
 	 * @param registration service registration (can be null)
-	 * @return true if the unregistration successeded, false otherwise
+	 * @return true if the unregistration succeeded, false otherwise
 	 */
 	public static boolean unregisterService(ServiceRegistration registration) {
 		try {
@@ -37,8 +37,8 @@ public abstract class OsgiServiceUtils {
 				registration.unregister();
 				return true;
 			}
-		}
-		catch (IllegalStateException alreadyUnregisteredException) {
+		} catch (IllegalStateException alreadyUnregisteredException) {
+            // do nothing
 		}
 		return false;
 	}

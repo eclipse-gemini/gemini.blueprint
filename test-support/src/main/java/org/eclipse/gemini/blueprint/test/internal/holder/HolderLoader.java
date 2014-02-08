@@ -53,21 +53,19 @@ public class HolderLoader {
 		Class<?> clazz;
 		try {
 			clazz = appCL.loadClass(HOLDER_CLASS_NAME);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			// if it's not found, then the class path is incorrectly constructed
-			throw (RuntimeException) new IllegalStateException(
-				"spring-osgi-test.jar is not available on the boot class path; are you deploying the test framework"
-						+ "as a bundle by any chance? ").initCause(ex);
+			throw new IllegalStateException(
+				"gemini-blueprint-test.jar is not available on the boot class path; are you deploying the test framework"
+						+ "as a bundle by any chance? ", ex);
 		}
 		// get the static instance
 		Field field = ReflectionUtils.findField(clazz, INSTANCE_FIELD, clazz);
 		Object instance;
 		try {
 			instance = field.get(null);
-		}
-		catch (Exception ex) {
-			throw (RuntimeException) new IllegalStateException("Cannot read property " + INSTANCE_FIELD).initCause(ex);
+		} catch (Exception ex) {
+			throw new IllegalStateException("Cannot read property " + INSTANCE_FIELD, ex);
 		}
 		// once the class is loaded return it wrapped through it's OSGi instance
 		holder = new ReflectionOsgiHolder(instance);

@@ -36,7 +36,7 @@ import org.osgi.framework.ServiceRegistration;
  * the test execution. This class is used by the testing framework to run
  * integration tests inside the OSGi framework.
  * 
- * <strong>Note:</strong> Programatic usage of this class is strongly
+ * <strong>Note:</strong> Programmatic usage of this class is strongly
  * discouraged as its semantics might change in the future - in fact, the only
  * reason this class is public is because the OSGi specification requires this.
  * 
@@ -47,21 +47,20 @@ public class JUnitTestActivator implements BundleActivator {
 	private static final Log log = LogFactory.getLog(JUnitTestActivator.class);
 
 	private BundleContext context;
-	private ServiceReference reference;
-	private ServiceRegistration registration;
+	private ServiceReference<TestRunnerService> reference;
+	private ServiceRegistration<JUnitTestActivator> registration;
 	private TestRunnerService service;
 
 
 	public void start(BundleContext bc) throws Exception {
 		this.context = bc;
 
-		reference = context.getServiceReference(TestRunnerService.class.getName());
-		if (reference == null)
+		reference = context.getServiceReference(TestRunnerService.class);
+		if (reference == null) {
 			throw new IllegalArgumentException("cannot find service at " + TestRunnerService.class.getName());
-		service = (TestRunnerService) context.getService(reference);
-
-		registration = context.registerService(JUnitTestActivator.class.getName(), this, new Hashtable());
-
+        }
+		service = context.getService(reference);
+		registration = context.registerService(JUnitTestActivator.class, this, new Hashtable<String, Object>());
 	}
 
 	/**
@@ -100,6 +99,7 @@ public class JUnitTestActivator implements BundleActivator {
 
 	public void stop(BundleContext bc) throws Exception {
 		OsgiServiceUtils.unregisterService(registration);
+        reference = null;
 	}
 
 }

@@ -224,8 +224,9 @@ public abstract class PropertiesUtil {
 	public static Properties loadAndExpand(Resource resource) {
 		Properties props = new OrderedProperties();
 
-		if (resource == null)
+		if (resource == null) {
 			return props;
+        }
 
 		try {
 			props.load(resource.getInputStream());
@@ -243,8 +244,9 @@ public abstract class PropertiesUtil {
 	 * @return
 	 */
 	public static Properties filterKeysStartingWith(Properties properties, String prefix) {
-		if (!StringUtils.hasText(prefix))
+		if (!StringUtils.hasText(prefix)) {
 			return EMPTY_PROPERTIES;
+        }
 
 		Assert.notNull(properties);
 
@@ -272,8 +274,9 @@ public abstract class PropertiesUtil {
 	 * @return
 	 */
 	public static Properties filterValuesStartingWith(Properties properties, String prefix) {
-		if (!StringUtils.hasText(prefix))
+		if (!StringUtils.hasText(prefix)) {
 			return EMPTY_PROPERTIES;
+        }
 
 		Assert.notNull(properties);
 		Properties excluded = (properties instanceof OrderedProperties ? new OrderedProperties() : new Properties());
@@ -354,11 +357,10 @@ public abstract class PropertiesUtil {
 					copy = copy.substring(stopIndex + 1);
 					// append the replacement for the token
 					result.append(properties.getProperty(token));
-				}
-
-				else
+				} else {
 					throw new IllegalArgumentException("cannot interpret property " + prop + " due of token [" + copy
 							+ "]");
+                }
 
 			} else {
 				hasPlaceholder = false;

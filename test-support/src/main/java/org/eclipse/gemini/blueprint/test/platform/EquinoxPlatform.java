@@ -68,17 +68,18 @@ public class EquinoxPlatform extends AbstractOsgiPlatform {
 
 			// Equinox 3.1.x returns void - use of reflection is required
 			// use main since in 3.1.x it sets up some system properties
-			EclipseStarter.main(new String[0]);
+//			EclipseStarter.main(new String[0]);
 
-			final Field field = EclipseStarter.class.getDeclaredField("context");
+//			final Field field = EclipseStarter.class.getDeclaredField("context");
 
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					field.setAccessible(true);
-					return null;
-				}
-			});
-			context = (BundleContext) field.get(null);
+//			AccessController.doPrivileged(new PrivilegedAction<Object>() {
+//				public Object run() {
+//					field.setAccessible(true);
+//					return null;
+//				}
+//			});
+//			context = (BundleContext) field.get(null);
+            context = EclipseStarter.startup(new String[0], null);
 		}
 	}
 

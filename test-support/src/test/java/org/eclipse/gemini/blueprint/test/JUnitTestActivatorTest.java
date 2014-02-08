@@ -16,6 +16,7 @@ package org.eclipse.gemini.blueprint.test;
 
 import java.lang.reflect.Field;
 import java.util.Dictionary;
+import java.util.Hashtable;
 
 import junit.framework.TestCase;
 
@@ -85,9 +86,9 @@ public class JUnitTestActivatorTest extends TestCase {
 
 		ServiceReference ref = new MockServiceReference();
 
-		expect(ctx.getServiceReference(TestRunnerService.class.getName())).andReturn(ref);
+		expect(ctx.getServiceReference(TestRunnerService.class)).andReturn(ref);
 		expect(ctx.getService(ref)).andReturn(runner);
-		expect(ctx.registerService(anyString(), anyObject(), anyObject(Dictionary.class))).andReturn(null);
+		expect(ctx.registerService(eq(JUnitTestActivator.class), eq(activator), eq(new Hashtable<String, Object>()))).andReturn(null);
 
 		replay(ctx, runner);
 		activator.start(ctx);
@@ -120,8 +121,7 @@ public class JUnitTestActivatorTest extends TestCase {
 		try {
 			activator.executeTest();
 			fail("should have thrown exception");
-		}
-		catch (RuntimeException ex) {
+		} catch (RuntimeException ex) {
 			// expected
 		}
 

@@ -81,10 +81,11 @@ abstract class AbstractOsgiPlatform implements OsgiPlatform {
 	}
 
 	File createTempDir(String suffix) {
-		if (suffix == null)
+		if (suffix == null) {
 			suffix = DEFAULT_SUFFIX;
-		File tempFileName;
+        }
 
+		File tempFileName;
 		try {
 			tempFileName = File.createTempFile(TMP_PREFIX, suffix);
 		} catch (IOException ex) {

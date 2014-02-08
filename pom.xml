@@ -44,14 +44,14 @@
         <env.buildNumber></env.buildNumber>
 
         <!-- compiled against osgi Revision -->
-        <osgi.ver>4.2.0</osgi.ver>
+        <osgi.ver>4.3.0</osgi.ver>
         <!-- platform versions -->
         <!-- equinox 3.7 is R4.3 impl -->
         <!-- todo: would like to use this version -->
-        <!--<equinox.ver>3.7.2.v20120110-1415</equinox.ver>-->
+        <equinox.ver>3.7.2.v20120110-1415</equinox.ver>
         <!-- todo: only found this in public repos -->
         <!-- note - another reason why ebr is so important -->
-        <equinox.ver>3.7.1</equinox.ver>
+        <!--<equinox.ver>3.7.1</equinox.ver>-->
         <!-- Knopflerfish 4.0.1 -->
         <kf.ver>6.0.2</kf.ver>
         <!-- Felix 4.x supports OSGi R4.3 -->
@@ -112,9 +112,7 @@
 
     <scm>
         <connection>scm:git:git//git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</connection>
-        <developerConnection>
-            ssh://{user.name}@git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git
-        </developerConnection>
+        <developerConnection>scm:git:ssh://{user.name}@git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</developerConnection>
     </scm>
 
     <developers>
@@ -600,9 +598,7 @@
                             <Bundle-SymbolicName>${spring.osgi.symbolic.name}.source</Bundle-SymbolicName>
                             <Bundle-Vendor>Eclipse Foundation</Bundle-Vendor>
                             <Bundle-DocURL>http://www.eclipse.org/gemini/blueprint/</Bundle-DocURL>
-                            <Bundle-License>http://www.opensource.org/licenses/eclipse-1.0.php,
-                                http://www.opensource.org/licenses/apache2.0.php
-                            </Bundle-License>
+                            <Bundle-License>http://www.opensource.org/licenses/eclipse-1.0.php,http://www.opensource.org/licenses/apache2.0.php</Bundle-License>
                             <Implementation-Title>Eclipse Gemini Blueprint</Implementation-Title>
                             <Implementation-Version>${project.version}</Implementation-Version>
                             <Implementation-Vendor>Eclipse Foundation</Implementation-Vendor>
@@ -610,8 +606,7 @@
                             <Gemini-Blueprint-Version>${project.version}</Gemini-Blueprint-Version>
                             <Spring-Version>${spring.maven.artifact.version}</Spring-Version>
                             <Git-Revision>${git.commit.id.describe}</Git-Revision>
-                            <Eclipse-SourceBundle>${spring.osgi.symbolic.name};version="${project.version}";roots:="."
-                            </Eclipse-SourceBundle>
+                            <Eclipse-SourceBundle>${spring.osgi.symbolic.name};version="${project.version}";roots:="."</Eclipse-SourceBundle>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -773,7 +768,6 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -1054,11 +1048,11 @@
             <url>http://www.knopflerfish.org/maven2/</url>
         </repository>
 
-        <!--<repository>-->
-            <!--<id>dmitry-local</id>-->
-            <!--<name>Just Cause equinox 3.7.2 is not in central</name>-->
-            <!--<url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>-->
-        <!--</repository>-->
+        <repository>
+            <id>dmitry-local</id>
+            <name>Just Cause equinox 3.7.2 is not in central</name>
+            <url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>
+        </repository>
 
         <repository>
             <id>com.springsource.repository.bundles.release</id>

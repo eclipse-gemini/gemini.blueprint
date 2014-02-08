@@ -15,6 +15,7 @@
 package org.eclipse.gemini.blueprint.mock;
 
 import java.util.Dictionary;
+import java.util.Map;
 
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
@@ -63,4 +64,9 @@ public class MockFilter implements Filter {
 	public String toString() {
 		return filter;
 	}
+
+    @Override
+    public boolean matches(Map<String, ?> map) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

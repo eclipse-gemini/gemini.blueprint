@@ -319,9 +319,9 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 	@SuppressWarnings("unchecked")
 	private void publishContextAsOsgiServiceIfNecessary() {
 		if (publishContextAsService && serviceRegistration == null) {
-			final Dictionary<Object, Object> serviceProperties = new MapBasedDictionary<Object, Object>();
+			final Dictionary<String, Object> serviceProperties = new MapBasedDictionary<String, Object>();
 
-			customizeApplicationContextServiceProperties((Map<Object, Object>) serviceProperties);
+			customizeApplicationContextServiceProperties((Map<String, Object>) serviceProperties);
 
 			if (logger.isInfoEnabled()) {
 				logger.info("Publishing application context as OSGi service with properties " + serviceProperties);
@@ -396,7 +396,7 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 	 * 
 	 * @param serviceProperties service properties map (can be casted to {@link Dictionary})
 	 */
-	protected void customizeApplicationContextServiceProperties(Map<Object, Object> serviceProperties) {
+	protected void customizeApplicationContextServiceProperties(Map<String, Object> serviceProperties) {
 		serviceProperties.put(APPLICATION_CONTEXT_SERVICE_PROPERTY_NAME, getBundleSymbolicName());
 		serviceProperties.put(SPRING_DM_APPLICATION_CONTEXT_SERVICE_PROPERTY_NAME, getBundleSymbolicName());
 		serviceProperties.put(Constants.BUNDLE_SYMBOLICNAME, getBundleSymbolicName());

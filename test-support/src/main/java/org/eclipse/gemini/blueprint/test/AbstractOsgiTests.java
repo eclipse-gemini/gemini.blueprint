@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
  * You may elect to redistribute this code under either of these licenses. 
- * 
+ *
  * Contributors:
  *   VMware Inc.
  *****************************************************************************/
@@ -41,491 +41,493 @@ import org.springframework.util.ReflectionUtils;
 /**
  * Base test for OSGi environments. Takes care of configuring the chosen OSGi platform, starting it, installing a number
  * of bundles and delegating the test execution to a test copy that runs inside OSGi.
- * 
+ *
  * @author Costin Leau
  */
 public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInjectionTests {
 
-	private static final String UTF_8_CHARSET = "UTF-8";
+    private static final String UTF_8_CHARSET = "UTF-8";
 
-	// JVM shutdown hook
-	private static Thread shutdownHook;
+    // JVM shutdown hook
+    private static Thread shutdownHook;
 
-	// the OSGi fixture
-	private static OsgiPlatform osgiPlatform;
+    // the OSGi fixture
+    private static OsgiPlatform osgiPlatform;
 
-	// OsgiPlatform bundle context
-	private static BundleContext platformContext;
+    // OsgiPlatform bundle context
+    private static BundleContext platformContext;
 
-	// JUnit Service
-	private static Object service;
+    // JUnit Service
+    private static Object service;
 
-	// JUnitService trigger
-	private static Method serviceTrigger;
+    // JUnitService trigger
+    private static Method serviceTrigger;
 
-	// the test results used by the triggering test runner
-	private TestResult originalResult;
+    // the test results used by the triggering test runner
+    private TestResult originalResult;
 
-	// OsgiResourceLoader
-	protected ResourceLoader resourceLoader;
+    // OsgiResourceLoader
+    protected ResourceLoader resourceLoader;
 
-	/**
-	 * Hook for JUnit infrastructures which can't reuse this class hierarchy. This instance represents the test which
-	 * will be executed by AbstractOsgiTests & co.
-	 */
-	private TestCase osgiJUnitTest = this;
+    /**
+     * Hook for JUnit infrastructures which can't reuse this class hierarchy. This instance represents the test which
+     * will be executed by AbstractOsgiTests & co.
+     */
+    private TestCase osgiJUnitTest = this;
 
-	private static final String ACTIVATOR_REFERENCE = "org.eclipse.gemini.blueprint.test.JUnitTestActivator";
+    private static final String ACTIVATOR_REFERENCE = "org.eclipse.gemini.blueprint.test.JUnitTestActivator";
 
-	/**
-	 * Default constructor. Constructs a new <code>AbstractOsgiTests</code> instance.
-	 */
-	public AbstractOsgiTests() {
-		super();
-	}
+    /**
+     * Default constructor. Constructs a new <code>AbstractOsgiTests</code> instance.
+     */
+    public AbstractOsgiTests() {
+        super();
+    }
 
-	/**
-	 * Constructs a new <code>AbstractOsgiTests</code> instance.
-	 * 
-	 * @param name test name
-	 */
-	public AbstractOsgiTests(String name) {
-		super(name);
-	}
+    /**
+     * Constructs a new <code>AbstractOsgiTests</code> instance.
+     *
+     * @param name test name
+     */
+    public AbstractOsgiTests(String name) {
+        super(name);
+    }
 
-	/**
-	 * Returns the test framework bundles (part of the test setup). Used by the test infrastructure. Override this
-	 * method <i>only</i> if you want to change the jars used by default, by the testing infrastructure.
-	 * 
-	 * User subclasses should use {@link #getTestBundles()} instead.
-	 * 
-	 * @return the array of test framework bundle resources
-	 */
-	protected abstract Resource[] getTestFrameworkBundles();
+    /**
+     * Returns the test framework bundles (part of the test setup). Used by the test infrastructure. Override this
+     * method <i>only</i> if you want to change the jars used by default, by the testing infrastructure.
+     * <p/>
+     * User subclasses should use {@link #getTestBundles()} instead.
+     *
+     * @return the array of test framework bundle resources
+     */
+    protected abstract Resource[] getTestFrameworkBundles();
 
-	/**
-	 * Returns the bundles required for the test execution.
-	 * 
-	 * @return the array of bundles to install
-	 */
-	protected abstract Resource[] getTestBundles();
+    /**
+     * Returns the bundles required for the test execution.
+     *
+     * @return the array of bundles to install
+     */
+    protected abstract Resource[] getTestBundles();
 
-	/**
-	 * Creates (and configures) the OSGi platform.
-	 * 
-	 * @return OSGi platform instance
-	 * @throws Exception if the platform creation fails
-	 */
-	protected abstract OsgiPlatform createPlatform() throws Exception;
+    /**
+     * Creates (and configures) the OSGi platform.
+     *
+     * @return OSGi platform instance
+     * @throws Exception if the platform creation fails
+     */
+    protected abstract OsgiPlatform createPlatform() throws Exception;
 
-	/**
-	 * Pre-processes the bundle context. This call back gives access to the platform bundle context before any bundles
-	 * have been installed. The method is invoked <b>after</b> starting the OSGi environment but <b>before</b> any
-	 * bundles are installed in the OSGi framework.
-	 * 
-	 * <p/> Normally, this method is called only once during the lifecycle of a test suite.
-	 * 
-	 * @param platformBundleContext the platform bundle context
-	 * @throws Exception if processing the bundle context fails
-	 * @see #postProcessBundleContext(BundleContext)
-	 * 
-	 */
-	protected void preProcessBundleContext(BundleContext platformBundleContext) throws Exception {
-	}
+    /**
+     * Pre-processes the bundle context. This call back gives access to the platform bundle context before any bundles
+     * have been installed. The method is invoked <b>after</b> starting the OSGi environment but <b>before</b> any
+     * bundles are installed in the OSGi framework.
+     * <p/>
+     * <p/> Normally, this method is called only once during the lifecycle of a test suite.
+     *
+     * @param platformBundleContext the platform bundle context
+     * @throws Exception if processing the bundle context fails
+     * @see #postProcessBundleContext(BundleContext)
+     */
+    protected void preProcessBundleContext(BundleContext platformBundleContext) throws Exception {
+    }
 
-	/**
-	 * Post-processes the bundle context. This call back gives access to the platform bundle context after the critical
-	 * test infrastructure bundles have been installed and started. The method is invoked <b>after</b> preparing the
-	 * OSGi environment for the test execution but <b>before</b> any test is executed.
-	 * 
-	 * The given <code>BundleContext</code> belongs to the underlying OSGi framework.
-	 * 
-	 * <p/> Normally, this method is called only one during the lifecycle of a test suite.
-	 * 
-	 * @param platformBundleContext the platform bundle context
-	 * @see #preProcessBundleContext(BundleContext)
-	 */
-	protected void postProcessBundleContext(BundleContext platformBundleContext) throws Exception {
-	}
+    /**
+     * Post-processes the bundle context. This call back gives access to the platform bundle context after the critical
+     * test infrastructure bundles have been installed and started. The method is invoked <b>after</b> preparing the
+     * OSGi environment for the test execution but <b>before</b> any test is executed.
+     * <p/>
+     * The given <code>BundleContext</code> belongs to the underlying OSGi framework.
+     * <p/>
+     * <p/> Normally, this method is called only one during the lifecycle of a test suite.
+     *
+     * @param platformBundleContext the platform bundle context
+     * @see #preProcessBundleContext(BundleContext)
+     */
+    protected void postProcessBundleContext(BundleContext platformBundleContext) throws Exception {
+    }
 
-	//
-	// JUnit overridden methods.
-	//
+    //
+    // JUnit overridden methods.
+    //
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p/> Replacement run method. Gets a hold of the TestRunner used for running this test so it can populate it with
-	 * the results retrieved from OSGi.
-	 */
-	public final void run(TestResult result) {
+    /**
+     * {@inheritDoc}
+     * <p/>
+     * <p/> Replacement run method. Gets a hold of the TestRunner used for running this test so it can populate it with
+     * the results retrieved from OSGi.
+     */
+    public final void run(TestResult result) {
 
-		// get a hold of the test result
-		originalResult = result;
+        // get a hold of the test result
+        originalResult = result;
 
-		result.startTest(osgiJUnitTest);
-		result.runProtected(osgiJUnitTest, new Protectable() {
+        result.startTest(osgiJUnitTest);
+        result.runProtected(osgiJUnitTest, new Protectable() {
 
-			public void protect() throws Throwable {
-				AbstractOsgiTests.this.runBare();
-			}
-		});
-		result.endTest(osgiJUnitTest);
+            public void protect() throws Throwable {
+                AbstractOsgiTests.this.runBare();
+            }
+        });
+        result.endTest(osgiJUnitTest);
 
-		// super.run(result);
-	}
+        // super.run(result);
+    }
 
-	public void runBare() throws Throwable {
-		// add ConditionalTestCase behaviour
+    public void runBare() throws Throwable {
+        // add ConditionalTestCase behaviour
 
-		// getName will return the name of the method being run
-		if (isDisabledInThisEnvironment(getName())) {
-			recordDisabled();
-			logger.warn("**** " + getClass().getName() + "." + getName() + " disabled in this environment: "
-					+ "Total disabled tests=" + getDisabledTestCount());
-			return;
-		} else {
-			prepareTestExecution();
-			try {
-				// invoke OSGi test run
-				invokeOSGiTestExecution();
-				readTestResult();
-			} finally {
-				// nothing to clean up
-			}
-		}
-	}
+        // getName will return the name of the method being run
+        if (isDisabledInThisEnvironment(getName())) {
+            recordDisabled();
+            logger.warn("**** " + getClass().getName() + "." + getName() + " disabled in this environment: "
+                    + "Total disabled tests=" + getDisabledTestCount());
+        } else {
+            prepareTestExecution();
+            // invoke OSGi test run
+            invokeOSGiTestExecution();
+            readTestResult();
 
-	//
-	// OSGi testing infrastructure setup.
-	//
+        }
+    }
 
-	/**
-	 * Starts the OSGi platform and install/start the bundles (happens once for the all test runs)
-	 * 
-	 * @throws Exception
-	 */
-	private void startup() throws Exception {
-		if (osgiPlatform == null) {
+    //
+    // OSGi testing infrastructure setup.
+    //
 
-			boolean debug = logger.isDebugEnabled();
+    /**
+     * Starts the OSGi platform and install/start the bundles (happens once for the all test runs)
+     *
+     * @throws Exception
+     */
+    private void startup() throws Exception {
+        if (osgiPlatform == null) {
 
-			// make sure the platform is closed properly
-			registerShutdownHook();
+            boolean debug = logger.isDebugEnabled();
 
-			osgiPlatform = createPlatform();
-			// start platform
-			if (debug)
-				logger.debug("About to start " + osgiPlatform);
-			osgiPlatform.start();
-			// platform context
-			platformContext = osgiPlatform.getBundleContext();
+            // make sure the platform is closed properly
+            registerShutdownHook();
 
-			// log platform name and version
-			logPlatformInfo(platformContext);
+            osgiPlatform = createPlatform();
 
-			// hook before the OSGi platform is setup but right after is has
-			// been started
-			preProcessBundleContext(platformContext);
+            // start platform
+            if (debug) {
+                logger.debug("About to start " + osgiPlatform);
+            }
 
-			// install bundles (from the local system/classpath)
-			Resource[] bundleResources = locateBundles();
+            osgiPlatform.start();
 
-			Bundle[] bundles = new Bundle[bundleResources.length];
-			for (int i = 0; i < bundles.length; i++) {
-				bundles[i] = installBundle(bundleResources[i]);
-			}
+            // platform context
+            platformContext = osgiPlatform.getBundleContext();
 
-			// start bundles
-			for (int i = 0; i < bundles.length; i++) {
-				startBundle(bundles[i]);
-			}
+            // log platform name and version
+            logPlatformInfo(platformContext);
 
-			// hook after the OSGi platform has been setup
-			postProcessBundleContext(platformContext);
+            // hook before the OSGi platform is setup but right after is has been started
+            preProcessBundleContext(platformContext);
 
-			initializeServiceRunnerInvocationMethods();
-		}
-	}
+            // install bundles (from the local system/classpath)
+            Resource[] bundleResources = locateBundles();
 
-	// concatenate bundles to install
-	private Resource[] locateBundles() {
-		Resource[] testFrameworkBundles = getTestFrameworkBundles();
-		Resource[] testBundles = getTestBundles();
+            Bundle[] bundles = new Bundle[bundleResources.length];
+            for (int i = 0; i < bundles.length; i++) {
+                bundles[i] = installBundle(bundleResources[i]);
+            }
 
-		if (testFrameworkBundles == null)
-			testFrameworkBundles = new Resource[0];
-		if (testBundles == null)
-			testBundles = new Resource[0];
+            // start bundles
+            for (Bundle bundle : bundles) {
+                startBundle(bundle);
+            }
 
-		Resource[] allBundles = new Resource[testFrameworkBundles.length + testBundles.length];
-		System.arraycopy(testFrameworkBundles, 0, allBundles, 0, testFrameworkBundles.length);
-		System.arraycopy(testBundles, 0, allBundles, testFrameworkBundles.length, testBundles.length);
-		return allBundles;
-	}
+            // hook after the OSGi platform has been setup
+            postProcessBundleContext(platformContext);
 
-	/**
-	 * Logs the underlying OSGi information (which can be tricky).
-	 * 
-	 */
-	private void logPlatformInfo(BundleContext context) {
-		StringBuilder platformInfo = new StringBuilder();
+            initializeServiceRunnerInvocationMethods();
+        }
+    }
 
-		// add platform information
-		platformInfo.append(osgiPlatform);
-		platformInfo.append(" [");
-		// Version
-		platformInfo.append(OsgiPlatformDetector.getVersion(context));
-		platformInfo.append("]");
-		logger.info(platformInfo + " started");
-	}
+    // concatenate bundles to install
+    private Resource[] locateBundles() {
+        Resource[] testFrameworkBundles = getTestFrameworkBundles();
+        Resource[] testBundles = getTestBundles();
 
-	/**
-	 * Installs an OSGi bundle from the given location.
-	 * 
-	 * @param location
-	 * @return
-	 * @throws Exception
-	 */
-	private Bundle installBundle(Resource location) throws Exception {
-		Assert.notNull(platformContext, "the OSGi platform is not set");
-		Assert.notNull(location, "cannot install from a null location");
-		if (logger.isDebugEnabled())
-			logger.debug("Installing bundle from location " + location.getDescription());
+        if (testFrameworkBundles == null) {
+            testFrameworkBundles = new Resource[0];
+        }
+        if (testBundles == null) {
+            testBundles = new Resource[0];
+        }
 
-		String bundleLocation;
+        Resource[] allBundles = new Resource[testFrameworkBundles.length + testBundles.length];
+        System.arraycopy(testFrameworkBundles, 0, allBundles, 0, testFrameworkBundles.length);
+        System.arraycopy(testBundles, 0, allBundles, testFrameworkBundles.length, testBundles.length);
+        return allBundles;
+    }
 
-		try {
-			bundleLocation = URLDecoder.decode(location.getURL().toExternalForm(), UTF_8_CHARSET);
-		} catch (Exception ex) {
-			// the URL cannot be created, fall back to the description
-			bundleLocation = location.getDescription();
-		}
+    /**
+     * Logs the underlying OSGi information (which can be tricky).
+     */
+    private void logPlatformInfo(BundleContext context) {
+        StringBuilder platformInfo = new StringBuilder();
 
-		return platformContext.installBundle(bundleLocation, location.getInputStream());
-	}
+        // add platform information
+        platformInfo.append(osgiPlatform);
+        platformInfo.append(" [");
+        // Version
+        platformInfo.append(OsgiPlatformDetector.getVersion(context));
+        platformInfo.append("]");
+        logger.info(platformInfo + " started");
+    }
 
-	/**
-	 * Starts a bundle and prints a nice logging message in case of failure.
-	 * 
-	 * @param bundle
-	 * @return
-	 * @throws BundleException
-	 */
-	private void startBundle(Bundle bundle) throws BundleException {
-		boolean debug = logger.isDebugEnabled();
-		String info = "[" + OsgiStringUtils.nullSafeNameAndSymName(bundle) + "|" + bundle.getLocation() + "]";
+    /**
+     * Installs an OSGi bundle from the given location.
+     *
+     * @param location - location bundle to install
+     * @return bundle instance
+     * @throws Exception
+     */
+    private Bundle installBundle(Resource location) throws Exception {
+        Assert.notNull(platformContext, "the OSGi platform is not set");
+        Assert.notNull(location, "cannot install from a null location");
+        if (logger.isDebugEnabled())
+            logger.debug("Installing bundle from location " + location.getDescription());
 
-		if (!OsgiBundleUtils.isFragment(bundle)) {
-			if (debug)
-				logger.debug("Starting " + info);
-			try {
-				bundle.start();
-			} catch (BundleException ex) {
-				logger.error("cannot start bundle " + info, ex);
-				throw ex;
-			}
-		} else {
+        String bundleLocation;
+
+        try {
+            bundleLocation = URLDecoder.decode(location.getURL().toExternalForm(), UTF_8_CHARSET);
+        } catch (Exception ex) {
+            // the URL cannot be created, fall back to the description
+            bundleLocation = location.getDescription();
+        }
+
+        return platformContext.installBundle(bundleLocation, location.getInputStream());
+    }
+
+    /**
+     * Starts a bundle and prints a nice logging message in case of failure.
+     *
+     * @param bundle to start
+     * @throws BundleException
+     */
+    private void startBundle(Bundle bundle) throws BundleException {
+        boolean debug = logger.isDebugEnabled();
+        String info = "[" + OsgiStringUtils.nullSafeNameAndSymName(bundle) + "|" + bundle.getLocation() + "]";
+
+        if (!OsgiBundleUtils.isFragment(bundle)) {
+            if (debug)
+                logger.debug("Starting " + info);
+            try {
+                bundle.start();
+            } catch (BundleException ex) {
+                logger.error("cannot start bundle " + info, ex);
+                throw ex;
+            }
+        } else {
 //			if (!OsgiBundleUtils.isBundleResolved(bundle)) {
 //				logger.error("fragment not resolved: " + info);
 //				throw new BundleException("Unable to resolve fragment: " + info);
 //			} else if (debug)
-				logger.debug(info + " is a fragment; start not invoked");
-		}
-	}
+            logger.debug(info + " is a fragment; start not invoked");
+        }
+    }
 
-	//
-	// Delegation methods for OSGi execution and initialization
-	//
+    //
+    // Delegation methods for OSGi execution and initialization
+    //
 
-	// runs outside OSGi
-	/**
-	 * Prepares test execution - the OSGi platform will be started (if needed) and cached for the test suite execution.
-	 */
-	private void prepareTestExecution() throws Exception {
+    // runs outside OSGi
 
-		if (getName() == null)
-			throw new IllegalArgumentException("no test specified");
+    /**
+     * Prepares test execution - the OSGi platform will be started (if needed) and cached for the test suite execution.
+     */
+    private void prepareTestExecution() throws Exception {
 
-		// clear test results
-		OsgiTestInfoHolder.INSTANCE.clearResults();
-		// set test class
-		OsgiTestInfoHolder.INSTANCE.setTestClassName(osgiJUnitTest.getClass().getName());
+        if (getName() == null) {
+            throw new IllegalArgumentException("no test specified");
+        }
 
-		// start OSGi platform (the caching is done inside the method).
-		try {
-			startup();
-		} catch (Exception e) {
-			logger.debug("Caught exception starting up", e);
-			throw e;
-		}
+        // clear test results
+        OsgiTestInfoHolder.INSTANCE.clearResults();
+        // set test class
+        OsgiTestInfoHolder.INSTANCE.setTestClassName(osgiJUnitTest.getClass().getName());
 
-		if (logger.isTraceEnabled())
-			logger.trace("Writing test name [" + getName() + "] to OSGi");
+        // start OSGi platform (the caching is done inside the method).
+        try {
+            startup();
+        } catch (Exception e) {
+            logger.debug("Caught exception starting up", e);
+            throw e;
+        }
 
-		// write test name to OSGi
-		// set test method name
-		OsgiTestInfoHolder.INSTANCE.setTestMethodName(getName());
-	}
+        if (logger.isTraceEnabled())
+            logger.trace("Writing test name [" + getName() + "] to OSGi");
 
-	/**
-	 * Delegates the test execution to the OSGi copy.
-	 * 
-	 * @throws Exception
-	 */
-	private void invokeOSGiTestExecution() throws Exception {
-		Assert.notNull(serviceTrigger, "no executeTest() method found on: " + service.getClass());
-		try {
-			serviceTrigger.invoke(service, null);
-		} catch (InvocationTargetException ex) {
-			Throwable th = ex.getCause();
-			if (th instanceof Exception)
-				throw ((Exception) th);
-			else
-				throw ((Error) th);
-		}
-	}
+        // write test name to OSGi
+        // set test method name
+        OsgiTestInfoHolder.INSTANCE.setTestMethodName(getName());
+    }
 
-	/**
-	 * Determines through reflection the methods used for invoking the TestRunnerService.
-	 * 
-	 * @throws Exception
-	 */
-	private void initializeServiceRunnerInvocationMethods() throws Exception {
-		// get JUnit test service reference
-		// this is a loose reference - update it if the JUnitTestActivator
-		// class is
-		// changed.
+    /**
+     * Delegates the test execution to the OSGi copy.
+     *
+     * @throws Exception
+     */
+    private void invokeOSGiTestExecution() throws Exception {
+        Assert.notNull(serviceTrigger, "no executeTest() method found on: " + service.getClass());
+        try {
+            serviceTrigger.invoke(service);
+        } catch (InvocationTargetException ex) {
+            Throwable th = ex.getCause();
+            if (th instanceof Exception) {
+                throw ((Exception) th);
+            } else {
+                throw ((Error) th);
+            }
+        }
+    }
 
-		BundleContext ctx = getRuntimeBundleContext();
+    /**
+     * Determines through reflection the methods used for invoking the TestRunnerService.
+     *
+     * @throws Exception
+     */
+    private void initializeServiceRunnerInvocationMethods() throws Exception {
+        // get JUnit test service reference
+        // this is a loose reference - update it if the JUnitTestActivator class is changed.
 
-		ServiceReference reference = ctx.getServiceReference(ACTIVATOR_REFERENCE);
-		Assert.notNull(reference, "no OSGi service reference found at " + ACTIVATOR_REFERENCE);
+        BundleContext ctx = getRuntimeBundleContext();
 
-		service = ctx.getService(reference);
-		Assert.notNull(service, "no service found for reference: " + reference);
+        ServiceReference reference = ctx.getServiceReference(ACTIVATOR_REFERENCE);
+        Assert.notNull(reference, "no OSGi service reference found at " + ACTIVATOR_REFERENCE);
 
-		serviceTrigger = service.getClass().getDeclaredMethod("executeTest", null);
-		ReflectionUtils.makeAccessible(serviceTrigger);
-		Assert.notNull(serviceTrigger, "no executeTest() method found on: " + service.getClass());
-	}
+        service = ctx.getService(reference);
+        Assert.notNull(service, "no service found for reference: " + reference);
 
-	/**
-	 * Tries to get the bundle context for spring-osgi-test-support bundle. This is useful on platform where the
-	 * platformContext or system BundleContext doesn't behave like a normal context.
-	 * 
-	 * Will fallback to {@link #platformContext}.
-	 * 
-	 * @return
-	 */
-	private BundleContext getRuntimeBundleContext() {
+        serviceTrigger = service.getClass().getDeclaredMethod("executeTest", new Class[0]);
+        ReflectionUtils.makeAccessible(serviceTrigger);
+        Assert.notNull(serviceTrigger, "no executeTest() method found on: " + service.getClass());
+    }
 
-		// read test bundle id property
-		Long id = OsgiTestInfoHolder.INSTANCE.getTestBundleId();
+    /**
+     * Tries to get the bundle context for test-support bundle. This is useful on platform where the
+     * platformContext or system BundleContext doesn't behave like a normal context.
+     * <p/>
+     * Will fallback to {@link #platformContext}.
+     *
+     * @return BundleContext of test-support bundle
+     */
+    private BundleContext getRuntimeBundleContext() {
 
-		BundleContext ctx = null;
-		if (id != null)
-			try {
-				ctx = OsgiBundleUtils.getBundleContext(platformContext.getBundle(id.longValue()));
-			} catch (RuntimeException ex) {
-				logger.trace("cannot determine bundle context for bundle " + id, ex);
-			}
+        // read test bundle id property
+        Long id = OsgiTestInfoHolder.INSTANCE.getTestBundleId();
 
-		return (ctx == null ? platformContext : ctx);
-	}
+        BundleContext ctx = null;
+        if (id != null) {
+            try {
+                ctx = OsgiBundleUtils.getBundleContext(platformContext.getBundle(id));
+            } catch (RuntimeException ex) {
+                logger.trace("cannot determine bundle context for bundle " + id, ex);
+            }
+        }
 
-	// runs outside OSGi
-	private void readTestResult() {
-		if (logger.isTraceEnabled())
-			logger.trace("Reading OSGi results for test [" + getName() + "]");
+        return (ctx == null ? platformContext : ctx);
+    }
 
-		// copy results from OSGi into existing test result
-		TestUtils.cloneTestResults(OsgiTestInfoHolder.INSTANCE, originalResult, osgiJUnitTest);
+    // runs outside OSGi
+    private void readTestResult() {
+        if (logger.isTraceEnabled()) {
+            logger.trace("Reading OSGi results for test [" + getName() + "]");
+        }
 
-		if (logger.isTraceEnabled())
-			logger.debug("Test[" + getName() + "]'s result read");
-	}
+        // copy results from OSGi into existing test result
+        TestUtils.cloneTestResults(OsgiTestInfoHolder.INSTANCE, originalResult, osgiJUnitTest);
 
-	/**
-	 * Special shutdown hook.
-	 */
-	private void registerShutdownHook() {
-		if (shutdownHook == null) {
-			// No shutdown hook registered yet.
-			shutdownHook = new Thread() {
+        if (logger.isTraceEnabled()) {
+            logger.debug("Test[" + getName() + "]'s result read");
+        }
+    }
 
-				public void run() {
-					shutdownTest();
-				}
-			};
-			Runtime.getRuntime().addShutdownHook(shutdownHook);
-		}
-	}
+    /**
+     * Special shutdown hook.
+     */
+    private void registerShutdownHook() {
+        if (shutdownHook == null) {
+            // No shutdown hook registered yet.
+            shutdownHook = new Thread() {
 
-	/**
-	 * Cleanup for the test suite.
-	 */
-	private void shutdownTest() {
-		logger.info("Shutting down OSGi platform");
-		if (osgiPlatform != null) {
-			try {
-				osgiPlatform.stop();
-			} catch (Exception ex) {
-				// swallow
-				logger.warn("Shutdown procedure threw exception " + ex);
-			}
-			osgiPlatform = null;
-		}
-	}
+                public void run() {
+                    shutdownTest();
+                }
+            };
+            Runtime.getRuntime().addShutdownHook(shutdownHook);
+        }
+    }
 
-	//
-	// OsgiJUnitTest execution hooks. Used by the test framework.
-	//
+    /**
+     * Cleanup for the test suite.
+     */
+    private void shutdownTest() {
+        logger.info("Shutting down OSGi platform");
+        if (osgiPlatform != null) {
+            try {
+                osgiPlatform.stop();
+            } catch (Exception ex) {
+                // swallow
+                logger.warn("Shutdown procedure threw exception " + ex);
+            }
+            osgiPlatform = null;
+        }
+    }
 
-	/**
-	 * Set the bundle context to be used by this test.
-	 * 
-	 * <p/> This method is called automatically by the test infrastructure after the OSGi platform is being setup.
-	 */
-	private void injectBundleContext(BundleContext bundleContext) {
-		this.bundleContext = bundleContext;
-		// instantiate ResourceLoader
-		this.resourceLoader = new OsgiBundleResourceLoader(bundleContext.getBundle());
-	}
+    //
+    // OsgiJUnitTest execution hooks. Used by the test framework.
+    //
 
-	/**
-	 * Set the underlying OsgiJUnitTest used for the test delegation.
-	 * 
-	 * <p/> This method is called automatically by the test infrastructure after the OSGi platform is being setup.
-	 * 
-	 * @param test
-	 */
-	private void injectOsgiJUnitTest(TestCase test) {
-		this.osgiJUnitTest = test;
-	}
+    /**
+     * Set the bundle context to be used by this test.
+     * <p/>
+     * <p/> This method is called automatically by the test infrastructure after the OSGi platform is being setup.
+     */
+    private void injectBundleContext(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
+        // instantiate ResourceLoader
+        this.resourceLoader = new OsgiBundleResourceLoader(bundleContext.getBundle());
+    }
 
-	/**
-	 * the setUp version for the OSGi environment.
-	 * 
-	 * @throws Exception
-	 */
-	private void osgiSetUp() throws Exception {
-		// call the normal onSetUp
-		setUp();
-	}
+    /**
+     * Set the underlying OsgiJUnitTest used for the test delegation.
+     * <p/>
+     * <p/> This method is called automatically by the test infrastructure after the OSGi platform is being setup.
+     *
+     * @param test
+     */
+    private void injectOsgiJUnitTest(TestCase test) {
+        this.osgiJUnitTest = test;
+    }
 
-	private void osgiTearDown() throws Exception {
-		// call the normal tearDown
-		tearDown();
-	}
+    /**
+     * the setUp version for the OSGi environment.
+     *
+     * @throws Exception
+     */
+    private void osgiSetUp() throws Exception {
+        // call the normal onSetUp
+        setUp();
+    }
 
-	/**
-	 * Actual test execution (delegates to the superclass implementation).
-	 * 
-	 * @throws Throwable
-	 */
-	private void osgiRunTest() throws Throwable {
-		super.runTest();
-	}
+    private void osgiTearDown() throws Exception {
+        // call the normal tearDown
+        tearDown();
+    }
+
+    /**
+     * Actual test execution (delegates to the superclass implementation).
+     *
+     * @throws Throwable
+     */
+    private void osgiRunTest() throws Throwable {
+        super.runTest();
+    }
 
 }

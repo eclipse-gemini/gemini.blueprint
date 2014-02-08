@@ -14,6 +14,7 @@
 
 package org.eclipse.gemini.blueprint.test;
 
+import java.net.URL;
 import java.util.Enumeration;
 
 import org.eclipse.gemini.blueprint.extender.internal.util.concurrent.Counter;
@@ -158,7 +159,8 @@ public abstract class AbstractSynchronizedOsgiTests extends AbstractConfigurable
 	 * @see #getDefaultWaitTime()
 	 * @see #waitOnContextCreation(BundleContext, String, long)
 	 */
-	protected void waitOnContextCreation(String forBundleWithSymbolicName) {
+	@SuppressWarnings("UnusedDeclaration")
+    protected void waitOnContextCreation(String forBundleWithSymbolicName) {
 		waitOnContextCreation(forBundleWithSymbolicName, getDefaultWaitTime());
 	}
 
@@ -202,29 +204,30 @@ public abstract class AbstractSynchronizedOsgiTests extends AbstractConfigurable
 		if (shouldWaitForSpringBundlesContextCreation()) {
 			boolean debug = logger.isDebugEnabled();
 			boolean trace = logger.isTraceEnabled();
-			if (debug)
+			if (debug) {
 				logger.debug("Looking for Spring/OSGi powered bundles to wait for...");
+            }
 
 			// determine Spring/OSGi bundles
 			Bundle[] bundles = platformBundleContext.getBundles();
-			for (int i = 0; i < bundles.length; i++) {
-				Bundle bundle = bundles[i];
-				String bundleName = OsgiStringUtils.nullSafeSymbolicName(bundle);
-				if (OsgiBundleUtils.isBundleActive(bundle)) {
-					if (isSpringDMManaged(bundle) && ConfigUtils.getPublishContext(bundle.getHeaders())) {
-						if (debug)
-							logger.debug("Bundle [" + bundleName + "] triggers a context creation; waiting for it");
-						// use platformBundleContext
-						waitOnContextCreation(platformBundleContext, bundleName, getDefaultWaitTime());
-					}
-					else if (trace)
-						logger.trace("Bundle [" + bundleName + "] does not trigger a context creation.");
-				}
-				else {
-					if (trace)
-						logger.trace("Bundle [" + bundleName + "] is not active (probably a fragment); ignoring");
-				}
-			}
+            for (Bundle bundle : bundles) {
+                String bundleName = OsgiStringUtils.nullSafeSymbolicName(bundle);
+                if (OsgiBundleUtils.isBundleActive(bundle)) {
+                    if (isSpringDMManaged(bundle) && ConfigUtils.getPublishContext(bundle.getHeaders())) {
+                        if (debug) {
+                            logger.debug("Bundle [" + bundleName + "] triggers a context creation; waiting for it");
+                        }
+                        // use platformBundleContext
+                        waitOnContextCreation(platformBundleContext, bundleName, getDefaultWaitTime());
+                    } else if (trace) {
+                        logger.trace("Bundle [" + bundleName + "] does not trigger a context creation.");
+                    }
+                } else {
+                    if (trace) {
+                        logger.trace("Bundle [" + bundleName + "] is not active (probably a fragment); ignoring");
+                    }
+                }
+            }
 		}
 	}
 
@@ -233,13 +236,15 @@ public abstract class AbstractSynchronizedOsgiTests extends AbstractConfigurable
 	 * is used at startup, for waiting on all Spring DM contexts to be properly
 	 * started and published.
 	 * 
-	 * @param bundle
-	 * @return
+	 * @param bundle bundle to check
+	 * @return boolean true if spring managed or false.
 	 */
 	protected boolean isSpringDMManaged(Bundle bundle) {
-		if (!ObjectUtils.isEmpty(ConfigUtils.getHeaderLocations(bundle.getHeaders())))
+		if (!ObjectUtils.isEmpty(ConfigUtils.getHeaderLocations(bundle.getHeaders()))) {
 			return true;
-		Enumeration enm = bundle.findEntries("META-INF/spring", "*.xml", false);
+        }
+        // TODO: do we need to check for blueprint?
+		Enumeration<URL> enm = bundle.findEntries("META-INF/spring", "*.xml", false);
 		return (enm != null && enm.hasMoreElements());
 	}
 }

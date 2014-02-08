@@ -43,18 +43,17 @@ public abstract class TestUtils {
 	 */
 	public static TestResult cloneTestResults(OsgiTestInfoHolder source, TestResult destination, Test test) {
 		// get errors
-		for (Iterator iter = source.getTestErrors().iterator(); iter.hasNext();) {
-			destination.addError(test, (Throwable) iter.next());
-		}
+        for (Throwable throwable : source.getTestErrors()) {
+            destination.addError(test, throwable);
+        }
 
 		// get failures
 		// since failures are a special JUnit error, we have to clone the stack
-		for (Iterator iter = source.getTestFailures().iterator(); iter.hasNext();) {
-			Throwable originalFailure = (Throwable) iter.next();
-			AssertionFailedError clonedFailure = new AssertionFailedError(originalFailure.getMessage());
-			clonedFailure.setStackTrace(originalFailure.getStackTrace());
-			destination.addFailure(test, clonedFailure);
-		}
+        for (Throwable originalFailure : source.getTestFailures()) {
+            AssertionFailedError clonedFailure = new AssertionFailedError(originalFailure.getMessage());
+            clonedFailure.setStackTrace(originalFailure.getStackTrace());
+            destination.addFailure(test, clonedFailure);
+        }
 
 		return destination;
 	}
@@ -68,14 +67,14 @@ public abstract class TestUtils {
 	 * @param holder
 	 */
 	public static void unpackProblems(TestResult result, OsgiTestInfoHolder holder) {
-		Enumeration errors = result.errors();
+		Enumeration<TestFailure> errors = result.errors();
 		while (errors.hasMoreElements()) {
-			TestFailure failure = (TestFailure) errors.nextElement();
+			TestFailure failure = errors.nextElement();
 			holder.addTestError(failure.thrownException());
 		}
-		Enumeration failures = result.failures();
+		Enumeration<TestFailure> failures = result.failures();
 		while (failures.hasMoreElements()) {
-			TestFailure failure = (TestFailure) failures.nextElement();
+			TestFailure failure = failures.nextElement();
 			holder.addTestFailure(failure.thrownException());
 		}
 	}

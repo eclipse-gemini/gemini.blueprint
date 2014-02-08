@@ -39,7 +39,7 @@ class ReflectionOsgiHolder extends OsgiTestInfoHolder {
 	 * given object and accessing it through reflection. This constructor is
 	 * used for accessing the instance loaded outside OSGi, from within OSGi.
 	 * 
-	 * @param twinInstance
+	 * @param twinInstance instance to wrap
 	 */
 	ReflectionOsgiHolder(Object twinInstance) {
 		Assert.notNull(twinInstance);
@@ -49,8 +49,8 @@ class ReflectionOsgiHolder extends OsgiTestInfoHolder {
 		GET_TEST_CLASS_NAME = ReflectionUtils.findMethod(clazz, "getTestClassName");
 		GET_TEST_METHOD_NAME = ReflectionUtils.findMethod(clazz, "getTestMethodName");
 
-		ADD_TEST_ERROR = ReflectionUtils.findMethod(clazz, "addTestError", new Class<?>[] { Throwable.class });
-		ADD_TEST_FAILURE = ReflectionUtils.findMethod(clazz, "addTestFailure", new Class<?>[] { Throwable.class });
+		ADD_TEST_ERROR = ReflectionUtils.findMethod(clazz, "addTestError", Throwable.class);
+		ADD_TEST_FAILURE = ReflectionUtils.findMethod(clazz, "addTestFailure", Throwable.class);
 
 	}
 
@@ -67,11 +67,11 @@ class ReflectionOsgiHolder extends OsgiTestInfoHolder {
 	}
 
 	public void addTestError(Throwable testProblem) {
-		ReflectionUtils.invokeMethod(ADD_TEST_ERROR, instance, new Object[] { testProblem });
+		ReflectionUtils.invokeMethod(ADD_TEST_ERROR, instance, testProblem);
 	}
 
 	public void addTestFailure(Throwable testProblem) {
-		ReflectionUtils.invokeMethod(ADD_TEST_FAILURE, instance, new Object[] { testProblem });
+		ReflectionUtils.invokeMethod(ADD_TEST_FAILURE, instance, testProblem);
 	}
 
 }

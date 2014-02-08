@@ -78,8 +78,9 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 	 */
 	private void init() {
 		// already discovered a repository home, bailing out
-		if (repositoryHome != null)
+		if (repositoryHome != null) {
 			return;
+        }
 
 		boolean trace = log.isDebugEnabled();
 
@@ -96,20 +97,23 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 		String localRepository = sysProperties[0];
 		String userHome = sysProperties[1];
 
-		if (trace)
+		if (trace) {
 			log.trace("M2 system property [" + SYS_PROPERTY + "] has value=" + localRepository);
+        }
 
 		if (localRepository == null) {
 			// if it's not present then check settings.xml local repository property
 			Resource settingsFile = new FileSystemResource(new File(userHome, M2_SETTINGS));
 			localRepository = getMavenSettingsLocalRepository(settingsFile);
-			if (trace)
+			if (trace) {
 				log.trace("Falling back to M2 settings.xml [" + settingsFile + "]; found value=" + localRepository);
+            }
 			if (localRepository == null) {
 				// fall back to the default location
 				localRepository = new File(userHome, DEFAULT_DIR).getAbsolutePath();
-				if (trace)
+				if (trace) {
 					log.trace("No custom setting found; using default M2 local repository=" + localRepository);
+                }
 
 			}
 		}
@@ -126,8 +130,9 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 	 */
 	String getMavenSettingsLocalRepository(Resource m2Settings) {
 		// no file found, return null to continue the discovery process
-		if (!m2Settings.exists())
+		if (!m2Settings.exists()) {
 			return null;
+        }
 
 		try {
 			DocumentLoader docLoader = new DefaultDocumentLoader();
@@ -135,10 +140,8 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 				XmlValidationModeDetector.VALIDATION_NONE, false);
 
 			return (DomUtils.getChildElementValueByTagName(document.getDocumentElement(), LOCAL_REPOSITORY_ELEM));
-		}
-		catch (Exception ex) {
-			throw (RuntimeException) new RuntimeException(new ParserConfigurationException("error parsing resource="
-					+ m2Settings).initCause(ex));
+		} catch (Exception ex) {
+			throw new RuntimeException(new ParserConfigurationException("error parsing resource=" + m2Settings).initCause(ex));
 		}
 	}
 
@@ -165,10 +168,9 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 	 * @param artifactId - the artifact id of the bundle
 	 * @param version - the version of the bundle
 	 * @param type - the extension type of the artifact
-	 * @return
+	 * @return located artifact
 	 */
-	public Resource locateArtifact(final String groupId, final String artifactId, final String version,
-			final String type) {
+	public Resource locateArtifact(final String groupId, final String artifactId, final String version, final String type) {
 		init();
 
 		return (Resource) AccessController.doPrivileged(new PrivilegedAction() {
@@ -181,14 +183,7 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 				catch (IllegalStateException illStateEx) {
 					Resource localMavenBundle = localMavenBundle(groupId, artifactId, version, type);
 					if (log.isDebugEnabled()) {
-						StringBuilder buf = new StringBuilder();
-						buf.append("[");
-						buf.append(groupId);
-						buf.append("|");
-						buf.append(artifactId);
-						buf.append("|");
-						buf.append(version);
-						buf.append("]");
+						String buf = "[" + groupId + "|" + artifactId + "|" + version + "]";
 						log.debug(buf
 								+ " local maven build artifact detection failed, falling back to local maven bundle "
 								+ localMavenBundle.getDescription());
@@ -209,16 +204,8 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 	 */
 	protected Resource localMavenBundle(String groupId, String artifact, String version, String type) {
 		StringBuilder location = new StringBuilder(groupId.replace('.', SLASH_CHAR));
-		location.append(SLASH_CHAR);
-		location.append(artifact);
-		location.append(SLASH_CHAR);
-		location.append(version);
-		location.append(SLASH_CHAR);
-		location.append(artifact);
-		location.append('-');
-		location.append(version);
-		location.append(".");
-		location.append(type);
+        location.append(SLASH_CHAR).append(artifact).append(SLASH_CHAR).append(version).append(SLASH_CHAR)
+                .append(artifact).append('-').append(version).append(".").append(type);
 
 		return new FileSystemResource(new File(repositoryHome, location.toString()));
 	}
@@ -234,12 +221,10 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 	 */
 	protected Resource localMavenBuildArtifact(String groupId, String artifactId, String version, String type) {
 		try {
-			File found = new MavenPackagedArtifactFinder(groupId, artifactId, version, type).findPackagedArtifact(new File(
-				"."));
+			File found = new MavenPackagedArtifactFinder(groupId, artifactId, version, type).findPackagedArtifact(new File("."));
 			Resource res = new FileSystemResource(found);
 			if (log.isDebugEnabled()) {
-				log.debug("[" + artifactId + "|" + version + "] resolved to " + res.getDescription()
-						+ " as a local maven artifact");
+				log.debug("[" + artifactId + "|" + version + "] resolved to " + res.getDescription() + " as a local maven artifact");
 			}
 			return res;
 		}

@@ -70,8 +70,7 @@ import org.objectweb.asm.signature.SignatureVisitor;
  * 
  * @author Costin Leau
  */
-public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, ClassVisitor, FieldVisitor,
-		MethodVisitor {
+public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, ClassVisitor, FieldVisitor, MethodVisitor {
 
 	private Set packages = new LinkedHashSet();
 

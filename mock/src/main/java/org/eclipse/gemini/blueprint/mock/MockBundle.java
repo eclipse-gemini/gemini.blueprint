@@ -14,6 +14,7 @@
 
 package org.eclipse.gemini.blueprint.mock;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -60,7 +61,12 @@ public class MockBundle implements Bundle {
 
 	private final Version version;
 
-	private static class EmptyEnumeration implements Enumeration {
+    @Override
+    public int compareTo(Bundle o) {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    private static class EmptyEnumeration implements Enumeration {
 
 		public boolean hasMoreElements() {
 			return false;
@@ -233,7 +239,17 @@ public class MockBundle implements Bundle {
 		return version;
 	}
 
-	private static Version getVersion(Dictionary headers) {
+    @Override
+    public <A> A adapt(Class<A> type) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public File getDataFile(String filename) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    private static Version getVersion(Dictionary headers) {
 		if (headers != null) {
 			Object header = headers.get(Constants.BUNDLE_VERSION);
 			if (header instanceof String) {

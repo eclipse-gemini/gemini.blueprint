@@ -53,7 +53,7 @@ public class ConfigPropertiesHandlerTest extends TestCase {
     private ConfigurationAdmin admin;
 
 
-    private Dictionary<String, String> config;
+    private Dictionary<String, Object> config;
 
     private String persistentId = "foo.bar";
     private Configuration cfg;
@@ -65,7 +65,7 @@ public class ConfigPropertiesHandlerTest extends TestCase {
         admin = adminControl.createMock(ConfigurationAdmin.class);
         cfg = createMock(Configuration.class);
 
-        config = new Hashtable<String, String>();
+        config = new Hashtable<String, Object>();
 
         expect(admin.getConfiguration(persistentId)).andReturn(cfg).atLeastOnce();
         expect(cfg.getProperties()).andReturn(config).atLeastOnce();

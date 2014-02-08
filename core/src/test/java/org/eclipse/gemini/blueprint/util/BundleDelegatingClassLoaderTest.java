@@ -63,7 +63,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 	public void testFindClass() throws Exception {
 		String className = "foo.bar";
 		String anotherClassName = "bar.foo";
-		expect(bundle.loadClass(className)).andReturn(Object.class);
+		expect(bundle.loadClass(className)).andReturn((Class)Object.class);
         
 		expect(bundle.loadClass(anotherClassName)).andThrow(new ClassNotFoundException());
 	    expect(bundle.getSymbolicName()).andReturn("Test Bundle Symbolic Name");

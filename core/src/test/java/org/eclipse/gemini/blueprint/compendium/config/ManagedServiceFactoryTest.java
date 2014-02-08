@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.compendium.config;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 
@@ -49,7 +50,7 @@ public class ManagedServiceFactoryTest extends TestCase {
 
 
 		final Configuration cfg = createMock(Configuration.class);
-		expect(cfg.getProperties()).andReturn(new Properties());
+		expect(cfg.getProperties()).andReturn(new Hashtable<String, Object>());
 		replay(cfg);
 
 		BundleContext bundleContext = new MockBundleContext() {

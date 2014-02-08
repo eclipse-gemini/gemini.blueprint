@@ -72,7 +72,7 @@ public abstract class ContextLoaderListenerTest extends TestCase {
 		context.addBundleListener(null);
         expectLastCall().times(2);
 
-		expect(context.registerService(new String[0], null, new Properties())).andReturn(new MockServiceRegistration()).atLeastOnce();
+		expect(context.registerService(new String[0], null, new Hashtable<String, Object>())).andReturn(new MockServiceRegistration()).atLeastOnce();
 		replay(context);
 
 		this.listener.start(context);

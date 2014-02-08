@@ -28,8 +28,8 @@ import java.util.List;
 public class OsgiTestInfoHolder {
 
 	/** JUnit test problems */
-	private List testFailures = new ArrayList(4);
-	private List testErrors = new ArrayList(4);
+	private List<Throwable> testFailures = new ArrayList<Throwable>(4);
+	private List<Throwable> testErrors = new ArrayList<Throwable>(4);
 
 	/** test bundle id */
 	private Long testBundleId;
@@ -108,11 +108,11 @@ public class OsgiTestInfoHolder {
 		this.testMethodName = testMethodName;
 	}
 
-	public List getTestFailures() {
+	public List<Throwable> getTestFailures() {
 		return testFailures;
 	}
 
-	public List getTestErrors() {
+	public List<Throwable> getTestErrors() {
 		return testErrors;
 	}
 

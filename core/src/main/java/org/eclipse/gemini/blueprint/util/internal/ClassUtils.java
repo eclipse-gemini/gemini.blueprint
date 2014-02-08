@@ -120,7 +120,7 @@ public abstract class ClassUtils {
 		/** Include only the class hierarchy (interfaces are excluded) */
 		CLASS_HIERARCHY,
 		/** Include all inherited classes (classes or interfaces) */
-		ALL_CLASSES;
+		ALL_CLASSES
 	}
 
 	/**

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -120,7 +121,7 @@ public abstract class CMUtils {
 				}
 				// no valid props, register a listener and start waiting
 				final Object monitor = new Object();
-				Properties props = new Properties();
+				Dictionary<String, Object> props = new Hashtable<String, Object>();
 				props.put(Constants.SERVICE_PID, pid);
 				
 				ServiceRegistration reg =
@@ -167,7 +168,7 @@ public abstract class CMUtils {
 	public static ServiceRegistration registerManagedService(BundleContext bundleContext, ManagedService listener,
 			String pid) {
 
-		Properties props = new Properties();
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
 		props.put(Constants.SERVICE_PID, pid);
 		Bundle bundle = bundleContext.getBundle();
 		props.put(Constants.BUNDLE_SYMBOLICNAME, OsgiStringUtils.nullSafeSymbolicName(bundle));

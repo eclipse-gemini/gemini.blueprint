@@ -195,10 +195,10 @@ public abstract class OsgiBundleUtils {
 
 		if (OsgiPlatformDetector.isR41()) {
 			if (bundle.getState() == Bundle.STARTING) {
-				Dictionary<Object, Object> headers = bundle.getHeaders();
+				Dictionary<String, String> headers = bundle.getHeaders();
 				if (headers != null) {
 					Object val = headers.get(Constants.BUNDLE_ACTIVATIONPOLICY);
-					if (val instanceof String) {
+					if (val != null) {
 						String value = ((String) val).trim();
 						return (value.startsWith(Constants.ACTIVATION_LAZY));
 					}

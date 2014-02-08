@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.iandt.proxycreator;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,10 @@ import org.eclipse.gemini.blueprint.service.importer.support.*;
 import org.osgi.framework.AdminPermission;
 
 /**
+ *
+ * FIXME:
+ * TODO: this is not an applicable test anymore.  As equinox now exports javax.swing.* as part of org.osgi.framework.system.packages
+ *
  * Integration test for bug OSGI-597.
  * 
  * This test tries to create a proxy for DocumentEvent w/o importing its
@@ -87,8 +92,7 @@ public class ClassDependenciesVisibilityTest extends BaseIntegrationTest {
 		try {
 			cl.loadClass(DEPENDENCY_CLASS);
 			fail("should not be able to load " + DEPENDENCY_CLASS);
-		}
-		catch (ClassNotFoundException cnfe) {
+		}catch (ClassNotFoundException cnfe) {
 			// expected
 		}
 	}
@@ -98,13 +102,21 @@ public class ClassDependenciesVisibilityTest extends BaseIntegrationTest {
 		List packages = super.getBootDelegationPackages();
 		packages.remove("javax.*");
 		packages.remove("javax.swing.*");
+
+
 		return packages;
 	}
 
-	protected List getTestPermissions() {
-		List perms = super.getTestPermissions();
+	protected List<Permission> getTestPermissions() {
+		List<Permission> perms = super.getTestPermissions();
 		// export package
 		perms.add(new RuntimePermission("*", "getClassLoader"));
 		return perms;
 	}
+
+    @Override
+    protected boolean isDisabledInThisEnvironment(String testMethodName) {
+        // TODO: disabling this set of tests for now.
+        return true;
+    }
 }

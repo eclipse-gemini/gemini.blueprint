@@ -16,6 +16,7 @@ package org.eclipse.gemini.blueprint.compendium.config;
 
 import java.io.IOException;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -48,7 +49,7 @@ public class ManagedPropertiesTest extends TestCase {
 	protected void setUp() throws Exception {
 
 		final Configuration cfg = createNiceMock(Configuration.class);
-        expect(cfg.getProperties()).andReturn(new Properties());
+        expect(cfg.getProperties()).andReturn(new Hashtable<String, Object>());
         replay(cfg);
 
 		registrationCounter = 0;

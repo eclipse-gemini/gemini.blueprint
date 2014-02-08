@@ -15,6 +15,8 @@
 
 package org.eclipse.gemini.blueprint.service.exporter;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 
@@ -53,7 +55,7 @@ public class BeanNameServicePropertiesResolverTest extends TestCase {
 		expect(mockBundle.getSymbolicName()).andReturn("symbolic-name");
         expect(mockContext.getBundle()).andReturn(mockBundle);
 
-        Properties props = new Properties();
+        Dictionary<String, String> props = new Hashtable<String, String>();
         props.put(Constants.BUNDLE_VERSION, "1.0.0");
 
         expect(mockBundle.getHeaders()).andReturn(props);

@@ -80,6 +80,7 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 
 	/** field used for caching jar content */
 	private Map jarEntries;
+
 	/** discovered manifest */
 	private Manifest manifest;
 
@@ -188,13 +189,13 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 			// to resolve the patterns
 			jarEntries = jarCreator.resolveContent();
 
-			for (Iterator iterator = jarEntries.entrySet().iterator(); iterator.hasNext();) {
-				Map.Entry entry = (Map.Entry) iterator.next();
-				if (META_INF_JAR_LOCATION.equals(entry.getKey())) {
-					logger.info("Using Manifest from the test bundle content=[/META-INF/MANIFEST.MF]");
-					manifest = createManifestFrom((Resource) entry.getValue());
-				}
-			}
+            for (Object o : jarEntries.entrySet()) {
+                Map.Entry entry = (Map.Entry) o;
+                if (META_INF_JAR_LOCATION.equals(entry.getKey())) {
+                    logger.info("Using Manifest from the test bundle content=[/META-INF/MANIFEST.MF]");
+                    manifest = createManifestFrom((Resource) entry.getValue());
+                }
+            }
 			// fallback to default manifest creation
 
 			if (manifest == null) {
@@ -259,8 +260,9 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		// add Import-Package entry
 		addImportPackage(manifest);
 
-		if (logger.isDebugEnabled())
+		if (logger.isDebugEnabled()) {
 			logger.debug("Created manifest:" + manifest.getMainAttributes().entrySet());
+        }
 		return manifest;
 	}
 
@@ -269,25 +271,26 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 
 		boolean trace = logger.isTraceEnabled();
 
-		if (trace)
+		if (trace) {
 			logger.trace("Discovered raw imports " + ObjectUtils.nullSafeToString(rawImports));
+        }
 
 		Collection specialImportsOut = eliminateSpecialPackages(rawImports);
 		Collection imports = eliminatePackagesAvailableInTheJar(specialImportsOut);
 
-		if (trace)
+		if (trace) {
 			logger.trace("Filtered imports are " + imports);
+        }
 
-		manifest.getMainAttributes().putValue(Constants.IMPORT_PACKAGE,
-			StringUtils.collectionToCommaDelimitedString(imports));
+		manifest.getMainAttributes().putValue(Constants.IMPORT_PACKAGE, StringUtils.collectionToCommaDelimitedString(imports));
 	}
 
 	/**
 	 * Eliminate 'special' packages (java.*, test framework internal and the
 	 * class declaring package)
 	 * 
-	 * @param rawImports
-	 * @return
+	 * @param rawImports raw imports
+	 * @return cleaned up imports
 	 */
 	private Collection eliminateSpecialPackages(String[] rawImports) {
 		String currentPckg = ClassUtils.classPackageAsResourcePath(getClass()).replace('/', '.');
@@ -298,14 +301,16 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		for (int i = 0; i < rawImports.length; i++) {
 			String pckg = rawImports[i];
 
-			if (!(pckg.startsWith("java.") || pckg.startsWith("org.eclipse.gemini.blueprint.test.internal") || pckg.equals(currentPckg)))
+			if (!(pckg.startsWith("java.") || pckg.startsWith("org.eclipse.gemini.blueprint.test.internal") || pckg.equals(currentPckg))) {
 				filteredImports.add(pckg);
-			else
+            } else {
 				eliminatedImports.add(pckg);
+            }
 		}
 
-		if (!eliminatedImports.isEmpty() && logger.isTraceEnabled())
+		if (!eliminatedImports.isEmpty() && logger.isTraceEnabled()) {
 			logger.trace("Eliminated special packages " + eliminatedImports);
+        }
 
 		return filteredImports;
 	}
@@ -319,8 +324,9 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 	 */
 	private Collection eliminatePackagesAvailableInTheJar(Collection imports) {
 		// no jar entry present, bail out.
-		if (jarEntries == null || jarEntries.isEmpty())
+		if (jarEntries == null || jarEntries.isEmpty()) {
 			return imports;
+        }
 
 		Set filteredImports = new LinkedHashSet(imports.size());
 		Collection eliminatedImports = new LinkedHashSet(2);
@@ -328,10 +334,11 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		Collection jarPackages = jarCreator.getContainedPackages();
 		for (Iterator iterator = imports.iterator(); iterator.hasNext();) {
 			String pckg = (String) iterator.next();
-			if (jarPackages.contains(pckg))
+			if (jarPackages.contains(pckg)) {
 				eliminatedImports.add(pckg);
-			else
+            } else {
 				filteredImports.add(pckg);
+            }
 		}
 		if (!eliminatedImports.isEmpty() && logger.isTraceEnabled())
 			logger.trace("Eliminated packages already present in the bundle " + eliminatedImports);
@@ -355,14 +362,12 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		if (jarEntries == null || jarEntries.isEmpty()) {
 			logger.debug("No test jar content detected, generating bundle imports from the test class");
 			useTestClassOnly = true;
-		}
-
-		else if (createManifestOnlyFromTestClass()) {
+		} else if (createManifestOnlyFromTestClass()) {
 			logger.info("Using the test class for generating bundle imports");
 			useTestClassOnly = true;
-		}
-		else
+		} else {
 			logger.info("Using all classes in the jar for the generation of bundle imports");
+        }
 
 		// className, class resource
 		Map entries;
@@ -402,9 +407,9 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 				clazz = clazz.getSuperclass();
 
 			} while (!endPackage.equals(clazzPackage));
-		}
-		else
+		} else {
 			entries = jarEntries;
+        }
 
 		return determineImportsFor(entries);
 
@@ -426,31 +431,34 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 
 			// filter out the test hierarchy
 			if (resourceName.endsWith(ClassUtils.CLASS_FILE_SUFFIX)) {
-				if (trace)
+				if (trace) {
 					logger.trace("Analyze imports for test bundle resource " + resourceName);
+                }
 				String classFileName = StringUtils.getFilename(resourceName);
-				String className = classFileName.substring(0, classFileName.length()
-						- ClassUtils.CLASS_FILE_SUFFIX.length());
-				String classPkg = resourceName.substring(0, resourceName.length() - classFileName.length()).replace(
-					'/', '.');
+				String className = classFileName.substring(0, classFileName.length() - ClassUtils.CLASS_FILE_SUFFIX.length());
+				String classPkg = resourceName.substring(0, resourceName.length() - classFileName.length()).replace('/', '.');
 
-				if (classPkg.startsWith("."))
+				if (classPkg.startsWith(".")) {
 					classPkg = classPkg.substring(1);
+                }
 
-				if (classPkg.endsWith("."))
+				if (classPkg.endsWith(".")) {
 					classPkg = classPkg.substring(0, classPkg.length() - 1);
+                }
 
 				// if we don't have the package, add it
 				if (validPackageCollection && StringUtils.hasText(classPkg) && !containedPackages.contains(classPkg)) {
-					logger.trace("Package [" + classPkg + "] is NOT part of the test archive; adding an import for it");
+				    if (trace) {
+						logger.trace("Package [" + classPkg + "] is NOT part of the test archive; adding an import for it");
+                    }
 					cumulatedPackages.add(classPkg);
 				}
 
 				// otherwise parse the class byte-code
 				else {
-					if (trace)
-						logger.trace("Package [" + classPkg + "] is part of the test archive; parsing " + className
-								+ " bytecode to determine imports...");
+					if (trace) {
+						logger.trace("Package [" + classPkg + "] is part of the test archive; parsing " + className + " bytecode to determine imports...");
+                    }
 					cumulatedPackages.addAll(determineImportsForClass(className, (Resource) entry.getValue()));
 				}
 			}
@@ -479,11 +487,11 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		ClassReader reader;
 
 		try {
-			if (trace)
+			if (trace) {
 				logger.trace("Visiting class " + className);
+            }
 			reader = new ClassReader(resource.getInputStream());
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw (RuntimeException) new IllegalArgumentException("Cannot read class " + className).initCause(ex);
 		}
 		reader.accept(visitor, false);
@@ -550,8 +558,9 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
             logger.debug(Constants.FRAMEWORK_BOOTDELEGATION + " = " + context.getProperty(Constants.FRAMEWORK_BOOTDELEGATION));
         }
 		bundle.start();
-		if (debug)
+		if (debug) {
 			logger.debug("Test bundle [" + bundleString + "] successfully started");
+        }
 	}
 
 }

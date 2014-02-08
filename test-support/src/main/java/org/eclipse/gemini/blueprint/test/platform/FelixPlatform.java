@@ -81,7 +81,7 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 		private static final Constructor<Felix> CTOR;
 		static {
 			try {
-				CTOR = Felix.class.getConstructor(new Class<?>[] { Map.class, List.class });
+				CTOR = Felix.class.getConstructor(Map.class, List.class);
 			} catch (NoSuchMethodException ex) {
 				throw new IllegalStateException("Cannot find Felix constructor", ex);
 			}
@@ -90,7 +90,7 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 		@Override
 		Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception {
 
-			return CTOR.newInstance(new Object[] { configMap, activators });
+			return CTOR.newInstance(configMap, activators);
 		}
 	}
 

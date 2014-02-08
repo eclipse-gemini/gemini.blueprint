@@ -16,7 +16,9 @@ package org.eclipse.gemini.blueprint.extender.internal.support;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -186,11 +188,11 @@ public class NamespaceManager implements InitializingBean, DisposableBean {
 		}
 
 		Bundle bnd = BundleUtils.getDMCoreBundle(context);
-		Properties props = null;
+		Dictionary<String, Object> props = null;
 		if (bnd != null) {
-			props = new Properties();
-			props.setProperty(BundleUtils.DM_CORE_ID, "" + bnd.getBundleId());
-			props.setProperty(BundleUtils.DM_CORE_TS, "" + bnd.getLastModified());
+			props = new Hashtable<String, Object>();
+			props.put(BundleUtils.DM_CORE_ID, bnd.getBundleId());
+			props.put(BundleUtils.DM_CORE_TS, bnd.getLastModified());
 		}
 		nsResolverRegistration =
 				context.registerService(new String[] { NamespaceHandlerResolver.class.getName() },

@@ -17,8 +17,16 @@ package org.eclipse.gemini.blueprint.mock;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -54,7 +62,8 @@ public class MockBundleContext implements BundleContext {
 
 	private Properties properties;
 
-	protected Set serviceListeners, bundleListeners;
+    protected Set<ServiceListener> serviceListeners;
+    protected Set<BundleListener> bundleListeners;
 
 
 	/**
@@ -87,9 +96,9 @@ public class MockBundleContext implements BundleContext {
 		if (props != null)
 			properties.putAll(props);
 
-		// make sure the order is preserved
-		this.serviceListeners = new LinkedHashSet(2);
-		this.bundleListeners = new LinkedHashSet(2);
+        // make sure the order is preserved
+        this.serviceListeners = new LinkedHashSet<ServiceListener>(2);
+        this.bundleListeners = new LinkedHashSet<BundleListener>(2);
 	}
 
 	public void addBundleListener(BundleListener listener) {
@@ -99,14 +108,13 @@ public class MockBundleContext implements BundleContext {
 	public void addFrameworkListener(FrameworkListener listener) {
 	}
 
-	public void addServiceListener(ServiceListener listener) {
-		try {
-			addServiceListener(listener, null);
-		}
-		catch (InvalidSyntaxException ex) {
-			throw new IllegalStateException("exception should not occur");
-		}
-	}
+    public void addServiceListener(ServiceListener listener) {
+        try {
+            addServiceListener(listener, null);
+        } catch (InvalidSyntaxException ex) {
+            throw new IllegalStateException("exception should not occur");
+        }
+    }
 
 	public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException {
 		if (listener == null)
@@ -118,7 +126,13 @@ public class MockBundleContext implements BundleContext {
 		return new MockFilter(filter);
 	}
 
-	public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
+    @Override
+    public Bundle getBundle(String location) {
+        // always return null as we do not keep track of location.
+        return null;
+    }
+
+    public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
 		return new ServiceReference[] {};
 	}
 
@@ -142,18 +156,66 @@ public class MockBundleContext implements BundleContext {
 		return properties.getProperty(key);
 	}
 
-	public Object getService(ServiceReference reference) {
-		return new Object();
-	}
+	public <S> S getService(ServiceReference<S> reference) {
+        Class type = getClass(reference.getClass().getGenericSuperclass());
+        try {
+            @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"}) S result = (S)type.newInstance();
+            return result;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private static Class<?> getClass(Type type) {
+        if (type instanceof Class) {
+          return (Class) type;
+        }
+        else if (type instanceof ParameterizedType) {
+          return getClass(((ParameterizedType) type).getRawType());
+        }
+        else if (type instanceof GenericArrayType) {
+          Type componentType = ((GenericArrayType) type).getGenericComponentType();
+          Class<?> componentClass = getClass(componentType);
+          if (componentClass != null ) {
+            return Array.newInstance(componentClass, 0).getClass();
+          }
+          else {
+            return null;
+          }
+        }
+        else {
+          return null;
+        }
+      }
 
 	public ServiceReference getServiceReference(String clazz) {
 		return new MockServiceReference(getBundle(), new String[] { clazz });
 	}
 
-	public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
-		// Some jiggery-pokery to get round the fact that we don't ever use the
-		// clazz
-		if (clazz == null)
+    @Override
+    public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
+        @SuppressWarnings({"UnnecessaryLocalVariable", "unchecked"})
+        ServiceReference<S> result = (ServiceReference<S>) getServiceReference(clazz.getName());
+        return result;
+    }
+
+    @Override
+    public <S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException {
+        @SuppressWarnings("unchecked")
+        ServiceReference<S>[] refs = (ServiceReference<S>[]) getServiceReferences(clazz.getName(), filter);
+        if (refs == null) {
+            return Collections.emptyList();
+        }
+        List<ServiceReference<S>> result = new ArrayList<ServiceReference<S>>(refs.length);
+        for (ServiceReference<S> r : refs) {
+            result.add(r);
+        }
+        return result;
+    }
+
+    public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
+		// Some jiggery-pokery to get round the fact that we don't ever use the clazz
+		if (clazz == null) {
 			if (filter != null) {
 				// flatten filter since the constants might be case insensitive
 				String flattenFilter = filter.toLowerCase();
@@ -162,9 +224,10 @@ public class MockBundleContext implements BundleContext {
 					clazz = filter.substring(i + Constants.OBJECTCLASS.length() + 1);
 					clazz = clazz.substring(0, clazz.indexOf(")"));
 				}
-			}
-			else
+			} else {
 				clazz = Object.class.getName();
+            }
+        }
 		return new ServiceReference[] { new MockServiceReference(getBundle(), new String[] { clazz }) };
 	}
 
@@ -177,8 +240,7 @@ public class MockBundleContext implements BundleContext {
 	public Bundle installBundle(String location, InputStream input) throws BundleException {
 		try {
 			input.close();
-		}
-		catch (IOException ex) {
+        } catch (IOException ex) {
 			throw new BundleException("cannot close stream", ex);
 		}
 		return installBundle(location);
@@ -211,7 +273,14 @@ public class MockBundleContext implements BundleContext {
 	public void removeFrameworkListener(FrameworkListener listener) {
 	}
 
-	public void removeServiceListener(ServiceListener listener) {
+    @Override
+    public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String, ?> properties) {
+        @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"})
+        ServiceRegistration<S> registration = (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
+        return registration;
+    }
+
+    public void removeServiceListener(ServiceListener listener) {
 		serviceListeners.remove(listener);
 	}
 
@@ -235,7 +304,7 @@ public class MockBundleContext implements BundleContext {
 	 * 
 	 * @return set of registered service listeners
 	 */
-	public Set getServiceListeners() {
+    public Set<ServiceListener> getServiceListeners() {
 		return serviceListeners;
 	}
 
@@ -244,7 +313,7 @@ public class MockBundleContext implements BundleContext {
 	 * 
 	 * @return set of registered bundle listeners
 	 */
-	public Set getBundleListeners() {
+    public Set<BundleListener> getBundleListeners() {
 		return bundleListeners;
 	}
 }

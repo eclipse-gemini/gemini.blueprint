@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.compendium.internal.cm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class ConfigurationAdminManagerTest extends TestCase {
 		services = new LinkedHashMap();
 		IMocksControl mc = createNiceControl();
 		cfg = mc.createMock(Configuration.class);
-		expect(cfg.getProperties()).andReturn(new Properties());
+		expect(cfg.getProperties()).andReturn(new Hashtable<String, Object>());
 		mc.replay();
 		bundleContext = new MockBundleContext() {
 

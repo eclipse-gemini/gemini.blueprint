@@ -52,12 +52,8 @@ public abstract class AbstractOptionalDependencyInjectionTests extends AbstractD
 	 * 
 	 */
 	// the disposable interface is added just so that byte code detect the org.springframework.beans.factory package
-	private static class EmptyOsgiApplicationContext extends AbstractDelegatedExecutionApplicationContext implements
-			DisposableBean {
-
-		protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException, BeansException {
-		}
-
+	private static class EmptyOsgiApplicationContext extends AbstractDelegatedExecutionApplicationContext implements DisposableBean {
+		protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException, BeansException {}
 	}
 
 
@@ -95,10 +91,11 @@ public abstract class AbstractOptionalDependencyInjectionTests extends AbstractD
 
 		ConfigurableOsgiBundleApplicationContext context = null;
 
-		if (ObjectUtils.isEmpty(locations))
+		if (ObjectUtils.isEmpty(locations)) {
 			context = new EmptyOsgiApplicationContext();
-		else
+        } else {
 			context = new OsgiBundleXmlApplicationContext(locations);
+        }
 
 		context.setBundleContext(bundleContext);
 		context.refresh();

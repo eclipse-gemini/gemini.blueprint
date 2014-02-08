@@ -46,7 +46,7 @@ import org.springframework.util.StringUtils;
  */
 public abstract class AbstractDependencyManagerTests extends AbstractSynchronizedOsgiTests {
 
-	private static final String TEST_FRRAMEWORK_BUNDLES_CONF_FILE = "/org/eclipse/gemini/blueprint/test/internal/boot-bundles.properties";
+	private static final String TEST_FRAMEWORK_BUNDLES_CONF_FILE = "/org/eclipse/gemini/blueprint/test/internal/boot-bundles.properties";
 
 	private static final String IGNORE = "ignore";
 
@@ -76,9 +76,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 		super(name);
 	}
 
-
 	private static final String GEMINI_BLUEPRINT_VERSION_PROP_KEY = "ignore.gemini.blueprint.version";
-
 	private static final String SPRING_VERSION_PROP_KEY = "ignore.spring.version";
 
 	/** uninitialised - read from the properties file */
@@ -124,8 +122,9 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 				}
 			});
 		}
-		else
+		else {
 			return System.getProperty(name);
+        }
 	}
 
 	/**
@@ -169,14 +168,15 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 		// load properties file
 		Properties props = PropertiesUtil.loadAndExpand(getTestingFrameworkBundlesConfiguration());
 
-		if (props == null)
-			throw new IllegalArgumentException("cannot load default configuration from "
-					+ getTestingFrameworkBundlesConfiguration());
+		if (props == null) {
+			throw new IllegalArgumentException("cannot load default configuration from " + getTestingFrameworkBundlesConfiguration());
+        }
 
 		boolean trace = logger.isTraceEnabled();
 
-		if (trace)
+		if (trace) {
 			logger.trace("Loaded properties " + props);
+        }
 
 		// pass properties to test instance running inside OSGi space
 		System.getProperties().put(GEMINI_BLUEPRINT_VERSION_PROP_KEY, props.get(GEMINI_BLUEPRINT_VERSION_PROP_KEY));
@@ -192,8 +192,9 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 		// sort the array (as the Properties file doesn't respect the order)
 		//bundles = StringUtils.sortStringArray(bundles);
 
-		if (logger.isDebugEnabled())
+		if (logger.isDebugEnabled()) {
 			logger.debug("Default framework bundles :" + ObjectUtils.nullSafeToString(bundles));
+        }
 
 		return bundles;
 	}
@@ -204,8 +205,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	 * @return the location of the test framework bundles configuration
 	 */
 	protected Resource getTestingFrameworkBundlesConfiguration() {
-		return new InputStreamResource(
-			AbstractDependencyManagerTests.class.getResourceAsStream(TEST_FRRAMEWORK_BUNDLES_CONF_FILE));
+		return new InputStreamResource(AbstractDependencyManagerTests.class.getResourceAsStream(TEST_FRAMEWORK_BUNDLES_CONF_FILE));
 	}
 
 	/**
@@ -244,8 +244,9 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	 * @return an array of Spring resources for the given bundle indentifiers
 	 */
 	protected Resource[] locateBundles(String[] bundles) {
-		if (bundles == null)
+		if (bundles == null) {
 			bundles = new String[0];
+        }
 
 		Resource[] res = new Resource[bundles.length];
 		for (int i = 0; i < bundles.length; i++) {
@@ -254,7 +255,6 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 		return res;
 	}
 
-	// Set log4j property to avoid TCCL problems during startup
 	/**
 	 * {@inheritDoc}
 	 * 
