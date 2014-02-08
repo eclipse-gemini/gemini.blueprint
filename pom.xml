@@ -48,10 +48,10 @@
         <!-- platform versions -->
         <!-- equinox 3.7 is R4.3 impl -->
         <!-- todo: would like to use this version -->
-        <equinox.ver>3.7.2.v20120110-1415</equinox.ver>
+        <!-- <equinox.ver>3.7.2.v20120110-1415</equinox.ver> -->
         <!-- todo: only found this in public repos -->
         <!-- note - another reason why ebr is so important -->
-        <!--<equinox.ver>3.7.1</equinox.ver>-->
+        <equinox.ver>3.7.1</equinox.ver>
         <!-- Knopflerfish 4.0.1 -->
         <kf.ver>6.0.2</kf.ver>
         <!-- Felix 4.x supports OSGi R4.3 -->
