@@ -44,7 +44,7 @@
         <env.buildNumber></env.buildNumber>
 
         <!-- compiled against osgi Revision -->
-        <osgi.ver>4.3.0</osgi.ver>
+        <osgi.ver>4.3.1</osgi.ver>
         <!-- platform versions -->
         <!-- equinox 3.7 is R4.3 impl -->
         <!-- todo: would like to use this version - need ebr support -->
@@ -54,8 +54,6 @@
         <kf.ver>6.0.2</kf.ver>
         <!-- Felix 4.x supports OSGi R4.3 -->
         <felix.ver>4.0.3</felix.ver>
-        <!--<kf.ver>5.3.3</kf.ver>-->
-        <!--<felix.ver>3.2.2</felix.ver>-->
 
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -570,8 +568,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <debug>true</debug>
                     <fork>true</fork>
                 </configuration>
