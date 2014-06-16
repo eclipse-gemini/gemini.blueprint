@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.test.platform;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -58,7 +59,7 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 
 		public final BundleContext start() throws Exception {
 			// load properties
-			Map<Object, Object> configMap = getConfiguration();
+			Map<String, String> configMap = getConfiguration();
 
 			// pass the auto activator as a list
 			List<Object> list = new ArrayList<Object>(1);
@@ -73,35 +74,35 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 			felix.stop();
 		}
 
-		abstract Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception;
+		abstract Felix createFelix(Map<String, String> configMap, List<?> activators) throws Exception;
 	}
 
-	private static class Felix10XPlatform extends Felix1XPlatform {
+//	private static class Felix10XPlatform extends Felix1XPlatform {
+//
+//		private static final Constructor<Felix> CTOR;
+//		static {
+//			try {
+//				CTOR = Felix.class.getConstructor(Map.class, List.class);
+//			} catch (NoSuchMethodException ex) {
+//				throw new IllegalStateException("Cannot find Felix constructor", ex);
+//			}
+//		}
+//
+//		@Override
+//		Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception {
+//
+//			return CTOR.newInstance(configMap, activators);
+//		}
+//	}
 
-		private static final Constructor<Felix> CTOR;
-		static {
-			try {
-				CTOR = Felix.class.getConstructor(Map.class, List.class);
-			} catch (NoSuchMethodException ex) {
-				throw new IllegalStateException("Cannot find Felix constructor", ex);
-			}
-		}
-
-		@Override
-		Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception {
-
-			return CTOR.newInstance(configMap, activators);
-		}
-	}
-
-	private static class Felix14XPlatform extends Felix1XPlatform {
-
-		@Override
-		Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception {
-			configMap.put("felix.systembundle.activators", activators);
-			return new Felix(configMap);
-		}
-	}
+//	private static class Felix14XPlatform extends Felix1XPlatform {
+//
+//		@Override
+//		Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception {
+//			configMap.put("felix.systembundle.activators", activators);
+//			return new Felix(configMap);
+//		}
+//	}
 
 	private static class Felix20XPlatform implements Platform {
 		private FrameworkTemplate fwkTemplate;
@@ -112,7 +113,7 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 		}
 
 		public BundleContext start() throws Exception {
-			Map<Object, Object> configMap = getConfiguration();
+			Map<String, String> configMap = getConfiguration();
 			Felix fx = new Felix(configMap);
 			fwkTemplate = new DefaultFrameworkTemplate(fx, log);
 
@@ -128,11 +129,11 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 		}
 	}
 
-	private static enum FelixVersion {
-		V_10X, V_14X, V_20X
-	}
+//	private static enum FelixVersion {
+//		V_10X, V_14X, V_20X
+//	}
 
-	private static FelixVersion FELIX_VERSION;
+//	private static FelixVersion FELIX_VERSION;
 
 	private static final Log log = LogFactory.getLog(FelixPlatform.class);
 
@@ -140,18 +141,18 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 	/** new property in 1.4.0 replacing cache.profiledir */
 	private static final String OSGI_STORAGE_PROPERTY = "org.osgi.framework.storage";
 
-	static {
-		ClassLoader loader = Felix.class.getClassLoader();
+//	static {
+//		ClassLoader loader = Felix.class.getClassLoader();
 		// detect available Felix version
-		if (ClassUtils.isPresent("org.apache.felix.main.AutoProcessor", loader)) {
-			FELIX_VERSION = FelixVersion.V_20X;
-		} else {
-			if (ClassUtils.isPresent("org.apache.felix.main.RegularBundleInfo", loader)) {
-				FELIX_VERSION = FelixVersion.V_14X;
-			}
-			FELIX_VERSION = FelixVersion.V_10X;
-		}
-	}
+//		if (ClassUtils.isPresent("org.apache.felix.main.AutoProcessor", loader)) {
+//			FELIX_VERSION = FelixVersion.V_20X;
+//		} else {
+//			if (ClassUtils.isPresent("org.apache.felix.main.RegularBundleInfo", loader)) {
+//				FELIX_VERSION = FelixVersion.V_14X;
+//			}
+//			FELIX_VERSION = FelixVersion.V_10X;
+//		}
+//	}
 
 	private BundleContext context;
 	private File felixStorageDir;
@@ -203,18 +204,19 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 			Map<Object, Object> configProperties = getConfigurationProperties();
 			System.getProperties().putAll(configProperties);
 
-			switch (FELIX_VERSION) {
-			case V_20X:
-				platform = new Felix20XPlatform(null);
-				break;
-			case V_14X:
-				platform = new Felix14XPlatform();
-				break;
-			// fallback to 10-12 version
-			default:
-				platform = new Felix10XPlatform();
-				break;
-			}
+            platform = new Felix20XPlatform(LogFactory.getLog(Felix20XPlatform.class));
+//			switch (FELIX_VERSION) {
+//			case V_20X:
+//				platform = new Felix20XPlatform(null);
+//				break;
+//			case V_14X:
+//				platform = new Felix14XPlatform();
+//				break;
+//			// fallback to 10-12 version
+//			default:
+//				platform = new Felix10XPlatform();
+//				break;
+//			}
 
 			context = platform.start();
 		}
@@ -226,22 +228,23 @@ public class FelixPlatform extends AbstractOsgiPlatform {
 	 * 
 	 * @return Felix configuration
 	 */
-	private static Map<Object, Object> getConfiguration() {
+	private static Map<String, String> getConfiguration() {
 		// Load system properties.
 		Main.loadSystemProperties();
 
 		// Read configuration properties.
-		Properties configProps = Main.loadConfigProperties();
+		Map<String, String> configProps = Main.loadConfigProperties();
 
 		if (configProps == null) {
-			configProps = new Properties();
+			configProps = new HashMap<String, String>();
 		}
 
 		// Copy framework properties from the system properties.
 		Main.copySystemProperties(configProps);
 
 		// Create a (Felix specific) case-insensitive property map
-		return new StringMap(configProps, false);
+//		return new StringMap(configProps, false);
+        return configProps;
 	}
 
 	public void stop() throws Exception {

@@ -44,16 +44,14 @@
         <env.buildNumber></env.buildNumber>
 
         <!-- compiled against osgi Revision -->
-        <osgi.ver>4.3.1</osgi.ver>
+        <osgi.ver>5.0.0</osgi.ver>
         <!-- platform versions -->
-        <!-- equinox 3.7 is R4.3 impl -->
-        <!-- todo: would like to use this version - need ebr support -->
-        <!-- todo: currently doing an install-file in lib/equinox -->
-        <equinox.ver>3.7.2.v20120110-1415</equinox.ver>
-        <!-- Knopflerfish 4.0.1 -->
-        <kf.ver>6.0.2</kf.ver>
-        <!-- Felix 4.x supports OSGi R4.3 -->
-        <felix.ver>4.0.3</felix.ver>
+        <!-- equinox - repackaged in ${basedir}/lib/equinox -->
+        <equinox.ver>3.9.1.v20140110-1610</equinox.ver>
+        <!-- Knopflerfish -->
+        <kf.ver>7.1.2</kf.ver>
+        <!-- Felix 4.4.x supports OSGi R5 -->
+        <felix.ver>4.4.0</felix.ver>
 
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -177,7 +175,6 @@
 
     <!-- modules for Spring-OSGi -->
     <modules>
-        <!-- todo: temp till I can find correct version in public repo -->
         <module>lib/equinox</module>
         <module>mock</module>
         <module>io</module>
@@ -639,7 +636,7 @@
                     the previous unless a different folder is used for the root
                     <historyDir>${basedir}/clover/history</historyDir>
                     -->
-                    <jdk>1.6</jdk>
+                    <jdk>1.7</jdk>
                     <includesTestSourceRoots>false</includesTestSourceRoots>
                     <skip>${clover.skip}</skip>
 
@@ -767,7 +764,7 @@
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-pmd-plugin</artifactId>
                             <configuration>
-                                <targetJdk>1.6</targetJdk>
+                                <targetJdk>1.7</targetJdk>
                             </configuration>
                         </plugin>
 

@@ -5,6 +5,7 @@
 # Maven
 target/
 integration-tests/tests/fwdir/
+.repo
 
 # Eclipse
 eclipse_config
