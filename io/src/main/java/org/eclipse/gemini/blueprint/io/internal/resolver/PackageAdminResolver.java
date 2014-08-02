@@ -47,6 +47,7 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * 
  */
+//TODO: rework to use WIRE Admin
 public class PackageAdminResolver implements DependencyResolver {
 
 	/** logger */

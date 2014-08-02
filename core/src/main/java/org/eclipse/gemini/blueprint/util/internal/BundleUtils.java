@@ -16,8 +16,7 @@ package org.eclipse.gemini.blueprint.util.internal;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.framework.FrameworkUtil;
 
 /**
  * Internal utility used for internal purposes.
@@ -28,19 +27,9 @@ public abstract class BundleUtils {
 	public static final String DM_CORE_ID = "spring.osgi.core.bundle.id";
 	public static final String DM_CORE_TS = "spring.osgi.core.bundle.timestamp";
 
-	public static Bundle getDMCoreBundle(BundleContext ctx) {
-		ServiceReference ref = ctx.getServiceReference(PackageAdmin.class.getName());
-		if (ref != null) {
-			Object service = ctx.getService(ref);
-			if (service instanceof PackageAdmin) {
-				PackageAdmin pa = (PackageAdmin) service;
-				if (pa != null) {
-					return pa.getBundle(BundleUtils.class);
-				}
-			}
-		}
-		return null;
-	}
+    public static Bundle getDMCoreBundle(BundleContext ctx) {
+        return FrameworkUtil.getBundle(BundleUtils.class);
+    }
 
 	public static String createNamespaceFilter(BundleContext ctx) {
 		Bundle bnd = getDMCoreBundle(ctx);

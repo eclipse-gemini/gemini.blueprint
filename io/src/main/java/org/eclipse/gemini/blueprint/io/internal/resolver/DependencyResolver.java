@@ -19,11 +19,12 @@ import org.osgi.service.packageadmin.PackageAdmin;
 
 /**
  * Simple interface offering utility methods for OSGi dependencies, mainly
- * 
  * bundles. This class suplements the {@link PackageAdmin} service by offering
  * information on importing, not just exporting.
  * 
  * @author Costin Leau
+ *
+ * TODO: Rework to remove reference to PackageAdmin
  */
 public interface DependencyResolver {
 

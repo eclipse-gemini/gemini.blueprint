@@ -84,7 +84,8 @@ import org.springframework.util.StringUtils;
  * @see PathMatchingResourcePatternResolver
  * 
  * @author Costin Leau
- * 
+ *
+ * TODO: Rework to use WIRE Admin
  */
 public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatternResolver {
 

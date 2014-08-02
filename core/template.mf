@@ -13,7 +13,6 @@ Import-Template:
  org.osgi.service.blueprint;version="1.0.0",
  org.aopalliance.*;version="0.0.0",
  org.osgi.service.cm;version=1.2;resolution:=optional,
- org.osgi.service.packageadmin;version=1.2,
  org.osgi.service.startlevel;version=1.0;resolution:=optional,
  org.apache.commons.logging.*;version=${logging.version.range},
  org.eclipse.gemini.blueprint.*;version=${gemini.blueprint.version.range},

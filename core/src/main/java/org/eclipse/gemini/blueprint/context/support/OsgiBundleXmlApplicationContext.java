@@ -237,7 +237,7 @@ public class OsgiBundleXmlApplicationContext extends AbstractDelegatedExecutionA
 	}
 
 	/**
-	 * Similar to {@link #createNamespaceHandlerResolver(BundleContext, ClassLoader, ClassLoader)} , this method creates
+	 * Similar to {@link #createNamespaceHandlerResolver(BundleContext, String, ClassLoader)} , this method creates
 	 * a special OSGi entity resolver that considers the bundle class path first, falling back to the entity resolver
 	 * service provided by the Spring DM extender.
 	 * 
