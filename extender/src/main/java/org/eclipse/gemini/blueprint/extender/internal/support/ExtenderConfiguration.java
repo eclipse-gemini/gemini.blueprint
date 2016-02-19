@@ -35,19 +35,13 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.timer.TimerTaskExecutor;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
-import java.util.Timer;
+import java.util.*;
 
 /**
  * Configuration class for the extender. Takes care of locating the extender specific configurations and merging the
@@ -376,14 +370,9 @@ public class ExtenderConfiguration implements BundleActivator {
 	}
 
 	private TaskExecutor createDefaultShutdownTaskExecutor() {
-		TimerTaskExecutor taskExecutor = new TimerTaskExecutor() {
-			@Override
-			protected Timer createTimer() {
-				return new Timer("Gemini Blueprint context shutdown thread", true);
-			}
-		};
-
-		taskExecutor.afterPropertiesSet();
+		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("Gemini Blueprint context shutdown thread ");
+		taskExecutor.setDaemon(true);
+		taskExecutor.setConcurrencyLimit(1);
 		isShutdownTaskExecutorManagedInternally = true;
 		return taskExecutor;
 	}

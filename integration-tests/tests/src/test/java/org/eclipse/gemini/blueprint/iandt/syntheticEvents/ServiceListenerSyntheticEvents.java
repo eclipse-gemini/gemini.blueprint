@@ -30,6 +30,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Integration test for synthetic events delivery of service listeners during
  * startup/shutdown.

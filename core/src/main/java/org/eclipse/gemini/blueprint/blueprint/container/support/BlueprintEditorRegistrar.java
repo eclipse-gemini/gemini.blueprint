@@ -59,7 +59,7 @@ public class BlueprintEditorRegistrar implements PropertyEditorRegistrar {
 	 */
 	private static class BlueprintCustomCollectionEditor extends CustomCollectionEditor {
 
-		public BlueprintCustomCollectionEditor(Class<?> collectionType) {
+		public BlueprintCustomCollectionEditor(Class<? extends Collection> collectionType) {
 			super(collectionType);
 		}
 

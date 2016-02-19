@@ -58,7 +58,7 @@ import org.springframework.util.StringUtils;
  * 
  * @author Andy Piper
  * @author Costin Leau
- * @see BundleAction
+ * @see BundleActionEnum
  */
 public class BundleFactoryBean implements FactoryBean<Bundle>, BundleContextAware, InitializingBean, DisposableBean,
 		ResourceLoaderAware {
@@ -306,16 +306,6 @@ public class BundleFactoryBean implements FactoryBean<Bundle>, BundleContextAwar
 	}
 
 	/**
-	 * Returns the action.
-	 * 
-	 * @return Returns the action
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #getBundleAction()}
-	 */
-	public BundleAction getAction() {
-		return BundleAction.getBundleAction(action);
-	}
-
-	/**
 	 * Returns the bundle action.
 	 * 
 	 * @return the bundle action.
@@ -328,29 +318,9 @@ public class BundleFactoryBean implements FactoryBean<Bundle>, BundleContextAwar
 	 * Action to execute at startup.
 	 * 
 	 * @param action action to execute at startup
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #setBundleAction(BundleAction)}
-	 */
-	public void setAction(BundleAction action) {
-		this.action = action.getBundleActionEnum();
-	}
-
-	/**
-	 * Action to execute at startup.
-	 * 
-	 * @param action action to execute at startup
 	 */
 	public void setBundleAction(BundleActionEnum action) {
 		this.action = action;
-	}
-
-	/**
-	 * Returns the destroyAction.
-	 * 
-	 * @return Returns the destroyAction
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #getBundleDestroyAction()}
-	 */
-	public BundleAction getDestroyAction() {
-		return BundleAction.getBundleAction(destroyAction);
 	}
 
 	/**
@@ -359,16 +329,6 @@ public class BundleFactoryBean implements FactoryBean<Bundle>, BundleContextAwar
 	 */
 	public BundleActionEnum getBundleDestroyAction() {
 		return destroyAction;
-	}
-
-	/**
-	 * Action to execute at shutdown.
-	 * 
-	 * @param action action to execute at shutdown
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #setBundleDestroyAction(BundleActionEnum)}
-	 */
-	public void setDestroyAction(BundleAction action) {
-		this.destroyAction = action.getBundleActionEnum();
 	}
 
 	/**

@@ -14,19 +14,20 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceProxyFactoryBean;
 
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
-
+import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
+import org.eclipse.gemini.blueprint.service.importer.support.Availability;
+import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
+import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.aop.SpringProxy;
 import org.springframework.core.InfrastructureProxy;
-import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
-import org.eclipse.gemini.blueprint.service.importer.support.Cardinality;
-import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
-import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
+
+import java.util.*;
+
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Costin Leau
@@ -54,7 +55,7 @@ public class ServiceRefAwareWithSingleServiceTest extends ServiceBaseTest {
 		Date date = new Date(time);
 		ServiceRegistration reg = publishService(date);
 
-		fb.setCardinality(Cardinality.C_1__1);
+		fb.setAvailability(Availability.MANDATORY);
 
 		fb.setInterfaces(new Class<?>[] { Date.class });
 		fb.afterPropertiesSet();
@@ -93,7 +94,7 @@ public class ServiceRefAwareWithSingleServiceTest extends ServiceBaseTest {
 
 		ServiceRegistration reg = publishService(date, dict);
 
-		fb.setCardinality(Cardinality.C_1__1);
+		fb.setAvailability(Availability.MANDATORY);
 		fb.setFilter("(&(foo=bar)(george=michael))");
 		fb.setInterfaces(new Class<?>[] { Date.class });
 		fb.afterPropertiesSet();

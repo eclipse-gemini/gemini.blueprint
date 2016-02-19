@@ -83,9 +83,9 @@ public class ClassUtilsTest extends TestCase {
 		Class<?>[] clazz = ClassUtils.getAllInterfaces(DelegatedExecutionOsgiBundleApplicationContext.class);
 		Class<?>[] expected =
 				{ ConfigurableOsgiBundleApplicationContext.class, ConfigurableApplicationContext.class,
-						ApplicationContext.class, Lifecycle.class, EnvironmentCapable.class, ListableBeanFactory.class,
+						ApplicationContext.class, Lifecycle.class, Closeable.class, EnvironmentCapable.class, ListableBeanFactory.class,
 						HierarchicalBeanFactory.class, MessageSource.class, ApplicationEventPublisher.class,
-						ResourcePatternResolver.class, BeanFactory.class, ResourceLoader.class };
+						ResourcePatternResolver.class, BeanFactory.class, ResourceLoader.class, AutoCloseable.class };
 
 		assertTrue(compareArrays(expected, clazz));
 	}
@@ -100,9 +100,10 @@ public class ClassUtilsTest extends TestCase {
 						AbstractDelegatedExecutionApplicationContext.class, AbstractOsgiBundleApplicationContext.class,
 						AbstractRefreshableApplicationContext.class, AbstractApplicationContext.class,
 						DefaultResourceLoader.class, ResourceLoader.class,
+						AutoCloseable.class,
 						DelegatedExecutionOsgiBundleApplicationContext.class,
 						ConfigurableOsgiBundleApplicationContext.class, ConfigurableApplicationContext.class,
-						ApplicationContext.class, Lifecycle.class, EnvironmentCapable.class, ListableBeanFactory.class,
+						ApplicationContext.class, Lifecycle.class, Closeable.class, EnvironmentCapable.class, ListableBeanFactory.class,
 						HierarchicalBeanFactory.class, ApplicationEventPublisher.class, ResourcePatternResolver.class,
 						MessageSource.class, BeanFactory.class, DisposableBean.class };
 

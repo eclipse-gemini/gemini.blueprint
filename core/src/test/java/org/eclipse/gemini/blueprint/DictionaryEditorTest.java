@@ -2,55 +2,52 @@
  * Copyright (c) 2006, 2010 VMware Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
- * and Apache License v2.0 which accompanies this distribution. 
- * The Eclipse Public License is available at 
+ * and Apache License v2.0 which accompanies this distribution.
+ * The Eclipse Public License is available at
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
- * You may elect to redistribute this code under either of these licenses. 
- * 
+ * You may elect to redistribute this code under either of these licenses.
+ * <p/>
  * Contributors:
- *   VMware Inc.
+ * VMware Inc.
  *****************************************************************************/
 
 package org.eclipse.gemini.blueprint;
 
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.PropertiesEditor;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+
 import java.util.Dictionary;
 
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.propertyeditors.PropertiesEditor;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
-public class DictionaryEditorTest extends AbstractDependencyInjectionSpringContextTests {
+@ContextConfiguration(locations = "dict-editor.xml", initializers = DictionaryEditorTest.class)
+public class DictionaryEditorTest extends AbstractJUnit4SpringContextTests implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    private Dictionary dictionary;
 
-	private Dictionary dictionary;
+    @Autowired
+    public void setDictionary(Dictionary dictionary) {
+        this.dictionary = dictionary;
+    }
 
+    @Test
+    public void testInjection() {
+        assertNotNull(dictionary);
+    }
 
-	/**
-	 * @param property The dictionary to set.
-	 */
-	public void setDictionary(Dictionary property) {
-		this.dictionary = property;
-	}
+    @Test
+    public void testInjectedValue() {
+        assertSame(applicationContext.getBean("dictionary"), dictionary);
+    }
 
-	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
-		beanFactory.registerCustomEditor(Dictionary.class, PropertiesEditor.class);
-		super.customizeBeanFactory(beanFactory);
-	}
-
-	protected String[] getConfigLocations() {
-		//return new String[] { "/org/eclipse/gemini/blueprint/dict-editor.xml" };
-		return null;
-	}
-
-	public void tstInjection() {
-		assertNotNull(dictionary);
-	}
-
-	public void tstInjectedValue() {
-		assertSame(applicationContext.getBean("dictionary"), dictionary);
-	}
-
-	public void testSanity() throws Exception {
-		System.out.println(String[][].class);
-	}
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        applicationContext.getBeanFactory().registerCustomEditor(Dictionary.class, PropertiesEditor.class);
+    }
 }

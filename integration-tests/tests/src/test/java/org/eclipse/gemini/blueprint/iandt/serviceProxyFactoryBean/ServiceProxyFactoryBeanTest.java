@@ -14,13 +14,17 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceProxyFactoryBean;
 
+import org.eclipse.gemini.blueprint.service.importer.support.Availability;
+import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
+import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import org.osgi.framework.ServiceRegistration;
+
 import java.io.Serializable;
 import java.util.Date;
 
-import org.osgi.framework.ServiceRegistration;
-import org.eclipse.gemini.blueprint.service.importer.support.Cardinality;
-import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
-import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Costin Leau
@@ -48,7 +52,7 @@ public class ServiceProxyFactoryBeanTest extends ServiceBaseTest {
 		Date date = new Date(time);
 		ServiceRegistration reg = publishService(date);
 
-		fb.setCardinality(Cardinality.C_1__1);
+		fb.setAvailability(Availability.MANDATORY);
 		fb.setInterfaces(new Class<?>[] { Date.class });
 		fb.afterPropertiesSet();
 
@@ -74,7 +78,7 @@ public class ServiceProxyFactoryBeanTest extends ServiceBaseTest {
 
 		ServiceRegistration reg = publishService(date, classes);
 
-		fb.setCardinality(Cardinality.C_1__1);
+		fb.setAvailability(Availability.MANDATORY);
 		fb.setInterfaces(intfs);
 		fb.setFilter(OsgiFilterUtils.unifyFilter(Date.class, null));
 		fb.afterPropertiesSet();

@@ -21,7 +21,6 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.framework.BundleContext;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.timer.TimerTaskExecutor;
 
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class ExtenderConfigurationDefaultSettingsTest extends TestCase {
 
 	public void testShutdownTaskExecutor() throws Exception {
 		TaskExecutor executor = config.getShutdownTaskExecutor();
-		assertTrue(executor instanceof TimerTaskExecutor);
+		assertTrue(executor instanceof SimpleAsyncTaskExecutor);
 	}
 
 	public void testEventMulticaster() throws Exception {

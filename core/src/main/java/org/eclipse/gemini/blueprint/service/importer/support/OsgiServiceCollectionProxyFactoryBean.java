@@ -299,9 +299,4 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 		Assert.notNull(type);
 		this.memberType = type;
 	}
-
-	@Override
-	Cardinality getInternalCardinality() {
-		return (Availability.OPTIONAL.equals(getAvailability()) ? Cardinality.C_0__N : Cardinality.C_1__N);
-	}
 }

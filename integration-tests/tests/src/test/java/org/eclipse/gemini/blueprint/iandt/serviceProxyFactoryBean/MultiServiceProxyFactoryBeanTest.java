@@ -14,21 +14,20 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceProxyFactoryBean;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Properties;
-
-import org.osgi.framework.ServiceRegistration;
-import org.springframework.core.InfrastructureProxy;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.ServiceProxyDestroyedException;
-import org.eclipse.gemini.blueprint.service.importer.support.Cardinality;
+import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
+import org.osgi.framework.ServiceRegistration;
+import org.springframework.core.InfrastructureProxy;
+
+import java.util.*;
+
+import static junit.framework.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 
@@ -49,7 +48,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 	// causes CGLIB problems
 	public void testFactoryBeanForMultipleServicesAsInterfaces() throws Exception {
 
-		fb.setCardinality(Cardinality.C_0__N);
+		fb.setAvailability(Availability.OPTIONAL);
 		// look for collections
 		fb.setInterfaces(new Class<?>[] { ArrayList.class });
 		fb.afterPropertiesSet();
@@ -93,7 +92,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 
 	public void testFactoryBeanForMultipleServicesAsClasses() throws Exception {
 
-		fb.setCardinality(Cardinality.C_0__N);
+		fb.setAvailability(Availability.OPTIONAL);
 		fb.setInterfaces(new Class<?>[] { Date.class });
 		fb.afterPropertiesSet();
 
@@ -142,7 +141,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 	}
 
 	public void testIteratorWhenServiceGoesDown() throws Exception {
-		fb.setCardinality(Cardinality.C_0__N);
+		fb.setAvailability(Availability.OPTIONAL);
 		fb.setInterfaces(new Class<?>[] { Date.class });
 		fb.afterPropertiesSet();
 
@@ -186,7 +185,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 	}
 
 	public void testProxyDestruction() throws Exception {
-		fb.setCardinality(Cardinality.C_0__N);
+		fb.setAvailability(Availability.OPTIONAL);
 		fb.setInterfaces(new Class<?>[] { Date.class });
 		fb.afterPropertiesSet();
 

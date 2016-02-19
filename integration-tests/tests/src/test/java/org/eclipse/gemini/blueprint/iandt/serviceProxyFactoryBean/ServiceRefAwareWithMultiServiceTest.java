@@ -14,17 +14,16 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceProxyFactoryBean;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
+import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
+import org.eclipse.gemini.blueprint.service.importer.support.Availability;
+import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.core.InfrastructureProxy;
-import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
-import org.eclipse.gemini.blueprint.service.importer.support.Cardinality;
-import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
+
+import java.util.*;
+
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Costin Leau
@@ -46,7 +45,7 @@ public class ServiceRefAwareWithMultiServiceTest extends ServiceBaseTest {
 	}
 
 	public void testProxyForMultipleCardinality() throws Exception {
-		fb.setCardinality(Cardinality.C_0__N);
+		fb.setAvailability(Availability.OPTIONAL);
 		fb.setInterfaces(new Class<?>[] { Date.class });
 		fb.afterPropertiesSet();
 

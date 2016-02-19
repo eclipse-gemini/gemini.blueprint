@@ -14,13 +14,17 @@
 
 package org.eclipse.gemini.blueprint.iandt.referenceProxy;
 
-import java.awt.Shape;
-
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
-import org.eclipse.gemini.blueprint.service.importer.support.Cardinality;
-import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoader;
+import org.eclipse.gemini.blueprint.service.importer.support.Availability;
+import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
+
+import java.awt.*;
+
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Costin Leau
@@ -33,8 +37,8 @@ public class ReferenceInterruptTest extends BaseIntegrationTest {
 		final OsgiServiceProxyFactoryBean proxyFactory = new OsgiServiceProxyFactoryBean();
 		proxyFactory.setBeanClassLoader(getClass().getClassLoader());
 		proxyFactory.setBundleContext(bundleContext);
-		proxyFactory.setCardinality(Cardinality.C_0__1);
-		proxyFactory.setContextClassLoader(ImportContextClassLoader.UNMANAGED);
+		proxyFactory.setAvailability(Availability.OPTIONAL);
+		proxyFactory.setImportContextClassLoader(ImportContextClassLoaderEnum.UNMANAGED);
 		proxyFactory.setInterfaces(new Class<?>[] { Shape.class });
 		proxyFactory.setTimeout(initialWait);
 		proxyFactory.afterPropertiesSet();

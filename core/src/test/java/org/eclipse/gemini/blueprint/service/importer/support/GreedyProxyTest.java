@@ -14,23 +14,19 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support;
 
+import junit.framework.TestCase;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
+import org.osgi.framework.BundleContext;
+import org.springframework.util.CollectionUtils;
+
+import javax.print.attribute.SupportedValuesAttribute;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import javax.print.attribute.SupportedValuesAttribute;
-
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
-import org.osgi.framework.BundleContext;
-import org.springframework.core.enums.LabeledEnum;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
-import org.springframework.util.CollectionUtils;
 
 /**
  * Unit test regarding the importing of services inside a collection.
@@ -97,13 +93,12 @@ public class GreedyProxyTest extends TestCase {
 	}
 
 	public void testParentInterfaces() throws Exception {
-		String[] extraClasses = new String[] { SupportedValuesAttribute.class.getName(), LabeledEnum.class.getName() };
+		String[] extraClasses = new String[] { SupportedValuesAttribute.class.getName()};
 
 		MockServiceReference ref = new MockServiceReference(addExtraIntfs(extraClasses));
 		Class<?>[] clazzes = proxyCreator.discoverProxyClasses(ref);
 		assertEquals(2, clazzes.length);
-		assertTrue(containsClass(clazzes, LabeledEnum.class));
-		assertFalse(containsClass(clazzes, Comparable.class));
+		assertTrue(containsClass(clazzes, Comparable.class));
 		assertTrue(containsClass(clazzes, SupportedValuesAttribute.class));
 	}
 

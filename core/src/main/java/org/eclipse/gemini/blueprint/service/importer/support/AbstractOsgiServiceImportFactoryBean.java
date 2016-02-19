@@ -24,11 +24,7 @@ import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
 import org.eclipse.gemini.blueprint.util.internal.ClassUtils;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
-import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.*;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -164,25 +160,13 @@ public abstract class AbstractOsgiServiceImportFactoryBean implements FactoryBea
 		this.interfaces = interfaces;
 	}
 
-	/**
-	 * Sets the thread context class loader management strategy to use for services imported by this service. By default
-	 * {@link ImportContextClassLoader#CLIENT} is used.
-	 * 
-	 * @param contextClassLoader import context class loader management strategy
-	 * @see ImportContextClassLoader
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #setImportContextClassLoader(ImportContextClassLoaderEnum))}
-	 */
-	public void setContextClassLoader(ImportContextClassLoader contextClassLoader) {
-		Assert.notNull(contextClassLoader);
-		this.contextClassLoader = contextClassLoader.getImportContextClassLoaderEnum();
-	}
 
 	/**
 	 * Sets the thread context class loader management strategy to use for services imported by this service. By default
 	 * {@link ImportContextClassLoaderEnum#CLIENT} is used.
 	 * 
 	 * @param contextClassLoader import context class loader management strategy
-	 * @see ImportContextClassLoader
+	 * @see ImportContextClassLoaderEnum
 	 */
 	public void setImportContextClassLoader(ImportContextClassLoaderEnum contextClassLoader) {
 		Assert.notNull(contextClassLoader);
@@ -281,46 +265,13 @@ public abstract class AbstractOsgiServiceImportFactoryBean implements FactoryBea
 	 * Returns the context class loader management strategy.
 	 * 
 	 * @return the context class loader management strategy
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #getImportContextClassLoader()}
-	 */
-	public ImportContextClassLoader getContextClassLoader() {
-		return ImportContextClassLoader.getImportContextClassLoader(contextClassLoader);
-	}
-
-	/**
-	 * Returns the context class loader management strategy.
-	 * 
-	 * @return the context class loader management strategy
 	 */
 	public ImportContextClassLoaderEnum getImportContextClassLoader() {
 		return contextClassLoader;
 	}
 
-	/**
-	 * Returns the cardinality used by this importer.
-	 * 
-	 * @return importer cardinality
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #getAvailability()}
-	 */
-	public Cardinality getCardinality() {
-		return getInternalCardinality();
-	}
-
-	abstract Cardinality getInternalCardinality();
-
 	public Availability getAvailability() {
 		return availability;
-	}
-
-	/**
-	 * Sets the importer cardinality (0..1, 1..1, 0..N, or 1..N). Default is 1..X.
-	 * 
-	 * @param cardinality importer cardinality.
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #setAvailability(Availability)}
-	 */
-	public void setCardinality(Cardinality cardinality) {
-		Assert.notNull(cardinality);
-		this.availability = cardinality.getAvailability();
 	}
 
 	/**

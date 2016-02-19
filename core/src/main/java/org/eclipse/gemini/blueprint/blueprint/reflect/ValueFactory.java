@@ -14,30 +14,18 @@
 
 package org.eclipse.gemini.blueprint.blueprint.reflect;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.gemini.blueprint.blueprint.reflect.SimpleCollectionMetadata.CollectionType;
+import org.eclipse.gemini.blueprint.util.BeanReferenceFactoryBean;
 import org.osgi.service.blueprint.reflect.MapEntry;
 import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.NonNullMetadata;
 import org.osgi.service.blueprint.reflect.NullMetadata;
 import org.springframework.beans.BeanMetadataElement;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.BeanReferenceFactoryBean;
-import org.springframework.beans.factory.config.RuntimeBeanNameReference;
-import org.springframework.beans.factory.config.RuntimeBeanReference;
-import org.springframework.beans.factory.config.TypedStringValue;
-import org.springframework.beans.factory.support.ManagedArray;
-import org.springframework.beans.factory.support.ManagedList;
-import org.springframework.beans.factory.support.ManagedMap;
-import org.springframework.beans.factory.support.ManagedProperties;
-import org.springframework.beans.factory.support.ManagedSet;
+import org.springframework.beans.factory.config.*;
+import org.springframework.beans.factory.support.*;
+
+import java.util.*;
 
 /**
  * Adapter between Spring {@link BeanMetadataElement} and OSGi's Blueprint {@link Value}.

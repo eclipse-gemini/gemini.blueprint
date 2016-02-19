@@ -15,16 +15,6 @@
 
 package org.eclipse.gemini.blueprint.service.exporter.support;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
@@ -34,11 +24,7 @@ import org.eclipse.gemini.blueprint.context.support.internal.security.SecurityUt
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServicePropertiesResolver;
 import org.eclipse.gemini.blueprint.service.exporter.support.internal.controller.ExporterController;
 import org.eclipse.gemini.blueprint.service.exporter.support.internal.controller.ExporterInternalActions;
-import org.eclipse.gemini.blueprint.service.exporter.support.internal.support.LazyTargetResolver;
-import org.eclipse.gemini.blueprint.service.exporter.support.internal.support.ListenerNotifier;
-import org.eclipse.gemini.blueprint.service.exporter.support.internal.support.PublishingServiceFactory;
-import org.eclipse.gemini.blueprint.service.exporter.support.internal.support.ServiceRegistrationDecorator;
-import org.eclipse.gemini.blueprint.service.exporter.support.internal.support.ServiceRegistrationWrapper;
+import org.eclipse.gemini.blueprint.service.exporter.support.internal.support.*;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
 import org.eclipse.gemini.blueprint.util.internal.ClassUtils;
 import org.eclipse.gemini.blueprint.util.internal.MapBasedDictionary;
@@ -47,12 +33,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -61,6 +42,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * FactoryBean that transparently publishes other beans in the same application context as OSGi services returning the
@@ -72,7 +59,7 @@ import org.springframework.util.StringUtils;
  * <li>BundleVersion=&lt;bundle version&gt;</li> <li>org.eclipse.gemini.blueprint.bean.name="&lt;bean name&gt;</li> </ul>
  * 
  * <p/> <strong>Note:</strong>If thread context class loader management is used (
- * {@link #setContextClassLoader(ExportContextClassLoader)}, since proxying is required, the target class has to meet
+ * {@link #setExportContextClassLoader(ExportContextClassLoaderEnum)}, since proxying is required, the target class has to meet
  * certain criterion described in the Spring AOP documentation. In short, final classes are not supported when class
  * enhancement is used.
  * 
@@ -219,8 +206,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 
 		// sanity check
 		if (interfaces == null) {
-			if (AutoExport.DISABLED.equals(interfaceDetector)
-					|| DefaultInterfaceDetector.DISABLED.equals(interfaceDetector))
+			if (DefaultInterfaceDetector.DISABLED.equals(interfaceDetector))
 				throw new IllegalArgumentException(
 						"No service interface(s) specified and auto-export discovery disabled; change at least one of these properties.");
 			interfaces = new Class[0];
@@ -456,31 +442,14 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 
 	/**
 	 * Sets the context class loader management strategy to use when invoking operations on the exposed target bean. By
-	 * default, {@link ExportContextClassLoader#UNMANAGED} is used.
+	 * default, {@link ExportContextClassLoaderEnum#UNMANAGED} is used.
 	 * 
 	 * <p/> <strong>Note:</strong> Since proxying is required for context class loader manager, the target class has to
 	 * meet certain criteria described in the Spring AOP documentation. In short, final classes are not supported when
 	 * class enhancement is used.
 	 * 
 	 * @param ccl context class loader strategy to use
-	 * @see ExportContextClassLoader
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #setExportContextClassLoader(ExportContextClassLoaderEnum)}
-	 */
-	public void setContextClassLoader(ExportContextClassLoader ccl) {
-		Assert.notNull(ccl);
-		this.contextClassLoader = ccl.getExportContextClassLoaderEnum();
-	}
-
-	/**
-	 * Sets the context class loader management strategy to use when invoking operations on the exposed target bean. By
-	 * default, {@link ExportContextClassLoader#UNMANAGED} is used.
-	 * 
-	 * <p/> <strong>Note:</strong> Since proxying is required for context class loader manager, the target class has to
-	 * meet certain criteria described in the Spring AOP documentation. In short, final classes are not supported when
-	 * class enhancement is used.
-	 * 
-	 * @param ccl context class loader strategy to use
-	 * @see ExportContextClassLoader
+	 * @see ExportContextClassLoaderEnum
 	 */
 	public void setExportContextClassLoader(ExportContextClassLoaderEnum ccl) {
 		Assert.notNull(ccl);
@@ -524,21 +493,6 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 	 */
 	public void setTargetBeanName(String name) {
 		this.targetBeanName = name;
-	}
-
-	/**
-	 * Sets the strategy used for automatically publishing classes. This allows the exporter to use the target class
-	 * hierarchy and/or interfaces for registering the OSGi service. By default, autoExport is disabled
-	 * {@link AutoExport#DISABLED}.
-	 * 
-	 * @param classExporter class exporter used for automatically publishing service classes.
-	 * 
-	 * @see AutoExport
-	 * @deprecated
-	 */
-	public void setAutoExport(AutoExport classExporter) {
-		Assert.notNull(classExporter);
-		this.interfaceDetector = classExporter;
 	}
 
 	/**

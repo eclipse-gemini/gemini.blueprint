@@ -100,7 +100,7 @@ public class ServiceBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 
 	private static final String AUTOEXPORT_PROP = "interfaceDetector";
 
-	private static final String CCL_PROP = "contextClassLoader";
+	private static final String CCL_PROP = "exportContextClassLoader";
 	// XML elements
 	private static final String INTERFACES_ID = "interfaces";
 

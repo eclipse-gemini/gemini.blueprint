@@ -143,7 +143,7 @@ public class BlueprintParser {
 		List<String> aliases = new ArrayList<String>(4);
 		if (StringUtils.hasLength(nameAttr)) {
 			String[] nameArr =
-					StringUtils.tokenizeToStringArray(nameAttr, BeanDefinitionParserDelegate.BEAN_NAME_DELIMITERS);
+					StringUtils.tokenizeToStringArray(nameAttr, BeanDefinitionParserDelegate.MULTI_VALUE_ATTRIBUTE_DELIMITERS);
 			aliases.addAll(Arrays.asList(nameArr));
 		}
 

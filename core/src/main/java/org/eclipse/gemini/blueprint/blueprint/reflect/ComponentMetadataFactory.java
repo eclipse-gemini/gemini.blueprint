@@ -14,15 +14,8 @@
 
 package org.eclipse.gemini.blueprint.blueprint.reflect;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import org.eclipse.gemini.blueprint.config.internal.AbstractReferenceDefinitionParser;
+import org.eclipse.gemini.blueprint.util.BeanReferenceFactoryBean;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.springframework.beans.BeanMetadataElement;
 import org.springframework.beans.Mergeable;
@@ -30,11 +23,13 @@ import org.springframework.beans.PropertyValue;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.BeanReferenceFactoryBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.ConstructorArgumentValues.ValueHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Internal class used for adapting Spring's bean definition to OSGi Blueprint metadata. Used by {@link MetadataFactory}

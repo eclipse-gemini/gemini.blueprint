@@ -251,20 +251,4 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 	public void testAfterPropertiesSet() {
 		assertNotNull("should have initialized listener", listener);
 	}
-
-	/**
-	 * HSH - Mandatory cardinality is enforced by the extender in the wait-for
-	 * semantic regarding dependent services of cardinality {1..}
-	 * 
-	 * public void testMandatoryCardinality() { MockBundleContext ctx = new
-	 * MockBundleContext() { public ServiceReference[]
-	 * getServiceReferences(String clazz, String filter) throws
-	 * InvalidSyntaxException { return null; } }; interceptor = new
-	 * OsgiServiceDynamicInterceptor(ctx, ImportContextClassLoader.UNMANAGED);
-	 * interceptor.setFilter(new MockFilter()); RetryTemplate template = new
-	 * RetryTemplate(); template.setRetryNumbers(1); template.setWaitTime(10);
-	 * interceptor.setRetryTemplate(template); try {
-	 * interceptor.afterPropertiesSet(); fail("expected exception"); } catch
-	 * (ServiceUnavailableException sue) { // expected } }
-	 */
 }

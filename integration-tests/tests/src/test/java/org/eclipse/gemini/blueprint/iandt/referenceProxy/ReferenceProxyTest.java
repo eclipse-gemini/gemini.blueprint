@@ -26,6 +26,9 @@ import org.eclipse.gemini.blueprint.iandt.simpleservice.MyService;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 /**
  * @author Hal Hildebrand Date: Nov 25, 2006 Time: 12:42:30 PM
  */
