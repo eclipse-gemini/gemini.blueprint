@@ -15,7 +15,7 @@
 	<bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor" p:threadGroupName="configured-extender" 
 			p:threadNamePrefix="conf-extender-thread" />
 
-	<bean id="shutdownTaskExecutor" class="org.springframework.scheduling.timer.TimerTaskExecutor"/>
+	<bean id="shutdownTaskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>
 	
 	<util:properties id="extenderProperties">
 		<prop key="smth">bla</prop>

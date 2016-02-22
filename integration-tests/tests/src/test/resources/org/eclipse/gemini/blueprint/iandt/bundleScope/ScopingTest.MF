@@ -15,6 +15,5 @@ Import-Package: junit.framework,
   org.eclipse.gemini.blueprint.iandt.scope.a,
   org.eclipse.gemini.blueprint.iandt.scope.b,
   org.eclipse.gemini.blueprint.test.provisioning,
-  org.springframework.context,
-  org.springframework.test
+  org.springframework.context
  

@@ -16,8 +16,7 @@ package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
 import junit.framework.TestCase;
 import junit.framework.TestResult;
-
-import org.springframework.test.ConditionalTestCase;
+import org.eclipse.gemini.blueprint.test.legacyspringsupport.ConditionalTestCase;
 
 /**
  * @author Costin Leau

@@ -13,5 +13,4 @@ Import-Package: junit.framework,
  org.eclipse.gemini.blueprint.test,
  org.eclipse.gemini.blueprint.test.platform,
  org.eclipse.gemini.blueprint.test.provisioning,
- org.springframework.test,
- org.apache.commons.logging
+  org.apache.commons.logging

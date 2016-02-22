@@ -37,7 +37,7 @@ import org.springframework.util.ObjectUtils;
 public class ScopingTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.2.0",
+		return new String[] {
 			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.common," + getSpringDMVersion(),
 			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.a," + getSpringDMVersion(),
 			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.b," + getSpringDMVersion() };

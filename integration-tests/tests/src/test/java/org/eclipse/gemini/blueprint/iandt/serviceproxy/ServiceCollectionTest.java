@@ -27,17 +27,12 @@ import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
 import org.springframework.util.ClassUtils;
 
 abstract class ServiceCollectionTest extends BaseIntegrationTest {
-
-	protected String[] getTestBundlesNames() {
-		return new String[] { "net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.1.3" };
-	}
-
 	protected ServiceRegistration publishService(Object obj) throws Exception {
 		return bundleContext.registerService(obj.getClass().getName(), obj, null);
 	}
 
 	public void testCGLIBAvailable() throws Exception {
-		assertTrue(ClassUtils.isPresent("net.sf.cglib.proxy.Enhancer", DefaultAopProxyFactory.class.getClassLoader()));
+		assertTrue(ClassUtils.isPresent("org.springframework.cglib.proxy.Enhancer", DefaultAopProxyFactory.class.getClassLoader()));
 	}
 
 	protected Collection createCollection() {

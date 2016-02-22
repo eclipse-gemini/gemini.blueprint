@@ -51,7 +51,7 @@ public class PublishedInterfacesTest extends BaseIntegrationTest {
 		for (int i = 0; i < refs.length; i++) {
 			ServiceReference serviceReference = refs[i];
 			String[] interfaces = (String[]) serviceReference.getProperty(Constants.OBJECTCLASS);
-			assertEquals("not enough interfaces published", 13, interfaces.length);
+			assertEquals("not enough interfaces published", 15, interfaces.length);
 			assertEquals(Version.emptyVersion, serviceReference.getProperty(Constants.BUNDLE_VERSION));
 			assertEquals(bundleContext.getBundle().getSymbolicName(),
 				serviceReference.getProperty(Constants.BUNDLE_SYMBOLICNAME));

@@ -29,8 +29,7 @@ import org.springframework.aop.framework.ProxyFactory;
  * @author Costin Leau
  */
 class CachingAopClassLoaderFactory implements InternalAopClassLoaderFactory {
-
-	private static final String CGLIB_CLASS = "net.sf.cglib.proxy.Enhancer";
+	private static final String CGLIB_CLASS = "org.springframework.cglib.proxy.Enhancer";
 	/** CGLIB class (if it's present) */
 	private final Class<?> cglibClass;
 

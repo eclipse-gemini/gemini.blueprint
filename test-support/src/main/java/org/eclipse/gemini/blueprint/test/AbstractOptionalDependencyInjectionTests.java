@@ -14,18 +14,18 @@
 
 package org.eclipse.gemini.blueprint.test;
 
-import java.io.IOException;
-
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.AbstractDelegatedExecutionApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
+import org.eclipse.gemini.blueprint.test.legacyspringsupport.AbstractDependencyInjectionSpringContextTests;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 import org.springframework.util.ObjectUtils;
+
+import java.io.IOException;
 
 /**
  * JUnit superclass, which creates an empty OSGi bundle appCtx when no

@@ -33,11 +33,6 @@ import org.springframework.util.ClassUtils;
  * 
  */
 public abstract class ServiceProxyTst extends AbstractConfigurableBundleCreatorTests {
-
-	protected String[] getTestBundlesNames() {
-		return new String[] { "net.sourceforge.cglib, com.springsource.net.sf.cglib, 2.1.3" };
-	}
-
 	protected String getManifestLocation() {
 		return null;
 	}
@@ -73,7 +68,7 @@ public abstract class ServiceProxyTst extends AbstractConfigurableBundleCreatorT
 	public void testCglibLibraryVisibility() {
 		// note that cglib is not declared inside this bundle but should be seen
 		// by spring-core (which contains the util classes)
-		assertTrue(ClassUtils.isPresent("net.sf.cglib.proxy.Enhancer", ProxyFactory.class.getClassLoader()));
+		assertTrue(ClassUtils.isPresent("org.springframework.cglib.proxy.Enhancer", ProxyFactory.class.getClassLoader()));
 	}
 
 	public void testDynamicEndProxy() throws Exception {

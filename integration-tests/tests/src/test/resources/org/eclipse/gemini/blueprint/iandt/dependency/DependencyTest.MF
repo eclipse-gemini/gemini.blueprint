@@ -7,7 +7,6 @@ Import-Package: junit.framework,
  org.osgi.framework,
  org.springframework.aop,
  org.springframework.core.io,
- org.springframework.test,
  org.springframework.osgi.util,
  org.springframework.osgi.test,
  org.springframework.osgi.test.platform
