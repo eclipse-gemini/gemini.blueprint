@@ -12,10 +12,10 @@
 	<osgi:reference id="packageAdmin"
 		interface="org.osgi.service.packageadmin.PackageAdmin" cardinality="0..1"/>
 
-	<bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor" p:threadGroupName="configured-extender" 
-			p:threadNamePrefix="conf-extender-thread" />
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" p:threadGroupName="configured-extender"
+		  p:threadNamePrefix="conf-extender-thread" />
 
-	<bean id="shutdownTaskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>
+	<bean id="shutdownTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
 	
 	<util:properties id="extenderProperties">
 		<prop key="smth">bla</prop>

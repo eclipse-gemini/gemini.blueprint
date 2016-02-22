@@ -19,8 +19,8 @@ import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEv
 import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.framework.BundleContext;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.List;
 
@@ -44,12 +44,12 @@ public class ExtenderConfigurationDefaultSettingsTest extends TestCase {
 	}
 
 	public void testTaskExecutor() throws Exception {
-		assertTrue(config.getTaskExecutor() instanceof SimpleAsyncTaskExecutor);
+		assertTrue(config.getTaskExecutor() instanceof ThreadPoolTaskExecutor);
 	}
 
 	public void testShutdownTaskExecutor() throws Exception {
 		TaskExecutor executor = config.getShutdownTaskExecutor();
-		assertTrue(executor instanceof SimpleAsyncTaskExecutor);
+		assertTrue(executor instanceof ThreadPoolTaskExecutor);
 	}
 
 	public void testEventMulticaster() throws Exception {

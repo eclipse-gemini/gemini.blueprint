@@ -22,8 +22,8 @@ import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.net.URL;
 import java.util.Enumeration;
@@ -58,13 +58,13 @@ public class ExtenderConfigurationCustomSettingsTest extends TestCase {
 	}
 
 	public void testTaskExecutor() throws Exception {
-		assertTrue(config.getTaskExecutor() instanceof SimpleAsyncTaskExecutor);
-		assertEquals("conf-extender-thread", ((SimpleAsyncTaskExecutor) config.getTaskExecutor()).getThreadNamePrefix());
+		assertTrue(config.getTaskExecutor() instanceof ThreadPoolTaskExecutor);
+		assertEquals("conf-extender-thread", ((ThreadPoolTaskExecutor) config.getTaskExecutor()).getThreadNamePrefix());
 	}
 
 	public void testShutdownTaskExecutor() throws Exception {
 		TaskExecutor executor = config.getShutdownTaskExecutor();
-		assertTrue(executor instanceof SimpleAsyncTaskExecutor);
+		assertTrue(executor instanceof ThreadPoolTaskExecutor);
 	}
 
 	public void testEventMulticaster() throws Exception {

@@ -20,8 +20,8 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.List;
 import java.util.Properties;
@@ -67,7 +67,7 @@ public class ExtenderConfigurationTest extends BaseIntegrationTest {
 	public void testShutdownTaskExecutor() throws Exception {
 		assertTrue(context.containsBean("shutdownTaskExecutor"));
 		Object bean = context.getBean("shutdownTaskExecutor");
-		assertTrue("unexpected type", bean instanceof SimpleAsyncTaskExecutor);
+		assertTrue("unexpected type", bean instanceof ThreadPoolTaskExecutor);
 	}
 
 	public void testTaskExecutor() throws Exception {

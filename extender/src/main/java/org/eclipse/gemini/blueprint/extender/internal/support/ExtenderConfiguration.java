@@ -33,8 +33,8 @@ import org.osgi.framework.BundleContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
@@ -259,7 +259,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 				if (isTaskExecutorManagedInternally) {
 					log.warn("Forcing the (internally created) taskExecutor to stop...");
-					ThreadGroup th = ((SimpleAsyncTaskExecutor) taskExecutor).getThreadGroup();
+					ThreadGroup th = ((ThreadPoolTaskExecutor) taskExecutor).getThreadGroup();
 					if (!th.isDestroyed()) {
 						// ask the threads nicely to stop
 						th.interrupt();
@@ -360,9 +360,11 @@ public class ExtenderConfiguration implements BundleActivator {
 				new ThreadGroup("eclipse-gemini-blueprint-extender[" + ObjectUtils.getIdentityHexString(this) + "]-threads");
 		threadGroup.setDaemon(false);
 
-		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+		taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
 		taskExecutor.setThreadGroup(threadGroup);
 		taskExecutor.setThreadNamePrefix("EclipseGeminiBlueprintExtenderThread-");
+		taskExecutor.initialize();
 
 		isTaskExecutorManagedInternally = true;
 
@@ -370,10 +372,14 @@ public class ExtenderConfiguration implements BundleActivator {
 	}
 
 	private TaskExecutor createDefaultShutdownTaskExecutor() {
-		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("Gemini Blueprint context shutdown thread ");
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+		taskExecutor.setThreadNamePrefix("Gemini Blueprint context shutdown thread ");
 		taskExecutor.setDaemon(true);
-		taskExecutor.setConcurrencyLimit(1);
+		taskExecutor.setMaxPoolSize(1);
+		taskExecutor.initialize();
+
 		isShutdownTaskExecutorManagedInternally = true;
+
 		return taskExecutor;
 	}
 
