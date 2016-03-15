@@ -2,6 +2,17 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+
+Changes in version 2.0.0 (2016-03-15)
+-----------------------------------------
+
+General:
+* Bug 488009 - Update to Spring 4.2.x
+* Bug 403998 - Upgrade to recent mocking and verification tools and refactor test cases accordingly
+* Bug 489622 - Use the PackageAdmin service instead of the FrameworkUtil to obtain bundle references
+* Bug 489623 - Update to R5 compliant framework versions
+
+
 Changes in version 2.0.0.M02 (2013-03-20)
 -----------------------------------------
 
