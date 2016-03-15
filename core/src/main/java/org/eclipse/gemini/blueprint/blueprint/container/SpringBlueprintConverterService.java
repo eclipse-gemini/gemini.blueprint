@@ -32,7 +32,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 
 /**
- * OSGi 4.2 Blueprint converter adapter as an Spring 3.0 ConverterService.
+ * OSGi 4.2 Blueprint converter adapter as an Spring 4.0 ConverterService.
  * 
  * @author Costin Leau
  */

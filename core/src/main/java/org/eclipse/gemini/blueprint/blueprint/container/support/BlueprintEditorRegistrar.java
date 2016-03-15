@@ -63,15 +63,6 @@ public class BlueprintEditorRegistrar implements PropertyEditorRegistrar {
 			super(collectionType);
 		}
 
-		@Override
-		public void setValue(Object value) {
-			if (value != null && (!(value instanceof Collection)) && (!value.getClass().isArray())) {
-				throw new IllegalArgumentException("Cannot create collection from type " + value.getClass()
-						+ " of instance " + value);
-			}
-			super.setValue(value);
-		}
-
 		@SuppressWarnings("unchecked")
 		@Override
 		protected Collection createCollection(Class collectionType, int initialCapacity) {
