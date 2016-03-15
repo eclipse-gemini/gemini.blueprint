@@ -59,7 +59,7 @@
 	
 	<bean id="referenceFactory" class="org.eclipse.gemini.blueprint.blueprint.ReferenceDelegateFactory"/>
 	
-	<bean id="invalidInjection1" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" activation="lazy">
+	<bean id="objectToCollectionConversion1" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" activation="lazy">
 		<property name="list">
 			<map>
 				<entry key="foo">
@@ -69,7 +69,7 @@
 		</property>
 	</bean>
 
-	<bean id="invalidInjection2" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" activation="lazy">
+	<bean id="objectToCollectionConversion2" class="org.eclipse.gemini.blueprint.blueprint.TestComponent" activation="lazy">
 		<property name="collection">
 			<ref component-id="referenceFactory"/>
 		</property>

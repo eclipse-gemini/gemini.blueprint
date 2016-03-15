@@ -29,6 +29,11 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Collection;
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
+
 /**
  * @author Costin Leau
  * 
@@ -102,19 +107,17 @@ public class TypeConverterTest extends TestCase {
 		assertNotNull(comp.getServiceReference());
 	}
 
-	public void testInvalidInjection1() throws Exception {
-		try {
-			TestComponent comp = (TestComponent) context.getBean("invalidInjection1");
-			fail("expected exception");
-		} catch (Exception ex) {
-		}
+	public void testObjectToCollectionConversion1() throws Exception {
+		TestComponent comp = (TestComponent) context.getBean("objectToCollectionConversion1");
+		Object propA = comp.getPropA();
+		assertThat(propA).isInstanceOf(List.class);
+		assertThat((List) propA).hasSize(1);
 	}
 
-	public void testInvalidInjection2() throws Exception {
-		try {
-			TestComponent comp = (TestComponent) context.getBean("invalidInjection2");
-			fail("expected exception");
-		} catch (Exception ex) {
-		}
+	public void testObjectToCollectionConversion2() throws Exception {
+		TestComponent comp = (TestComponent) context.getBean("objectToCollectionConversion2");
+		Object propA = comp.getPropA();
+		assertThat(propA).isInstanceOf(List.class);
+		assertThat((List) propA).hasSize(1);
 	}
 }
