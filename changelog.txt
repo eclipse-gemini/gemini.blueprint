@@ -11,7 +11,7 @@ General:
 * Bug 403998 - Upgrade to recent mocking and verification tools and refactor test cases accordingly
 * Bug 489622 - Use the PackageAdmin service instead of the FrameworkUtil to obtain bundle references
 * Bug 489623 - Update to R5 compliant framework versions
-
+* Bug 489688 - BlueprintCustomCollectionEditor fails to convert non-collection values, but must accept them
 
 Changes in version 2.0.0.M02 (2013-03-20)
 -----------------------------------------
