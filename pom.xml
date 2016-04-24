@@ -455,6 +455,56 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>2.9.1</version>
+                    <configuration>
+                        <aggregate>true</aggregate>
+                        <stylesheetfile>${javadoc.loc}/javadoc.css</stylesheetfile>
+                        <overview>${javadoc.loc}/overview.html</overview>
+                        <groups>
+                            <group>
+                                <title>OSGi Blueprint Service</title>
+                                <packages>org.osgi.service.blueprint*</packages>
+                            </group>
+                            <group>
+                                <title>Eclipse Gemini Blueprint Core</title>
+                                <packages>org.eclipse.gemini.blueprint*</packages>
+                            </group>
+                            <group>
+                                <title>Eclipse Gemini Blueprint Extender</title>
+                                <packages>org.eclipse.gemini.blueprint.extender*</packages>
+                            </group>
+                            <group>
+                                <title>Eclipse Gemini Blueprint IO</title>
+                                <packages>org.eclipse.gemini.blueprint.io*</packages>
+                            </group>
+                            <group>
+                                <title>Eclipse Gemini Blueprint Integration Testing Framework</title>
+                                <packages>org.eclipse.gemini.blueprint.test*</packages>
+                            </group>
+                            <group>
+                                <title>Eclipse Gemini Blueprint Mock</title>
+                                <packages>org.eclipse.gemini.blueprint.mock*</packages>
+                            </group>
+                        </groups>
+                        <excludePackageNames>
+                            *internal:org.eclipse.gemini.blueprint.config:org.eclipse.gemini.blueprint.compendium.config:org.eclipse.gemini.blueprint.blueprint.config:org.eclipse.gemini.blueprint.blueprint.compendium.cm.config:org.eclipse.gemini.blueprint.iandt*
+                        </excludePackageNames>
+
+                        <breakiterator>true</breakiterator>
+                        <quiet>true</quiet>
+                        <verbose>false</verbose>
+                        <show>protected</show>
+                        <source>1.7</source>
+                        <links>
+                            <link>http://download.oracle.com/javase/6/docs/api/</link>
+                            <link>http://docs.spring.io/autorepo/docs/spring-framework/4.2.x/javadoc-api/</link>
+                            <link>http://www2.osgi.org/javadoc/r4/</link>
+                            <link>http://cglib.sourceforge.net/apidocs</link>
+                            <!--<link>http://logging.apache.org/log4j/docs/api/</link>-->
+                            <link>http://jakarta.apache.org/commons/logging/apidocs/</link>
+                            <link>http://junit.org/junit/javadoc/4.9.0/</link>
+                            <link>http://aopalliance.sourceforge.net/doc/</link>
+                        </links>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -641,56 +691,6 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-javadoc-plugin</artifactId>
-                            <configuration>
-                                <aggregate>true</aggregate>
-                                <stylesheetfile>${javadoc.loc}/javadoc.css</stylesheetfile>
-                                <overview>${javadoc.loc}/overview.html</overview>
-                                <groups>
-                                    <group>
-                                        <title>OSGi Blueprint Service</title>
-                                        <packages>org.osgi.service.blueprint*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Eclipse Gemini Blueprint Core</title>
-                                        <packages>org.eclipse.gemini.blueprint*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Eclipse Gemini Blueprint Extender</title>
-                                        <packages>org.eclipse.gemini.blueprint.extender*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Eclipse Gemini Blueprint IO</title>
-                                        <packages>org.eclipse.gemini.blueprint.io*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Eclipse Gemini Blueprint Integration Testing Framework</title>
-                                        <packages>org.eclipse.gemini.blueprint.test*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Eclipse Gemini Blueprint Mock</title>
-                                        <packages>org.eclipse.gemini.blueprint.mock*</packages>
-                                    </group>
-                                </groups>
-                                <excludePackageNames>
-                                    *internal:org.eclipse.gemini.blueprint.config:org.eclipse.gemini.blueprint.compendium.config:org.eclipse.gemini.blueprint.blueprint.config:org.eclipse.gemini.blueprint.blueprint.compendium.cm.config:org.eclipse.gemini.blueprint.iandt*
-                                </excludePackageNames>
-
-                                <breakiterator>true</breakiterator>
-                                <quiet>true</quiet>
-                                <verbose>false</verbose>
-                                <show>protected</show>
-                                <source>1.7</source>
-                                <links>
-                                    <link>http://download.oracle.com/javase/6/docs/api/</link>
-                                    <link>http://docs.spring.io/autorepo/docs/spring-framework/4.2.x/javadoc-api/</link>
-                                    <link>http://www2.osgi.org/javadoc/r4/</link>
-                                    <link>http://cglib.sourceforge.net/apidocs</link>
-                                    <!--<link>http://logging.apache.org/log4j/docs/api/</link>-->
-                                    <link>http://jakarta.apache.org/commons/logging/apidocs/</link>
-                                    <link>http://junit.org/junit/javadoc/4.9.0/</link>
-                                    <link>http://aopalliance.sourceforge.net/doc/</link>
-                                </links>
-                            </configuration>
                         </plugin>
 
                         <plugin>
