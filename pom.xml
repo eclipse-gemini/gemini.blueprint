@@ -933,6 +933,51 @@
             </dependencies>
 
         </profile>
+
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 
@@ -947,18 +992,14 @@
             <name>www.eclipse.org/gemini/blueprint</name>
             <url>http://www.eclipse.org/gemini/blueprint/</url>
         </site>
-        <repository>
-            <id>repo.eclipse.org</id>
-            <name>Project Repository - Releases</name>
-            <url>https://repo.eclipse.org/content/repositories/gemini-blueprint-releases/</url>
-        </repository>
         <snapshotRepository>
-            <!-- makes it simpler for virgo to consumer specific snapshots -->
-            <uniqueVersion>true</uniqueVersion>
-            <id>repo.eclipse.org</id>
-            <name>Project Repository - Snapshots</name>
-            <url>https://repo.eclipse.org/content/repositories/gemini-blueprint-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 
 
@@ -1020,13 +1061,7 @@
             <name>knopflerfish repo</name>
             <url>http://www.knopflerfish.org/maven2/</url>
         </repository>
-        <!--
-        <repository>
-            <id>dmitry-local</id>
-            <name>Just Cause equinox 3.7.2 is not in central</name>
-            <url>http://localhost:9091/nexus/content/repositories/thirdparty/</url>
-        </repository>
-        -->
+
         <repository>
             <id>com.springsource.repository.bundles.release</id>
             <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
