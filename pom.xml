@@ -47,7 +47,7 @@
         <osgi.ver>5.0.0</osgi.ver>
         <!-- platform versions -->
         <!-- equinox - repackaged in ${basedir}/lib/equinox -->
-        <equinox.ver>3.9.1.v20140110-1610</equinox.ver>
+        <equinox.ver>3.9.1.v20130814-1242</equinox.ver>
         <!-- Knopflerfish -->
         <kf.ver>7.1.2</kf.ver>
         <!-- Felix 4.4.x supports OSGi R5 -->
@@ -175,7 +175,6 @@
 
     <!-- modules for Spring-OSGi -->
     <modules>
-        <module>lib/equinox</module>
         <module>mock</module>
         <module>io</module>
         <module>core</module>
@@ -274,7 +273,7 @@
             </dependency>
 
             <dependency>
-                <groupId>org.eclipse.osgi</groupId>
+                <groupId>org.eclipse.birt.runtime</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
                 <version>${equinox.ver}</version>
             </dependency>
@@ -837,8 +836,9 @@
             <id>equinox</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.eclipse.osgi</groupId>
+                    <groupId>org.eclipse.birt.runtime</groupId>
                     <artifactId>org.eclipse.osgi</artifactId>
+                    <version>${equinox.ver}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
