@@ -19,67 +19,31 @@
 		  
 		<section id="get-started:first-steps:spring">
 			<title>Knowing Spring</title>
-			<para>Gemini Blueprint uses heavily Spring framework's <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/spring-core.html">core</ulink> functionalty, 
-			such as the <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/beans.html">IoC</ulink> container,
-			<ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/resources.html">resource</ulink> abstraction and
-			<ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/aop.html">AOP</ulink> infrastructure. While it is not important
+			<para>Gemini Blueprint uses heavily Spring framework's <ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/overview.html#overview-core-container">core</ulink> functionalty,
+			such as the <ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/beans.html#beans-introduction">IoC</ulink> container,
+			<ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/resources.html">resource</ulink> abstraction and
+			<ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/aop.html">AOP</ulink> infrastructure. While it is not important
 			to know the Spring framework APIs, understanding the concepts behind them is. At a minimum, the idea behind IoC should be familiar.
 			That being said, the more knowledge you have about Spring framework, the faster you will pick Gemini Blueprint.
 			Besides the comprehensive documentation that explains the Spring Framework in detail,
 			there are a lot of articles, blog entries and books on the topic - take a look at the Spring framework
-			<ulink url="http://www.springsource.org/documentation">home page</ulink> for more information. In general, this should be the starting point for 
+			<ulink url="http://projects.spring.io/spring-framework/">home page</ulink> for more information. In general, this should be the starting point for
 			OSGi (or Eclipse plugin) developers wanting to try Gemini Blueprint.</para>
 		</section>
 		<section id="get-started:first-steps:osgi">
 			<title>Knowing OSGi</title>
-			<para>Java developers, new to OSGi, can start by reading the OSGi Alliance <ulink url="http://www.osgi.org/About/HowOSGi">introduction</ulink>,
-			the OSGi <ulink url="http://www.osgi.org/Specifications/HomePage">specifications</ulink> or one of the articles/blogs 
-			available on the internet (such as the SpringSource <ulink url="http://blog.springsource.com/category/osgi/">blogs</ulink>).
-			Additionally, the Gemini Blueprint home <ulink url="http://www.springframework.org/osgi">page</ulink> hosts various links to useful materials.
+			<para>Java developers, new to OSGi, can start by reading the OSGi Alliance <ulink url="https://www.osgi.org/developer/where-to-start/">introduction</ulink>,
+			the OSGi <ulink url="https://www.osgi.org/developer/specifications/">specifications</ulink> or one of the articles/blogs
+			available on the internet.
 			</para>
 		</section>
 		<section id="get-started:first-steps:blueprint">
-			<title>Quick start - OSGi 4.2 Blueprint Container</title>
-			<para>As an alternative to the recommended Spring documentation, if OSGi 4.2 is an option, one can read the Blueprint Container specification
+			<title>Quick start - OSGi 5.x Blueprint Container</title>
+			<para>As an alternative to the recommended Spring documentation, if OSGi 5.x is an option, one can read the Blueprint Container specification
 			for a quick introduction to dependency injection and Gemini Blueprint functionality. Note that Blueprint is a subset of Spring and Gemini Blueprint and we recommend
 			the official documentation to get access to the whole set of features.
 			</para>
 		</section>	
-		<!--	
-		<section id="get-started:first-steps:samples">
-			<title>Trying Out The Samples</title>
-			<para>Once one is familiar with the concepts behind Spring and OSGi, she can start reading the Gemini Blueprint reference documentation (this document) and
-			take the Gemini Blueprint samples for a spin. The samples are available either in the .zip distribution or from the Gemini Blueprint repository.
-			The samples are a convenient way to get started quickly with Gemini Blueprint as they show various features of Gemini Blueprint and help one get pass the 
-			initial struggles with OSGi. However, they are not meant as the definitive guide in using OSGi rather, they aim to be a launching pad 
-			for "newbies" trying out OSGi in Spring.
-			</para>
-			<para>The current distribution contains:</para>
-			<itemizedlist>
-				<listitem>
-					<para>Simple Service Sample</para>
-					<para>A simple example that illustrates OSGi service publication and consumption through Gemini Blueprint. This is a good starting point
-					for users learning the basics.</para>
-				</listitem>
-				<listitem>
-					<para>Weather Sample</para>
-					<para>A demo that shows more advanced features of Gemini Blueprint and OSGi. The application creates a very simple weather information services 
-					presenting some best practices in designing an application to take advantage of the modularity offered by OSGi.</para>
-				</listitem>
-				<listitem>
-					<para>Simple Web App Sample</para>
-					<para>As the name implies, this is a simple web application, containing Servlets, JSPs and JSP tags, that runs inside OSGi through Gemini Blueprint.</para>
-				</listitem>
-				<listitem>
-					<para>Web Console Sample</para>
-					<para>A more complicated sample that demos a Spring MVC annotation based, web application that runs inside OSGi through Gemini Blueprint, featuring 
-					class path scanning and various Spring taglib. Additionally, the web application interacts with the OSGi environment through the web UI.</para>
-				</listitem>
-			</itemizedlist> 
-			<para>Each project contains instructions regarding its content and startup procedure. Users are encouraged to experiment with the samples to get a better
-			understanding of the technologies used.</para>
-		</section>
-		-->
 	</section>
     
     <section id="get-started:help">
@@ -89,14 +53,12 @@
 		
 		<section id="get-started:help:community">
   		    <title>Community Support</title>
-			<para>The Gemini Blueprint <ulink url="http://www.eclipse.org/forums/index.php/f/153/">forum</ulink> 
-			(and the previous Spring DM <ulink url="http://forum.springframework.org/forumdisplay.php?f=43">forum</ulink>) is a message board for all Gemini Blueprint users to
-			share information and help each other. Note that registration is needed <emphasis>only</emphasis> for posting.
-			</para>
+			<para>The Gemini Blueprint <ulink url="http://www.eclipse.org/forums/index.php/f/153/">forum</ulink>.</para>
+			<para>The Gemini Blueprint GitHub <ulink url="https://github.com/eclipse/gemini.blueprint">mirror</ulink>.</para>
 		</section>
 		<section id="get-started:help:professional">
   		    <title>Professional Support</title>
-			<para>Professional, from-the-source support, with guaranteed response time, is available from <ulink url="http://www.springsource.com">SpringSource</ulink>,
+			<para>Professional, from-the-source support, with guaranteed response time, is available from <ulink url="http://spring.io/">Pivotal</ulink>,
 			the company behind Gemini Blueprint and Spring.  
 			</para>
 		</section>
@@ -106,16 +68,16 @@
 		<title>Following Development</title>
 		
 		<para>For information on the Gemini Blueprint source code repository, nightly builds and snapshot artifacts please see the Gemini Blueprint home 
-		<ulink url="http://www.springsource.org/osgi">page</ulink>.   
+		<ulink url="https://www.eclipse.org/gemini/blueprint/">page</ulink>.
 		</para>
 		<para>You can help make Gemini Blueprint best serve the needs of the Spring community by interacting with developers through the Spring Community 
-		<ulink url="http://forum.springsource.org">forums</ulink>.</para>
+		<ulink url="http://spring.io/questions">stack overflow</ulink>.</para>
 		<para>If you encounter a bug or want to suggest an improvement, 
-		please create a ticket on the Gemini Blueprint issue <ulink url="http://jira.springframework.org/">tracker</ulink>.</para>
+		please create a ticket on the Gemini Blueprint issue <ulink url="https://jira.spring.io/">tracker</ulink>.</para>
 		<para>To stay up to date with the latest news and announcements in the Spring eco system, subscribe to the 
-		Spring Community <ulink url="http://www.springframework.org/">Portal</ulink>.</para>
-		<para>Lastly, you can follow the SpringSource OSGi <ulink url="http://blog.springsource.com/category/osgi/">blog</ulink> or the project team on Twitter 
-		(<ulink url="http://twitter.com/adriancolyer">Adrian</ulink>, <ulink url="http://twitter.com/costinl">Costin</ulink>)</para>
+		Spring Community <ulink url="http://www.spring.io/">Portal</ulink>.</para>
+		<para>Lastly, you can follow the project team on Twitter
+		(<ulink url="https://twitter.com/adriancolyer">Adrian</ulink>, <ulink url="https://twitter.com/costinl">Costin</ulink>, <ulink url="https://twitter.com/deploynix">Olaf</ulink>)</para>
 	</section>
     
 </chapter>

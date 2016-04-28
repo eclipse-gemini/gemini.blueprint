@@ -15,6 +15,7 @@
 package org.eclipse.gemini.blueprint.config.internal;
 
 import java.util.Comparator;
+import java.util.Locale;
 
 import org.eclipse.gemini.blueprint.config.internal.util.AttributeCallback;
 import org.eclipse.gemini.blueprint.config.internal.util.ParserUtils;

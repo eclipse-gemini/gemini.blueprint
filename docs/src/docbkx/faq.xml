@@ -82,7 +82,7 @@
 	<section id="requirements">
 	  <title>What are Gemini Blueprint requirements?</title>
 	  <para>
-	    Gemini Blueprint requires at least Java 1.5, OSGi 4.1 and Spring 3.0.
+	    Gemini Blueprint requires at least Java 1.7, OSGi 4.1+ and Spring 4.2
 	    It might be possible to use Gemini Blueprint on a lower <ulink 
 	    url="http://wiki.eclipse.org/index.php/Execution_Environments">execution environment</ulink>
 	    (such <ulink url="http://java.sun.com/products/cdc/">CDC</ulink>) but 
@@ -91,8 +91,7 @@
 	    JavaBeans</ulink> (java.beans package) which, unfortunately, is missing in most 
 	    restricted environments. See this <ulink url="http://java.sun.com/products/cdc/reference/cdc_packages.pdf" 
 	    type="application/pdf">PDF</ulink> for information on CDC profiles.
-	    Note that, Spring 3.0 also requires Java 1.5. For Spring 2.5 and/or Java 1.4 see 
-	    <ulink url="http://www.springframework.org/osgi">Spring Dynamic Modules</ulink> 1.x releases.
+	    Note that, Spring 4.2 also requires Java 1.7.
 	  </para>
 	  <para>
 	    Nevertheless, experiences and feedback on running Gemini Blueprint in restricted environments 
@@ -108,8 +107,8 @@
 	<section id="restricted-environments">
 	  <title>Will Gemini Blueprint work in restricted environments (such as small/mobile devices)?</title>
 	  <para>See the <link linkend="requirements">requirements</link> entry. The OSGi Service Platform is designed to run in 
-	  very constrained environments however, Gemini Blueprint depends on the Spring Framework v3.0 which in turn depends on 
-	  JDK 1.5. Thus Gemini Blueprint cannot run on more constrained environments (such as the OSGi Minimum Execution Environment) 
+	  very constrained environments however, Gemini Blueprint depends on the Spring Framework v4.2.x which in turn depends on
+	  JDK 1.7. Thus Gemini Blueprint cannot run on more constrained environments (such as the OSGi Minimum Execution Environment)
 	  unless Spring itself also runs in those environments. There are no current plans to make such a version of Spring. 
 	  However as existing OSGi developers adopt Gemini Blueprint to simplify creation of OSGi applications and the user
 	  base expands, the target audience can cover domains much broader than <emphasis>enterprise Java applications</emphasis>. 

@@ -389,14 +389,14 @@ Blueprint-Bundle: config/account-data-context.xml, config/osgi-*.xml
                 <entry><interfacename>ApplicationEventMulticaster</interfacename>
                 <footnote>Part of <literal>org.springframework.context.event</literal> package</footnote>
                 </entry>
-                <entry><literal><ulink url="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/context/event/ApplicationEventMulticaster.html">
+                <entry><literal><ulink url="https://docs.spring.io/spring/docs/4.2.x/javadoc-api/org/springframework/context/event/ApplicationEventMulticaster.html">
                 ApplicationEventMultiCaster</ulink></literal> used for propagating Gemini Blueprint/Spring DM <link linkend="app-deploy:extender-configuration:events">events</link>
                 to third parties. 
                 </entry>
-                <entry>An instance of <classname><ulink url="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/context/event/SimpleApplicationEventMulticaster.html">
+                <entry>An instance of <classname><ulink url="https://docs.spring.io/spring/docs/4.2.x/javadoc-api/org/springframework/context/event/SimpleApplicationEventMulticaster.html">
                 SimpleApplicationEventMulticaster</ulink></classname> is used.
                 See <classname>AbstractApplicationContext</classname> 
-                <ulink url="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/context/support/AbstractApplicationContext.html">javadoc</ulink> 
+                <ulink url="https://docs.spring.io/spring/docs/4.2.x/javadoc-api/org/springframework/context/support/AbstractApplicationContext.html">javadoc</ulink>
                 for more information regarding available beans in an application context.</entry>
               </row>
               
@@ -543,7 +543,7 @@ Blueprint-Bundle: config/account-data-context.xml, config/osgi-*.xml
     		Of course, it is also possible for the client to unregister the listener manually during a bundle lifecycle.
 			    		
     		<note>The Gemini Blueprint/Spring DM events semantics are slightly different then
-    		<ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/beans.html#context-functionality-events">Spring's</ulink>. The OSGi events are
+    		<ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/beans.html#context-functionality-events">Spring's</ulink>. The OSGi events are
     		not sent to beans inside the <emphasis>causing</emphasis> application context but to other parties (possible beans in other application contexts)
     		interested in monitoring its behaviour.</note>
     		</para>
@@ -577,85 +577,17 @@ Blueprint-Bundle: config/account-data-context.xml, config/osgi-*.xml
       </itemizedlist>
 
       <para>In addition, the Spring Framework provides a number of bundles that
-      are required to be installed as dependencies. As of release 2.5 of the 
-      Spring Framework, the Spring jars included in the Spring distribution are valid OSGi
-      bundles and can be installed directly into an OSGi platform. The minimum
-      required set of bundles is:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>org.springframework.aop.jar (bundle symbolic name
-          <literal>org.springframework.aop</literal>)</para>
-        </listitem>
-
-        <listitem>
-          <para>org.springframework.asm.jar (bundle symbolic name
-          <literal>org.springframework.asm</literal>)</para>
-        </listitem>
-
-        <listitem>
-          <para>org.springframework.beans.jar (bundle symbolic name
-          <literal>org.springframework.beans</literal>)</para>
-        </listitem>
-      
-        <listitem>
-          <para>org.springframework.core.jar (bundle symbolic name
-          <literal>org.springframework.core</literal>)</para>
-        </listitem>
-
-        <listitem>
-          <para>org.springframework.context.jar (bundle symbolic name
-          <literal>org.springframework.context</literal>)</para>
-        </listitem>
-
-        <listitem>
-          <para>org.springframework.expression.jar (bundle symbolic name
-          <literal>org.springframework.expression</literal>)</para>
-        </listitem>
-
-      </itemizedlist>
-
-      <para>In additional the following supporting library bundles are
-      required. OSGi-ready versions of these libraries are shipped with the
-      Gemini Blueprint distribution.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>aopalliance</para>
-        </listitem>
-
-        <listitem>
-          <para>cglib-nodep (when proxying classes rather then
-          interfaces, needed in most cases)</para>
-        </listitem>
-        <listitem>
-          <para>commons-logging API (<ulink url="http://www.slf4j.org/">SLF4J</ulink> version <emphasis>highly</emphasis> recommended:</para>
-          <itemizedlist>
-            <listitem>
-               <para>SLF4J API (com.springsource.sfl4j.api.jar)</para>
-            </listitem>
-            <listitem>
-               <para>SLF4J Implementation Bridge (such as Log4j - com.springsource.sfl4j.log4j.jar)</para>
-            </listitem>
-            <listitem>
-               <para>SLF4J commons logging adapter (com.springsource.sfl4j.org.apache.commons.logging.jar)</para>
-            </listitem>
-            
-          </itemizedlist>
-        </listitem>
-        
-        <listitem>
-          <para>logging implementation suitable for commons-logging (such as log4j)</para>
-        </listitem>
-        
-      </itemizedlist>
+      are required to be installed as dependencies. As of release 4.2.4 of the
+      Spring Framework, OSGi bundle versions are maintained by the Apache ServiceMix team and published using their group id, see for example
+          <ulink url="http://search.maven.org/#search|ga|1|g%3Aorg.apache.servicemix.bundles%20spring-">all Spring OSGi artifacts published in maven central</ulink>.
+      </para>
     </section>
     
     <section id="app-deploy:spring-namespaces">
     	<title>Spring XML Authoring Support</title>
     	
-    	<para>Spring 2.0 introduced (among other things) <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/xsd-config.html">
-    	easier</ulink> XML configuration and <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/extensible-xml.html">
+    	<para>Spring 2.0 introduced (among other things) <ulink url="https://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/oxm.html#oxm-schema-based-config">
+    	easier</ulink> XML configuration and <ulink url="https://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/xml-custom.html">
     	extensible</ulink> XML authoring. The latter gives the ability of creating custom schemas that are discovered automatically (in non-OSGi environment)
     	by the Spring XML infrastructure by including them in the classpath. Gemini Blueprint/Spring DM is aware of this process and supports it in OSGi environments so
     	that custom schemas are available to bundles that use them without any extra code or manifest declaration.</para>
@@ -687,7 +619,7 @@ Blueprint-Bundle: config/account-data-context.xml, config/osgi-*.xml
       the bundle might not be able to load certain classes or resources, load incorrect versions or even load multiple versions at the same time which usually 
       result in <literal>ClassCastException</literal>, <literal>NoClassDefFoundError</literal> or <literal>LinkageError</literal>. We strongly
       recommend that you get familiar with the basics and, at least for starters, use tools 
-      (such as <ulink url="http://www.springsource.org/bundlor">Bundlor</ulink> or <ulink url="http://www.aqute.biz/Code/Bnd">BND</ulink>) for creating proper 
+      (such as <ulink url="https://docs.spring.io/s2-bundlor/1.0.x/user-guide/html/">Bundlor</ulink> or <ulink url="http://www.aqute.biz/Bnd/Bnd">BND</ulink>) for creating proper
       OSGi manifests.</important>
     </section>
 
@@ -773,7 +705,7 @@ Blueprint-Bundle: config/account-data-context.xml, config/osgi-*.xml
       classpath.</para>
       
       <para>Managed, OSGi-aware runtime environments such as 
-      <ulink url="http://www.springsource.com/products/dmserver">dmServer</ulink>
+      <ulink url="http://docs.spring.io/s2-dmserver/2.0.x/user-guide/html/">dmServer</ulink>
       provide additional logging and insight not just for the bundle at hand, but also
       regarding the application context and the VM among other things.</para>
       
