@@ -22,23 +22,33 @@
 			<area id="compendium:ns:xml:uri.loc" coords="9 95"/>
 		</areaspec>
     	<programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/osgi"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
-   xmlns:beans="http://www.springframework.org/schema/beans"
-   xsi:schemaLocation="http://www.springframework.org/schema/osgi  
-       	http://www.springframework.org/schema/osgi/spring-osgi.xsd
-     http://www.springframework.org/schema/osgi-compendium
-       	http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
-     http://www.springframework.org/schema/beans   
-       	http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:compendium="http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-3.2.xsd
+           http://www.springframework.org/schema/task
+           http://www.springframework.org/schema/task/spring-task-3.2.xsd
+           http://www.osgi.org/xmlns/blueprint/v1.0.0
+           http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium
+           http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium/gemini-blueprint-compendium.xsd">
 
    <!-- use the OSGi namespace elements directly -->
    <service id="simpleServiceOsgi" ref="simpleService"
        interface="org.xyz.MyService" />
 
    <!-- qualify compendium namespace elements -->
-   <osgix:cm-properties id="cm" persistent-id="com.xyz.myapp"/>
+   <compendium:cm-properties id="cm" persistent-id="com.xyz.myapp"/>
 
 </beans:beans>]]></programlisting>
 		<calloutlist>
@@ -82,26 +92,37 @@
         <interfacename>ManagedServiceFactory</interfacename>.</para></note>
         
         <para>Those familiar with Spring's 
-        <ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/xsd-config.html#xsd-config-body-schemas-util">util namespace</ulink> will
+        <ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/xsd-configuration.html#xsd-config-body-schemas-util">util schema</ulink> will
         find <literal><![CDATA[<osgi:cm-properties/>]]></literal> element similar to <literal><![CDATA[<util:properties/>]]></literal>.</para>
         
         <para>It is possible to specify a default set of property values to be used in the event that the configuration dictionary does not contain
         an entry for a given key. The declaration is similar to the <literal>props</literal> element inside the Spring beans namespace:</para>
         <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/osgi-compendium"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:beans="http://www.springframework.org/schema/beans"
-   xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
-   xsi:schemaLocation="
-      http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-      http://www.springframework.org/schema/osgi-compendium 
-        http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:compendium="http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium"
 
-   <osgix:cm-properties id="cfg.with.defaults" persistent-id="data.source.office.2">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-3.2.xsd
+           http://www.springframework.org/schema/task
+           http://www.springframework.org/schema/task/spring-task-3.2.xsd
+           http://www.osgi.org/xmlns/blueprint/v1.0.0
+           http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium
+           http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium/gemini-blueprint-compendium.xsd">
+
+   <compendium:cm-properties id="cfg.with.defaults" persistent-id="data.source.office.2">
       <beans:prop key="host">localhost</beans:prop>
       <beans:prop key="port">3306</beans:prop>
-   </osgix:cm-properties>
+   </compendium:cm-properties>
 
 </beans:beans>]]></programlisting>
 
@@ -111,30 +132,35 @@
 		(default <literal>false</literal>) allows one to revert the merging algorithm, forcing the local properties to override the entries in the CM.</para>
 		
 		<para>Since <literal>cm-properties</literal> exposes the CM entries as <classname>Properties</classname>, it can be used with Spring's <classname>
-		<ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/beans.html#beans-factory-placeholderconfigurer">PropertyPlaceholderConfigurer</ulink></classname> 
-		and <classname><ulink url="http://static.springframework.org/spring/docs/2.5.x/reference/beans.html#beans-factory-overrideconfigurer">PropertyOverrideConfigurer</ulink></classname> 
+		<ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/beans.html#beans-factory-placeholderconfigurer">PropertyPlaceholderConfigurer</ulink></classname>
+		and <classname><ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/beans.html#beans-factory-overrideconfigurer">PropertyOverrideConfigurer</ulink></classname>
 		to externalize and customize environment-specific properties:</para>
 	
 		<programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
-   xmlns:ctx="http://www.springframework.org/schema/context"
-   xsi:schemaLocation="
-	http://www.springframework.org/schema/beans 
-	  http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/context 
-	  http://www.springframework.org/schema/context/spring-context.xsd
-	http://www.springframework.org/schema/osgi-compendium 
-	  http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+       xmlns:compendium="http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+   http://www.osgi.org/xmlns/blueprint/v1.0.0
+   http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context-4.2.xsd
+   http://www.springframework.org/schema/mvc
+   http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+   http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium
+   http://www.eclipse.org/gemini/blueprint/schema/blueprint-compendium/gemini-blueprint-compendium.xsd">
 
    <!-- Configuration Admin entry -->
-   <osgix:cm-properties id="cmProps" persistent-id="com.xyz.myapp">
+   <compendium:cm-properties id="cmProps" persistent-id="com.xyz.myapp">
       <prop key="host">localhost</prop>
-   </osgix:cm-properties>
+   </compendium:cm-properties>
 
    <!-- placeholder configurer -->
-   <ctx:property-placeholder properties-ref="cmProps" />
+   <context:property-placeholder properties-ref="cmProps" />
 
    <bean id="dataSource" ...>
       <property name="host" value="${host}"/>
@@ -192,18 +218,18 @@
 			<title>Configuration Admin Runtime Updates</title>
 			<para>A powerful feature of Configuration Admin is the ability to update (or delete) entries at runtime. That is, the configuration data 
 			stored in Configuration Admin may be updated after the bean has been created. By default, any post-creation updates will be ignored. However,
-			one can configure <literal>managed-properties</literal> element to receive configuration updates through the <literal>update-strategy</literal>
-			attribute, which can have a value of either <literal>bean-managed</literal> or <literal>container-managed</literal>.</para>
+			one can configure <literal>managed-properties</literal> element to receive configuration updates through the <literal>autowire-on-update</literal>
+			and <literal>update-method</literal> attributes.</para>
 		
-			<para><literal>bean-managed</literal> strategy will pass all the updates made to the configuration to a callback present on the bean, specified
-			through the <literal>update-method</literal> attribute (which becomes required). The update method must have one of the following signatures:</para>
+			<para><literal>update-method</literal> specifies the bean method to invoke whenever an update occurs in the configuration data.
+			The update method must have one of the following signatures:</para>
 			
 			<programlisting language="java"><![CDATA[public void anyMethodName(Map properties)
 public void anyMethodName(Map<String,?> properties); // for Java 5]]></programlisting>
 
-		    <para>In contrast, the <literal>container-managed</literal> update strategy will re-inject bean properties by name based on the new properties 
-		    received in the update. For <literal>container-managed</literal> updates, the component class must provide setter methods for the component properties 
-		    that it wishes to have updated. Consider the following class definitions:</para>
+		    <para>If <literal>autowire-on-update</literal> is set to <literal>true</literal> (default is <literal>false</literal>) then the container will autowire the target bean everytime an update occurs.
+		    If both <literal>autowire-on-update</literal> and <literal>update-method</literal> are specified then the autowiring process will take precedence.
+		    For autowiring, the component class must provide setter methods for the component properties that it wishes to have updated. Consider the following class definitions:</para>
 		    
 		    <programlisting language="java"><![CDATA[public class ContainerManagedBean {
   // will be reinjected (since it has a setter)
@@ -228,12 +254,12 @@ public class SelfManagedBean {
 		    <para>and configuraton:</para>
 		    
 		    <programlisting language="xml"><![CDATA[<bean id="containerManaged" class="ContainerManagedBean">
-   <osgix:managed-properties persistent-id="labX" update-strategy="container-managed"/>
+   <osgix:managed-properties persistent-id="labX" autowire-on-update="true"/>
    <property name="integer" value="23"/>
 </bean>
 	
 <bean id="beanManaged" class="SelfManagedBean">
-   <osgix:managed-properties persistent-id="labY" update-strategy="bean-managed" update-method="updateCallback"/>
+   <osgix:managed-properties persistent-id="labY" update-method="updateCallback"/>
 </bean>]]></programlisting>
 
 		    <para>Any updates made to the CM entry <literal>labX</literal> will be automatically reinjected on existing instances of 
@@ -249,22 +275,22 @@ public class SelfManagedBean {
 				  <colspec colname="c3" colwidth="4*"/>
 	              <thead>
                	  	<row>
-		              <entry><literal>update-strategy</literal></entry>
+		              <entry><literal>autowire-on-update</literal></entry>
 		              <entry><literal>update-method</literal></entry>
 		              <entry>Behaviour</entry>
 		   			</row>
 	              </thead>
 	              <tbody>
 	              	<row>
-	              	  <entry><literal>container-managed</literal></entry>
-	              	  <entry><emphasis>ignored</emphasis></entry>
+	              	  <entry><literal>true</literal></entry>
+	              	  <entry><emphasis>optional</emphasis>, called after autowiring</entry>
 	              	  <entry>Reinjects the bean properties, using the properties present in the update. The re-injection will be applied while locking (through
 	              	  a <literal>synchronized</literal> instruction) the bean instance. If the locking or re-injection strategy is not suitable, consider using
-	              	  the <literal>bean-managed</literal> approach.</entry>
+	              	  the <literal>update-method</literal> only approach.</entry>
 	              	</row>
 	              	<row>
-	              	  <entry><literal>bean-managed</literal></entry>
-	              	  <entry><emphasis>required</emphasis></entry>
+	              	  <entry><literal>false</literal> (default)</entry>
+	              	  <entry><emphasis>optional</emphasis></entry>
 	              	  <entry>Invokes the <literal>update-method</literal> callback on the bean instance, passing the updated configuration (as a 
 	              	  <interfacename>Map</interfacename> object that can be safely cast to a <classname>Dictionary</classname> if needed). No locking is
 	              	  performed.</entry>
@@ -378,11 +404,21 @@ public class SelfManagedBean {
                   <literal>all-classes</literal> advertises all Java interfaces and classes.</entry>
                 </row>
 	           	<row>
-	           	  <entry>update-strategy</entry>
-  	           	  <entry>none <literal>(default)</literal></entry>
-	           	  <entry>bean-managed</entry>
-                  <entry namest="c4" nameend="c5">container-managed</entry>
-                  <entry>Defines the update strategy for configuration modifications made after the associated beans have been created.</entry>
+	           	  <entry>autowire-on-update</entry>
+  	           	  <entry namest="c2" nameend="c3">false <literal>(default)</literal></entry>
+	           	  <entry namest="c4" nameend="c5">true</entry>
+	           	  <entry>Whether or not the container should autowire the target bean everytime an update occurs.
+        When <literal>true</literal> is specified, the container will perform autowire (by name) the bean instance with the
+        newly set properties. In case <literal>update-method</literal> attribute is used as well, the autowiring process will
+        take precedence.</entry>
+	           	</row>
+			<row>
+	           	  <entry>update-method</entry>
+  	           	  <entry namest="c2" nameend="c3">none <literal>(default)</literal></entry>
+	           	  <entry namest="c4" nameend="c5">someMethod</entry>
+	           	  <entry>The update method to invoke whenever an update occurs in the configuration data. Allows the target
+        bean to process the update information itself. In case <literal>autowire-on-update</literal> is also used, the <literal>update-method</literal>
+        will be invoked after the autowiring takes place.</entry>
 	           	</row>
 	          </tbody>
 			</tgroup>
@@ -415,7 +451,7 @@ public class SelfManagedBean {
 			
 <osgix:managed-service-factory id="data-msf" 
    factory-pid="org.xyz.labX" 
-   update-strategy="bean-managed"
+   autowire-on-update="true"
    update-method="refresh">
    <osgix:interfaces>
        <value>java.util.Collection</value>
@@ -437,10 +473,10 @@ public class SelfManagedBean {
 					<para><interfacename>ManagedServiceFactory</interfacename> factory persistent id</para>
 				</callout>
 				<callout arearefs="compendium:msf:def.2:us">
-					<para>how should Gemini Blueprint behave when a <interfacename>Configuration</interfacename> is updated</para>
+					<para>whether Gemini Blueprint should autowire the bean when a <interfacename>Configuration</interfacename> is updated</para>
 				</callout>
 				<callout arearefs="compendium:msf:def.2:um">
-					<para>the method to invoke when for <literal>bean-managed</literal> updates</para>
+					<para>the method to invoke after autowiring</para>
 				</callout>
 				<callout arearefs="compendium:msf:def.2:intfs">
 					<para>the interfaces under which the nested beans are published as OSGi services</para>
@@ -466,8 +502,9 @@ public class SelfManagedBean {
 		Configuration Admin will be injected by name, possibly overriding existing settings. Once created and configured, each nested, anonymous bean instance
 		is registered as an OSGi service under the <interfacename>java.util.Collection</interfacename> and <interfacename>java.util.Queue</interfacename> 
 		interfaces. The OSGi service lifecycle is monitored by a registration listener, namely the bean <literal>queueTracker</literal>.
-		Finally, due to the specified <literal>update-strategy</literal>, any updates executed to each CM configuration will cause the 
-		<methodname>refresh</methodname> callback to be invoked on the associated bean instance.</para>
+		Finally, due to the specified <literal>autowire-on-update</literal> and <literal>update-method</literal> attributes, any updates executed to each CM configuration
+		will cause the container to autowire the associated bean instance with the newly set properties and after that a
+		<methodname>refresh</methodname> callback will be invoked on it.</para>
 	  </section>
 	  
       <section id="compendium:cm:dict">
