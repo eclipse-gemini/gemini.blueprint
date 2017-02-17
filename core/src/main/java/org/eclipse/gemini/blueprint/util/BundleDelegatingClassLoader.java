@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.util;
 
 import org.apache.commons.logging.Log;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleReference;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ import java.util.NoSuchElementException;
  * @author Andy Piper
  * @author Costin Leau
  */
-public class BundleDelegatingClassLoader extends ClassLoader {
+public class BundleDelegatingClassLoader extends ClassLoader implements BundleReference {
 
     private static final Enumeration<URL>  EMPTY_RESOURCES = new Enumeration<URL>() {
         public boolean hasMoreElements() {
@@ -231,6 +232,7 @@ public class BundleDelegatingClassLoader extends ClassLoader {
 	 * 
 	 * @return the backing bundle
 	 */
+	@Override
 	public Bundle getBundle() {
 		return backingBundle;
 	}
