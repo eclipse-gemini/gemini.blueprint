@@ -22,7 +22,6 @@
         <spring.osgi.import.pkg>!org.eclipse.gemini.blueprint.iandt, *</spring.osgi.import.pkg>
         <spring.osgi.export.pkg>${project.artifactId}*</spring.osgi.export.pkg>
         <clover.skip>true</clover.skip>
-        <bundlor.enabled>false</bundlor.enabled>
     </properties>
 
     <!-- shared dependencies -->

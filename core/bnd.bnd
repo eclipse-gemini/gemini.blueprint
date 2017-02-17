@@ -1,0 +1,41 @@
+Export-Package: !*.internal.*, \
+ org.osgi.service.blueprint.container;version="1.0.0", \
+ org.osgi.service.blueprint.reflect;version="1.0.0", \
+ org.eclipse.gemini.blueprint.blueprint.*;version=${project.version}, \
+ org.eclipse.gemini.blueprint.bundle.*;version=${project.version}, \
+ org.eclipse.gemini.blueprint.compendium.*;version=${project.version}, \
+ org.eclipse.gemini.blueprint.config.*;version=${project.version}, \
+ org.eclipse.gemini.blueprint.context.*;version=${project.version}, \
+ org.eclipse.gemini.blueprint.service.*;version=${project.version}, \
+ org.eclipse.gemini.blueprint.util.*;version=${project.version}, \
+ org.eclipse.gemini.blueprint;version=${project.version}
+
+Import-Package: \
+ org.springframework.aop;version="${spring.version.range.nq}", \
+ org.springframework.beans.propertyeditors;version="${spring.version.range.nq}", \
+ org.osgi.framework;version=1.3, \
+ org.aopalliance.*;version="0.0.0", \
+ org.osgi.service.cm;version=1.2;resolution:=optional, \
+ org.osgi.service.startlevel;version=1.0;resolution:=optional, \
+ org.apache.commons.logging.*;version=${logging.version.range}, \
+ org.springframework.*;version=${spring.version.range}, \
+ *;resolution:="optional"
+
+
+Bundle-Name: ${project.artifactId}
+Bundle-Version: ${project.version}
+Bundle-SymbolicName: ${spring.osgi.symbolic.name}
+Bundle-Vendor: Eclipse Foundation
+Bundle-DocURL: http://www.eclipse.org/gemini/blueprint/
+Bundle-Description: ${bundle.description}
+Bundle-License: http://www.opensource.org/licenses/eclipse-1.0.php, http://www.opensource.org/licenses/apache2.0.php
+Implementation-Title: Eclipse Gemini Blueprint
+Implementation-Version: ${project.version}
+Implementation-Vendor: Eclipse Foundation
+Implementation-Vendor-Id: org.eclipse.gemini.blueprint
+Gemini-Blueprint-Version: ${project.version}
+Spring-Version: ${spring.maven.artifact.version}
+Build-Jdk: ${java.version}
+Build-Plan: ${env.buildPlan}
+Build-Number: ${env.buildNumber}
+Git-Revision: ${git.commit.id.describe}

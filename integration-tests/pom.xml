@@ -19,7 +19,6 @@
 
     <properties>
         <clover.skip>true</clover.skip>
-        <bundlor.enabled>false</bundlor.enabled>
     </properties>
 
     <modules>
