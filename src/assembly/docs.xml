@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://maven.apache.org/ASSEMBLY-COMPONENT/2.0.0"
+        xsi:schemaLocation="http://maven.apache.org/ASSEMBLY-COMPONENT/2.0.0 http://maven.apache.org/xsd/assembly-component-2.0.0.xsd">
+
+    <fileSets>
+		<!-- License/Changelog/Readme -->
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory/>
+            <includes>
+                <include>changelog.txt</include>
+                <include>epl-v10.html</include>
+ 				<include>license-apache.txt</include>
+                <include>notice.html</include>
+                <include>readme.txt</include>                                
+            </includes>
+			<lineEnding>dos</lineEnding>
+			<filtered>true</filtered>
+        </fileSet>
+        
+        <!-- Documentation -->
+        <fileSet>
+            <directory>docs/target/site/reference</directory>
+            <outputDirectory>docs/reference</outputDirectory>
+        </fileSet>
+    </fileSets>
+</component>
