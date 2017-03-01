@@ -76,4 +76,14 @@ public class MandatoryDependencyBeanPostProcessor implements BeanFactoryAware, B
 			manager.removeServiceExporter(bean, beanName);
 		}
 	}
+
+	/**
+	 * @param o is ignored.
+	 * @return always <code>true</code> as this post processor is unaware of bean instances and
+	 *          will determine whether a bean requires destruction using the bean name in {@link #postProcessBeforeDestruction(Object, String)}.
+	 */
+	@Override
+	public boolean requiresDestruction(Object o) {
+		return true;
+	}
 }

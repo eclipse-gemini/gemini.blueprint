@@ -25,8 +25,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Spring version -->
-        <spring.maven.artifact.version>4.2.5.RELEASE_1</spring.maven.artifact.version>
-        <spring.base.version>4.2.0</spring.base.version>
+        <spring.maven.artifact.version>4.3.6.RELEASE_1</spring.maven.artifact.version>
+        <spring.base.version>4.3.0</spring.base.version>
 
         <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
         <spring.osgi.symbolic.name>${project.groupId}.${project.artifactId}</spring.osgi.symbolic.name>
@@ -63,7 +63,7 @@
         <policy.url>..${file.separator}policy.all</policy.url>
 
         <!-- common version ranges -->
-        <spring.version.range.nq>[${spring.base.version},4.3)</spring.version.range.nq>
+        <spring.version.range.nq>[${spring.base.version},4.4)</spring.version.range.nq>
         <spring.version.range>"${spring.version.range.nq}"</spring.version.range>
         <gemini.blueprint.version.range.nq>[${project.version},${project.version}]</gemini.blueprint.version.range.nq>
         <gemini.blueprint.version.range>"${gemini.blueprint.version.range.nq}"</gemini.blueprint.version.range>
@@ -264,7 +264,7 @@
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.junit</artifactId>
-                <version>4.9_1</version>
+                <version>4.12_1</version>
             </dependency>
 
             <dependency>

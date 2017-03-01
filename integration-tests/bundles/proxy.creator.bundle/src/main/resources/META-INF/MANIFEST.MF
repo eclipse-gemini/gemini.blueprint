@@ -4,6 +4,7 @@ Bundle-ManifestVersion: 2
 Bundle-Version: 1.0
 Import-Package: org.apache.commons.logging,org.springframework.aop.interceptor,
  org.springframework.aop.framework,org.springframework.aop,org.aopalliance.aop,
- org.springframework.cglib.proxy,org.springframework.cglib.core,org.springframework.cglib.reflect
+ org.springframework.cglib.proxy,org.springframework.cglib.core,org.springframework.cglib.reflect,
+ org.springframework.core
 Export-Package: org.eclipse.gemini.blueprint.iandt.service.listener
 Spring-Context: *; eagerly-init-importers:=true
