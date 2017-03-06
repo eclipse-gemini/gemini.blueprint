@@ -619,6 +619,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
+                    <skipDeploy>true</skipDeploy>
                     <reportPlugins>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -995,11 +996,6 @@
 
     <distributionManagement>
         <downloadUrl>http://www.eclipse.org/gemini/blueprint/download/</downloadUrl>
-        <site>
-            <id>gemini.blueprint.home</id>
-            <name>www.eclipse.org/gemini/blueprint</name>
-            <url>http://www.eclipse.org/gemini/blueprint/</url>
-        </site>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
