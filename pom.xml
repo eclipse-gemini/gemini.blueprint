@@ -101,7 +101,8 @@
     <scm>
         <url>http://git.eclipse.org/c/gemini.blueprint/org.eclipse.gemini.blueprint.git/</url>
         <connection>scm:git:git//git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</connection>
-        <developerConnection>scm:git:ssh://{user.name}@git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</developerConnection>
+        <!-- hudson-based releases require this SCM url to point to the local FS, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=512974 -->
+        <developerConnection>scm:git:file:///gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</developerConnection>
     </scm>
 
     <developers>
