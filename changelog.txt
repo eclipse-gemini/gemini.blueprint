@@ -3,6 +3,15 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 http://www.eclipse.org/gemini/blueprint
 
 
+Changes in version 2.1.0.M1 (2017-03-17)
+-----------------------------------------
+
+General:
+* Bug 512392 - Make gemini blueprint use the standard maven release process
+* Bug 511911 - Update to Spring 4.3.x
+* Bug 493185 - UIntroduce Maven 3.3+ support for gemini blueprint builds
+
+
 Changes in version 2.0.0.RELEASE (2016-03-15)
 -----------------------------------------
 
