@@ -20,7 +20,9 @@ import java.util.Hashtable;
 
 import junit.framework.TestCase;
 
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import org.fest.assertions.Assertions;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -172,6 +174,23 @@ public class OsgiFilterUtilsTest extends TestCase {
 		filter = OsgiFilterUtils.unifyFilter("someKey", new String[] { null }, fl);
 		assertEquals(fl, filter);
 
+	}
+
+	/**
+	 * As per OSGI r5 spec, https://www.scribd.com/document/137122057/osgi-core-5-0-0, the characters
+	 * <code> \ * ( )</code>  must be escaped using a \ character.
+	 */
+	public void testFiltersFromServiceReferencesAreEscaped() {
+		MockServiceReference serviceReference = new MockServiceReference();
+		Dictionary<String, String> properties = new Hashtable<>();
+		properties.put("ds.target", "(thing=ball)");
+		properties.put("all.escapable", "*()\\");
+		serviceReference.setProperties(properties);
+
+		String actual = OsgiFilterUtils.getFilter(serviceReference);
+
+		Assertions.assertThat(actual).contains("(ds.target=\\(thing=ball\\)");
+		Assertions.assertThat(actual).contains("\\*\\(\\)\\");
 	}
 
     protected BundleContext getBundleContext() {

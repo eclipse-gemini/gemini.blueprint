@@ -14,16 +14,16 @@
 
 package org.eclipse.gemini.blueprint.util;
 
-import java.util.Collection;
-
-import org.osgi.framework.Constants;
-import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.nio.CharBuffer;
+import java.util.Collection;
+
+import static java.lang.String.valueOf;
+import static java.nio.CharBuffer.allocate;
 
 /**
  * Utility class for creating OSGi filters. This class allows filter creation and concatenation from common parameters
@@ -32,7 +32,6 @@ import org.springframework.util.StringUtils;
  * @author Costin Leau
  */
 public abstract class OsgiFilterUtils {
-
 	private static final char FILTER_BEGIN = '(';
 
 	private static final char FILTER_END = ')';
@@ -227,9 +226,6 @@ public abstract class OsgiFilterUtils {
 
 	/**
 	 * Creates a filter (as String) that matches the properties (expect the service id) of service reference.
-	 * 
-	 * @param reference
-	 * @return
 	 */
 	public static String getFilter(ServiceReference reference) {
 		String[] propertyKeys = reference.getPropertyKeys();
@@ -240,15 +236,15 @@ public abstract class OsgiFilterUtils {
 			if (!Constants.SERVICE_ID.equals(key)) {
 				Object value = reference.getProperty(key);
 				Class<?> cl = value.getClass();
-				Iterable it;
+
 				// array
 				if (cl.isArray()) {
 					Object[] array = ObjectUtils.toObjectArray(value);
 					for (Object item : array) {
 						sb.append("(");
-						sb.append(key);
+						sb.append(escapeFilterCharacters(key));
 						sb.append("=");
-						sb.append(item);
+						sb.append(escapeFilterCharacters(valueOf(item)));
 						sb.append(")");
 					}
 				}
@@ -258,9 +254,9 @@ public abstract class OsgiFilterUtils {
 					Collection<?> c = (Collection) value;
 					for (Object item : c) {
 						sb.append("(");
-						sb.append(key);
+						sb.append(escapeFilterCharacters(key));
 						sb.append("=");
-						sb.append(item);
+						sb.append(escapeFilterCharacters(valueOf(item)));
 						sb.append(")");
 					}
 				}
@@ -268,9 +264,9 @@ public abstract class OsgiFilterUtils {
 				// scalar/primitive
 				else {
 					sb.append("(");
-					sb.append(key);
+					sb.append(escapeFilterCharacters(key));
 					sb.append("=");
-					sb.append(value);
+					sb.append(escapeFilterCharacters(valueOf(value)));
 					sb.append(")");
 				}
 			}
@@ -278,5 +274,19 @@ public abstract class OsgiFilterUtils {
 
 		sb.append(")");
 		return sb.toString();
+	}
+
+	private static String escapeFilterCharacters(String value) {
+		CharBuffer buffer = allocate(value.length() * 2);
+		for ( char c : value.toCharArray()) {
+			switch (c) {
+				case '*'  : buffer.append('\\'); break;
+				case '\\' : buffer.append('\\'); break;
+				case '('  : buffer.append('\\'); break;
+				case ')'  : buffer.append('\\'); break;
+			}
+			buffer.append(c);
+		}
+		return buffer.flip().toString();
 	}
 }
