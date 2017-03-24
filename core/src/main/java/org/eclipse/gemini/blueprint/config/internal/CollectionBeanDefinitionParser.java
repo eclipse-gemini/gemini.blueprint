@@ -50,7 +50,7 @@ public abstract class CollectionBeanDefinitionParser extends AbstractReferenceDe
 		public boolean process(Element parent, Attr attribute, BeanDefinitionBuilder builder) {
 			String name = attribute.getLocalName();
 			if (MEMBER_TYPE.equals(name)) {
-				builder.addPropertyValue(MEMBER_TYPE_PROPERTY, MemberType.valueOf(attribute.getValue().toUpperCase()
+				builder.addPropertyValue(MEMBER_TYPE_PROPERTY, MemberType.valueOf(attribute.getValue().toUpperCase(Locale.ENGLISH)
 						.replace('-', '_')));
 				return false;
 			}
