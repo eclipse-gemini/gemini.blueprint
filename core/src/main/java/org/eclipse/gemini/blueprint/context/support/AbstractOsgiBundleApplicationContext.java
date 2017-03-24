@@ -163,7 +163,7 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 		return this.bundle;
 	}
 
-	public void setConfigLocations(String[] configLocations) {
+	public void setConfigLocations(String... configLocations) {
 		this.configLocations = configLocations;
 	}
 

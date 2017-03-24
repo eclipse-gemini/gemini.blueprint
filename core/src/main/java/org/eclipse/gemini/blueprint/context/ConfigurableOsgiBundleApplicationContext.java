@@ -61,7 +61,7 @@ public interface ConfigurableOsgiBundleApplicationContext extends ConfigurableAp
 	 * 
 	 * @param configLocations array of configuration locations
 	 */
-	void setConfigLocations(String[] configLocations);
+	void setConfigLocations(String... configLocations);
 
 	/**
 	 * Sets the <code>BundleContext</code> used by this OSGi bundle
