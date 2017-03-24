@@ -95,7 +95,7 @@ public class ExtenderConfiguration implements BundleActivator {
 	private static final boolean DEFAULT_SHUTDOWN_ASYNCHRONOUS = true;
     private static final long DEFAULT_SHUTDOWN_WAIT = 10 * 1000;
 
-	private static final boolean DEFAULT_PROCESS_ANNOTATION = false;
+	private static final boolean DEFAULT_PROCESS_ANNOTATION = true;
 
 	private ConfigurableOsgiBundleApplicationContext extenderConfiguration;
 
@@ -331,8 +331,8 @@ public class ExtenderConfiguration implements BundleActivator {
 						Class.forName(ANNOTATION_DEPENDENCY_FACTORY, false, ExtenderConfiguration.class
 								.getClassLoader());
 			} catch (ClassNotFoundException cnfe) {
-				log.warn("Spring DM annotation package not found, annotation processing disabled.");
-				log.debug("Spring DM annotation package not found, annotation processing disabled.", cnfe);
+				log.warn("Gemini Blueprint extensions bundle not present, annotation processing disabled.");
+				log.debug("Gemini Blueprint extensions bundle not present, annotation processing disabled.", cnfe);
 				return;
 			}
 			Object processor = BeanUtils.instantiateClass(annotationProcessor);
@@ -344,10 +344,10 @@ public class ExtenderConfiguration implements BundleActivator {
 
 			// add injection processor (first in line)
 			postProcessors.add(0, new OsgiAnnotationPostProcessor());
-			log.info("Spring-DM annotation processing enabled");
+			log.info("Gemini Blueprint extensions annotation processing enabled");
 		} else {
 			if (debug) {
-				log.debug("Spring-DM annotation processing disabled; [" + ANNOTATION_DEPENDENCY_FACTORY
+				log.debug("Gemini Blueprint extensions annotation processing disabled; [" + ANNOTATION_DEPENDENCY_FACTORY
 						+ "] not loaded");
 			}
 		}

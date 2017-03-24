@@ -17,7 +17,8 @@
 				<include>org.eclipse.gemini.blueprint:gemini-blueprint-io</include>
 				<include>org.eclipse.gemini.blueprint:gemini-blueprint-mock</include>
 				<include>org.eclipse.gemini.blueprint:gemini-blueprint-core</include>
-				<include>org.eclipse.gemini.blueprint:gemini-blueprint-extender</include>											
+				<include>org.eclipse.gemini.blueprint:gemini-blueprint-extender</include>
+				<include>org.eclipse.gemini.blueprint:gemini-blueprint-extensions</include>
 				<include>org.eclipse.gemini.blueprint:gemini-blueprint-test</include>
 			</includes>
 			<!-- the .jar and -sources.jar will be included here -->

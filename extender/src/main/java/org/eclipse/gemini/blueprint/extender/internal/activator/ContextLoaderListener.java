@@ -54,9 +54,8 @@ import org.osgi.framework.*;
  * <table border="1"> <tr> <th>Name</th> <th>Type</th> <th>Description</th> </tr> <tr>
  * <td><code>shutdown.wait.time</code></td> <td>Number</td> <td>The amount of time the extender will wait for each
  * application context to shutdown gracefully. Expressed in milliseconds.</td> </tr> <tr>
- * <td><code>process.annotations</code></td> <td>Boolean</td> <td>Whether or not, the extender will process SpringOSGi
- * annotations.</td> </tr> </table>
- * 
+ * <td><code>process.annotations</code></td> <td>Boolean</td> <td>Whether or not, the extender will process proprietary OSGi annotations.
+ * </td> </tr> </table>
  * <p/> Note: The extender configuration context is created during the bundle activation (a synchronous OSGi lifecycle
  * callback) and should contain only simple bean definitions that will not delay context initialisation. </p>
  * 
