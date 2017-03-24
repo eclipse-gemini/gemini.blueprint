@@ -64,6 +64,30 @@ public class BlueprintShutdownSorterTest extends TestCase {
 		assertOrder(new Bundle[] { c, a, b, d, e }, order);
 	}
 
+	/**
+	 * If the service of a managed bundle are consumed by an unmanaged bundle,
+	 * that dependency should not affect the shutdown ordering as gemini blueprint is only responsible for
+	 * orderly shutting down the bundles it is managing.
+	 */
+	public void testUnmanagedBundlesAreIgnoredForShutdownOrdering() throws Exception {
+		DependencyMockBundle a = new DependencyMockBundle("A");
+		DependencyMockBundle b = new DependencyMockBundle("B");
+		DependencyMockBundle c = new DependencyMockBundle("C");
+		DependencyMockBundle d = new DependencyMockBundle("D");
+		DependencyMockBundle e = new DependencyMockBundle("E");
+		DependencyMockBundle unmanaged = new DependencyMockBundle("F");
+
+		b.setDependentOn(c);
+		d.setDependentOn(e, -13, 12);
+		e.setDependentOn(d, 0, 14);
+		a.setDependentOn(unmanaged);
+
+		List<Bundle> order = getOrder(a, b, c, d, e);
+		System.out.println("Shutdown order is " + order);
+		assertOrder(new Bundle[] { c, a, b, d, e }, order);
+	}
+
+
 	private void assertOrder(Bundle[] expected, List<Bundle> ordered) {
 		assertTrue("shutdown order is incorrect", Arrays.equals(expected, ordered.toArray()));
 	}

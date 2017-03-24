@@ -14,20 +14,18 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.dependencies.shutdown;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
-import org.springframework.util.ObjectUtils;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
+
+import java.util.*;
+
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * Utility for sorting out bundles during shutdown based on the OSGi 4.2 shutdown algorithm. Please see section 121.3.11
@@ -68,19 +66,19 @@ public abstract class ShutdownSorter {
 		}
 	}
 
-	private static List<Bundle> unusedBundles(Collection<Bundle> unsorted) {
+	private static List<Bundle> unusedBundles(Collection<Bundle> unsortedManagedBundles) {
 		List<Bundle> unused = new ArrayList<Bundle>();
 
 		boolean trace = log.isTraceEnabled();
 
-		for (Bundle bundle : unsorted) {
+		for (Bundle bundle : unsortedManagedBundles) {
 		    try {
                 String bundleToString = null;
                 if (trace) {
                     bundleToString = OsgiStringUtils.nullSafeSymbolicName(bundle);
                 }
                 ServiceReference[] services = bundle.getRegisteredServices();
-                if (ObjectUtils.isEmpty(services)) {
+                if (isEmpty(services)) {
                     if (trace) {
                         log.trace("Bundle " + bundleToString + " has no registered services; added for shutdown");
                     }
@@ -89,7 +87,12 @@ public abstract class ShutdownSorter {
                     boolean unusedBundle = true;
                     for (ServiceReference serviceReference : services) {
                         Bundle[] usingBundles = serviceReference.getUsingBundles();
-                        if (!ObjectUtils.isEmpty(usingBundles)) {
+
+						if (!isEmpty(usingBundles)) {
+							usingBundles = stream(usingBundles).filter(unsortedManagedBundles::contains).collect(toList()).toArray(new Bundle[]{});
+						}
+
+                        if (!isEmpty(usingBundles)) {
                             if (trace)
                                 log.trace("Bundle " + bundleToString + " has registered services in use; postponing shutdown. The using bundles are "
                                     + Arrays.toString(usingBundles));
@@ -106,12 +109,12 @@ public abstract class ShutdownSorter {
                     }
                 }
             }
-		    catch (IllegalStateException _) {
+		    catch (IllegalStateException ignored) {
 		        unused.add(bundle);
 		    }
 		}
 
-		Collections.sort(unused, ReverseBundleIdSorter.INSTANCE);
+		unused.sort(ReverseBundleIdSorter.INSTANCE);
 
 		return unused;
 	}
@@ -191,10 +194,10 @@ public abstract class ShutdownSorter {
 	private static int getRegisteredServiceInUseLowestRanking(Bundle bundle) {
 		ServiceReference[] services = bundle.getRegisteredServices();
 		int min = Integer.MAX_VALUE;
-		if (!ObjectUtils.isEmpty(services)) {
+		if (!isEmpty(services)) {
 			for (ServiceReference ref : services) {
 				// make sure somebody is using the service
-				if (!ObjectUtils.isEmpty(ref.getUsingBundles())) {
+				if (!isEmpty(ref.getUsingBundles())) {
 					int localRank = OsgiServiceReferenceUtils.getServiceRanking(ref);
 					if (localRank < min) {
 						min = localRank;
@@ -208,7 +211,7 @@ public abstract class ShutdownSorter {
 	private static long getHighestServiceId(Bundle bundle) {
 		ServiceReference[] services = bundle.getRegisteredServices();
 		long max = Long.MIN_VALUE;
-		if (!ObjectUtils.isEmpty(services)) {
+		if (!isEmpty(services)) {
 			for (ServiceReference ref : services) {
 				long id = OsgiServiceReferenceUtils.getServiceId(ref);
 				if (id > max) {
@@ -226,7 +229,7 @@ public abstract class ShutdownSorter {
 		public int compare(Bundle o1, Bundle o2) {
 		    try {
 		        return (int) (o2.getBundleId() - o1.getBundleId());
-		    } catch (IllegalStateException _) {
+		    } catch (IllegalStateException ignored) {
 		        return o1 == o2 ? 0 : 1; // cannot tell which is larger, but must provide a total ordering
 		    }
 		}
