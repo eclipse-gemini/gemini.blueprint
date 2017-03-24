@@ -70,7 +70,7 @@ public class ExtenderConfigurationDefaultSettingsTest extends TestCase {
     }
 
     public void testShouldProcessAnnotation() throws Exception {
-		assertFalse(config.shouldProcessAnnotation());
+		assertTrue(config.shouldProcessAnnotation());
 	}
 
 	public void testDependencyWaitTime() throws Exception {
