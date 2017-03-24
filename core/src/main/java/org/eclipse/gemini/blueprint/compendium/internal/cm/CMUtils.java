@@ -60,6 +60,8 @@ public abstract class CMUtils {
 	public static void applyMapOntoInstance(Object instance, Map<String, ?> properties, AbstractBeanFactory beanFactory) {
 		if (properties != null && !properties.isEmpty()) {
 			BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(instance);
+			beanWrapper.setAutoGrowNestedPaths(true);
+
 			// configure bean wrapper (using method from Spring 2.5.6)
 			if (beanFactory != null) {
 				beanFactory.copyRegisteredEditorsTo(beanWrapper);
