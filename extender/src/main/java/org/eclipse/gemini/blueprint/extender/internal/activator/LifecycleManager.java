@@ -150,6 +150,12 @@ class LifecycleManager implements DisposableBean {
 
 		BundleContext localBundleContext = OsgiBundleUtils.getBundleContext(bundle);
 
+		if (localBundleContext == null) {
+			if (debug)
+				log.debug("Bundle " + bundleString + " has no bundle context; skipping...");
+			return;
+		}
+
 		// initialize context
 		final DelegatedExecutionOsgiBundleApplicationContext localApplicationContext;
 
