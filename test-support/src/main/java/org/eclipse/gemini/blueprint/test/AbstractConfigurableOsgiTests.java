@@ -174,6 +174,8 @@ public abstract class AbstractConfigurableOsgiTests extends AbstractOsgiTests {
 		defaults.add("sun.*");
 		defaults.add("com.sun.*");
 
+		defaults.add("org.objectweb.*");
+
 		// FIXME: the JAXP package (for 1.4 VMs) should be discovered in an OSGi manner
 		defaults.add("org.apache.xerces.jaxp.*");
 		return defaults;

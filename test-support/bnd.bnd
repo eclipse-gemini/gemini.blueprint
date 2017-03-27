@@ -2,6 +2,10 @@ Export-Package: \
  !*.internal.*, \
  org.eclipse.gemini.blueprint.test.*;version=${project.version}
 
+Private-Package: \
+ org.eclipse.gemini.blueprint.test.*, \
+ org.objectweb.*
+
 Import-Package: \
  !org.eclipse.gemini.blueprint.extender.internal.*, \
  !org.eclipse.gemini.blueprint.extender.support.internal.*, \
@@ -10,7 +14,6 @@ Import-Package: \
  org.apache.commons.logging.*;version=${logging.version.range}, \
  org.eclipse.gemini.blueprint.*;version=${gemini.blueprint.version.range}, \
  org.springframework.*;version=${spring.version.range}, \
- org.objectweb.*;version="[2,3)";resolution:=optional, \
  org.eclipse.*;resolution:=optional, \
  org.knopflerfish.*;resolution:=optional, \
  org.apache.felix.*;resolution:=optional, \

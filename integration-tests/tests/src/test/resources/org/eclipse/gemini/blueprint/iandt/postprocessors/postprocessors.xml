@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+    <!-- These post processors can alter the registry itself, e.g. contribute new bean definitions -->
+    <bean id="registryPostProcessorUnordered"
+          class="org.eclipse.gemini.blueprint.iandt.postprocessors.BeanDefinitionRegistryPostProcessorTest$DefinitionPostProcessor" />
+    <bean id="registryPostProcessorPriorityOrdered"
+          class="org.eclipse.gemini.blueprint.iandt.postprocessors.BeanDefinitionRegistryPostProcessorTest$DefinitionPostProcessorWithPriorityOrder2" />
+    <bean id="registryPostProcessorOrdered"
+          class="org.eclipse.gemini.blueprint.iandt.postprocessors.BeanDefinitionRegistryPostProcessorTest$DefinitionPostProcessorWithOrder2" />
+
+
+    <!-- These post processors can the factory itself -->
+    <bean id="factoryPostProcessorUnordered"
+          class="org.eclipse.gemini.blueprint.iandt.postprocessors.BeanDefinitionRegistryPostProcessorTest$RegularPostProcessor" />
+    <bean id="factoryPostProcessorPriorityOrdered"
+          class="org.eclipse.gemini.blueprint.iandt.postprocessors.BeanDefinitionRegistryPostProcessorTest$RegularPostProcessorWithPriorityOrder2" />
+    <bean id="factoryPostProcessorOrdered"
+          class="org.eclipse.gemini.blueprint.iandt.postprocessors.BeanDefinitionRegistryPostProcessorTest$RegularPostProcessorWithOrder2" />
+
+</beans>

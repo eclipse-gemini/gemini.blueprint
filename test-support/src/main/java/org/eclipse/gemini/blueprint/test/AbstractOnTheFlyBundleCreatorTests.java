@@ -494,7 +494,7 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		} catch (Exception ex) {
 			throw (RuntimeException) new IllegalArgumentException("Cannot read class " + className).initCause(ex);
 		}
-		reader.accept(visitor, false);
+		reader.accept(visitor, 0);
 
 		// convert from / to . format
 		Set originalPackages = visitor.getPackages();

@@ -49,14 +49,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
+import org.objectweb.asm.*;
 import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.signature.SignatureVisitor;
 
@@ -70,7 +63,329 @@ import org.objectweb.asm.signature.SignatureVisitor;
  * 
  * @author Costin Leau
  */
-public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, ClassVisitor, FieldVisitor, MethodVisitor {
+public class DependencyVisitor extends ClassVisitor {
+
+	private final AnnotationVisitor av = new AnnotationVisitor(Opcodes.ASM5) {
+			@Override
+			public void visit(String name, Object value) {
+				DependencyVisitor.this.visit(name, value);
+			}
+
+			@Override
+			public void visitEnum(String name, String desc, String value) {
+				DependencyVisitor.this.visitEnum(name, desc, value);
+			}
+
+			@Override
+			public AnnotationVisitor visitAnnotation(String name, String desc) {
+				return DependencyVisitor.this.visitAnnotation(name, desc);
+			}
+
+			@Override
+			public AnnotationVisitor visitArray(String name) {
+				return DependencyVisitor.this.visitArray(name);
+			}
+
+			@Override
+			public void visitEnd() {
+				DependencyVisitor.this.visitEnd();
+			}
+	};
+
+	private final SignatureVisitor sv = new SignatureVisitor(Opcodes.ASM5) {
+		@Override
+		public void visitFormalTypeParameter(String name) {
+			DependencyVisitor.this.visitFormalTypeParameter(name);
+		}
+
+		@Override
+		public SignatureVisitor visitClassBound() {
+			return DependencyVisitor.this.visitClassBound();
+		}
+
+		@Override
+		public SignatureVisitor visitInterfaceBound() {
+			return DependencyVisitor.this.visitInterfaceBound();
+		}
+
+		@Override
+		public SignatureVisitor visitSuperclass() {
+			return DependencyVisitor.this.visitSuperclass();
+		}
+
+		@Override
+		public SignatureVisitor visitInterface() {
+			return DependencyVisitor.this.visitInterface();
+		}
+
+		@Override
+		public SignatureVisitor visitParameterType() {
+			return DependencyVisitor.this.visitParameterType();
+		}
+
+		@Override
+		public SignatureVisitor visitReturnType() {
+			return DependencyVisitor.this.visitReturnType();
+		}
+
+		@Override
+		public SignatureVisitor visitExceptionType() {
+			return DependencyVisitor.this.visitExceptionType();
+		}
+
+		@Override
+		public void visitBaseType(char descriptor) {
+			DependencyVisitor.this.visitBaseType(descriptor);
+		}
+
+		@Override
+		public void visitTypeVariable(String name) {
+			DependencyVisitor.this.visitTypeVariable(name);
+		}
+
+		@Override
+		public SignatureVisitor visitArrayType() {
+			return DependencyVisitor.this.visitArrayType();
+		}
+
+		@Override
+		public void visitClassType(String name) {
+			DependencyVisitor.this.visitClassType(name);
+		}
+
+		@Override
+		public void visitInnerClassType(String name) {
+			DependencyVisitor.this.visitInnerClassType(name);
+		}
+
+		@Override
+		public void visitTypeArgument() {
+			DependencyVisitor.this.visitTypeArgument();
+		}
+
+		@Override
+		public SignatureVisitor visitTypeArgument(char wildcard) {
+			return DependencyVisitor.this.visitTypeArgument(wildcard);
+		}
+
+		@Override
+		public void visitEnd() {
+			DependencyVisitor.this.visitEnd();
+		}
+	};
+
+	private final FieldVisitor fv = new FieldVisitor(Opcodes.ASM5) {
+		@Override
+		public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+			return DependencyVisitor.this.visitAnnotation(desc, visible);
+		}
+
+		@Override
+		public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+			return DependencyVisitor.this.visitTypeAnnotation(typeRef, typePath, desc, visible);
+		}
+
+		@Override
+		public void visitAttribute(Attribute attr) {
+			DependencyVisitor.this.visitAttribute(attr);
+		}
+
+		@Override
+		public void visitEnd() {
+			DependencyVisitor.this.visitEnd();
+		}
+	};
+
+	private final MethodVisitor mv = new MethodVisitor(Opcodes.ASM5) {
+		@Override
+		public void visitParameter(String name, int access) {
+			DependencyVisitor.this.visitParameter(name, access);
+		}
+
+		@Override
+		public AnnotationVisitor visitAnnotationDefault() {
+			return DependencyVisitor.this.visitAnnotationDefault();
+		}
+
+		@Override
+		public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+			return DependencyVisitor.this.visitAnnotation(desc, visible);
+		}
+
+		@Override
+		public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+			return DependencyVisitor.this.visitTypeAnnotation(typeRef, typePath, desc, visible);
+		}
+
+		@Override
+		public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
+			return DependencyVisitor.this.visitParameterAnnotation(parameter, desc, visible);
+		}
+
+		@Override
+		public void visitAttribute(Attribute attr) {
+			DependencyVisitor.this.visitAttribute(attr);
+		}
+
+		@Override
+		public void visitCode() {
+			DependencyVisitor.this.visitCode();
+		}
+
+		@Override
+		public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+			DependencyVisitor.this.visitFrame(type, nLocal, local, nStack, stack);
+		}
+
+		@Override
+		public void visitInsn(int opcode) {
+			DependencyVisitor.this.visitInsn(opcode);
+		}
+
+		@Override
+		public void visitIntInsn(int opcode, int operand) {
+			DependencyVisitor.this.visitIntInsn(opcode, operand);
+		}
+
+		@Override
+		public void visitVarInsn(int opcode, int var) {
+			DependencyVisitor.this.visitVarInsn(opcode, var);
+		}
+
+		@Override
+		public void visitTypeInsn(int opcode, String type) {
+			DependencyVisitor.this.visitTypeInsn(opcode, type);
+		}
+
+		@Override
+		public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+			DependencyVisitor.this.visitFieldInsn(opcode, owner, name, desc);
+		}
+
+		@Override
+		public void visitMethodInsn(int opcode, String owner, String name, String desc) {
+			DependencyVisitor.this.visitMethodInsn(opcode, owner, name, desc, false);
+		}
+
+		@Override
+		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+			DependencyVisitor.this.visitMethodInsn(opcode, owner, name, desc, itf);
+		}
+
+		@Override
+		public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+			DependencyVisitor.this.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+		}
+
+		@Override
+		public void visitJumpInsn(int opcode, Label label) {
+			DependencyVisitor.this.visitJumpInsn(opcode, label);
+		}
+
+		@Override
+		public void visitLabel(Label label) {
+			DependencyVisitor.this.visitLabel(label);
+		}
+
+		@Override
+		public void visitLdcInsn(Object cst) {
+			DependencyVisitor.this.visitLdcInsn(cst);
+		}
+
+		@Override
+		public void visitIincInsn(int var, int increment) {
+			DependencyVisitor.this.visitIincInsn(var, increment);
+		}
+
+		@Override
+		public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels) {
+			DependencyVisitor.this.visitTableSwitchInsn(min, max, dflt, labels);
+		}
+
+		@Override
+		public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
+			DependencyVisitor.this.visitLookupSwitchInsn(dflt, keys, labels);
+		}
+
+		@Override
+		public void visitMultiANewArrayInsn(String desc, int dims) {
+			DependencyVisitor.this.visitMultiANewArrayInsn(desc, dims);
+		}
+
+		@Override
+		public AnnotationVisitor visitInsnAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+			return DependencyVisitor.this.visitInsnAnnotation(typeRef, typePath, desc, visible);
+		}
+
+		@Override
+		public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+			DependencyVisitor.this.visitTryCatchBlock(start, end, handler, type);
+		}
+
+		@Override
+		public AnnotationVisitor visitTryCatchAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+			return DependencyVisitor.this.visitTryCatchAnnotation(typeRef, typePath, desc, visible);
+		}
+
+		@Override
+		public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+			DependencyVisitor.this.visitLocalVariable(name, desc, signature, start, end, index);
+		}
+
+		@Override
+		public AnnotationVisitor visitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start, Label[] end, int[] index, String desc, boolean visible) {
+			return DependencyVisitor.this.visitLocalVariableAnnotation(typeRef, typePath, start, end, index, desc, visible);
+		}
+
+		@Override
+		public void visitLineNumber(int line, Label start) {
+			DependencyVisitor.this.visitLineNumber(line, start);
+		}
+
+		@Override
+		public void visitMaxs(int maxStack, int maxLocals) {
+			DependencyVisitor.this.visitMaxs(maxStack, maxLocals);
+		}
+
+		@Override
+		public void visitEnd() {
+			DependencyVisitor.this.visitEnd();
+		}
+	};
+
+	public DependencyVisitor() {
+		super(Opcodes.ASM5);
+	}
+
+	private AnnotationVisitor visitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start, Label[] end, int[] index, String desc, boolean visible) {
+		tempLdc = null;
+		addDesc(desc);
+		return this.av;
+	}
+
+	private AnnotationVisitor visitTryCatchAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+		tempLdc = null;
+		addDesc(desc);
+		return this.av;
+	}
+
+	private AnnotationVisitor visitInsnAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+		tempLdc = null;
+		addDesc(desc);
+		return this.av;
+	}
+
+	private void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object[] bsmArgs) {
+		for (Object o : bsmArgs) {
+			if (o instanceof Type) {
+				addType((Type) o);
+			}
+		}
+	}
+
+	private void visitParameter(String name, int access) {
+		tempLdc = null;
+	}
 
 	private Set packages = new LinkedHashSet();
 
@@ -120,7 +435,7 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
 		tempLdc = null;
 		addDesc(desc);
-		return this;
+		return this.av;
 	}
 
 	public void visitAttribute(Attribute attr) {
@@ -136,7 +451,7 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 		}
 		if (value instanceof Type)
 			addType((Type) value);
-		return this;
+		return fv;
 	}
 
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -147,7 +462,7 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 			addSignature(signature);
 		}
 		addNames(exceptions);
-		return this;
+		return mv;
 	}
 
 	public void visitSource(String source, String debug) {
@@ -176,7 +491,7 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 	public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
 		tempLdc = null;
 		addDesc(desc);
-		return this;
+		return this.av;
 	}
 
 	public void visitTypeInsn(int opcode, String desc) {
@@ -193,7 +508,7 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 		addDesc(desc);
 	}
 
-	public void visitMethodInsn(int opcode, String owner, String name, String desc) {
+	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 		String returnType = Type.getReturnType(desc).getClassName();
 		if (opcode == Opcodes.INVOKESTATIC && CLASS_NAME.equals(returnType)) {
 			if (tempLdc != null)
@@ -227,10 +542,14 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 
 	public AnnotationVisitor visitAnnotationDefault() {
 		tempLdc = null;
-		return this;
+		return av;
 	}
 
 	public void visitCode() {
+		tempLdc = null;
+	}
+
+	public void visitFrame(int i, int i1, Object[] objects, int i2, Object[] objects1) {
 		tempLdc = null;
 	}
 
@@ -295,12 +614,12 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 	public AnnotationVisitor visitAnnotation(String name, String desc) {
 		tempLdc = null;
 		addDesc(desc);
-		return this;
+		return this.av;
 	}
 
 	public AnnotationVisitor visitArray(String name) {
 		tempLdc = null;
-		return this;
+		return this.av;
 	}
 
 	// SignatureVisitor
@@ -311,37 +630,37 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 
 	public SignatureVisitor visitClassBound() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public SignatureVisitor visitInterfaceBound() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public SignatureVisitor visitSuperclass() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public SignatureVisitor visitInterface() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public SignatureVisitor visitParameterType() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public SignatureVisitor visitReturnType() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public SignatureVisitor visitExceptionType() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public void visitBaseType(char descriptor) {
@@ -354,7 +673,7 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 
 	public SignatureVisitor visitArrayType() {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	public void visitClassType(String name) {
@@ -373,7 +692,7 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 
 	public SignatureVisitor visitTypeArgument(char wildcard) {
 		tempLdc = null;
-		return this;
+		return sv;
 	}
 
 	// common
@@ -432,11 +751,11 @@ public class DependencyVisitor implements AnnotationVisitor, SignatureVisitor, C
 
 	private void addSignature(String signature) {
 		if (signature != null)
-			new SignatureReader(signature).accept(this);
+			new SignatureReader(signature).accept(this.sv);
 	}
 
 	private void addTypeSignature(String signature) {
 		if (signature != null)
-			new SignatureReader(signature).acceptType(this);
+			new SignatureReader(signature).acceptType(this.sv);
 	}
 }

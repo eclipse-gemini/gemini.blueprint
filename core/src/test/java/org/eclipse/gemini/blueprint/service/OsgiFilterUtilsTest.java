@@ -20,9 +20,9 @@ import java.util.Hashtable;
 
 import junit.framework.TestCase;
 
+import org.assertj.core.api.Assertions;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
-import org.fest.assertions.Assertions;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
