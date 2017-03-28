@@ -2,6 +2,20 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
+Changes in version 2.1.0.M2 (2017-03-28)
+-----------------------------------------
+
+General:
+* Bug 512927 	Re-add spring-osgi extensions
+* Bug 506536 	Support autoGrowNestedPaths via CMUtils
+* Bug 506104 	NullPointerException in LifecycleManager maybeCreateApplicationContextFor on non-Blueprint bundle
+* Bug 492769 	OsgiFilterUtils should escape filter values that come from ServiceReference properties
+* Bug 475592 	fix warning in ServerOsgiBundleXmlWebApplicationContext
+* Bug 452642 	Blueprint extender shutdown ordering affected by external bundles
+* Bug 434148 	Virgo fails to start on Turkish Windows
+* Bug 348776 	Enhanced support for custom scopes when using Blueprint (Won't fix)
+* Bug 324829 	Propagate ConfigurationAdmin properties to service instance properties (Won't fix)
+
 
 Changes in version 2.1.0.M1 (2017-03-17)
 -----------------------------------------
