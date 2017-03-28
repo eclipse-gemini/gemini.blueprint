@@ -82,11 +82,6 @@ public class ExtenderConfigurationTest extends BaseIntegrationTest {
 		assertTrue("unexpected type", bean instanceof Properties);
 	}
 
-	// felix doesn't support fragments, so disable this test
-	protected boolean isDisabledInThisEnvironment(String testMethodName) {
-		return getPlatformName().indexOf("elix") > -1;
-	}
-
 	protected List getTestPermissions() {
 		List list = super.getTestPermissions();
 		list.add(new AdminPermission("*", AdminPermission.METADATA));

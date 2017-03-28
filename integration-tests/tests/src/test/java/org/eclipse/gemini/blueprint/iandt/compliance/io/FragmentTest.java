@@ -34,10 +34,6 @@ public class FragmentTest extends BaseIoTest {
 	// Folder tests
 	//
 
-	protected boolean isDisabledInThisEnvironment(String testMethodName) {
-		return isFelix();
-	}
-
 	protected String[] getBundleContentPattern() {
 		return new String[] { "**/*" };
 	}

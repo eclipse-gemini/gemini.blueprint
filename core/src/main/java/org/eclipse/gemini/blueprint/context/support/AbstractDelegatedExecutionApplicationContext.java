@@ -470,16 +470,15 @@ public abstract class AbstractDelegatedExecutionApplicationContext extends Abstr
 		List<String> orderedPostProcessorNames = new ArrayList<String>();
 		List<String> nonOrderedPostProcessorNames = new ArrayList<String>();
 		for (String ppName : postProcessorNames) {
-			if (processedBeans.contains(ppName)) {
-				// skip - already processed in first phase above
+			if (processedBeans.contains(ppName) || exclude != null && isTypeMatch(ppName, exclude)) {
+				continue;
 			}
-			else if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
+
+			if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
 				priorityOrderedPostProcessors.add(beanFactory.getBean(ppName, include));
-			}
-			else if (beanFactory.isTypeMatch(ppName, Ordered.class)) {
+			} else if (beanFactory.isTypeMatch(ppName, Ordered.class)) {
 				orderedPostProcessorNames.add(ppName);
-			}
-			else {
+			} else {
 				nonOrderedPostProcessorNames.add(ppName);
 			}
 		}
@@ -509,7 +508,7 @@ public abstract class AbstractDelegatedExecutionApplicationContext extends Abstr
 	}
 
 	private boolean isExcluded(Class<? extends BeanFactoryPostProcessor> include, Class<? extends BeanFactoryPostProcessor> exclude, BeanFactoryPostProcessor postProcessor) {
-		return !include.isInstance(postProcessor) || exclude != null && !exclude.isInstance(postProcessor);
+		return !include.isInstance(postProcessor) || exclude != null && exclude.isInstance(postProcessor);
 	}
 
 	/**

@@ -29,10 +29,6 @@ import org.springframework.util.ObjectUtils;
  */
 public class FragmentIoTests extends BaseIoTest {
 
-	protected boolean isDisabledInThisEnvironment(String testMethodName) {
-		return isFelix();
-	}
-
 	public void testFileWithTheSameNameInOwningBundleAndAttachedFragment() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "duplicate.file");
 		assertTrue("file with the same name available in bundles are ignored", fragmentResource.length > 1);
