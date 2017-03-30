@@ -582,6 +582,19 @@ Blueprint-Bundle: config/account-data-context.xml, config/osgi-*.xml
           <ulink url="http://search.maven.org/#search|ga|1|g%3Aorg.apache.servicemix.bundles%20spring-">all Spring OSGi artifacts published in maven central</ulink>.
       </para>
     </section>
+
+    <section id="app-deploy:optional-libraries">
+        <title>Optional Gemini Blueprint Bundles</title>
+
+        <para>Optionally, the following bundles may be installed to augment the Gemini Blueprint core functionality:</para>
+
+        <itemizedlist>
+            <listitem>
+                <para>The Gemini Blueprint propriertary extensions bundle,
+                    <literal>org.eclipse.gemini.blueprint.extensions</literal></para>
+            </listitem>
+        </itemizedlist>
+    </section>
     
     <section id="app-deploy:spring-namespaces">
     	<title>Spring XML Authoring Support</title>

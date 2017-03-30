@@ -865,13 +865,13 @@ public interface SubInterface extends SuperInterface {}]]></programlisting>
 	  	<para>In Gemini Blueprint/Spring DM, a <literal>mandatory</literal> service import that is unsatisfied (there are no services
 	  	matching the description) can either prevent an application context from starting up or, if already started,
 	  	cause the unregistration of the exported services dependent on it.</para>
-	  	
+
 	  	<section id="service-registry:refs:availability:startup">
 	  	<title>Mandatory Services and Application Startup</title>
 	  	<para>
-	  	The availability of a service impacts the startup of an Spring-powered application and 
+	  	The availability of a service impacts the startup of an Spring-powered application and
 	  	the publication of any exported services that depend on it.
-	  	As mentioned in <xref linkend="bnd-app-ctx:app-creation:mandatory-deps"/>, a SpringDM application will not start 
+	  	As mentioned in <xref linkend="bnd-app-ctx:app-creation:mandatory-deps"/>, a SpringDM application will not start
 	  	unless <emphasis>all</emphasis> <literal>mandatory</literal> services are available, at the same time.
 
 	  	Before initializing the context, Gemini Blueprint/Spring DM discovers all the <literal>mandatory</literal> service
@@ -881,15 +881,15 @@ public interface SubInterface extends SuperInterface {}]]></programlisting>
 	  	If the timeout occurs, the application initialization fails (since the required or mandatory services
 	  	are not available) or succeeds, meaning the application context is being initialized.
 	  	</para>
-	  	
+
 	  	<para>This way, the framework prevents the application from starting up only to fail since its required
-	  	services are unavailable. This feature avoids the need for ordering the bundle startup sequence as the 
+	  	services are unavailable. This feature avoids the need for ordering the bundle startup sequence as the
 	  	configuration already acts as a service <emphasis>barrier</emphasis> blueprint: no matter the order of the services
 	  	started, on whether they come and go, only when all of them are present, will the context initialization
 	  	commence.</para>
-	  	
-	  	<note>The fact that an application has mandatory service references, gives no guarantee 
-	  	that a valid service object is available when the service reference is used, since services can 
+
+	  	<note>The fact that an application has mandatory service references, gives no guarantee
+	  	that a valid service object is available when the service reference is used, since services can
 	  	get unregistered at any time. Gemini Blueprint/Spring DM guarantees that all the mandatory services were present, at
 	  	the same time, before the application was started but it cannot prevent or guarantee that this services
 	  	will not be disappear during the application life span.</note>
@@ -900,7 +900,32 @@ public interface SubInterface extends SuperInterface {}]]></programlisting>
           cause application context creation to fail through either deadlock
           or timeout.
         </warning>
+
+	  	</section>
+
+	  	<section id="service-registry:annotations-vs-xml-declarations">
+	  	<title>Referencing services via the @ServiceReference annotation</title>
+	  	<para>
+        Since 2.1.0, gemini-blueprint allows using the @ServiceReference annotation provided by the proprietary gemini-blueprint-extensions bundle
+        in addition to the XML declarations given below. Both ways of declaring service references have the exact same semantics, i.e. a bean of the form
+
+<programlisting language="java"><![CDATA[
+import org.eclipse.gemini.blueprint.extensions.annotation.ServiceReference;
+
+public class MyBean {
+    @ServiceReference
+    private Service myService;
+}]]></programlisting>
+
+        Is equivalent to
+
+        <programlisting language="xml"><![CDATA[<osgi:reference id="myService" interface="some.package.Service" />]]></programlisting>
+
+        and subsequently injecting the service reference into the bean.
+	  	</para>
 	  	
+	  	<para>It is, however, important to stress that @ServiceReference is a proprietary extension that is not covered by the OSGi specification.</para>
+
 	  	</section>
 	  	
 	  	<!-- keep the old name in case the old chapter in 1.2 is still referred to -->

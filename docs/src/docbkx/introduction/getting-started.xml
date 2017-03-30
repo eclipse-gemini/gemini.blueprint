@@ -19,10 +19,10 @@
 		  
 		<section id="get-started:first-steps:spring">
 			<title>Knowing Spring</title>
-			<para>Gemini Blueprint uses heavily Spring framework's <ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/overview.html#overview-core-container">core</ulink> functionalty,
-			such as the <ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/beans.html#beans-introduction">IoC</ulink> container,
-			<ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/resources.html">resource</ulink> abstraction and
-			<ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/aop.html">AOP</ulink> infrastructure. While it is not important
+			<para>Gemini Blueprint uses heavily Spring framework's <ulink url="http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/overview.html#overview-core-container">core</ulink> functionalty,
+			such as the <ulink url="http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/beans.html#beans-introduction">IoC</ulink> container,
+			<ulink url="http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/resources.html">resource</ulink> abstraction and
+			<ulink url="http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/aop.html">AOP</ulink> infrastructure. While it is not important
 			to know the Spring framework APIs, understanding the concepts behind them is. At a minimum, the idea behind IoC should be familiar.
 			That being said, the more knowledge you have about Spring framework, the faster you will pick Gemini Blueprint.
 			Besides the comprehensive documentation that explains the Spring Framework in detail,

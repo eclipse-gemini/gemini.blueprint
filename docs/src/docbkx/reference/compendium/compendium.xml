@@ -92,7 +92,7 @@
         <interfacename>ManagedServiceFactory</interfacename>.</para></note>
         
         <para>Those familiar with Spring's 
-        <ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/xsd-configuration.html#xsd-config-body-schemas-util">util schema</ulink> will
+        <ulink url="http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/xsd-configuration.html#xsd-config-body-schemas-util">util schema</ulink> will
         find <literal><![CDATA[<osgi:cm-properties/>]]></literal> element similar to <literal><![CDATA[<util:properties/>]]></literal>.</para>
         
         <para>It is possible to specify a default set of property values to be used in the event that the configuration dictionary does not contain
@@ -132,8 +132,8 @@
 		(default <literal>false</literal>) allows one to revert the merging algorithm, forcing the local properties to override the entries in the CM.</para>
 		
 		<para>Since <literal>cm-properties</literal> exposes the CM entries as <classname>Properties</classname>, it can be used with Spring's <classname>
-		<ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/beans.html#beans-factory-placeholderconfigurer">PropertyPlaceholderConfigurer</ulink></classname>
-		and <classname><ulink url="http://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/beans.html#beans-factory-overrideconfigurer">PropertyOverrideConfigurer</ulink></classname>
+		<ulink url="http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/beans.html#beans-factory-placeholderconfigurer">PropertyPlaceholderConfigurer</ulink></classname>
+		and <classname><ulink url="http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/beans.html#beans-factory-overrideconfigurer">PropertyOverrideConfigurer</ulink></classname>
 		to externalize and customize environment-specific properties:</para>
 	
 		<programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>

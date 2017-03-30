@@ -1,44 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE preface PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
                  "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+
 <chapter id="what-is-new">
-    <title>What is new?</title>
+	<title>What is new?</title>
 
-    <para>While a relatively young project, each version of Gemini Blueprint (even minor ones) offers new functionality. This chapter is a guide to the new
-    and improved feature and intended as a high-level, short summary. Please follow the appropriate links for more in-depth information.</para>
-    
-    <note>This section includes the updates from Spring Dynamic Modules (Spring DM) project and previous gemini blueprint versions.</note>
+	<para>While a relatively young project, each version of Gemini Blueprint (even minor ones) offers new functionality. This chapter is a guide to the new
+		and improved feature and intended as a high-level, short summary. Please follow the appropriate links for more in-depth information.</para>
 
-	<section id="dm-2.0.0">
+	<section id="gemini-blueprint-2.1.0">
+		<title>Gemini Blueprint 2.1.0+</title>
+		<section id="gemini-blueprint-2.1.0.x:jdk8">
+			<title>Java 8</title>
+			<para>Gemini Blueprint requires <ulink url="https://java.sun.com/j2se/1.8.0/">JDK 7</ulink> to run (or compile). The framework code has been
+				revised to take advantage of the JDK 8 features.</para>
+		</section>
+		<section id="gemini-blueprint-2.1.x:spring-4.3.x">
+			<title>Spring 4.3.x</title>
+			<para>Besides the Java 8 upgrade, Gemini Blueprint requires Spring 4.3.x to get access to the latest framework features and JDK optimizations.</para>
+		</section>
+		<section id="gemini-blueprint-2.1.x:gemini-blueprint-extensions">
+			<title>Gemini Blueprint Extensions</title>
+			<para>With 2.1, gemini blueprint ships the gemini-blueprint-extensions bundle, supporting the @ServiceReference
+				annotation on fields and setter methods to inject service references without using a service import in the blueprint context's XML declaration.
+			See <xref linkend="service-registry:annotations-vs-xml-declarations"/> for more information.</para>
+		</section>
+	</section>
+
+	<section id="gemini-blueprint-2.0.0">
 		<title>Gemini Blueprint 2.0.0+</title>
 
-		<section id="dm-2.0.0.x:blueprint">
+		<section id="gemini-blueprint-2.0.0.x:blueprint">
 			<title>OSGi 5.x Blueprint Reference Implementation (RI)</title>
 			<para>Gemini Blueprint served as the basis for the Blueprint Container specification, introduced by OSGi 5 Gemini Blueprint stands as the RI for the
 				aforementioned specification, providing the Blueprint API and implementation out of the box. Various aspect of Gemini Blueprint have been adjusted for
 				consistency to the Blueprint specification. For more information on the two models,	see <xref linkend="blueprint"/> for more information.</para>
 		</section>
-		<section id="dm-2.0.0.x:jdk5">
+		<section id="gemini-blueprint-2.0.0.x:jdk5">
 			<title>Java 7</title>
 			<para>Gemini Blueprint requires <ulink url="https://java.sun.com/j2se/1.7.0/">JDK 7</ulink> to run (or compile). The framework code has been
 				revised to take advantage of the JDK 7 features.</para>
 		</section>
-		<section id="dm-2.0.x:spring-3.x">
+		<section id="gemini-blueprint-2.0.x:spring-4.2.x">
 			<title>Spring 4.2.x</title>
 			<para>Besides the Java 7 upgrade, Gemini Blueprint requires Spring 4.2.x to get access to the latest framework features and JDK optimizations.</para>
 		</section>
 	</section>
 
-    <section id="dm-2.0.x">
+    <section id="gemini-blueprint-2.0.x">
 		<title>Gemini Blueprint 1.x</title>
 		
-		<section id="dm-2.0.x:blueprint">
+		<section id="gemini-blueprint-2.0.x:blueprint">
 			<title>OSGi 4.2 Blueprint Reference Implementation (RI)</title>
 			<para>Gemini Blueprint served as the basis for the Blueprint Container specification, introduced by OSGi 4.2. Gemini Blueprint stands as the RI for the 
 			aforementioned specification, providing the Blueprint API and implementation out of the box. Various aspect of Gemini Blueprint have been adjusted for
 			consistency to the Blueprint specification. For more information on the two models,	see <xref linkend="blueprint"/> for more information.</para>
 		</section>
-		<section id="dm-2.0.x:jdk5">
+		<section id="gemini-blueprint-2.0.x:jdk5">
 			<title>Java 5</title>
 			<para>Gemini Blueprint requires <ulink url="http://java.sun.com/j2se/1.5.0/">JDK 5</ulink> to run (or compile). The framework code has been
 			revised to take advantage of the JDK 5 features such as language improvements, concurrency and generics: for example, various enum-like classes
@@ -46,45 +64,47 @@
 			Considerable effort has been spent to keep the code backwards compatible however, it is recommended to compile the code against the Gemini Blueprint 2.x
 			code and perform sanity checks before upgrading.</para>
 		</section>
-		<section id="dm-2.0.x:spring-3.x">
+		<section id="gemini-blueprint-2.0.x:spring-3.x">
 			<title>Spring 3.x</title>
 			<para>Besides the Java 5 upgrade, Gemini Blueprint requires Spring 3.x to get access to the latest framework features and JDK optimizations.</para>
 		</section>
-		<section id="dm-2.0.x:imports">
+		<section id="gemini-blueprint-2.0.x:imports">
 			<title>Service Importer Improvements</title>
 			<para>Gemini Blueprint provides several improvements for service imports (whether single or collection based) in terms of speed, configuration and 
 			service lifecycle. <xref linkend="service-registry:refs"/> provides more details. </para>
 		</section>		
-		<section id="dm-2.0.x:security">
+		<section id="gemini-blueprint-2.0.x:security">
 			<title>Java 2 Security Integration</title>
 			<para>Continuing the work in Spring DM 1.2.x, Gemini Blueprint executes all user code using its credentials (the managed bundle permissions). 
 			See <xref linkend="appendix-security"/> for more information.</para>
 		</section>
 	</section>
 
-    <section id="dm-1.2.x">
+    <section id="gemini-blueprint-1.2.x">
 		<title>Spring DM 1.2.x</title>
-		
-		<section id="dm-1.2.x:security">
+
+		<note>This section includes the updates from Spring Dynamic Modules (Spring DM) project and previous gemini blueprint versions.</note>
+
+		<section id="gemini-blueprint-1.2.x:security">
 			<title>Java 2 Security Integration</title>
 			<para>Since 1.2.x, Spring DM is aware of <ulink url="http://java.sun.com/javase/technologies/security/#overview">secured</ulink> 
 			environments by making use of dedicated <ulink url="http://java.sun.com/j2se/1.4.2/docs/guide/security/doprivileged.html">privileged blocks</ulink> 
 			for executing security sensitive code. Thus, Spring DM can run as a <emphasis>trusted</emphasis> library without requiring escalated 
 			permissions for its managed bundles. See <xref linkend="appendix-security"/> for more information.</para>
 		</section>
-		<section id="dm-1.2.x:compendium">
+		<section id="gemini-blueprint-1.2.x:compendium">
 			<title>Compendium Services Support</title>
 			<para>1.2.x provides integration with the <ulink url="http://www.osgi.org/javadoc/r4v401/org/osgi/service/cm/package-summary.html">Configuration Admin</ulink>, 
 			part of the OSGi compendium services. <xref linkend="compendium"/> provides more details on the topic.</para>
 		</section>
-		<section id="dm-1.2.x:sym-name-change">
+		<section id="gemini-blueprint-1.2.x:sym-name-change">
 			<title>Changed Spring DM Symbolic Names</title>
 			<para>Since 1.2.0 M2, the Spring DM bundles symbolic names have been aligned with Spring's 2.5.6+. Thus the prefix 
 			<literal>org.springframework.bundle.osgi</literal> has been changed to <literal>org.eclipse.gemini.blueprint</literal>; for example
 			Spring DM extender symbolic name was changed from <literal>org.springframework.bundle.osgi.extender</literal> to <literal>org.eclipse.gemini.blueprint.extender</literal> 
 			(notice the missing <literal>bundle</literal> word). Additionally, the documentation has been updated to reflect Spring 2.5.6+ symbolic names.</para>
 		</section>
-        <section id="dm-1.2.x:ebr-usage">
+        <section id="gemini-blueprint-1.2.x:ebr-usage">
 			<title>Usage of SpringSource Enterprise Bundle Repository (EBR)</title>
 			<para>To minimize the number of repositories used and the confusion caused by OSGified vs non-OSGified artifacts especially to users using SpringSource dm Server,
 			after 1.2.0 RC1, Spring DM aligned as many of its dependencies as possible with SpringSource <ulink url="http://www.springsource.com/repository">EBR</ulink>.
