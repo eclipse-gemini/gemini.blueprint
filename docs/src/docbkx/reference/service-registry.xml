@@ -827,6 +827,31 @@ public interface SubInterface extends SuperInterface {}]]></programlisting>
       management of this group of references as either a <interfacename>List</interfacename> or a
       <interfacename>Set</interfacename> collection.</para>
 
+      <section id="service-registry:annotations-vs-xml-declarations">
+	  	<title>Referencing services via the @ServiceReference annotation</title>
+	  	<para>
+        Since 2.1.0, gemini-blueprint allows using the @ServiceReference annotation provided by the proprietary gemini-blueprint-extensions bundle
+        in addition to the XML declarations given below. Both ways of declaring service references have the exact same semantics, i.e. a bean of the form
+
+<programlisting language="java"><![CDATA[
+import org.eclipse.gemini.blueprint.extensions.annotation.ServiceReference;
+
+public class MyBean {
+    @ServiceReference
+    private Service myService;
+}]]></programlisting>
+
+        Is equivalent to
+
+        <programlisting language="xml"><![CDATA[<osgi:reference id="myService" interface="some.package.Service" />]]></programlisting>
+
+        and subsequently injecting the service reference into the bean.
+	  	</para>
+
+	  	<para>It is, however, important to stress that @ServiceReference is a proprietary extension that is not covered by the OSGi specification.</para>
+
+	  </section>
+
 	  <section id="service-registry:refs:availability">
 	  	<title>Imported Service Availability</title>
 	  	
@@ -903,31 +928,6 @@ public interface SubInterface extends SuperInterface {}]]></programlisting>
 
 	  	</section>
 
-	  	<section id="service-registry:annotations-vs-xml-declarations">
-	  	<title>Referencing services via the @ServiceReference annotation</title>
-	  	<para>
-        Since 2.1.0, gemini-blueprint allows using the @ServiceReference annotation provided by the proprietary gemini-blueprint-extensions bundle
-        in addition to the XML declarations given below. Both ways of declaring service references have the exact same semantics, i.e. a bean of the form
-
-<programlisting language="java"><![CDATA[
-import org.eclipse.gemini.blueprint.extensions.annotation.ServiceReference;
-
-public class MyBean {
-    @ServiceReference
-    private Service myService;
-}]]></programlisting>
-
-        Is equivalent to
-
-        <programlisting language="xml"><![CDATA[<osgi:reference id="myService" interface="some.package.Service" />]]></programlisting>
-
-        and subsequently injecting the service reference into the bean.
-	  	</para>
-	  	
-	  	<para>It is, however, important to stress that @ServiceReference is a proprietary extension that is not covered by the OSGi specification.</para>
-
-	  	</section>
-	  	
 	  	<!-- keep the old name in case the old chapter in 1.2 is still referred to -->
     	<section id="service-registry:export-import-relationship">
      	<title>Relationship Between The Service Exporter And Service Importer</title>
