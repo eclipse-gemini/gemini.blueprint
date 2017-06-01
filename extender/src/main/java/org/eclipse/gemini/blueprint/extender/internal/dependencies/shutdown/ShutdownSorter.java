@@ -21,10 +21,16 @@ import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.addAll;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
@@ -89,7 +95,15 @@ public abstract class ShutdownSorter {
                         Bundle[] usingBundles = serviceReference.getUsingBundles();
 
 						if (!isEmpty(usingBundles)) {
-							usingBundles = stream(usingBundles).filter(unsortedManagedBundles::contains).collect(toList()).toArray(new Bundle[]{});
+							Collection<Bundle> filteredUsingBundles = new LinkedList<>();
+							addAll(filteredUsingBundles, usingBundles);
+							Iterator<Bundle> it = filteredUsingBundles.iterator();
+							while (it.hasNext()) {
+								if (!unsortedManagedBundles.contains(it.next())) {
+									it.remove();
+								}
+							}
+							filteredUsingBundles.toArray(new Bundle[filteredUsingBundles.size()]);
 						}
 
                         if (!isEmpty(usingBundles)) {
@@ -114,7 +128,7 @@ public abstract class ShutdownSorter {
 		    }
 		}
 
-		unused.sort(ReverseBundleIdSorter.INSTANCE);
+		Collections.sort(unused, ReverseBundleIdSorter.INSTANCE);
 
 		return unused;
 	}
