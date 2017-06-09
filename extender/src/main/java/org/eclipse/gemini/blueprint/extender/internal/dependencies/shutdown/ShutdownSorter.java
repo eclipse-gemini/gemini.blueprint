@@ -103,7 +103,7 @@ public abstract class ShutdownSorter {
 									it.remove();
 								}
 							}
-							filteredUsingBundles.toArray(new Bundle[filteredUsingBundles.size()]);
+							usingBundles = filteredUsingBundles.toArray(new Bundle[filteredUsingBundles.size()]);
 						}
 
                         if (!isEmpty(usingBundles)) {
