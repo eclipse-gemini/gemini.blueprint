@@ -7,13 +7,18 @@
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
  * You may elect to redistribute this code under either of these licenses. 
- * 
+ *
  * Contributors:
  *   VMware Inc.
  *****************************************************************************/
 
 package org.eclipse.gemini.blueprint.extender.internal.dependencies.shutdown;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
@@ -21,16 +26,9 @@ import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
-import static java.util.Collections.addAll;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
@@ -38,7 +36,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
  * in OSGi 4.2 release. Since sorting out the entire graph from the beginning is difficult (shutting down some bundles,
  * might allow others to be destroyed), this utility is meant to be called multiple times until the list is being
  * depleted.
- * 
+ *
  * @author Costin Leau
  */
 public abstract class ShutdownSorter {
@@ -49,7 +47,7 @@ public abstract class ShutdownSorter {
 	 * Sorts the given bundles. The method extracts the bundles about to be destroyed from the given lists and returns
 	 * them to the user. Since shutting down a bundle can influence the destruction of the others, this method should be
 	 * called after all the returned bundles have been destroyed until the list is empty.
-	 * 
+	 *
 	 * @param managedBundles
 	 * @return sorted collection of Bundles
 	 */
@@ -95,15 +93,7 @@ public abstract class ShutdownSorter {
                         Bundle[] usingBundles = serviceReference.getUsingBundles();
 
 						if (!isEmpty(usingBundles)) {
-							Collection<Bundle> filteredUsingBundles = new LinkedList<>();
-							addAll(filteredUsingBundles, usingBundles);
-							Iterator<Bundle> it = filteredUsingBundles.iterator();
-							while (it.hasNext()) {
-								if (!unsortedManagedBundles.contains(it.next())) {
-									it.remove();
-								}
-							}
-							usingBundles = filteredUsingBundles.toArray(new Bundle[filteredUsingBundles.size()]);
+							usingBundles = stream(usingBundles).filter(unsortedManagedBundles::contains).collect(toList()).toArray(new Bundle[]{});
 						}
 
                         if (!isEmpty(usingBundles)) {
@@ -128,7 +118,7 @@ public abstract class ShutdownSorter {
 		    }
 		}
 
-		Collections.sort(unused, ReverseBundleIdSorter.INSTANCE);
+		unused.sort(ReverseBundleIdSorter.INSTANCE);
 
 		return unused;
 	}
