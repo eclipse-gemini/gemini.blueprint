@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.iandt.postprocessors;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -23,8 +25,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.genericBeanDefinition;
@@ -35,7 +35,12 @@ import static org.springframework.beans.factory.support.BeanDefinitionBuilder.ge
  * @author Olaf Otto
  */
 public class BeanDefinitionRegistryPostProcessorTest extends BaseIntegrationTest {
-    private static ThreadLocal<List<String>> INVOCATION_TRACKER = ThreadLocal.withInitial(ArrayList::new);
+    private static ThreadLocal<List<String>> INVOCATION_TRACKER = new ThreadLocal<List<String>>() {
+        @Override
+        protected List<String> initialValue() {
+            return new ArrayList<>();
+        }
+    };
 
     public static class DefinitionPostProcessor implements BeanDefinitionRegistryPostProcessor {
         @Override
