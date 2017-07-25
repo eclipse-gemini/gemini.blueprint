@@ -1,6 +1,0 @@
-digraph G{
- 	A;
-	B -> C;
-	D -> E; (lower rank)
-	E -> D; (high rank)
-}

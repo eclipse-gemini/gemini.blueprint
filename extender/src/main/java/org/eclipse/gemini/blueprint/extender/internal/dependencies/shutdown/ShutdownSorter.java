@@ -93,7 +93,11 @@ public abstract class ShutdownSorter {
                         Bundle[] usingBundles = serviceReference.getUsingBundles();
 
 						if (!isEmpty(usingBundles)) {
-							usingBundles = stream(usingBundles).filter(unsortedManagedBundles::contains).collect(toList()).toArray(new Bundle[]{});
+							usingBundles =
+									stream(usingBundles)
+											.filter(b -> unsortedManagedBundles.contains(b) && !b.equals(bundle))
+											.collect(toList())
+											.toArray(new Bundle[]{});
 						}
 
                         if (!isEmpty(usingBundles)) {
