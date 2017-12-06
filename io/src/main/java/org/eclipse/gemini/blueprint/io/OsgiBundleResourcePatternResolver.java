@@ -439,9 +439,6 @@ public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatte
 
 	/**
 	 * Checks the jar entries from the Bundle-Classpath for the given pattern.
-	 * 
-	 * @param list
-	 * @param ur
 	 */
 	private void findBundleClassPathMatchingJarEntries(List<String> list, URL url, String pattern) throws IOException {
 		// get the stream to the resource and read it as a jar
@@ -566,7 +563,8 @@ public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatte
 		for (int i = 0; i < rootDirResources.length; i++) {
 			Resource rootDirResource = rootDirResources[i];
 			if (isJarResource(rootDirResource)) {
-				result.addAll(doFindPathMatchingJarResources(rootDirResource, subPattern));
+				// FIXME: Spring 5 Migration
+				result.addAll(doFindPathMatchingJarResources(rootDirResource, new URL(""), subPattern));
 			} else {
 				result.addAll(doFindPathMatchingFileResources(rootDirResource, subPattern, searchType));
 			}
@@ -579,7 +577,7 @@ public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatte
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * Overrides the default check up since computing the URL can be fairly expensive operation as there is no caching
 	 * (due to the framework dynamic nature).
 	 */
@@ -598,7 +596,7 @@ public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatte
 
 	/**
 	 * Based on the search type, uses the appropriate searching method.
-	 * 
+	 *
 	 * @see OsgiBundleResource#BUNDLE_URL_PREFIX
 	 * @see org.springframework.core.io.support.PathMatchingResourcePatternResolver#getResources(java.lang.String)
 	 */

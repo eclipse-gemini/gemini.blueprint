@@ -14,17 +14,17 @@
 
 package org.eclipse.gemini.blueprint.util;
 
-import java.util.Dictionary;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
-import org.springframework.core.ConstantException;
 import org.springframework.core.Constants;
+import org.springframework.core.Constants.ConstantException;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+
+import java.util.Dictionary;
 
 /**
  * Utility class for creating nice string representations of various OSGi classes.
@@ -60,7 +60,6 @@ public abstract class OsgiStringUtils {
 		} catch (ConstantException cex) {
 			return UNKNOWN_EVENT_TYPE;
 		}
-
 	}
 
 	/**

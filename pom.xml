@@ -5,7 +5,7 @@
     <groupId>org.eclipse.gemini.blueprint</groupId>
     <artifactId>gemini-blueprint</artifactId>
     <!-- Note: When updating the version, ensure it is a valid OSGi version -->
-    <version>2.2.0.M1-SNAPSHOT</version>
+    <version>3.0.0.M1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
@@ -23,8 +23,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Spring version -->
-        <spring.maven.artifact.version>4.3.7.RELEASE_1</spring.maven.artifact.version>
-        <spring.base.version>4.3.0</spring.base.version>
+        <spring.maven.artifact.version>5.0.2.RELEASE_1</spring.maven.artifact.version>
+        <spring.base.version>5.0.0</spring.base.version>
 
         <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
         <spring.osgi.symbolic.name>${project.groupId}.${project.artifactId}</spring.osgi.symbolic.name>
@@ -61,7 +61,7 @@
         <policy.url>..${file.separator}policy.all</policy.url>
 
         <!-- common version ranges -->
-        <spring.version.range.nq>[${spring.base.version},4.4)</spring.version.range.nq>
+        <spring.version.range.nq>[${spring.base.version},6)</spring.version.range.nq>
         <spring.version.range>"${spring.version.range.nq}"</spring.version.range>
         <gemini.blueprint.version.range.nq>[${project.version},${project.version}]</gemini.blueprint.version.range.nq>
         <gemini.blueprint.version.range>"${gemini.blueprint.version.range.nq}"</gemini.blueprint.version.range>
