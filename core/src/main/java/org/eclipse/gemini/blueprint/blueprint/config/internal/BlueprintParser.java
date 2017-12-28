@@ -14,20 +14,9 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config.internal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.blueprint.config.internal.support.InstanceEqualityRuntimeBeanReference;
-import org.eclipse.gemini.blueprint.blueprint.reflect.internal.support.OrderedManagedProperties;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -55,6 +44,16 @@ import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Stateful class that handles the parsing details of a &lt;component&gt; elements. Borrows heavily from
@@ -792,7 +791,7 @@ public class BlueprintParser {
 	 * Parse a props element.
 	 */
 	public Properties parsePropsElement(Element propsEle) {
-		ManagedProperties props = new OrderedManagedProperties();
+		ManagedProperties props = new ManagedProperties();
 		props.setSource(extractSource(propsEle));
 		props.setMergeEnabled(parseMergeAttribute(propsEle));
 

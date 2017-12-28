@@ -14,11 +14,6 @@
 
 package org.eclipse.gemini.blueprint.blueprint.reflect;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.gemini.blueprint.blueprint.reflect.internal.support.OrderedManagedProperties;
 import org.osgi.service.blueprint.reflect.CollectionMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.IdRefMetadata;
@@ -38,6 +33,10 @@ import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.support.ManagedProperties;
 import org.springframework.beans.factory.support.ManagedSet;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Adapter between OSGi's Blueprint {@link Value} and Spring {@link BeanMetadataElement}.
@@ -142,7 +141,7 @@ class BeanMetadataElementFactory {
 			PropsMetadata propertiesValue = (PropsMetadata) value;
 
 			List<MapEntry> entries = propertiesValue.getEntries();
-			ManagedProperties managedProperties = new OrderedManagedProperties();
+			ManagedProperties managedProperties = new ManagedProperties();
 
 			for (MapEntry mapEntry : entries) {
 				managedProperties.put(BeanMetadataElementFactory.buildBeanMetadata(mapEntry.getKey()),
