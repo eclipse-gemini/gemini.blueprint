@@ -14,12 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.context;
 
+import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
+import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
-import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 
 /**
  * Test checking the context published interfaces.
@@ -29,18 +29,21 @@ import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationCont
  */
 public class PublishedInterfacesTest extends BaseIntegrationTest {
 
-	public void testEmptyApplicationContext() throws Exception {
-		checkedPublishedOSGiService(1);
-	}
-
 	public void testXmlOsgiContext() throws Exception {
+		// At this point, only the automatically generated test application context should be published as an OSGi service.
+		checkedPublishedOSGiService(1);
+
 		OsgiBundleXmlApplicationContext context = new OsgiBundleXmlApplicationContext(
 			new String[] { "/org/eclipse/gemini/blueprint/iandt/context/no-op-context.xml" });
 		context.setBundleContext(bundleContext);
 		context.refresh();
 
+		// Now, the default and the explicitly create application context should be present
 		checkedPublishedOSGiService(2);
 		context.close();
+
+		// When an application context is closed, the respective service must also be unpublished. Thus, there should only be one service again.
+		checkedPublishedOSGiService(1);
 	}
 
 	private void checkedPublishedOSGiService(int expectedContexts) throws Exception {

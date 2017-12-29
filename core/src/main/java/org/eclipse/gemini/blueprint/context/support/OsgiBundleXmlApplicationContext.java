@@ -24,6 +24,7 @@ import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.eclipse.gemini.blueprint.util.internal.BundleUtils;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
 import org.springframework.beans.factory.xml.DelegatingEntityResolver;
@@ -52,7 +53,7 @@ import org.xml.sax.EntityResolver;
  * @author Andy Piper
  * @author Hal Hildebrand
  */
-public class OsgiBundleXmlApplicationContext extends AbstractDelegatedExecutionApplicationContext {
+public class OsgiBundleXmlApplicationContext extends AbstractDelegatedExecutionApplicationContext implements DisposableBean {
 
 	/** Default config location for the root context(s) */
 	public static final String DEFAULT_CONFIG_LOCATION =
