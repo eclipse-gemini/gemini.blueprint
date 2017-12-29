@@ -22,6 +22,7 @@ import org.eclipse.gemini.blueprint.context.support.AbstractOsgiBundleApplicatio
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.internal.ClassUtils;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.HierarchicalBeanFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -89,6 +90,7 @@ public class ClassUtilsTest extends TestCase {
 
         assertThat(resolved).containsExactly(
                 OsgiBundleXmlApplicationContext.class,
+                DisposableBean.class,
                 AbstractDelegatedExecutionApplicationContext.class,
                 DelegatedExecutionOsgiBundleApplicationContext.class,
                 ConfigurableOsgiBundleApplicationContext.class,
