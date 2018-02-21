@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Spring version -->
-        <spring.maven.artifact.version>5.0.2.RELEASE_1</spring.maven.artifact.version>
+        <spring.maven.artifact.version>5.0.3.RELEASE_1</spring.maven.artifact.version>
         <spring.base.version>5.0.0</spring.base.version>
 
         <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
