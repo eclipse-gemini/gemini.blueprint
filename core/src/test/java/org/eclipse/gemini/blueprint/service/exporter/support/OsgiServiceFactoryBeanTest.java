@@ -295,7 +295,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         String beanName = "fooBar";
         exporter.setTargetBeanName(beanName);
         exporter.setInterfaces(new Class<?>[]{service.getClass()});
-        expect(beanFactory.isSingleton(beanName)).andReturn(true);
+        expect(beanFactory.isSingleton(beanName)).andReturn(true).times(2);
         expect(beanFactory.containsBean(beanName)).andReturn(true);
         expect(beanFactory.getBean(beanName)).andReturn(service);
         expect(beanFactory.getType(beanName)).andStubReturn((Class) service.getClass());
@@ -329,7 +329,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         };
 
         String beanName = "fooBar";
-        expect(beanFactory.isSingleton(beanName)).andReturn(true);
+        expect(beanFactory.isSingleton(beanName)).andReturn(true).times(2);
         expect(beanFactory.containsBean(beanName)).andReturn(true);
         expect(beanFactory.getBean(beanName)).andReturn(service);
         expect(beanFactory.getType(beanName)).andStubReturn((Class) service.getClass());

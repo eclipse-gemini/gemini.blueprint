@@ -72,7 +72,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 
 		bundleContext = new MockBundleContext() {
 
-			public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
+			public ServiceReference[] getServiceReferences(String clazz, String filter) {
 				return new ServiceReference[] { new MockServiceReference(new String[] { Cloneable.class.getName() }) };
 			}
 
@@ -99,7 +99,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		return fact.getService(null, null);
 	}
 
-	public void testSimpleService() throws Exception {
+	public void testSimpleService() {
 		Object bean = appContext.getBean("&inlineReference");
 		assertSame(OsgiServiceFactoryBean.class, bean.getClass());
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) bean;
@@ -111,7 +111,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		assertSame(appContext.getBean("string"), getServiceAtIndex(0));
 	}
 
-	public void testBiggerService() throws Exception {
+	public void testBiggerService() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&manyOptions");
 
 		assertTrue(Arrays.equals(new Class<?>[] { Serializable.class, CharSequence.class }, getInterfaces(exporter)));
@@ -128,7 +128,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		//assertEquals(appContext.getBean("string"), getTarget(exporter));
 	}
 
-	public void testNestedService() throws Exception {
+	public void testNestedService() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&nestedService");
 		assertTrue(Arrays.equals(new Class<?>[] { Object.class }, getInterfaces(exporter)));
 
@@ -139,13 +139,13 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		assertNotNull(getTarget(exporter));
 	}
 
-	public void testServiceExporterFactoryBean() throws Exception {
+	public void testServiceExporterFactoryBean() {
 		Object bean = appContext.getBean("nestedService");
 		assertTrue(bean instanceof ServiceRegistration);
 		assertNotSame("registration not wrapped to provide exporting listener notification", registration, bean);
 	}
 
-	public void testServiceProperties() throws Exception {
+	public void testServiceProperties() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&serviceProperties");
 		Map properties = exporter.getServiceProperties();
 		assertEquals(2, properties.size());
@@ -157,7 +157,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 
 	}
 
-	public void testListeners() throws Exception {
+	public void testListeners() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&exporterWithListener");
 		OsgiServiceRegistrationListener[] listeners = getListeners(exporter);
 		assertEquals(2, listeners.length);
@@ -178,7 +178,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		assertSame(RegistrationListener.SERVICE_REG, RegistrationListener.SERVICE_UNREG);
 	}
 
-	public void testFBWithCustomListeners() throws Exception {
+	public void testFBWithCustomListeners() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&exporterWithCustomListener");
 		OsgiServiceRegistrationListener[] listeners = getListeners(exporter);
 		assertEquals(1, listeners.length);
