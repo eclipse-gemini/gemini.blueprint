@@ -150,6 +150,18 @@
             </roles>
             <timezone>0</timezone>
         </developer>
+        <developer>
+            <id>olaf-otto</id>
+            <name>Olaf Otto</name>
+            <email>olaf at x100 de</email>
+            <organization>Unic AG</organization>
+            <organizationUrl>https://www.unic.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+                <role>Project lead</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
 
     </developers>
 
