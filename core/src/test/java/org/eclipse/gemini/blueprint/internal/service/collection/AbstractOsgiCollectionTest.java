@@ -134,7 +134,7 @@ public abstract class AbstractOsgiCollectionTest extends TestCase {
 			clazzez[i++] = ((Class) iter.next()).getName();
 		}
 
-		ref = new MockServiceReference(null, properties, null, clazzez);
+		ref = new MockServiceReference(null, properties, clazzez);
 
 		event = new ServiceEvent(ServiceEvent.REGISTERED, ref);
 

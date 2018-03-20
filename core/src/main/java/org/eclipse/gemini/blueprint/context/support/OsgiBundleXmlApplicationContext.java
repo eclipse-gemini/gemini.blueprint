@@ -15,10 +15,6 @@
 
 package org.eclipse.gemini.blueprint.context.support;
 
-import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.eclipse.gemini.blueprint.util.internal.BundleUtils;
@@ -34,11 +30,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.xml.sax.EntityResolver;
 
+import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 /**
  * Stand-alone XML application context, backed by an OSGi bundle.
  * 
- * <p> The configuration location defaults can be overridden via {@link #getDefaultConfigLocations()}. Note that
- * locations can either denote concrete files like <code>/myfiles/context.xml</code> or <em>Ant-style</em> patterns like
+ * <p>Note that locations can either denote concrete files like <code>/myfiles/context.xml</code> or <em>Ant-style</em> patterns like
  * <code>/myfiles/*-context.xml</code> (see the {@link org.springframework.util.AntPathMatcher} javadoc for pattern
  * details). </p>
  * 
@@ -192,20 +191,6 @@ public class OsgiBundleXmlApplicationContext extends AbstractDelegatedExecutionA
 			}
 		}
 		return expanded;
-	}
-
-	/**
-	 * Provide default locations for XML files. This implementation returns <code>META-INF/spring/*.xml</code> relying
-	 * on the default resource environment for actual localisation. By default, the bundle space will be used for
-	 * locating the resources.
-	 * 
-	 * <p/> <strong>Note:</strong> Instead of overriding this method, consider using the Spring-DM specific header
-	 * inside your manifest bundle.
-	 * 
-	 * @return default XML configuration locations
-	 */
-	protected String[] getDefaultConfigLocations() {
-		return new String[] { DEFAULT_CONFIG_LOCATION };
 	}
 
 	/**

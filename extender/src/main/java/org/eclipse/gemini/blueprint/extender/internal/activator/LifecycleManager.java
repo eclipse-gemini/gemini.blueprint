@@ -26,7 +26,6 @@ import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.Depen
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.eclipse.gemini.blueprint.extender.internal.support.OsgiBeanFactoryPostProcessorAdapter;
 import org.eclipse.gemini.blueprint.extender.internal.util.concurrent.Counter;
-import org.eclipse.gemini.blueprint.extender.internal.util.concurrent.RunnableTimedExecution;
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
@@ -48,7 +47,7 @@ import static org.eclipse.gemini.blueprint.extender.internal.util.concurrent.Run
  * 
  * @author Costin Leau
  */
-class LifecycleManager implements DisposableBean {
+public class LifecycleManager implements DisposableBean {
 
 	/** logger */
 	private static final Log log = LogFactory.getLog(LifecycleManager.class);
@@ -97,8 +96,8 @@ class LifecycleManager implements DisposableBean {
 	private final TypeCompatibilityChecker typeChecker;
 
 	LifecycleManager(ExtenderConfiguration extenderConfiguration, VersionMatcher versionMatcher,
-                     ApplicationContextConfigurationFactory appCtxCfgFactory, OsgiApplicationContextCreator osgiApplicationContextCreator, OsgiContextProcessor processor,
-                     TypeCompatibilityChecker checker, BundleContext context) {
+					 ApplicationContextConfigurationFactory appCtxCfgFactory, OsgiApplicationContextCreator osgiApplicationContextCreator, OsgiContextProcessor processor,
+					 TypeCompatibilityChecker checker, BundleContext context) {
 
 		this.versionMatcher = versionMatcher;
 		this.extenderConfiguration = extenderConfiguration;
@@ -130,12 +129,12 @@ class LifecycleManager implements DisposableBean {
 	 * 
 	 * @param bundle
 	 */
-	protected void maybeCreateApplicationContextFor(Bundle bundle) {
+	public void maybeCreateApplicationContextFor(Bundle bundle) {
 
 		boolean debug = log.isDebugEnabled();
 		String bundleString = "[" + OsgiStringUtils.nullSafeNameAndSymName(bundle) + "]";
 
-		final Long bundleId = new Long(bundle.getBundleId());
+		final Long bundleId = bundle.getBundleId();
 
 		if (managedContexts.containsKey(bundleId)) {
 			if (debug) {

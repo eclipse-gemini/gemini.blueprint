@@ -46,14 +46,14 @@ public class NamespaceHandlerActivator implements BundleActivator {
     private BaseListener nsListener;
     private long bundleId;
     private BundleContext extenderBundleContext;
-    private DefaultVersionMatcher versionMatcher;
+    private VersionMatcher versionMatcher;
 
     public void start(BundleContext extenderBundleContext) {
         this.extenderBundleContext = extenderBundleContext;
         this.nsManager = new NamespaceManager(extenderBundleContext);
         this.bundleId = extenderBundleContext.getBundle().getBundleId();
         Version extenderVersion = OsgiBundleUtils.getBundleVersion(extenderBundleContext.getBundle());
-        this.versionMatcher = new DefaultVersionMatcher(getManagedBundleExtenderVersionHeader(), extenderVersion);
+        this.versionMatcher = new VersionMatcher(getManagedBundleExtenderVersionHeader(), extenderVersion);
 
         initNamespaceHandlers(extenderBundleContext);
     }

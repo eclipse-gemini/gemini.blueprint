@@ -15,13 +15,16 @@
 package org.eclipse.gemini.blueprint.extender.internal.blueprint.activator;
 
 import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
-import org.eclipse.gemini.blueprint.extender.internal.activator.*;
+import org.eclipse.gemini.blueprint.extender.internal.activator.ApplicationContextConfigurationFactory;
+import org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener;
+import org.eclipse.gemini.blueprint.extender.internal.activator.ListenerServiceActivator;
+import org.eclipse.gemini.blueprint.extender.internal.activator.OsgiContextProcessor;
+import org.eclipse.gemini.blueprint.extender.internal.activator.TypeCompatibilityChecker;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintConfigUtils;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintContainerConfig;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintContainerCreator;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.event.EventAdminDispatcher;
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
-import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
@@ -60,22 +63,17 @@ public class BlueprintLoaderListener extends ContextLoaderListener {
 
 	@Override
 	protected ApplicationContextConfigurationFactory createContextConfigFactory() {
-		return new ApplicationContextConfigurationFactory() {
-
-			public ApplicationContextConfiguration createConfiguration(Bundle bundle) {
-				return new BlueprintContainerConfig(bundle);
-			}
-		};
+		return BlueprintContainerConfig::new;
 	}
 
     /**
-     * Always use the {@link BlueprintContainerCreator}, never the configured creator.
-     * Rationale: Backwards compatibility. Both DM and Blueprint extenders are available simultaneously,
-     * however Blueprint extender support is new and must not be broken by existing configurations. Otherwise, existing
-     * users would have to make their creators aware of the difference between blueprint and dm containers.
+     * FIXME: For container configs residing in META-INF/spring (the old Spring DM location), use
+	 * 		  a user-provided context creator via {@link #extenderConfiguration#getOsgiApplicationContextCreator()}, if any,
+	 * 		  to keep supporting custom spring-dm creators for backwards compatibility.
      */
     @Override
     protected OsgiApplicationContextCreator getOsgiApplicationContextCreator() {
+    	// TODO: check config location (META-INF/spring or OSGI-INF/blueprint?) and provide respective context creator.
         return new BlueprintContainerCreator();
     }
 

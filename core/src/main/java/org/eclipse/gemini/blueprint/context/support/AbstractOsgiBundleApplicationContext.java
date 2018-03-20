@@ -187,14 +187,12 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 	}
 
 	/**
-	 * Returns this application context configuration locations. The default implementation will check whether there are
-	 * any locations configured and, if not, will return the default locations.
-	 * 
+	 * Returns this application context configuration locations.
+	 *
 	 * @return application context configuration locations.
-	 * @see #getDefaultConfigLocations()
 	 */
 	public String[] getConfigLocations() {
-		return (this.configLocations != null ? this.configLocations : getDefaultConfigLocations());
+		return configLocations;
 	}
 
 	/**
@@ -217,17 +215,6 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 		} catch (Exception ex) {
 			logger.warn("got exception when closing", ex);
 		}
-	}
-
-	/**
-	 * Returns the default configuration locations to use, for the case where no explicit configuration locations have
-	 * been specified. <p> Default implementation returns <code>null</code>, requiring explicit configuration locations.
-	 * 
-	 * @return application context default configuration locations
-	 * @see #setConfigLocations
-	 */
-	protected String[] getDefaultConfigLocations() {
-		return null;
 	}
 
 	protected void prepareRefresh() {

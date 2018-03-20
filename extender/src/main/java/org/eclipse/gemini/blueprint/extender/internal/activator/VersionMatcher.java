@@ -14,12 +14,41 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.activator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
+import org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils;
+import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 
 /**
  * @author Costin Leau
  */
-interface VersionMatcher {
+public class VersionMatcher {
 
-	boolean matchVersion(Bundle bundle);
+	/** logger */
+	private static final Log log = LogFactory.getLog(LifecycleManager.class);
+
+	private final String versionHeader;
+	private final Version expectedVersion;
+
+
+	public VersionMatcher(String versionHeader, Version expectedVersion) {
+		this.versionHeader = versionHeader;
+		this.expectedVersion = expectedVersion;
+	}
+
+	public boolean matchVersion(Bundle bundle) {
+
+		if (!ConfigUtils.matchExtenderVersionRange(bundle, versionHeader, expectedVersion)) {
+			if (log.isDebugEnabled())
+				log.debug("Bundle [" + OsgiStringUtils.nullSafeNameAndSymName(bundle)
+						+ "] expects an extender w/ version[" + bundle.getHeaders().get(versionHeader)
+						+ "] which does not match current extender w/ version[" + expectedVersion
+						+ "]; skipping bundle analysis...");
+			return false;
+		}
+
+		return true;
+	}
 }

@@ -94,6 +94,6 @@ public class ServiceReferenceComparatorTest extends TestCase {
 		if (ranking != null)
 			dict.put(Constants.SERVICE_RANKING, ranking);
 
-		return new MockServiceReference(null, dict, null);
+		return new MockServiceReference(null, dict);
 	}
 }

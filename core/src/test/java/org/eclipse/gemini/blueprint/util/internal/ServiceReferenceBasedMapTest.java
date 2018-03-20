@@ -58,7 +58,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 	public void testContainsKeyObject() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
-		reference = new MockServiceReference(new MockBundle(), prop, null);
+		reference = new MockServiceReference(new MockBundle(), prop);
 		createMap();
 		assertTrue(map.containsKey("joe"));
 	}
@@ -66,7 +66,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 	public void testContainsValueObject() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
-		reference = new MockServiceReference(new MockBundle(), prop, null);
+		reference = new MockServiceReference(new MockBundle(), prop);
 		createMap();
 		assertTrue(map.containsValue("satriani"));
 	}
@@ -74,7 +74,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 	public void testEntrySet() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
-		reference = new MockServiceReference(new MockBundle(), prop, null);
+		reference = new MockServiceReference(new MockBundle(), prop);
 		createMap();
 		Set entries = map.entrySet();
 		assertNotNull(entries);
@@ -89,7 +89,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 	public void testGetObject() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
-		reference = new MockServiceReference(new MockBundle(), prop, null);
+		reference = new MockServiceReference(new MockBundle(), prop);
 		createMap();
 		assertEquals("satriani", map.get("joe"));
 	}

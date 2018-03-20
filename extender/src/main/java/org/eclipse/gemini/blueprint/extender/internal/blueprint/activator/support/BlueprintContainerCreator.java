@@ -45,7 +45,7 @@ public class BlueprintContainerCreator implements OsgiApplicationContextCreator 
 			log.trace("Created configuration " + config + " for bundle " + bundleName);
 
 		// it's not a spring bundle, ignore it
-		if (!config.isSpringPoweredBundle()) {
+		if (!config.isBlueprintConfigurationPresent()) {
 			if (log.isDebugEnabled())
 				log.debug("No blueprint configuration found in bundle " + bundleName + "; ignoring it...");
 			return null;

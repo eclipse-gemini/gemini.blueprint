@@ -63,7 +63,7 @@ public class ListListenerAdapterTest extends TestCase {
         public ServiceRegistration registerService(String[] clazzes, final Object service, Dictionary properties) {
             MockServiceRegistration reg = new MockServiceRegistration(properties);
 
-            MockServiceReference ref = new MockServiceReference(getBundle(), properties, reg, clazzes) {
+            MockServiceReference ref = new MockServiceReference(getBundle(), properties, clazzes) {
 
                 @Override
                 public Object getProperty(String key) {

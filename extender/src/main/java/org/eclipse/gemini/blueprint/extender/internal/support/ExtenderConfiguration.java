@@ -167,27 +167,27 @@ public class ExtenderConfiguration implements BundleActivator {
 				extenderConfiguration = extenderAppCtx;
 				// initialize beans
 				taskExecutor =
-						extenderConfiguration.containsBean(TASK_EXECUTOR_NAME) ? (TaskExecutor) extenderConfiguration
+						extenderConfiguration.containsBean(TASK_EXECUTOR_NAME) ? extenderConfiguration
 								.getBean(TASK_EXECUTOR_NAME, TaskExecutor.class) : createDefaultTaskExecutor();
 
 				shutdownTaskExecutor =
-						extenderConfiguration.containsBean(SHUTDOWN_TASK_EXECUTOR_NAME) ? (TaskExecutor) extenderConfiguration
+						extenderConfiguration.containsBean(SHUTDOWN_TASK_EXECUTOR_NAME) ? extenderConfiguration
 								.getBean(SHUTDOWN_TASK_EXECUTOR_NAME, TaskExecutor.class)
 								: createDefaultShutdownTaskExecutor();
 
 				eventMulticaster =
-						extenderConfiguration.containsBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME) ? (OsgiBundleApplicationContextEventMulticaster) extenderConfiguration
+						extenderConfiguration.containsBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME) ? extenderConfiguration
 								.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME,
 										OsgiBundleApplicationContextEventMulticaster.class)
 								: createDefaultEventMulticaster();
 
 				contextCreator =
-						extenderConfiguration.containsBean(CONTEXT_CREATOR_NAME) ? (OsgiApplicationContextCreator) extenderConfiguration
+						extenderConfiguration.containsBean(CONTEXT_CREATOR_NAME) ? extenderConfiguration
 								.getBean(CONTEXT_CREATOR_NAME, OsgiApplicationContextCreator.class)
 								: null;
 
 				contextEventListener =
-						extenderConfiguration.containsBean(CONTEXT_LISTENER_NAME) ? (OsgiBundleApplicationContextListener) extenderConfiguration
+						extenderConfiguration.containsBean(CONTEXT_LISTENER_NAME) ? extenderConfiguration
 								.getBean(CONTEXT_LISTENER_NAME, OsgiBundleApplicationContextListener.class)
 								: createDefaultApplicationContextListener();
 			}
@@ -203,7 +203,7 @@ public class ExtenderConfiguration implements BundleActivator {
 			// extender properties using the defaults as backup
 			if (extenderConfiguration.containsBean(PROPERTIES_NAME)) {
 				Properties customProperties =
-						(Properties) extenderConfiguration.getBean(PROPERTIES_NAME, Properties.class);
+						extenderConfiguration.getBean(PROPERTIES_NAME, Properties.class);
 				Enumeration<?> propertyKey = customProperties.propertyNames();
 				while (propertyKey.hasMoreElements()) {
 					String property = (String) propertyKey.nextElement();
@@ -302,7 +302,7 @@ public class ExtenderConfiguration implements BundleActivator {
 			}
 		}
 
-		return (String[]) urls.toArray(new String[urls.size()]);
+		return urls.toArray(new String[urls.size()]);
 	}
 
 	private Properties createDefaultProperties() {

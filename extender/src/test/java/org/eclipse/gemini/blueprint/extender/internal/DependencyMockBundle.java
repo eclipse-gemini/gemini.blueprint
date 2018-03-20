@@ -104,7 +104,7 @@ public class DependencyMockBundle extends MockBundle {
 
 		for (int i = 0; i < dependents.length; i++) {
 			registeredServices.put(dependents[i], new MockServiceReference(DependencyMockBundle.this, createProps(i,
-					serviceRanking, serviceId), null) {
+					serviceRanking, serviceId)) {
 
 				public Bundle[] getUsingBundles() {
 					return DependencyMockBundle.this.dependentOn.toArray(new Bundle[dependentOn.size()]);

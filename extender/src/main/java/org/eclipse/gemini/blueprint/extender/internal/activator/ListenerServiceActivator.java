@@ -47,12 +47,12 @@ public class ListenerServiceActivator implements BundleActivator {
         this.extenderConfiguration = extenderConfiguration;
     }
 
-    public void start(BundleContext extenderBundleContext) throws Exception {
+    public void start(BundleContext extenderBundleContext) {
         this.extenderBundleContext = extenderBundleContext;
         initListenerService();
     }
 
-    public void stop(BundleContext extenderBundleContext) throws Exception {
+    public void stop(BundleContext extenderBundleContext) {
         synchronized (monitor) {
             if (stopped) {
                 return;

@@ -115,7 +115,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		// increase service ranking
 		props.put(Constants.SERVICE_RANKING, 10);
 
-		ServiceReference ref = new MockServiceReference(null, props, null);
+		ServiceReference ref = new MockServiceReference(null, props);
 
 		ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, ref);
 
@@ -154,7 +154,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		// increase service ranking
 		props.put(Constants.SERVICE_RANKING, 10);
 
-		ServiceReference ref = new MockServiceReference(null, props, null);
+		ServiceReference ref = new MockServiceReference(null, props);
 		ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, ref);
 
 		assertEquals(1, SimpleTargetSourceLifecycleListener.BIND);
@@ -176,7 +176,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		// increase service ranking
 		props.put(Constants.SERVICE_RANKING, 10);
 
-		ServiceReference higherRankingRef = new MockServiceReference(null, props, null);
+		ServiceReference higherRankingRef = new MockServiceReference(null, props);
 		refs = new ServiceReference[] { new MockServiceReference(), higherRankingRef };
 
 		assertTrue(Arrays.equals(bundleContext.getServiceReferences((String)null, null), refs));

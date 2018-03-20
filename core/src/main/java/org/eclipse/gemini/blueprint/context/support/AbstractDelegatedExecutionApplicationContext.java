@@ -219,10 +219,6 @@ public abstract class AbstractDelegatedExecutionApplicationContext extends Abstr
 
 						public Object run() {
 							synchronized (startupShutdownMonitor) {
-
-								if (ObjectUtils.isEmpty(getConfigLocations())) {
-									setConfigLocations(getDefaultConfigLocations());
-								}
 								if (!OsgiBundleUtils.isBundleActive(getBundle())
 										&& !OsgiBundleUtils.isBundleLazyActivated(getBundle())) {
 									throw new ApplicationContextException(

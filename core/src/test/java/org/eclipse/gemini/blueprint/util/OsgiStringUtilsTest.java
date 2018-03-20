@@ -18,7 +18,6 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.FrameworkEvent;
@@ -134,7 +133,7 @@ public class OsgiStringUtilsTest extends TestCase {
 		String header = "HEADER";
 		String value = "VALUE";
 		props.put(header, value);
-		MockServiceReference ref = new MockServiceReference(bundle, props, null);
+		MockServiceReference ref = new MockServiceReference(bundle, props);
 		String out = OsgiStringUtils.nullSafeToString(ref);
 		assertTrue(out.indexOf(symName) > -1);
 		assertTrue(out.indexOf(header) > -1);

@@ -56,19 +56,19 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 		// lowest service reference
 		Dictionary dict1 = new Hashtable();
 		dict1.put(Constants.SERVICE_RANKING, Integer.MIN_VALUE);
-		ref1 = new MockServiceReference(null, dict1, null);
+		ref1 = new MockServiceReference(null, dict1);
 
 		// neutral service reference
 		Dictionary dict2 = new Hashtable();
 		dict2.put(Constants.SERVICE_ID, (long) 20);
 
-		ref2 = new MockServiceReference(null, dict2, null);
+		ref2 = new MockServiceReference(null, dict2);
 
 		// neutral service reference
 		Dictionary dict3 = new Hashtable();
 		dict3.put(Constants.SERVICE_ID, (long) 30);
 
-		ref3 = new MockServiceReference(null, dict3, null);
+		ref3 = new MockServiceReference(null, dict3);
 
 		ctrl = createStrictControl();
 		context = ctrl.createMock(BundleContext.class);
@@ -148,7 +148,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 		long id = 12345;
 		Dictionary dict = new Hashtable();
 		dict.put(Constants.SERVICE_ID, id);
-		ServiceReference ref = new MockServiceReference(null, dict, null);
+		ServiceReference ref = new MockServiceReference(null, dict);
 		assertEquals(id, OsgiServiceReferenceUtils.getServiceId(ref));
 	}
 
@@ -160,7 +160,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 		int ranking = 12345;
 		Dictionary dict = new Hashtable();
 		dict.put(Constants.SERVICE_RANKING, ranking);
-		ServiceReference ref = new MockServiceReference(null, dict, null);
+		ServiceReference ref = new MockServiceReference(null, dict);
 		assertEquals(ranking, OsgiServiceReferenceUtils.getServiceRanking(ref));
 	}
 
@@ -168,7 +168,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 		int ranking = 12345;
 		Dictionary dict = new Hashtable();
 		dict.put(Constants.SERVICE_RANKING, (long) ranking);
-		ServiceReference ref = new MockServiceReference(null, dict, null);
+		ServiceReference ref = new MockServiceReference(null, dict);
 		assertEquals(0, OsgiServiceReferenceUtils.getServiceRanking(ref));
 	}
 
@@ -182,7 +182,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 			}
 		};
 
-		ServiceReference ref = new MockServiceReference(null, dict, null);
+		ServiceReference ref = new MockServiceReference(null, dict);
 
 		assertNull(ref.getProperty(Constants.SERVICE_RANKING));
 		assertEquals(0, OsgiServiceReferenceUtils.getServiceRanking(ref));
