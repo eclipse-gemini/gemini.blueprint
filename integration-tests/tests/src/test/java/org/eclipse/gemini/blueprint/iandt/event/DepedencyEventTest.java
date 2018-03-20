@@ -70,16 +70,16 @@ public abstract class DepedencyEventTest extends AbstractEventTest {
 
 		// install the dependency bundle
 		Resource bundle =
-				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "dependencies", getSpringDMVersion());
+				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "dependencies", getGeminiBlueprintVersion());
 
 		Resource dependency1 =
-				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "simple.service", getSpringDMVersion());
+				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "simple.service", getGeminiBlueprintVersion());
 
 		Resource dependency2 =
-				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "simple.service2", getSpringDMVersion());
+				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "simple.service2", getGeminiBlueprintVersion());
 
 		Resource dependency3 =
-				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "simple.service3", getSpringDMVersion());
+				getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "simple.service3", getGeminiBlueprintVersion());
 
 		Bundle bnd = bundleContext.installBundle(bundle.getURL().toExternalForm());
 

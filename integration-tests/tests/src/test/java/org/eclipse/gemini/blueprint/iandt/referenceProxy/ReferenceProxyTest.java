@@ -35,8 +35,8 @@ import static org.junit.Assert.fail;
 public class ReferenceProxyTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt, reference.proxy," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt, reference.proxy," + getGeminiBlueprintVersion() };
 	}
 
 	public void testReferenceProxyLifecycle() throws Exception {

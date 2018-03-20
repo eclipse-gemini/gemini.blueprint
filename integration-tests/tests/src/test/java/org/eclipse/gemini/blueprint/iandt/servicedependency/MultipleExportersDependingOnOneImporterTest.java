@@ -38,8 +38,8 @@ public class MultipleExportersDependingOnOneImporterTest extends BaseIntegration
 
 	protected String[] getTestBundlesNames() {
 		// load the tccl bundle as it exposes a simple service
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getSpringDMVersion(),
-				"org.eclipse.gemini.blueprint.iandt,tccl," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getGeminiBlueprintVersion(),
+				"org.eclipse.gemini.blueprint.iandt,tccl," + getGeminiBlueprintVersion() };
 	}
 
 	protected synchronized String[] getConfigLocations() {

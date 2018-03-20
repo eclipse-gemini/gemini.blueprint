@@ -65,7 +65,7 @@ public class NestedDefinitionMetadataTest extends TestCase {
 		reader.loadBeanDefinitions(new ClassPathResource(CONFIG, getClass()));
 		context.refresh();
 
-		blueprintContainer = new SpringBlueprintContainer(context);
+		blueprintContainer = new SpringBlueprintContainer(context.getBeanFactory());
 	}
 
 	protected void tearDown() throws Exception {

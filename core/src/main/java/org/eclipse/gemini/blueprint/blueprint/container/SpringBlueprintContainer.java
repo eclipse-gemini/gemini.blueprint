@@ -14,12 +14,6 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import org.eclipse.gemini.blueprint.blueprint.reflect.MetadataFactory;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.ComponentDefinitionException;
@@ -27,8 +21,13 @@ import org.osgi.service.blueprint.container.NoSuchComponentException;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Default {@link BlueprintContainer} implementation. Wraps Spring's {@link ConfigurableListableBeanFactory} in the
@@ -41,19 +40,16 @@ import org.springframework.util.CollectionUtils;
  * @author Costin Leau
  */
 public class SpringBlueprintContainer implements BlueprintContainer {
+	private ConfigurableListableBeanFactory beanFactory;
 
-	// cannot use a ConfigurableBeanFactory since the context is not yet refreshed at construction time
-	private final ConfigurableApplicationContext applicationContext;
-	private volatile ConfigurableListableBeanFactory beanFactory;
-
-	public SpringBlueprintContainer(ConfigurableApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
+	public SpringBlueprintContainer(ConfigurableListableBeanFactory applicationContext) {
+		this.beanFactory = applicationContext;
 	}
 
 	public Object getComponentInstance(String name) throws NoSuchComponentException {
-		if (getBeanFactory().containsBean(name)) {
+		if (beanFactory.containsBean(name)) {
 			try {
-				return getBeanFactory().getBean(name);
+				return beanFactory.getBean(name);
 			} catch (RuntimeException ex) {
 				throw new ComponentDefinitionException("Cannot get component instance " + name, ex);
 			}
@@ -63,8 +59,8 @@ public class SpringBlueprintContainer implements BlueprintContainer {
 	}
 
 	public ComponentMetadata getComponentMetadata(String name) throws NoSuchComponentException {
-		if (getBeanFactory().containsBeanDefinition(name)) {
-			BeanDefinition beanDefinition = getBeanFactory().getBeanDefinition(name);
+		if (beanFactory.containsBeanDefinition(name)) {
+			BeanDefinition beanDefinition = beanFactory.getBeanDefinition(name);
 			return MetadataFactory.buildComponentMetadataFor(name, beanDefinition);
 		} else {
 			throw new NoSuchComponentException(name);
@@ -72,7 +68,7 @@ public class SpringBlueprintContainer implements BlueprintContainer {
 	}
 
 	public Set<String> getComponentIds() {
-		String[] names = getBeanFactory().getBeanDefinitionNames();
+		String[] names = beanFactory.getBeanDefinitionNames();
 		Set<String> components = new LinkedHashSet<String>(names.length);
 		CollectionUtils.mergeArrayIntoCollection(names, components);
 		Set<String> filtered = MetadataFactory.filterIds(components);
@@ -99,13 +95,6 @@ public class SpringBlueprintContainer implements BlueprintContainer {
 	}
 
 	private Collection<ComponentMetadata> getComponentMetadataForAllComponents() {
-		return MetadataFactory.buildComponentMetadataFor(getBeanFactory());
-	}
-
-	private ConfigurableListableBeanFactory getBeanFactory() {
-		if (beanFactory == null) {
-			beanFactory = applicationContext.getBeanFactory();
-		}
-		return beanFactory;
+		return MetadataFactory.buildComponentMetadataFor(beanFactory);
 	}
 }

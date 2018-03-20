@@ -66,7 +66,7 @@ public class ExtenderTest extends BaseIntegrationTest {
 	}
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, lifecycle," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, lifecycle," + getGeminiBlueprintVersion() };
 	}
 
 	public void testLifecycle() throws Exception {
@@ -89,7 +89,7 @@ public class ExtenderTest extends BaseIntegrationTest {
 
 		Resource extenderResource =
 				getLocator().locateArtifact("org.eclipse.gemini.blueprint", "gemini-blueprint-extender",
-						getSpringDMVersion());
+						getGeminiBlueprintVersion());
 		assertNotNull("Extender bundle resource", extenderResource);
 		Bundle extenderBundle = bundleContext.installBundle(extenderResource.getURL().toExternalForm());
 		assertNotNull("Extender bundle", extenderBundle);

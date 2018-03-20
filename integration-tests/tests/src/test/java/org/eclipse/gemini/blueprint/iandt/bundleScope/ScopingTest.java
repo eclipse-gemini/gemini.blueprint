@@ -38,9 +38,9 @@ public class ScopingTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
 		return new String[] {
-			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.common," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.a," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.b," + getSpringDMVersion() };
+			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.common," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.a," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt, scoped.bundle.b," + getGeminiBlueprintVersion() };
 	}
 
 	protected String getManifestLocation() {

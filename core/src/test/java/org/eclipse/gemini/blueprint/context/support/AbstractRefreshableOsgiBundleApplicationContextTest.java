@@ -14,70 +14,63 @@
 
 package org.eclipse.gemini.blueprint.context.support;
 
-import java.io.IOException;
-import java.util.Dictionary;
-import java.util.Properties;
-
 import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
-
-import org.easymock.IMocksControl;
-
+import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
+import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
-import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
-import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
-
+import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
+
+import java.util.Dictionary;
+import java.util.Properties;
+
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Costin Leau
  */
 public class AbstractRefreshableOsgiBundleApplicationContextTest extends TestCase {
-
     private AbstractOsgiBundleApplicationContext context;
-    private IMocksControl mocksControl;
     private Bundle bundle;
     private BundleContext bundleCtx;
 
     protected void setUp() throws Exception {
         context = new AbstractOsgiBundleApplicationContext() {
-
-            protected void loadBeanDefinitions(DefaultListableBeanFactory arg0) throws IOException, BeansException {
+            protected void loadBeanDefinitions(DefaultListableBeanFactory arg0) throws BeansException {
             }
         };
 
-        mocksControl = createStrictControl();
-
-        bundleCtx = mocksControl.createMock(BundleContext.class);
-        bundle = createNiceMock(Bundle.class);
-        expect(bundleCtx.getBundle()).andReturn(bundle);
+        bundleCtx = mock(BundleContext.class);
+        bundle = mock(Bundle.class);
+        when(bundleCtx.getBundle()).thenReturn(bundle);
     }
 
     protected void tearDown() throws Exception {
         context = null;
     }
 
-    public void testBundleContext() throws Exception {
+    public void testBundleContext() {
 
         String location = "osgibundle://someLocation";
         Resource bundleResource = new OsgiBundleResource(bundle, location);
 
         Dictionary dict = new Properties();
-
-        expect(bundle.getHeaders()).andReturn(dict);
-        expect(bundle.getSymbolicName()).andReturn("symName").atLeastOnce();
-
-        replay(bundle, bundleCtx);
+        when(bundle.getHeaders()).thenReturn(dict);
+        when(bundle.getSymbolicName()).thenReturn("symName");
 
         context.setBundleContext(bundleCtx);
         assertSame(bundle, context.getBundle());
@@ -89,39 +82,29 @@ public class AbstractRefreshableOsgiBundleApplicationContextTest extends TestCas
         // do some resource loading
         assertEquals(bundleResource, context.getResource(location));
 
-        verify(bundle, bundleCtx);
+        verify(bundle, atLeast(1)).getBundleContext();
+        verify(bundle, atLeast(1)).getHeaders();
+        verify(bundle, atLeast(1)).getSymbolicName();
     }
 
-    public void testServicePublicationBetweenRefreshes() throws Exception {
-        // [0] = service registration
-        // [1] = service unregistration
+    public void testServicePublicationBetweenRefreshes() {
+        ServiceRegistration registration = mock(ServiceRegistration.class);
+        MockBundleContext mCtx = spy(new MockBundleContext());
+        doReturn(registration).when(mCtx).registerService(isA(String[].class), isA(Object.class), isA(Dictionary.class));
 
-        final int[] counters = new int[]{0, 0};
-
-        MockBundleContext mCtx = new MockBundleContext() {
-
-            public ServiceRegistration registerService(String clazz[], Object service, Dictionary properties) {
-                counters[0]++;
-                return new MockServiceRegistration(clazz, properties) {
-
-                    public void unregister() {
-                        counters[1]++;
-                    }
-                };
-            }
-
-        };
         context.setBundleContext(mCtx);
 
-        assertEquals(counters[0], 0);
-        assertEquals(counters[1], 0);
+        verify(mCtx, never()).registerService(isA(String[].class), isA(Object.class), isA(Dictionary.class));
+        verify(registration, never()).unregister();
 
         context.refresh();
-        assertEquals(counters[0], 1);
-        assertEquals(counters[1], 0);
+        verify(mCtx).registerService(isA(String[].class), isA(ApplicationContext.class), isA(Dictionary.class));
+        verify(mCtx).registerService(isA(String[].class), isA(BlueprintContainer.class), isA(Dictionary.class));
+        verify(registration, never()).unregister();
 
         context.refresh();
-        assertEquals(counters[0], 2);
-        assertEquals(counters[1], 1);
+        verify(mCtx, times(2)).registerService(isA(String[].class), isA(ApplicationContext.class), isA(Dictionary.class));
+        verify(mCtx, times(2)).registerService(isA(String[].class), isA(BlueprintContainer.class), isA(Dictionary.class));
+        verify(registration).unregister();
     }
 }

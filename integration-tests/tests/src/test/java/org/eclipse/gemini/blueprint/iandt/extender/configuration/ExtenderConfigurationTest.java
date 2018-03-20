@@ -41,7 +41,7 @@ public class ExtenderConfigurationTest extends BaseIntegrationTest {
 	}
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,extender-fragment-bundle," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,extender-fragment-bundle," + getGeminiBlueprintVersion() };
 	}
 
 	protected String[] getConfigLocations() {

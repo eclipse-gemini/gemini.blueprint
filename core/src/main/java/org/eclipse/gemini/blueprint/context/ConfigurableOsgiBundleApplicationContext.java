@@ -55,6 +55,14 @@ public interface ConfigurableOsgiBundleApplicationContext extends ConfigurableAp
 
 
 	/**
+	 * Standard blueprint environment per blueprint spec 121.11.1 Environment Managers
+	 */
+	static final String BLUEPRINT_CONTAINER = "blueprintContainer";
+	static final String BLUEPRINT_BUNDLE = "blueprintBundle";
+	static final String BLUEPRINT_BUNDLE_CONTEXT = "blueprintBundleContext";
+	static final String BLUEPRINT_CONVERTER = "blueprintConverter";
+
+	/**
 	 * Sets the config locations for this OSGi bundle application context. If
 	 * not set, the implementation is supposed to use a default for the given
 	 * bundle.

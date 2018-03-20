@@ -80,7 +80,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	private static final String SPRING_VERSION_PROP_KEY = "ignore.spring.version";
 
 	/** uninitialised - read from the properties file */
-	private String springOsgiVersion = null;
+	private String geminiBlueprintVersion = null;
 
 	/** uninitialised - read from the properties file */
 	private String springBundledVersion = null;
@@ -92,12 +92,12 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	 * 
 	 * @return Spring-DM bundles version
 	 */
-	protected String getSpringDMVersion() {
-		if (springOsgiVersion == null) {
-			springOsgiVersion = readProperty(GEMINI_BLUEPRINT_VERSION_PROP_KEY);
+	protected String getGeminiBlueprintVersion() {
+		if (geminiBlueprintVersion == null) {
+			geminiBlueprintVersion = readProperty(GEMINI_BLUEPRINT_VERSION_PROP_KEY);
 		}
 
-		return springOsgiVersion;
+		return geminiBlueprintVersion;
 	}
 
 	/**

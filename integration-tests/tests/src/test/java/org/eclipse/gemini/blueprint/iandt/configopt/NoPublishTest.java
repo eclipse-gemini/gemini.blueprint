@@ -29,7 +29,7 @@ public class NoPublishTest extends BehaviorBaseTest {
 
 	public void testBehaviour() throws Exception {
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, nopublish-bundle,"
-				+ getSpringDMVersion();
+				+ getGeminiBlueprintVersion();
 
 		// start it
 		Bundle bundle = installBundle(bundleId);

@@ -49,14 +49,14 @@ public class FactoryDependencyTest extends BaseIntegrationTest {
 		System.setProperty(DELAY_PROP, "10000");
 
 		Bundle dependencyTestBundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "dependencies", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "dependencies", getGeminiBlueprintVersion()).getURL().toExternalForm());
 
 		Bundle simpleService2Bundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getGeminiBlueprintVersion()).getURL().toExternalForm());
 		Bundle simpleService3Bundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service3", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service3", getGeminiBlueprintVersion()).getURL().toExternalForm());
 		Bundle factoryServiceBundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "dependendencies.factory", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "dependendencies.factory", getGeminiBlueprintVersion()).getURL().toExternalForm());
 
 		assertNotNull("Cannot find the factory service bundle", factoryServiceBundle);
 		assertNotNull("Cannot find the simple service 2 bundle", simpleService2Bundle);

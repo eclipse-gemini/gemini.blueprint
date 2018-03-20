@@ -16,7 +16,6 @@
 package org.eclipse.gemini.blueprint.iandt.cardinality0to1;
 
 import java.io.FilePermission;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyPermission;
 
@@ -24,9 +23,6 @@ import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.BundlePermission;
-import org.osgi.framework.PackagePermission;
-import org.osgi.framework.ServicePermission;
 import org.eclipse.gemini.blueprint.iandt.cardinality0to1.test.MyListener;
 import org.eclipse.gemini.blueprint.iandt.cardinality0to1.test.ReferenceContainer;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
@@ -37,13 +33,13 @@ import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
 public class Cardinality0to1Test extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt, cardinality0to1," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt, cardinality0to1," + getGeminiBlueprintVersion() };
 	}
 
 	public void test0to1Cardinality() throws Exception {
 		Bundle simpleService2Bundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getGeminiBlueprintVersion()).getURL().toExternalForm());
 
 		assertNotNull("Cannot find the simple service 2 bundle", simpleService2Bundle);
 

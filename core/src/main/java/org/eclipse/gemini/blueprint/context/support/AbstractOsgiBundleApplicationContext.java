@@ -15,17 +15,15 @@
 
 package org.eclipse.gemini.blueprint.context.support;
 
-import java.beans.PropertyEditor;
-import java.io.IOException;
-import java.security.AccessControlContext;
-import java.security.AccessControlException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Dictionary;
-import java.util.Map;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
+import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintConverter;
+import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintConverterService;
+import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintContainerServicePublisher;
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
+import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
 import org.eclipse.gemini.blueprint.context.support.internal.classloader.ClassLoaderFactory;
 import org.eclipse.gemini.blueprint.context.support.internal.scope.OsgiBundleScope;
 import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
@@ -41,10 +39,14 @@ import org.osgi.framework.ServiceRegistration;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.Scope;
 import org.springframework.beans.factory.support.AbstractBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.beans.factory.support.SecurityContextProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextException;
@@ -55,6 +57,15 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.beans.PropertyEditor;
+import java.io.IOException;
+import java.security.AccessControlContext;
+import java.security.AccessControlException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.Dictionary;
+import java.util.Map;
 
 /**
  * 
@@ -87,6 +98,14 @@ import org.springframework.util.StringUtils;
  */
 public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefreshableApplicationContext implements
 		ConfigurableOsgiBundleApplicationContext {
+
+	private static final Class<?> ENV_FB_CLASS;
+
+	static {
+		String className = "org.eclipse.gemini.blueprint.blueprint.reflect.internal.metadata.EnvironmentManagerFactoryBean";
+		ClassLoader loader = OsgiBundleApplicationContextEvent.class.getClassLoader();
+		ENV_FB_CLASS = ClassUtils.resolveClassName(className, loader);
+	}
 
 	private static final String EXPORTER_IMPORTER_DEPENDENCY_MANAGER =
 			"org.eclipse.gemini.blueprint.service.dependency.internal.MandatoryDependencyBeanPostProcessor";
@@ -246,11 +265,60 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 		addPredefinedBean(beanFactory, BUNDLE_CONTEXT_BEAN_NAME, this.bundleContext);
 		addPredefinedBean(beanFactory, BUNDLE_BEAN_NAME, this.bundle);
 
+		SpringBlueprintContainer blueprintContainer = new SpringBlueprintContainer(beanFactory);
+
+		// 1. add event listeners
+		// add service publisher
+		addApplicationListener(new BlueprintContainerServicePublisher(blueprintContainer, bundleContext));
+
+		// 2. Add predefined beans name according to OSGi blueprint spec
+		Log logger = LogFactory.getLog(getClass());
+
+		if (!(beanFactory instanceof BeanDefinitionRegistry)) {
+			logger.warn("Environmental beans will be registered as singletons instead "
+					+ "of usual bean definitions since beanFactory " + beanFactory
+					+ " is not a BeanDefinitionRegistry");
+		}
+
+		addPredefinedBlueprintBean(beanFactory, BLUEPRINT_BUNDLE, bundleContext.getBundle(), logger);
+		addPredefinedBlueprintBean(beanFactory, BLUEPRINT_BUNDLE_CONTEXT, bundleContext, logger);
+		addPredefinedBlueprintBean(beanFactory, BLUEPRINT_CONTAINER, blueprintContainer, logger);
+		addPredefinedBlueprintBean(beanFactory, BLUEPRINT_CONVERTER, new SpringBlueprintConverter(beanFactory), logger);
+
+		// Add Blueprint conversion service
+		beanFactory.setConversionService(new SpringBlueprintConverterService(beanFactory.getConversionService(), beanFactory));
+
 		// register property editors
 		registerPropertyEditors(beanFactory);
 
 		// register a 'bundle' scope
 		beanFactory.registerScope(OsgiBundleScope.SCOPE_NAME, new OsgiBundleScope());
+	}
+
+	private void addPredefinedBlueprintBean(ConfigurableListableBeanFactory beanFactory, String beanName,
+											Object value, Log logger) {
+		if (!beanFactory.containsLocalBean(beanName)) {
+			logger.debug("Registering pre-defined bean named " + beanName);
+			if (beanFactory instanceof BeanDefinitionRegistry) {
+				BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+
+				GenericBeanDefinition def = new GenericBeanDefinition();
+				def.setBeanClass(ENV_FB_CLASS);
+				ConstructorArgumentValues cav = new ConstructorArgumentValues();
+				cav.addIndexedArgumentValue(0, value);
+				def.setConstructorArgumentValues(cav);
+				def.setLazyInit(false);
+				def.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+				registry.registerBeanDefinition(beanName, def);
+
+			} else {
+				beanFactory.registerSingleton(beanName, value);
+			}
+
+		} else {
+			logger.warn("A bean named " + beanName
+					+ " already exists; aborting registration of the predefined value...");
+		}
 	}
 
 	private void addPredefinedBean(ConfigurableListableBeanFactory beanFactory, String name, Object value) {

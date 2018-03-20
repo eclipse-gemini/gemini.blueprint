@@ -74,13 +74,13 @@ public class BlueprintContainerServicePublisher implements ApplicationListener<A
 	public void onApplicationEvent(ApplicationContextEvent event) {
 		// publish
 		if (event instanceof ContextRefreshedEvent) {
-			registerService(event.getApplicationContext());
+			registerBlueprintContainerAsService(event.getApplicationContext());
 		} else if (event instanceof ContextClosedEvent) {
 			unregisterService();
 		}
 	}
 
-	private void registerService(ApplicationContext applicationContext) {
+	private void registerBlueprintContainerAsService(ApplicationContext applicationContext) {
 		final Dictionary<String, Object> serviceProperties = new Hashtable<String, Object>();
 
 		Bundle bundle = bundleContext.getBundle();

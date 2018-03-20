@@ -53,8 +53,8 @@ public class ClientOnlyTcclTest extends BaseIntegrationTest {
 	}
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getSpringDMVersion(),
-				"org.eclipse.gemini.blueprint.iandt,tccl," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getGeminiBlueprintVersion(),
+				"org.eclipse.gemini.blueprint.iandt,tccl," + getGeminiBlueprintVersion() };
 	}
 
 	public void testTCCLUnmanaged() throws Exception {

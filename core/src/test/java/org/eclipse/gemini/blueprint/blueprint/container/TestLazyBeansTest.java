@@ -14,14 +14,11 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container;
 
-import java.util.Collection;
-
 import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintEditorRegistrar;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.eclipse.gemini.blueprint.context.support.PublicBlueprintDocumentLoader;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.springframework.beans.BeansException;
@@ -30,7 +27,8 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+
+import java.util.Collection;
 
 /**
  * @author Costin Leau
@@ -55,7 +53,7 @@ public class TestLazyBeansTest extends TestCase {
 			public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 				beanFactory.addPropertyEditorRegistrar(new BlueprintEditorRegistrar());
 				beanFactory.registerSingleton("blueprintContainer",
-						new SpringBlueprintContainer(context));
+						new SpringBlueprintContainer(context.getBeanFactory()));
 			}
 		});
 
@@ -64,7 +62,7 @@ public class TestLazyBeansTest extends TestCase {
 		reader.loadBeanDefinitions(new ClassPathResource(CONFIG, getClass()));
 		context.refresh();
 
-		blueprintContainer = new SpringBlueprintContainer(context);
+		blueprintContainer = new SpringBlueprintContainer(context.getBeanFactory());
 	}
 
 	protected void tearDown() throws Exception {

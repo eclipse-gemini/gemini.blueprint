@@ -34,10 +34,10 @@ public class SyncWaitTest extends BehaviorBaseTest {
 
 		// locate bundle
 		String tailBundleId = "org.eclipse.gemini.blueprint.iandt, sync-tail-bundle,"
-				+ getSpringDMVersion();
+				+ getGeminiBlueprintVersion();
 
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, sync-wait-bundle,"
-				+ getSpringDMVersion();
+				+ getGeminiBlueprintVersion();
 
 		// start dependency first
 		Bundle tail = installBundle(tailBundleId);

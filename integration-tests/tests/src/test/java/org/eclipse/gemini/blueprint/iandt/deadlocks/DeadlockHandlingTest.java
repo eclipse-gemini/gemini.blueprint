@@ -45,7 +45,7 @@ public class DeadlockHandlingTest extends BaseIntegrationTest {
 	 */
 	public void testErrorHandling() throws Exception {
 		Resource errorResource = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "deadlock",
-			getSpringDMVersion());
+			getGeminiBlueprintVersion());
 		assertNotNull("bundle resource exists", errorResource);
 		Bundle errorBundle = bundleContext.installBundle(errorResource.getURL().toExternalForm());
 		assertNotNull("bundle exists", errorBundle);

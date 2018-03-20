@@ -16,7 +16,6 @@
 package org.eclipse.gemini.blueprint.iandt.dependency;
 
 import java.io.FilePermission;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyPermission;
 
@@ -55,14 +54,14 @@ public class DependencyTest extends BaseIntegrationTest {
 		// waitOnContextCreation("org.eclipse.gemini.blueprint.iandt.simpleservice");
 
 		Bundle dependencyTestBundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "dependencies", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "dependencies", getGeminiBlueprintVersion()).getURL().toExternalForm());
 
 		Bundle simpleService2Bundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getGeminiBlueprintVersion()).getURL().toExternalForm());
 		Bundle simpleService3Bundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service3", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service3", getGeminiBlueprintVersion()).getURL().toExternalForm());
 		Bundle simpleServiceBundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service", getGeminiBlueprintVersion()).getURL().toExternalForm());
 
 		assertNotNull("Cannot find the simple service bundle", simpleServiceBundle);
 		assertNotNull("Cannot find the simple service 2 bundle", simpleService2Bundle);

@@ -14,30 +14,8 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.blueprint.activator;
 
-import java.util.Collection;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.blueprint.container.BlueprintContainer;
-import org.osgi.service.blueprint.container.BlueprintEvent;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.config.ConstructorArgumentValues;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextClosedEvent;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintConverter;
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintConverterService;
-import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintContainerServicePublisher;
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
@@ -49,7 +27,19 @@ import org.eclipse.gemini.blueprint.extender.event.BootstrappingDependenciesFail
 import org.eclipse.gemini.blueprint.extender.internal.activator.OsgiContextProcessor;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.event.EventAdminDispatcher;
 import org.eclipse.gemini.blueprint.service.importer.event.OsgiServiceDependencyWaitStartingEvent;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.blueprint.container.BlueprintEvent;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.util.ClassUtils;
+
+import java.util.Collection;
 
 /**
  * Blueprint specific context processor.
@@ -61,13 +51,6 @@ public class BlueprintContainerProcessor implements
 
 	/** logger */
 	private static final Log log = LogFactory.getLog(BlueprintContainerProcessor.class);
-	private static final Class<?> ENV_FB_CLASS;
-
-	static {
-		String className = "org.eclipse.gemini.blueprint.blueprint.reflect.internal.metadata.EnvironmentManagerFactoryBean";
-		ClassLoader loader = OsgiBundleApplicationContextEvent.class.getClassLoader();
-		ENV_FB_CLASS = ClassUtils.resolveClassName(className, loader);
-	}
 
 	private final EventAdminDispatcher dispatcher;
 	private final BlueprintListenerManager listenerManager;
@@ -156,91 +139,22 @@ public class BlueprintContainerProcessor implements
 		dispatcher.beforeClose(destroyingEvent);
 	}
 
+	/**
+	 * Adds infrastructure to Blueprint bundles that has not already been registered in
+	 * {@link org.eclipse.gemini.blueprint.context.support.AbstractOsgiBundleApplicationContext#postProcessBeanFactory(ConfigurableListableBeanFactory)}
+	 */
 	public void preProcessRefresh(final ConfigurableOsgiBundleApplicationContext context) {
-		final BundleContext bundleContext = context.getBundleContext();
-		// create the ModuleContext adapter
-		final BlueprintContainer blueprintContainer = createBlueprintContainer(context);
 
 		// 1. add event listeners
-		// add service publisher
-		context.addApplicationListener(new BlueprintContainerServicePublisher(blueprintContainer, bundleContext));
 		// add waiting event broadcaster
 		context.addApplicationListener(new BlueprintWaitingEventDispatcher(context.getBundleContext()));
 
-		// 2. add environmental managers
-		context.addBeanFactoryPostProcessor(new BeanFactoryPostProcessor() {
-
-			private static final String BLUEPRINT_BUNDLE = "blueprintBundle";
-			private static final String BLUEPRINT_BUNDLE_CONTEXT = "blueprintBundleContext";
-			private static final String BLUEPRINT_CONTAINER = "blueprintContainer";
-			private static final String BLUEPRINT_EXTENDER = "blueprintExtenderBundle";
-			private static final String BLUEPRINT_CONVERTER = "blueprintConverter";
-
-			public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-				// lazy logger evaluation
-				Log logger = LogFactory.getLog(context.getClass());
-
-				if (!(beanFactory instanceof BeanDefinitionRegistry)) {
-					logger.warn("Environmental beans will be registered as singletons instead "
-							+ "of usual bean definitions since beanFactory " + beanFactory
-							+ " is not a BeanDefinitionRegistry");
-				}
-
-				// add blueprint container bean
-				addPredefinedBlueprintBean(beanFactory, BLUEPRINT_BUNDLE, bundleContext.getBundle(), logger);
-				addPredefinedBlueprintBean(beanFactory, BLUEPRINT_BUNDLE_CONTEXT, bundleContext, logger);
-				addPredefinedBlueprintBean(beanFactory, BLUEPRINT_CONTAINER, blueprintContainer, logger);
-				// addPredefinedBlueprintBean(beanFactory, BLUEPRINT_EXTENDER, extenderBundle, logger);
-				addPredefinedBlueprintBean(beanFactory, BLUEPRINT_CONVERTER, new SpringBlueprintConverter(beanFactory),
-						logger);
-
-				// add Blueprint conversion service
-				// String[] beans = beanFactory.getBeanNamesForType(BlueprintConverterConfigurer.class, false, false);
-				// if (ObjectUtils.isEmpty(beans)) {
-				// beanFactory.addPropertyEditorRegistrar(new BlueprintEditorRegistrar());
-				// }
-				beanFactory.setConversionService(new SpringBlueprintConverterService(
-						beanFactory.getConversionService(), beanFactory));
-			}
-
-			private void addPredefinedBlueprintBean(ConfigurableListableBeanFactory beanFactory, String beanName,
-					Object value, Log logger) {
-				if (!beanFactory.containsLocalBean(beanName)) {
-					logger.debug("Registering pre-defined bean named " + beanName);
-					if (beanFactory instanceof BeanDefinitionRegistry) {
-						BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
-
-						GenericBeanDefinition def = new GenericBeanDefinition();
-						def.setBeanClass(ENV_FB_CLASS);
-						ConstructorArgumentValues cav = new ConstructorArgumentValues();
-						cav.addIndexedArgumentValue(0, value);
-						def.setConstructorArgumentValues(cav);
-						def.setLazyInit(false);
-						def.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-						registry.registerBeanDefinition(beanName, def);
-
-					} else {
-						beanFactory.registerSingleton(beanName, value);
-					}
-
-				} else {
-					logger.warn("A bean named " + beanName
-							+ " already exists; aborting registration of the predefined value...");
-				}
-			}
-		});
-
-		// 3. add cycle breaker
+		// 2. add cycle breaker
 		context.addBeanFactoryPostProcessor(cycleBreaker);
 
 		BlueprintEvent creatingEvent = new BlueprintEvent(BlueprintEvent.CREATING, context.getBundle(), extenderBundle);
 		listenerManager.blueprintEvent(creatingEvent);
 		dispatcher.beforeRefresh(creatingEvent);
-	}
-
-	private BlueprintContainer createBlueprintContainer(ConfigurableOsgiBundleApplicationContext context) {
-		// return new ExceptionHandlingBlueprintContainer(context, bundleContext);
-		return new SpringBlueprintContainer(context);
 	}
 
 	public void onOsgiApplicationEvent(OsgiBundleApplicationContextEvent evt) {

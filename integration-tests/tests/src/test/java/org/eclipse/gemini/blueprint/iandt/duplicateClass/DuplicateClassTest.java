@@ -46,7 +46,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 
 		// Simple Service bundle (provides the base package + 1 service)
 		Bundle simpleServiceBundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service", getGeminiBlueprintVersion()).getURL().toExternalForm());
 		assertNotNull("Cannot find the simple service bundle", simpleServiceBundle);
 
 		assertNotSame("simple service bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
@@ -55,7 +55,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 
 		// Identical Simple Service bundle (+1 service)
 		Bundle simpleServiceDuplicateBundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service.identical", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service.identical", getGeminiBlueprintVersion()).getURL().toExternalForm());
 		assertNotNull("Cannot find the simple service duplicate bundle", simpleServiceDuplicateBundle);
 		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
 			simpleServiceDuplicateBundle.getState()));
@@ -93,7 +93,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 
 		// Install something subtley different
 		simpleServiceDuplicateBundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service.2.identical", getSpringDMVersion()).getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service.2.identical", getGeminiBlueprintVersion()).getURL().toExternalForm());
 		assertNotNull("Cannot find the simple service duplicate 2 bundle", simpleServiceDuplicateBundle);
 		startDependency(simpleServiceDuplicateBundle);
 

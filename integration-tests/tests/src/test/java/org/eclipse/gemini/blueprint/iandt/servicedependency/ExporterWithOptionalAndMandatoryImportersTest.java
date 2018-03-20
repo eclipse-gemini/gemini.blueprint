@@ -20,8 +20,6 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import junit.framework.Assert;
-
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -130,7 +128,7 @@ public class ExporterWithOptionalAndMandatoryImportersTest extends BaseIntegrati
 
 	Bundle installTestBundle(BundleContext context) throws Exception {
 		Resource res = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "export-import-dependency-bundle",
-				getSpringDMVersion());
+				getGeminiBlueprintVersion());
 		return context.installBundle("test-bundle", res.getInputStream());
 	}
 

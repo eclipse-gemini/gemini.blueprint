@@ -14,7 +14,6 @@
 
 package org.eclipse.gemini.blueprint.iandt.proxycreator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
@@ -36,7 +35,7 @@ public class ProxyCreatorTest extends BaseIntegrationTest {
 
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,proxy.creator," + getSpringDMVersion()};
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,proxy.creator," + getGeminiBlueprintVersion()};
 	}
 
 	public void testNewProxiesCreatedOnBundleRefresh() throws Exception {

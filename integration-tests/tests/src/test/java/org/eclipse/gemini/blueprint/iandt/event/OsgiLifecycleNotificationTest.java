@@ -15,9 +15,7 @@
 package org.eclipse.gemini.blueprint.iandt.event;
 
 import java.io.FilePermission;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyPermission;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -36,7 +34,7 @@ import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextRefreshedEven
 public class OsgiLifecycleNotificationTest extends AbstractEventTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, extender.listener.bundle," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, extender.listener.bundle," + getGeminiBlueprintVersion() };
 	}
 
 	protected void onSetUp() throws Exception {
@@ -64,7 +62,7 @@ public class OsgiLifecycleNotificationTest extends AbstractEventTest {
 		// install a simple osgi bundle and check the list of events
 
 		Resource bundle = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "simple.service",
-			getSpringDMVersion());
+			getGeminiBlueprintVersion());
 
 		Bundle bnd = bundleContext.installBundle(bundle.getURL().toExternalForm());
 		try {
@@ -98,7 +96,7 @@ public class OsgiLifecycleNotificationTest extends AbstractEventTest {
 		assertTrue("should start with an empty list", eventList.isEmpty());
 		// install a simple osgi bundle and check the list of events
 
-		Resource bundle = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "error", getSpringDMVersion());
+		Resource bundle = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "error", getGeminiBlueprintVersion());
 
 		Bundle bnd = bundleContext.installBundle(bundle.getURL().toExternalForm());
 

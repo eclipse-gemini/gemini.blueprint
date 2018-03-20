@@ -29,11 +29,11 @@ public class SyncWaitWithoutDependencyTest extends BehaviorBaseTest {
 	public void testBehaviour() throws Exception {
 
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, sync-wait-bundle,"
-				+ getSpringDMVersion();
+				+ getGeminiBlueprintVersion();
 
 		// locate bundle
 		String tailBundleId = "org.eclipse.gemini.blueprint.iandt, sync-tail-bundle,"
-				+ getSpringDMVersion();
+				+ getGeminiBlueprintVersion();
 
 		// start bundle first (no dependency)
 		Bundle bundle = installBundle(bundleId);

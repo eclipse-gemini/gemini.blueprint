@@ -80,8 +80,8 @@ public abstract class BaseIoTest extends BaseIntegrationTest {
 	 * Add a bundle fragment.
 	 */
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,io.fragment.1.bundle," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt,io.fragment.2.bundle," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,io.fragment.1.bundle," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt,io.fragment.2.bundle," + getGeminiBlueprintVersion() };
 	}
 
 	protected Object[] copyEnumeration(Enumeration enm) {

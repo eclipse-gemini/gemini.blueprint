@@ -29,10 +29,10 @@ import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 public class SyncNoWaitWithReverseQueueTest extends BehaviorBaseTest {
 
 	private String tailBundleId = "org.eclipse.gemini.blueprint.iandt, sync-tail-bundle,"
-			+ getSpringDMVersion();
+			+ getGeminiBlueprintVersion();
 
 	private String bundleId = "org.eclipse.gemini.blueprint.iandt, sync-nowait-bundle,"
-			+ getSpringDMVersion();
+			+ getGeminiBlueprintVersion();
 
 	public void testBehaviour() throws Exception {
 

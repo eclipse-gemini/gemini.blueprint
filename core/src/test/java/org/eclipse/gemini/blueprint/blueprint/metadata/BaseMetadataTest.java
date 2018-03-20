@@ -56,7 +56,7 @@ public abstract class BaseMetadataTest extends TestCase {
 		reader.setDocumentLoader(new PublicBlueprintDocumentLoader());
 		reader.loadBeanDefinitions(new ClassPathResource(getConfig(), getClass()));
 		applicationContext.refresh();
-		blueprintContainer = new SpringBlueprintContainer(applicationContext);
+		blueprintContainer = new SpringBlueprintContainer(applicationContext.getBeanFactory());
 	}
 
 	protected abstract String getConfig();

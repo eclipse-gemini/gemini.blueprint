@@ -30,7 +30,7 @@ import org.osgi.framework.ServiceReference;
 public class JdkProxyTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,jdk.proxy," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,jdk.proxy," + getGeminiBlueprintVersion() };
 	}
 
 	public void testJDKProxyCreationUsingTheInterfaceClassLoaderInsteadOfTheHandlerOne() throws Exception {

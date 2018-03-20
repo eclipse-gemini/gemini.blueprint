@@ -30,7 +30,7 @@ public class ComponentScanTest extends BaseIntegrationTest {
 	}
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,component.scan.bundle," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,component.scan.bundle," + getGeminiBlueprintVersion() };
 	}
 
 	public void testComponentScan() throws Exception {

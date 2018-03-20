@@ -38,7 +38,7 @@ public class NamespaceProviderAndConsumerTest extends BaseIntegrationTest {
 
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, ns.own.consumer," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, ns.own.consumer," + getGeminiBlueprintVersion() };
 	}
 
 	protected String[] getConfigLocations() {

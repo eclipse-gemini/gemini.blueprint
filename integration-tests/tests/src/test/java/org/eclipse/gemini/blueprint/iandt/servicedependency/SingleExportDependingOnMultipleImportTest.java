@@ -46,10 +46,10 @@ public class SingleExportDependingOnMultipleImportTest extends BaseIntegrationTe
 
 	protected String[] getTestBundlesNames() {
 		// load the tccl bundle, plus simple.service + simple.service.2
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getSpringDMVersion(),
-				"org.eclipse.gemini.blueprint.iandt, tccl," + getSpringDMVersion(),
-				"org.eclipse.gemini.blueprint.iandt, simple.service," + getSpringDMVersion(),
-				"org.eclipse.gemini.blueprint.iandt, simple.service2," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getGeminiBlueprintVersion(),
+				"org.eclipse.gemini.blueprint.iandt, tccl," + getGeminiBlueprintVersion(),
+				"org.eclipse.gemini.blueprint.iandt, simple.service," + getGeminiBlueprintVersion(),
+				"org.eclipse.gemini.blueprint.iandt, simple.service2," + getGeminiBlueprintVersion() };
 	}
 
 	public void testOneImporterCGoesDownAndThenUpAgain() throws Exception {

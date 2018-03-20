@@ -38,7 +38,7 @@ public class AsyncNoWaitTest extends BehaviorBaseTest {
 
 	public void testBehaviour() throws Exception {
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, async-nowait-bundle,"
-				+ getSpringDMVersion();
+				+ getGeminiBlueprintVersion();
 
 		// start it
 		Bundle bundle = installBundle(bundleId);

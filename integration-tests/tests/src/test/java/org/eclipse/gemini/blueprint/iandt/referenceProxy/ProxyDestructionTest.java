@@ -32,8 +32,8 @@ import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 public class ProxyDestructionTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt, proxy.destruction," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt, proxy.destruction," + getGeminiBlueprintVersion() };
 	}
 
 	/**

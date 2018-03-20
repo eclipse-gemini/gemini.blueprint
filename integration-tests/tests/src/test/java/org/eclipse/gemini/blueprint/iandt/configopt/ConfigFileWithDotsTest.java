@@ -17,7 +17,6 @@ package org.eclipse.gemini.blueprint.iandt.configopt;
 import java.awt.Shape;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
 
 /**
  * Simple test for bundles that provide a configuration file with dots.
@@ -28,7 +27,7 @@ import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
 public class ConfigFileWithDotsTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, config-with-dots.bundle," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, config-with-dots.bundle," + getGeminiBlueprintVersion() };
 	}
 
 	public void testShapeServicePublished() throws Exception {

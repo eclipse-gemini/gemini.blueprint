@@ -14,7 +14,6 @@
 
 package org.eclipse.gemini.blueprint.iandt.servicedependency;
 
-import java.io.FilePermission;
 import java.util.List;
 import java.util.Map;
 
@@ -43,9 +42,9 @@ public class CollectionImporterTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
 		// load the tccl bundle, plus simple.service
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getSpringDMVersion(),
-				"org.eclipse.gemini.blueprint.iandt, tccl," + getSpringDMVersion(),
-				"org.eclipse.gemini.blueprint.iandt, simple.service," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,tccl.intf," + getGeminiBlueprintVersion(),
+				"org.eclipse.gemini.blueprint.iandt, tccl," + getGeminiBlueprintVersion(),
+				"org.eclipse.gemini.blueprint.iandt, simple.service," + getGeminiBlueprintVersion() };
 	}
 
 	public void testExporterAWhenImporterAGoesDownAndUp() throws Exception {

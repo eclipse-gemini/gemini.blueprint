@@ -31,7 +31,7 @@ public class ProxiedListenerTest extends BaseIntegrationTest {
 	}
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, proxy.listener," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, proxy.listener," + getGeminiBlueprintVersion() };
 	}
 
 	public void testListenerProxy() throws Exception {

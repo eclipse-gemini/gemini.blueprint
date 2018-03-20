@@ -31,7 +31,7 @@ public class OrderedComponentScanningTest extends BaseIntegrationTest {
 
 	@Override
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, sync-tail-bundle," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, sync-tail-bundle," + getGeminiBlueprintVersion() };
 	}
 
 	public void testComponentExistence() throws Exception {

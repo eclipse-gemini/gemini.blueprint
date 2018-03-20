@@ -41,7 +41,7 @@ public class AsyncWaitTest extends BehaviorBaseTest {
 	public void testBehaviour() throws Exception {
 
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, async-wait-bundle,"
-				+ getSpringDMVersion();
+				+ getGeminiBlueprintVersion();
 
 		// start it
 		Bundle bundle = installBundle(bundleId);

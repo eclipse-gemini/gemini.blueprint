@@ -47,14 +47,14 @@ public class MavenArtifactLookupTest extends BaseIntegrationTest {
 	}
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt, cardinality0to1," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt, simple.service," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt, cardinality0to1," + getGeminiBlueprintVersion() };
 	}
 
 	public void test0to1Cardinality() throws Exception {
 
 		Bundle simpleService2Bundle = bundleContext.installBundle(getLocator().locateArtifact(
-			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getSpringDMVersion(), "jar").getURL().toExternalForm());
+			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getGeminiBlueprintVersion(), "jar").getURL().toExternalForm());
 
 		assertNotNull("Cannot find the simple service 2 bundle", simpleService2Bundle);
 

@@ -38,7 +38,7 @@ public class ExtenderVersionTest extends BaseIntegrationTest {
 	// certain version
 	public void testBundleIgnoredBasedOnSpringExtenderVersion() throws Exception {
 
-		String bundleId = "org.eclipse.gemini.blueprint.iandt, extender-version-bundle," + getSpringDMVersion();
+		String bundleId = "org.eclipse.gemini.blueprint.iandt, extender-version-bundle," + getGeminiBlueprintVersion();
 		Resource location = locateBundle(bundleId);
 
 		Bundle bundle = bundleContext.installBundle(location.getURL().toString());

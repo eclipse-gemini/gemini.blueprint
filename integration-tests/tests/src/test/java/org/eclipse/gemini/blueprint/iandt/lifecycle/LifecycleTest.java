@@ -15,7 +15,6 @@
 
 package org.eclipse.gemini.blueprint.iandt.lifecycle;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractRefreshableApplicationContext;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
@@ -39,7 +37,7 @@ public class LifecycleTest extends BaseIntegrationTest {
     }
 
     protected String[] getTestBundlesNames() {
-        return new String[]{"org.eclipse.gemini.blueprint.iandt,lifecycle," + getSpringDMVersion()};
+        return new String[]{"org.eclipse.gemini.blueprint.iandt,lifecycle," + getGeminiBlueprintVersion()};
     }
 
     public void testLifecycle() throws Exception {

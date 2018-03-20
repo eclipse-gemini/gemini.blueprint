@@ -15,9 +15,7 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceListener;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyPermission;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.AdminPermission;
@@ -31,8 +29,8 @@ import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 public class ServiceListenerTest extends BaseIntegrationTest {
 
 	protected String[] getTestBundlesNames() {
-		return new String[] { "org.eclipse.gemini.blueprint.iandt,simple.service," + getSpringDMVersion(),
-			"org.eclipse.gemini.blueprint.iandt, service.listener," + getSpringDMVersion() };
+		return new String[] { "org.eclipse.gemini.blueprint.iandt,simple.service," + getGeminiBlueprintVersion(),
+			"org.eclipse.gemini.blueprint.iandt, service.listener," + getGeminiBlueprintVersion() };
 	}
 
 	public void testServiceListener() throws Exception {

@@ -16,9 +16,7 @@
 package org.eclipse.gemini.blueprint.iandt.errors;
 
 import java.io.FilePermission;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyPermission;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.AdminPermission;
@@ -63,7 +61,7 @@ public class ErrorHandlingTest extends BaseIntegrationTest {
 	 */
 	public void testErrorHandling() throws Exception {
 		Resource errorResource = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "error",
-			getSpringDMVersion());
+			getGeminiBlueprintVersion());
 		assertNotNull("Error bundle resource exists", errorResource);
 		Bundle errorBundle = bundleContext.installBundle(errorResource.getURL().toExternalForm());
 		assertNotNull("Errro bundle exists", errorBundle);
