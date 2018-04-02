@@ -8,6 +8,14 @@
 	<para>While a relatively young project, each version of Gemini Blueprint (even minor ones) offers new functionality. This chapter is a guide to the new
 		and improved feature and intended as a high-level, short summary. Please follow the appropriate links for more in-depth information.</para>
 
+	<section id="gemini-blueprint-3.0.0.M01">
+		<title>Gemini Blueprint 3.0.x</title>
+		<section id="gemini-blueprint-3.0.x:spring-5.x">
+			<title>Spring 5.x</title>
+			<para>Gemini Blueprint 3.0.x runs with Spring 5.x Upgrades to Spring 5.</para>
+		</section>
+	</section>
+
 	<section id="gemini-blueprint-2.1.0">
 		<title>Gemini Blueprint 2.1.0+</title>
 		<section id="gemini-blueprint-2.1.0.x:jdk8">
