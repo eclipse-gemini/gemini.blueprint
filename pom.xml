@@ -5,7 +5,7 @@
     <groupId>org.eclipse.gemini.blueprint</groupId>
     <artifactId>gemini-blueprint</artifactId>
     <!-- Note: When updating the version, ensure it is a valid OSGi version -->
-    <version>3.0.0.M01-SNAPSHOT</version>
+    <version>3.0.0.M01</version>
     <packaging>pom</packaging>
     <name>Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
@@ -101,7 +101,7 @@
         <connection>scm:git:git//git.eclipse.org/gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</connection>
         <!-- hudson-based releases require this SCM url to point to the local FS, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=512974 -->
         <developerConnection>scm:git:file:///gitroot/gemini.blueprint/org.eclipse.gemini.blueprint.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>3.0.0.M01</tag>
   </scm>
 
     <developers>
