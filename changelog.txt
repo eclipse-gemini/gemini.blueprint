@@ -2,10 +2,11 @@ ECLIPSE GEMINI BLUEPRINT CHANGELOG
 ==================================
 http://www.eclipse.org/gemini/blueprint
 
-Changes in version 3.0.0.M1 (2018-02-25)
+Changes in version 3.0.0.M1 (2018-04-02)
 -----------------------------------------
 
 General:
+* Bug 531535 - org.eclipse.gemini.blueprint.service.importer.support.internal.aop.StaticServiceReferenceProxy cannot be cast to org.eclipse.osgi.internal.serviceregistry.ServiceReferenceImpl
 * Bug 518488 - ShutdownSorter does not take into account bundles with references to services provided by the same bundle
 * Bug 518934 - Deadlock when exporting service due to target bean caching
 * Bug 528188 - Update to Spring 5
