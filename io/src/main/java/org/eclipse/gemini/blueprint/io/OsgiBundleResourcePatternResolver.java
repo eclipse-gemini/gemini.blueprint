@@ -560,10 +560,8 @@ public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatte
 					+ ObjectUtils.nullSafeToString(rootDirResources));
 
 		Set<Resource> result = new LinkedHashSet<Resource>();
-		for (int i = 0; i < rootDirResources.length; i++) {
-			Resource rootDirResource = rootDirResources[i];
+		for (Resource rootDirResource : rootDirResources) {
 			if (isJarResource(rootDirResource)) {
-				// FIXME: Spring 5 Migration
 				result.addAll(doFindPathMatchingJarResources(rootDirResource, new URL(""), subPattern));
 			} else {
 				result.addAll(doFindPathMatchingFileResources(rootDirResource, subPattern, searchType));
