@@ -28,7 +28,7 @@ public class ArrayEnumerator<E> implements Enumeration<E> {
 	private int index = 0;
 
 
-	public ArrayEnumerator(E[] source) {
+	public ArrayEnumerator(E... source) {
 		this.source = source;
 	}
 

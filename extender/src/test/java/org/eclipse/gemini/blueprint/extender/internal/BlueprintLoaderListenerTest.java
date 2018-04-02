@@ -15,29 +15,30 @@
 package org.eclipse.gemini.blueprint.extender.internal;
 
 import junit.framework.TestCase;
+import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticaster;
 import org.eclipse.gemini.blueprint.extender.internal.activator.ListenerServiceActivator;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.BlueprintLoaderListener;
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.eclipse.gemini.blueprint.extender.internal.support.TestTaskExecutor;
 import org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils;
-import org.eclipse.gemini.blueprint.mock.EntryLookupControllingMockBundle;
+import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
 import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
-import org.mockito.Mockito;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.task.TaskExecutor;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -45,75 +46,82 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author Adrian Colyer
- * 
  */
 public class BlueprintLoaderListenerTest extends TestCase {
-	private BlueprintLoaderListener listener;
-    private ExtenderConfiguration configuration = mock(ExtenderConfiguration.class);
+    private ExtenderConfiguration extenderConfiguration = mock(ExtenderConfiguration.class);
     private OsgiBundleApplicationContextEventMulticaster multicaster = mock(OsgiBundleApplicationContextEventMulticaster.class);
-	private ListenerServiceActivator listenerServiceActivator;
-	private BundleContext context;
+    private BundleContext context = mock(BundleContext.class);
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		doReturn(multicaster).when(this.configuration).getEventMulticaster();
-		this.context = mock(BundleContext.class);
-		this.listenerServiceActivator = new ListenerServiceActivator(this.configuration);
-		this.listener = new BlueprintLoaderListener(this.configuration, listenerServiceActivator);
-		this.listenerServiceActivator.start(this.context);
-	}
+    private BlueprintLoaderListener testee;
 
-	public void testStart() throws Exception {
-		BundleContext context = Mockito.mock(BundleContext.class);
-		// look for existing resolved bundles
-		when(context.getBundles()).thenReturn(new Bundle[0]);
+    protected void setUp() throws Exception {
+        super.setUp();
+        doReturn(multicaster).when(this.extenderConfiguration).getEventMulticaster();
+        doReturn((TaskExecutor) Runnable::run).when(this.extenderConfiguration).getTaskExecutor();
 
-		// register context service
-		when(context.registerService((String[]) null, null, null)).thenReturn(null);
+        ListenerServiceActivator listenerServiceActivator = new ListenerServiceActivator(this.extenderConfiguration);
+        listenerServiceActivator.start(this.context);
 
-		// create task executor
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(null);
-		aBundle.setEntryReturnOnNextCallToGetEntry(null);
-		when(context.getBundle()).thenReturn(aBundle);
+        this.testee = new BlueprintLoaderListener(this.extenderConfiguration, listenerServiceActivator);
+    }
 
-		// listen for bundle events
-		context.addBundleListener(null);
+    public void testStart() throws Exception {
+        when(context.registerService((String[]) null, null, null)).thenReturn(null);
 
-		when(context.registerService(isA(String[].class), any(), isA(Dictionary.class))).thenReturn(new MockServiceRegistration<>());
+        Bundle bundle = new MockBundle() {
+            @Override
+            public Enumeration findEntries(String path, String filePattern, boolean recurse) {
+                if (path.endsWith("/blueprint/extender/internal/")) {
+                    // Retrieval of all XML files in a discovered directory: return test XML context
+                    return new ArrayEnumerator<>(getClass().getResource("/org/eclipse/gemini/blueprint/extender/internal/BlueprintLoaderListenerTest.xml"));
+                } else {
+                    // Directory listing: return directory containing XML file
+                    return new ArrayEnumerator<>(getClass().getResource("/org/eclipse/gemini/blueprint/extender/internal/"));
+                }
+            }
 
-		this.listener.start(context);
+            @Override
+            public BundleContext getBundleContext() {
+                return context;
+            }
+        };
 
-		verify(context).registerService(isA(String[].class), any(), isA(Dictionary.class));
-	}
+        when(context.getBundle()).thenReturn(bundle);
+        when(context.getBundles()).thenReturn(new Bundle[]{bundle});
+        this.testee.start(context);
 
-	public void ignoredTestTaskExecutor() throws Exception {
-		Dictionary<String, String> headers = new Hashtable<>();
-		headers.put(Constants.BUNDLE_NAME, "Extender mock bundle");
-		final EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new ClassPathResource("META-INF/spring/moved-extender.xml").getURL());
+        // Verify a blueprint container is published for the resulting application context.
+        verify(context).registerService(isA(String[].class), isA(SpringBlueprintContainer.class), isA(Dictionary.class));
+    }
 
-		MockBundleContext ctx = new MockBundleContext() {
+    public void ignoredTestTaskExecutor() throws Exception {
+        Dictionary<String, String> headers = new Hashtable<>();
+        headers.put(Constants.BUNDLE_NAME, "Extender mock bundle");
+        final Bundle aBundle = mock(Bundle.class);
+        doReturn(new ClassPathResource("META-INF/spring/moved-extender.xml").getURL()).when(aBundle).getEntry(anyString());
 
-			public Bundle getBundle() {
-				return aBundle;
-			}
-		};
+        MockBundleContext ctx = new MockBundleContext() {
 
-		this.listener.start(ctx);
+            public Bundle getBundle() {
+                return aBundle;
+            }
+        };
 
-		Dictionary<String, String> hdrs = new Hashtable<>();
-		hdrs.put(ConfigUtils.SPRING_CONTEXT_HEADER, "bla bla");
-		MockBundle anotherBundle = new MockBundle(hdrs);
-		anotherBundle.setBundleId(1);
+        this.testee.start(ctx);
 
-		BundleEvent event = new BundleEvent(BundleEvent.STARTED, anotherBundle);
+        Dictionary<String, String> hdrs = new Hashtable<>();
+        hdrs.put(ConfigUtils.SPRING_CONTEXT_HEADER, "bla bla");
+        MockBundle anotherBundle = new MockBundle(hdrs);
+        anotherBundle.setBundleId(1);
 
-		BundleListener listener = ctx.getBundleListeners().iterator().next();
+        BundleEvent event = new BundleEvent(BundleEvent.STARTED, anotherBundle);
 
-		TestTaskExecutor.called = false;
+        BundleListener listener = ctx.getBundleListeners().iterator().next();
 
-		listener.bundleChanged(event);
-		assertTrue("task executor should have been called if configured properly", TestTaskExecutor.called);
-	}
+        TestTaskExecutor.called = false;
+
+        listener.bundleChanged(event);
+        assertTrue("task executor should have been called if configured properly", TestTaskExecutor.called);
+    }
 
 }

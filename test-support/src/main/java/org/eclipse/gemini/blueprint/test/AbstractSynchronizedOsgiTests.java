@@ -240,7 +240,7 @@ public abstract class AbstractSynchronizedOsgiTests extends AbstractConfigurable
 	 * @return boolean true if spring managed or false.
 	 */
 	protected boolean isSpringDMManaged(Bundle bundle) {
-		if (!ObjectUtils.isEmpty(ConfigUtils.getHeaderLocations(bundle.getHeaders()))) {
+		if (!ObjectUtils.isEmpty(ConfigUtils.getSpringDmHeaderLocations(bundle.getHeaders()))) {
 			return true;
         }
         // TODO: do we need to check for blueprint?

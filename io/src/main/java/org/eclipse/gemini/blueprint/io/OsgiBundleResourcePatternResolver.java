@@ -563,7 +563,6 @@ public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatte
 		for (int i = 0; i < rootDirResources.length; i++) {
 			Resource rootDirResource = rootDirResources[i];
 			if (isJarResource(rootDirResource)) {
-				// FIXME: Spring 5 Migration
 				result.addAll(doFindPathMatchingJarResources(rootDirResource, new URL(""), subPattern));
 			} else {
 				result.addAll(doFindPathMatchingFileResources(rootDirResource, subPattern, searchType));

@@ -1,29 +1,18 @@
-/******************************************************************************
- * Copyright (c) 2006, 2010 VMware Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * and Apache License v2.0 which accompanies this distribution. 
- * The Eclipse Public License is available at 
- * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
- * is available at http://www.opensource.org/licenses/apache2.0.php.
- * You may elect to redistribute this code under either of these licenses. 
- * 
- * Contributors:
- *   VMware Inc.
- *****************************************************************************/
+/*
+ Copyright (c) 2006, 2010 VMware Inc.
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ and Apache License v2.0 which accompanies this distribution.
+ The Eclipse Public License is available at
+ http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
+ is available at http://www.opensource.org/licenses/apache2.0.php.
+ You may elect to redistribute this code under either of these licenses.
+
+ Contributors:
+ VMware Inc.
+ */
 
 package org.eclipse.gemini.blueprint.mock;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -31,6 +20,19 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.security.cert.X509Certificate;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * Bundle mock. Except resource/class loading operations (which are executed on its internal class loader), the rest of
@@ -42,7 +44,7 @@ public class MockBundle implements Bundle {
 
 	private String location;
 
-	private final Dictionary headers;
+	private final Dictionary<String, String> headers;
 
 	private static int GENERAL_BUNDLE_ID = 0;
 
@@ -52,8 +54,6 @@ public class MockBundle implements Bundle {
 	private BundleContext bundleContext;
 
 	private ClassLoader loader = getClass().getClassLoader();
-
-	private final Dictionary defaultHeaders = new Hashtable(0);
 
 	private final String SYMBOLIC_NAME = "Mock-Bundle_" + System.currentTimeMillis();
 
@@ -66,13 +66,13 @@ public class MockBundle implements Bundle {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    private static class EmptyEnumeration implements Enumeration {
+    private static class EmptyEnumeration<T> implements Enumeration<T> {
 
 		public boolean hasMoreElements() {
 			return false;
 		}
 
-		public Object nextElement() {
+		public T nextElement() {
 			throw new NoSuchElementException();
 		}
 	}
@@ -122,6 +122,7 @@ public class MockBundle implements Bundle {
 	 */
 	public MockBundle(String symName, Dictionary headers, BundleContext context) {
 		this.symName = ((symName != null && symName.length() > 0) ? symName : SYMBOLIC_NAME);
+		Dictionary<String, String> defaultHeaders = new Hashtable<>(0);
 		defaultHeaders.put("Bundle-SymbolicName", this.symName);
 
 		this.location = "<default location>";
@@ -135,7 +136,7 @@ public class MockBundle implements Bundle {
 	 * 
 	 * @see org.osgi.framework.Bundle#findEntries(java.lang.String, java.lang.String, boolean)
 	 */
-	public Enumeration findEntries(String path, String filePattern, boolean recurse) {
+	public Enumeration<URL> findEntries(String path, String filePattern, boolean recurse) {
 		Enumeration enm = null;
 
 		try {
@@ -159,15 +160,15 @@ public class MockBundle implements Bundle {
 		return loader.getResource(name);
 	}
 
-	public Enumeration getEntryPaths(String path) {
-		return new EmptyEnumeration();
+	public Enumeration<String> getEntryPaths(String path) {
+		return new EmptyEnumeration<>();
 	}
 
-	public Dictionary getHeaders() {
+	public Dictionary<String, String> getHeaders() {
 		return headers;
 	}
 
-	public Dictionary getHeaders(String locale) {
+	public Dictionary<String, String> getHeaders(String locale) {
 		return getHeaders();
 	}
 
@@ -187,7 +188,7 @@ public class MockBundle implements Bundle {
 		return loader.getResource(name);
 	}
 
-	public Enumeration getResources(String name) throws IOException {
+	public Enumeration<URL> getResources(String name) throws IOException {
 		return loader.getResources(name);
 	}
 
@@ -200,7 +201,7 @@ public class MockBundle implements Bundle {
 	}
 
 	public String getSymbolicName() {
-		String name = (String) headers.get(Constants.BUNDLE_SYMBOLICNAME);
+		String name = headers.get(Constants.BUNDLE_SYMBOLICNAME);
 		return (name == null ? SYMBOLIC_NAME : name);
 	}
 
@@ -226,13 +227,13 @@ public class MockBundle implements Bundle {
 	public void stop(int options) throws BundleException {
 	}
 
-	public void uninstall() throws BundleException {
+	public void uninstall() {
 	}
 
-	public void update() throws BundleException {
+	public void update() {
 	}
 
-	public void update(InputStream in) throws BundleException {
+	public void update(InputStream in) {
 	}
 
 	public Version getVersion() {
@@ -260,7 +261,7 @@ public class MockBundle implements Bundle {
 		return Version.emptyVersion;
 	}
 
-	public Map getSignerCertificates(int signerType) {
+	public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(int signerType) {
 		return Collections.emptyMap();
 	}
 

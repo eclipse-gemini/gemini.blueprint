@@ -14,16 +14,17 @@
 
 package org.eclipse.gemini.blueprint.extender.support.internal;
 
-import java.util.Dictionary;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
-import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.Dictionary;
+
+import static org.eclipse.gemini.blueprint.io.OsgiBundleResource.BUNDLE_URL_PREFIX;
 
 /**
  * Utility class for dealing with the extender configuration and OSGi bundle
@@ -57,6 +58,9 @@ public abstract class ConfigUtils {
 	 * Manifest entry name for configuring Spring application context.
 	 */
 	public static final String SPRING_CONTEXT_HEADER = "Spring-Context";
+
+	public static final String BLUEPRINT_SPEC_CONTEXT_LOCATION = BUNDLE_URL_PREFIX + "/OSGI-INF/blueprint/*.xml";
+	public static final String LEGACY_SPRING_DM_CONTEXT_LOCATION = BUNDLE_URL_PREFIX + "/META-INF/spring/*.xml";
 
 	/**
 	 * Directive for publishing Spring application context as a service.
@@ -324,21 +328,20 @@ public abstract class ConfigUtils {
 	 * @param headers bundle headers
 	 * @return array of locations specified (if any)
 	 */
-	public static String[] getHeaderLocations(Dictionary headers) {
-		return getLocationsFromHeader(getSpringContextHeader(headers),
-			OsgiBundleXmlApplicationContext.DEFAULT_CONFIG_LOCATION);
-
+	public static String[] getSpringDmHeaderLocations(Dictionary headers) {
+		return getSpringDmLocationsFromHeader(getSpringContextHeader(headers));
 	}
 
 	/**
-	 * Similar to {@link #getHeaderLocations(Dictionary)} but looks at a
+	 * Similar to {@link #getSpringDmHeaderLocations(Dictionary)} but looks at a
 	 * specified header directly.
 	 * 
 	 * @param header header to look at
-	 * @param defaultValue default locations if none is specified
-	 * @return
-	 */
-	public static String[] getLocationsFromHeader(String header, String defaultValue) {
+    */
+	public static String[] getSpringDmLocationsFromHeader(String header) {
+		if (header == null) {
+			return null;
+		}
 
 		String[] ctxEntries;
 		if (StringUtils.hasText(header) && !(';' == header.charAt(0))) {
@@ -350,7 +353,7 @@ public abstract class ConfigUtils {
 			// replace * with a 'digestable' location
 			for (int i = 0; i < ctxEntries.length; i++) {
 				if (CONFIG_WILDCARD.equals(ctxEntries[i]))
-					ctxEntries[i] = defaultValue;
+					ctxEntries[i] = LEGACY_SPRING_DM_CONTEXT_LOCATION;
 			}
 		}
 		else {

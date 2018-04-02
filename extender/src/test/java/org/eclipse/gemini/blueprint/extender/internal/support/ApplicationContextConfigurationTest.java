@@ -15,250 +15,268 @@
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
 import junit.framework.TestCase;
-import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintContainerConfig;
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
-import org.eclipse.gemini.blueprint.mock.EntryLookupControllingMockBundle;
+import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
+import org.osgi.framework.Bundle;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Hashtable;
+
+import static org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils.LEGACY_SPRING_DM_CONTEXT_LOCATION;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test that given a bundle, we can correctly determine the spring configuration
  * required for it.
- * 
+ *
  * @author Adrian Colyer
  */
 public class ApplicationContextConfigurationTest extends TestCase {
+    private final URL metaInfSpringFolder;
 
-	private static final String[] META_INF_SPRING_CONTENT = new String[] { "file://META-INF/spring/context.xml",
-			"file://META-INF/spring/context-two.xml" };
+    {
+        try {
+            metaInfSpringFolder = new URL("file:///META-INF/spring/");
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
-	public void testBundleWithNoHeaderAndNoMetaInfSpringResourcesIsNotSpringPowered() {
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(null);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(null);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertFalse("bundle is not spring powered", config.isBlueprintConfigurationPresent());
-	}
+    private final URL context_xml = getClass().getClassLoader().getResource("org/eclipse/gemini/blueprint/extender/internal/support/META-INF/spring/context.xml");
+    private final URL context_two_xml = getClass().getClassLoader().getResource("org/eclipse/gemini/blueprint/extender/internal/support/META-INF/spring/context-two.xml");
 
-	public void testBundleWithSpringResourcesAndNoHeaderIsSpringPowered() {
-		EntryLookupControllingMockBundle aBundle = new RepeatingEntryLookupControllingMockBundle(null);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle is spring powered", config.isBlueprintConfigurationPresent());
-	}
+    public void testBundleWithNoHeaderAndNoMetaInfSpringResourcesIsNotSpringPowered() {
+        Bundle bundle = mock(Bundle.class);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertFalse("bundle is not spring powered", config.isBlueprintConfigurationPresent());
+    }
 
-	public void testBundleWithHeaderAndNoMetaInfResourcesIsSpringPowered() throws Exception {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "META-INF/spring/context.xml");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(null);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL("file://META-INF/spring/context.xml"));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle is spring powered", config.isBlueprintConfigurationPresent());
-	}
+    public void testBundleWithSpringResourcesAndNoHeaderIsSpringPowered() {
+        Bundle bundle = mock(Bundle.class);
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle is spring powered", config.isBlueprintConfigurationPresent());
+    }
 
-	public void testBundleWithNoHeaderShouldWaitFiveMinutes() {
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(null);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertEquals("bundle should timeout in five minutes", new Long(5 * 60 * 1000), new Long(config.getTimeout()));
-	}
+    public void testBundleWithHeaderAndNoMetaInfResourcesIsSpringPowered() throws Exception {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "META-INF/spring/context.xml");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        doReturn(new URL("file://META-INF/spring/context.xml")).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle is spring powered", config.isBlueprintConfigurationPresent());
+    }
 
-	public void testBundleWithWaitFiveSecondWaitForTimeout() {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "*;timeout:=5");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertEquals("bundle should timeout in 5 s", new Long(5 * 1000), new Long(config.getTimeout()));
-	}
+    public void testBundleWithNoHeaderShouldWaitFiveMinutes() {
+        Bundle bundle = mock(Bundle.class);
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertEquals("bundle should timeout in five minutes", new Long(5 * 60 * 1000), new Long(config.getTimeout()));
+    }
 
-	public void testBundleWithWaitForEver() {
-		// *;flavour
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "*;timeout:=none");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertEquals("bundle should timeout -2 (indicates forever)", new Long(-2), new Long(config.getTimeout()));
-	}
+    public void testBundleWithWaitFiveSecondWaitForTimeout() {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "*;timeout:=5");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertEquals("bundle should timeout in 5 s", new Long(5 * 1000), new Long(config.getTimeout()));
+    }
 
-	public void tstConfigLocationsInMetaInfNoHeader() {
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(null);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		String[] configFiles = config.getConfigurationLocations();
-		assertEquals("0 config files", 0, configFiles.length);
-		// assertEquals("bundle-url:file://META-INF/spring/context.xml",
-		// configFiles[0]);
-		// assertEquals("bundle-url:file://META-INF/spring/context-two.xml",
-		// configFiles[1]);
-	}
+    public void testBundleWithWaitForEver() {
+        // *;flavour
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "*;timeout:=none");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertEquals("bundle should timeout -2 (indicates forever)", new Long(-2), new Long(config.getTimeout()));
+    }
 
-	public void tstConfigLocationsInMetaInfWithHeader() throws Exception {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "META-INF/spring/context.xml");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL("file://META-INF/spring/context.xml"));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		String[] configFiles = config.getConfigurationLocations();
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertEquals("osgibundle:META-INF/spring/context.xml", configFiles[0]);
-	}
+    public void tstConfigLocationsInMetaInfNoHeader() {
+        Bundle bundle = mock(Bundle.class);
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        String[] configFiles = config.getConfigurationLocations();
+        assertEquals("0 config files", 0, configFiles.length);
+        // assertEquals("bundle-url:file://META-INF/spring/context.xml",
+        // configFiles[0]);
+        // assertEquals("bundle-url:file://META-INF/spring/context-two.xml",
+        // configFiles[1]);
+    }
 
-	public void tstConfigLocationsInMetaInfWithWildcardHeader() throws Exception {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "*;wait-for-dependencies:=false");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL(META_INF_SPRING_CONTENT[0]));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		String[] configFiles = config.getConfigurationLocations();
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertEquals("1 config files", 1, configFiles.length);
-		assertEquals(OsgiBundleXmlApplicationContext.DEFAULT_CONFIG_LOCATION, configFiles[0]);
-	}
+    public void tstConfigLocationsInMetaInfWithHeader() throws Exception {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "META-INF/spring/context.xml");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        doReturn(new URL("file://META-INF/spring/context.xml")).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        String[] configFiles = config.getConfigurationLocations();
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertEquals("osgibundle:META-INF/spring/context.xml", configFiles[0]);
+    }
 
-	public void tstEmptyConfigLocationsInMetaInf() throws Exception {
-		System.out.println("tsst");
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", ";wait-for-dependencies:=false");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL(META_INF_SPRING_CONTENT[0]));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		String[] configFiles = config.getConfigurationLocations();
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertEquals("1 config files", 1, configFiles.length);
-		assertEquals(OsgiBundleXmlApplicationContext.DEFAULT_CONFIG_LOCATION, configFiles[0]);
-	}
+    public void tstConfigLocationsInMetaInfWithWildcardHeader() throws Exception {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "*;wait-for-dependencies:=false");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        doReturn(context_xml).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        String[] configFiles = config.getConfigurationLocations();
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertEquals("1 config files", 1, configFiles.length);
+        assertEquals(LEGACY_SPRING_DM_CONTEXT_LOCATION, configFiles[0]);
+    }
 
-	public void tstConfigLocationsInMetaInfWithHeaderAndDependencies() throws Exception {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "META-INF/spring/context.xml;wait-for-dependencies:=false");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL(META_INF_SPRING_CONTENT[0]));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		String[] configFiles = config.getConfigurationLocations();
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertEquals("2 config files", 1, configFiles.length);
-		assertEquals("osgibundle:META-INF/spring/context.xml", configFiles[0]);
-	}
+    public void tstEmptyConfigLocationsInMetaInf() throws Exception {
+        System.out.println("tsst");
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", ";wait-for-dependencies:=false");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        doReturn(context_xml).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        String[] configFiles = config.getConfigurationLocations();
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertEquals("1 config files", 1, configFiles.length);
+        assertEquals(LEGACY_SPRING_DM_CONTEXT_LOCATION, configFiles[0]);
+    }
 
-	public void tstBundleWithHeaderWithBadEntriesAndNoMetaInfResourcesIsNotSpringPowered() {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "META-INF/splurge/context.xml");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(null);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertFalse("bundle is not spring powered", config.isBlueprintConfigurationPresent());
-	}
+    public void tstConfigLocationsInMetaInfWithHeaderAndDependencies() throws Exception {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "META-INF/spring/context.xml;wait-for-dependencies:=false");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        doReturn(context_xml).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        String[] configFiles = config.getConfigurationLocations();
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertEquals("2 config files", 1, configFiles.length);
+        assertEquals("osgibundle:META-INF/spring/context.xml", configFiles[0]);
+    }
 
-	public void tstHeaderWithWildcardEntryAndNoMetaInfResources() {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "*;wait-for-dependencies:=false");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(null);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertFalse("not spring powered", config.isBlueprintConfigurationPresent());
-	}
+    public void tstBundleWithHeaderWithBadEntriesAndNoMetaInfResourcesIsNotSpringPowered() {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "META-INF/splurge/context.xml");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertFalse("bundle is not spring powered", config.isBlueprintConfigurationPresent());
+    }
 
-	public void tstHeaderWithBadEntry() throws Exception {
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "META-INF/spring/context-two.xml,META-INF/splurge/context.xml,");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL("file://META-INF/spring/context-two.xml"));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertFalse("bundle is not spring powered", config.isBlueprintConfigurationPresent());
-		String[] configFiles = config.getConfigurationLocations();
-		assertEquals("0 config file", 0, configFiles.length);
-	}
+    public void tstHeaderWithWildcardEntryAndNoMetaInfResources() {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "*;wait-for-dependencies:=false");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertFalse("not spring powered", config.isBlueprintConfigurationPresent());
+    }
 
-	public void testCreateAsynchronouslyDefaultTrue() throws Exception {
-		// *;flavour
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "*;timeout:=none");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL(META_INF_SPRING_CONTENT[0]));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
-	}
+    public void tstHeaderWithBadEntry() throws Exception {
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "META-INF/spring/context-two.xml,META-INF/splurge/context.xml,");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        doReturn(new URL("file://META-INF/spring/context-two.xml")).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertFalse("bundle is not spring powered", config.isBlueprintConfigurationPresent());
+        String[] configFiles = config.getConfigurationLocations();
+        assertEquals("0 config file", 0, configFiles.length);
+    }
 
-	public void testSetCreateAsynchronouslyTrue() {
-		// *;flavour
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "*;create-asynchronously:=true");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
-	}
+    public void testCreateAsynchronouslyDefaultTrue() throws Exception {
+        // *;flavour
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "*;timeout:=none");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        doReturn(context_xml).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
+    }
 
-	public void testSetCreateAsynchronouslyFalse() throws Exception {
-		// *;flavour
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "META-INF/spring/context.xml;create-asynchronously:=false");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		aBundle.setEntryReturnOnNextCallToGetEntry(new URL(META_INF_SPRING_CONTENT[0]));
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
-		assertFalse("bundle should have create-asynchronously = false", config.isCreateAsynchronously());
-	}
+    public void testSetCreateAsynchronouslyTrue() {
+        // *;flavour
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "*;create-asynchronously:=true");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
+    }
 
-	public void testCreateAsynchronouslyDefaultTrueIfAbsent() {
-		// *;flavour
-		Dictionary<String, Object> headers = new Hashtable<>();
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
-	}
+    public void testSetCreateAsynchronouslyFalse() throws Exception {
+        // *;flavour
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "META-INF/spring/context.xml;create-asynchronously:=false");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        doReturn(context_xml).when(bundle).getEntry(anyString());
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle should be Spring powered", config.isBlueprintConfigurationPresent());
+        assertFalse("bundle should have create-asynchronously = false", config.isCreateAsynchronously());
+    }
 
-	public void testCreateAsynchronouslyDefaultTrueIfGarbage() {
-		// *;flavour
-		Dictionary<String, Object> headers = new Hashtable<>();
-		headers.put("Spring-Context", "*;favour:=false");
-		EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);
-		aBundle.setResultsToReturnOnNextCallToFindEntries(META_INF_SPRING_CONTENT);
-		ApplicationContextConfiguration config = new BlueprintContainerConfig(aBundle);
-		assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
-	}
+    public void testCreateAsynchronouslyDefaultTrueIfAbsent() {
+        // *;flavour
+        Dictionary<String, Object> headers = new Hashtable<>();
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
+    }
 
-	private static class RepeatingEntryLookupControllingMockBundle extends EntryLookupControllingMockBundle {
-		protected String[] findResult;
+    public void testCreateAsynchronouslyDefaultTrueIfGarbage() {
+        // *;flavour
+        Dictionary<String, Object> headers = new Hashtable<>();
+        headers.put("Spring-Context", "*;favour:=false");
+        Bundle bundle = mock(Bundle.class);
+        doReturn(headers).when(bundle).getHeaders();
+        addSpringContextConfigurationPresent(bundle);
+        ApplicationContextConfiguration config = new BlueprintContainerConfig(bundle);
+        assertTrue("bundle should have create-asynchronously = true", config.isCreateAsynchronously());
+    }
 
-		public RepeatingEntryLookupControllingMockBundle(Dictionary headers) {
-			super(headers);
-		}
+    private void addSpringContextConfigurationPresent(Bundle bundle) {
 
-		public Enumeration findEntries(String path, String filePattern, boolean recurse) {
-			if (this.nextFindResult == null) {
-				return super.findEntries(path, filePattern, recurse);
-			}
-			else {
-				Enumeration r = this.nextFindResult;
-				this.nextFindResult = createEnumerationOver(findResult);
-				return r;
-			}
-		}
+        doAnswer(r -> new ArrayEnumerator<>(metaInfSpringFolder))
+                .when(bundle)
+                .findEntries(
+                        "META-INF",
+                        "spring",
+                        false);
 
-		public void setResultsToReturnOnNextCallToFindEntries(String[] r) {
-			findResult = r;
-			if (findResult == null) {
-				findResult = new String[0];
-			}
-			this.nextFindResult = createEnumerationOver(findResult);
-		}
-	}
+        doAnswer(r -> new ArrayEnumerator<>(context_xml, context_two_xml))
+                .when(bundle)
+                .findEntries(
+                        "/META-INF/spring/",
+                        null,
+                        false);
+    }
 }

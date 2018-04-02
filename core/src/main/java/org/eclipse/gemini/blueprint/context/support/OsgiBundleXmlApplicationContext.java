@@ -15,7 +15,6 @@
 
 package org.eclipse.gemini.blueprint.context.support;
 
-import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.eclipse.gemini.blueprint.util.internal.BundleUtils;
 import org.osgi.framework.BundleContext;
@@ -53,10 +52,6 @@ import java.security.PrivilegedAction;
  * @author Hal Hildebrand
  */
 public class OsgiBundleXmlApplicationContext extends AbstractDelegatedExecutionApplicationContext implements DisposableBean {
-
-	/** Default config location for the root context(s) */
-	public static final String DEFAULT_CONFIG_LOCATION =
-			OsgiBundleResource.BUNDLE_URL_PREFIX + "/META-INF/spring/*.xml";
 
 	/**
 	 * 

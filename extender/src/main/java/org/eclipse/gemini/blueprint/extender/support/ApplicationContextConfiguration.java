@@ -32,6 +32,8 @@ import static org.springframework.util.Assert.notNull;
  * Determines the configuration information available in a bundle for constructing an application context. Reads all the
  * Blueprint options present in the bundle header.
  *
+ * FIXME: This is the original SPRING DM configuration. Extract a common base class and create a specialized Blueprint and Spring DM implementation.
+ *
  * @author Adrian Colyer
  * @author Costin Leau
  */
