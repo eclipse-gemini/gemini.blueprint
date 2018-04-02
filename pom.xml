@@ -5,7 +5,7 @@
     <groupId>org.eclipse.gemini.blueprint</groupId>
     <artifactId>gemini-blueprint</artifactId>
     <!-- Note: When updating the version, ensure it is a valid OSGi version -->
-    <version>3.0.0.M1-SNAPSHOT</version>
+    <version>3.0.0.M01-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
