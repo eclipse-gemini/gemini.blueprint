@@ -2,12 +2,12 @@
  * Copyright (c) 2006, 2010 VMware Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
- * and Apache License v2.0 which accompanies this distribution. 
- * The Eclipse Public License is available at 
+ * and Apache License v2.0 which accompanies this distribution.
+ * The Eclipse Public License is available at
  * http://www.eclipse.org/legal/epl-v10.html and the Apache License v2.0
  * is available at http://www.opensource.org/licenses/apache2.0.php.
- * You may elect to redistribute this code under either of these licenses. 
- * 
+ * You may elect to redistribute this code under either of these licenses.
+ *
  * Contributors:
  *   VMware Inc.
  *****************************************************************************/
@@ -46,7 +46,7 @@ import java.util.*;
 /**
  * Configuration class for the extender. Takes care of locating the extender specific configurations and merging the
  * results with the defaults.
- * 
+ *
  * @author Costin Leau
  */
 public class ExtenderConfiguration implements BundleActivator {
@@ -136,7 +136,7 @@ public class ExtenderConfiguration implements BundleActivator {
     /**
 	 * Constructs a new <code>ExtenderConfiguration</code> instance. Locates the extender configuration, creates an
 	 * application context which will returned the extender items.
-	 * 
+	 *
 	 * @param extenderBundleContext extender OSGi bundle context
 	 */
 	public void start(BundleContext extenderBundleContext) {
@@ -228,7 +228,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Allows post processing of the context creator.
-	 * 
+	 *
 	 * @param contextCreator
 	 * @return
 	 */
@@ -238,7 +238,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * Cleanup the configuration items.
 	 */
 	public void stop(BundleContext extenderBundleContext) {
@@ -282,7 +282,7 @@ public class ExtenderConfiguration implements BundleActivator {
 	/**
 	 * Copies the URLs returned by the given enumeration and returns them as an array of Strings for consumption by the
 	 * application context.
-	 * 
+	 *
 	 * @param enm
 	 * @return
 	 */
@@ -361,7 +361,7 @@ public class ExtenderConfiguration implements BundleActivator {
 		threadGroup.setDaemon(false);
 
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-		taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
+		taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
 		taskExecutor.setThreadGroup(threadGroup);
 		taskExecutor.setThreadNamePrefix("EclipseGeminiBlueprintExtenderThread-");
 		taskExecutor.initialize();
@@ -411,7 +411,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the taskExecutor.
-	 * 
+	 *
 	 * @return Returns the taskExecutor
 	 */
 	public TaskExecutor getTaskExecutor() {
@@ -422,7 +422,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the shutdown task executor.
-	 * 
+	 *
 	 * @return Returns the shutdown task executor
 	 */
 	public TaskExecutor getShutdownTaskExecutor() {
@@ -433,7 +433,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the contextEventListener.
-	 * 
+	 *
 	 * @return Returns the contextEventListener
 	 */
 	public OsgiBundleApplicationContextListener getContextEventListener() {
@@ -444,7 +444,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the shutdownWaitTime.
-	 * 
+	 *
 	 * @return Returns the shutdownWaitTime
 	 */
 	public long getShutdownWaitTime() {
@@ -455,7 +455,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Indicates if the process annotation is enabled or not.
-	 * 
+	 *
 	 * @return Returns true if the annotation should be processed or not otherwise.
 	 */
 	public boolean shouldProcessAnnotation() {
@@ -476,7 +476,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the dependencyWaitTime.
-	 * 
+	 *
 	 * @return Returns the dependencyWaitTime
 	 */
 	public long getDependencyWaitTime() {
@@ -487,7 +487,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the eventMulticaster.
-	 * 
+	 *
 	 * @return Returns the eventMulticaster
 	 */
 	public OsgiBundleApplicationContextEventMulticaster getEventMulticaster() {
@@ -499,9 +499,9 @@ public class ExtenderConfiguration implements BundleActivator {
 	/**
 	 * Sets the flag to force the taskExtender to close up in case of runaway threads - this applies *only* if the
 	 * taskExecutor has been created internally.
-	 * 
+	 *
 	 * <p/> The flag will cause a best attempt to shutdown the threads.
-	 * 
+	 *
 	 * @param forceThreadShutdown The forceThreadShutdown to set.
 	 */
 	public void setForceThreadShutdown(boolean forceThreadShutdown) {
@@ -512,7 +512,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the contextCreator.
-	 * 
+	 *
 	 * @return Returns the contextCreator
 	 */
 	public OsgiApplicationContextCreator getContextCreator() {
@@ -523,7 +523,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the postProcessors.
-	 * 
+	 *
 	 * @return Returns the postProcessors
 	 */
 	public List<OsgiBeanFactoryPostProcessor> getPostProcessors() {
@@ -532,7 +532,7 @@ public class ExtenderConfiguration implements BundleActivator {
 
 	/**
 	 * Returns the class loader wrapped around the extender bundle.
-	 * 
+	 *
 	 * @return extender bundle class loader
 	 */
 	public ClassLoader getClassLoader() {
@@ -542,7 +542,7 @@ public class ExtenderConfiguration implements BundleActivator {
 	/**
 	 * Returns the dependencies factories declared by the extender configuration. The list automatically contains the
 	 * default listeners (such as the annotation one).
-	 * 
+	 *
 	 * @return list of dependency factories
 	 */
 	public List<OsgiServiceDependencyFactory> getDependencyFactories() {
