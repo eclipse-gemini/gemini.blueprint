@@ -59,5 +59,19 @@ spec:
         }
       }
     }
+    stage('Build with Felix profile') {
+      steps {
+        container('maven') {
+          sh 'mvn verify -P it,felix'
+        }
+      }
+    }
+    stage('Build with Knopflerfish profile') {
+      steps {
+        container('maven') {
+          sh 'mvn verify -P it,knopflerfish'
+        }
+      }
+    }
   }
 }
