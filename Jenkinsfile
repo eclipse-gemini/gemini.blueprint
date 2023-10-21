@@ -45,10 +45,17 @@ spec:
     }
   }
   stages {
-    stage('Run maven') {
+    stage('Build') {
       steps {
         container('maven') {
           sh 'mvn verify'
+        }
+      }
+    }
+    stage('Build with Equinox profile') {
+      steps {
+        container('maven') {
+          sh 'mvn verify -P it,equinox'
         }
       }
     }
