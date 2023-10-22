@@ -48,28 +48,32 @@ spec:
     stage('Build') {
       steps {
         container('maven') {
-          sh 'mvn verify'
+          sh 'mvn verify -Dmaven.test.failure.ignore=true'
+          junit '**/target/surefire-reports/*.xml'
         }
       }
     }
     stage('Build with Equinox profile') {
       steps {
         container('maven') {
-          sh 'mvn verify -P it,equinox'
+          sh 'mvn verify -P it,equinox -Dmaven.test.failure.ignore=true'
+          junit '**/target/surefire-reports/*.xml'
         }
       }
     }
     stage('Build with Felix profile') {
       steps {
         container('maven') {
-          sh 'mvn verify -P it,felix'
+          sh 'mvn verify -P it,felix -Dmaven.test.failure.ignore=true'
+          junit '**/target/surefire-reports/*.xml'
         }
       }
     }
     stage('Build with Knopflerfish profile') {
       steps {
         container('maven') {
-          sh 'mvn verify -P it,knopflerfish'
+          sh 'mvn verify -P it,knopflerfish -Dmaven.test.failure.ignore=true'
+          junit '**/target/surefire-reports/*.xml'
         }
       }
     }
