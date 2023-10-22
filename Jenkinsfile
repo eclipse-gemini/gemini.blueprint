@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      label 'gemini-blueprint-agent-pod'
+      inheritFrom 'gemini-blueprint-agent-pod'
       yaml """
 apiVersion: v1
 kind: Pod
