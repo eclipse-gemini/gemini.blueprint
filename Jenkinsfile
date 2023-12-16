@@ -8,7 +8,7 @@ kind: Pod
 spec:
   containers:
   - name: maven
-    image: maven:3.9.4-eclipse-temurin-8
+    image: maven:3.9.6-eclipse-temurin-8
     command:
     - cat
     tty: true
