@@ -77,7 +77,7 @@ spec:
         }
       }
     }
-    stage('Build with Equinox profile') {
+    stage('Build and test with Equinox profile') {
       steps {
         container('maven') {
           sh 'mvn verify -P it,equinox'
