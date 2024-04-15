@@ -16,9 +16,6 @@ package org.eclipse.gemini.blueprint.io;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -226,29 +223,10 @@ public class OsgiBundleResourcePatternResolver extends PathMatchingResourcePatte
 		// find folder path matching
 		final String rootDirPath = determineFolderPattern(path);
 
-		if (System.getSecurityManager() != null) {
-			try {
-				AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-
-					public Object run() throws IOException {
-						for (int i = 0; i < importedBundles.length; i++) {
-							final ImportedBundle importedBundle = importedBundles[i];
-							if (!bundle.equals(importedBundle.getBundle())) {
-								findImportedBundleMatchingResource(importedBundle, rootDirPath, path, foundPaths);
-							}
-						}
-						return null;
-					}
-				});
-			} catch (PrivilegedActionException pe) {
-				throw (IOException) pe.getException();
-			}
-		} else {
-			for (int i = 0; i < importedBundles.length; i++) {
-				final ImportedBundle importedBundle = importedBundles[i];
-				if (!bundle.equals(importedBundle.getBundle())) {
-					findImportedBundleMatchingResource(importedBundle, rootDirPath, path, foundPaths);
-				}
+		for (int i = 0; i < importedBundles.length; i++) {
+			final ImportedBundle importedBundle = importedBundles[i];
+			if (!bundle.equals(importedBundle.getBundle())) {
+				findImportedBundleMatchingResource(importedBundle, rootDirPath, path, foundPaths);
 			}
 		}
 

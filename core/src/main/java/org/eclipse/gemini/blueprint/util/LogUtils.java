@@ -14,9 +14,6 @@
 
 package org.eclipse.gemini.blueprint.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,13 +38,6 @@ class LogUtils {
 	 * @return logger implementation
 	 */
 	public static Log createLogger(final Class<?> logName) {
-		if (System.getSecurityManager() != null) {
-			return AccessController.doPrivileged(new PrivilegedAction<Log>() {
-				public Log run() {
-					return doCreateLogger(logName);
-				}
-			});
-		}
 		return doCreateLogger(logName);
 	}
 

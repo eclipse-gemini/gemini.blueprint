@@ -21,7 +21,6 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.eclipse.gemini.blueprint.context.support.internal.classloader.ClassLoaderFactory;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
-import org.eclipse.gemini.blueprint.util.internal.PrivilegedUtils;
 import org.osgi.framework.Bundle;
 import org.springframework.util.ObjectUtils;
 
@@ -64,25 +63,6 @@ public class ServiceProviderTCCLInterceptor implements MethodInterceptor {
 	private ClassLoader serviceClassLoader;
 
 	public Object invoke(MethodInvocation invocation) throws Throwable {
-
-		if (System.getSecurityManager() != null) {
-			return invokePrivileged(invocation);
-		} else {
-			return invokeUnprivileged(invocation);
-		}
-	}
-
-	private Object invokePrivileged(final MethodInvocation invocation) throws Throwable {
-		return PrivilegedUtils.executeWithCustomTCCL(getServiceProvidedClassLoader(),
-				new PrivilegedUtils.UnprivilegedThrowableExecution() {
-
-					public Object run() throws Throwable {
-						return invocation.proceed();
-					}
-				});
-	}
-
-	private Object invokeUnprivileged(MethodInvocation invocation) throws Throwable {
 		ClassLoader current = getServiceProvidedClassLoader();
 
 		ClassLoader previous = Thread.currentThread().getContextClassLoader();
