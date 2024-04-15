@@ -50,7 +50,7 @@
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
 
-        <clover.ver>4.0.6</clover.ver>
+        <clover.ver>4.5.2</clover.ver>
         <clover.argLine />
         <clover.skip>false</clover.skip>
 
@@ -273,7 +273,7 @@
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.junit</artifactId>
-                <version>4.12_1</version>
+                <version>4.13.2_1</version>
             </dependency>
 
             <dependency>
@@ -324,7 +324,7 @@
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-            <version>3.2</version>
+            <version>5.2.0</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -336,15 +336,15 @@
 
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <artifactId>mockito-core</artifactId>
+            <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.6.2</version>
+            <version>3.25.3</version>
             <scope>test</scope>
         </dependency>
 
@@ -391,7 +391,7 @@
                     -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
+                    <version>3.1.1</version>
                     <configuration>
                         <skip>true</skip>
                     </configuration>
@@ -399,7 +399,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.5.3</version>
+                    <version>3.0.1</version>
                     <configuration>
                         <!-- one release version for all modules -->
                         <autoVersionSubmodules>true</autoVersionSubmodules>
@@ -410,7 +410,7 @@
                 <plugin>
                     <groupId>biz.aQute.bnd</groupId>
                     <artifactId>bnd-maven-plugin</artifactId>
-                    <version>6.0.0</version>
+                    <version>7.0.0</version>
                     <executions>
                         <execution>
                             <goals>
@@ -422,47 +422,52 @@
                 <plugin>
                     <groupId>pl.project13.maven</groupId>
                     <artifactId>git-commit-id-plugin</artifactId>
-                    <version>2.2.2</version>
+                    <version>4.9.10</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.6</version>
+                    <version>3.12.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.2</version>
+                    <version>3.1.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.7.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.3.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>3.13.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.5</version>
+                    <version>3.12.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>3.2.5</version>
                     <dependencies>
                         <!-- force surefire to use new junit 4.7+ runner, it would normally auto detect this -->
                         <!-- but since we're not using the official junit dependency it is unable to do so.-->
@@ -470,24 +475,24 @@
                         <dependency>
                             <groupId>org.apache.maven.surefire</groupId>
                             <artifactId>surefire-junit47</artifactId>
-                            <version>2.19.1</version>
+                            <version>3.2.5</version>
                         </dependency>
                     </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.4</version>
+                    <version>3.6.3</version>
                     <configuration>
                         <quiet>true</quiet>
                         <additionalparam>-Xdoclint:none</additionalparam>
@@ -504,7 +509,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>3.3.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -512,34 +517,44 @@
                     <version>2.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>3.0.4</version>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>4.8.4.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.8</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>com.atlassian.maven.plugins</groupId>
-                    <artifactId>maven-clover2-plugin</artifactId>
+                    <groupId>org.openclover</groupId>
+                    <artifactId>clover-maven-plugin</artifactId>
                     <version>${clover.ver}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.7</version>
+                    <version>3.21.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>3.2.5</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>2.9</version>
+                    <version>3.5.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.2.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.13</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -548,7 +563,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
                 <configuration>
                     <source>17</source>
                     <target>17</target>
@@ -557,7 +571,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -595,8 +608,8 @@
 
             <!-- clover plug-in -->
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover2-plugin</artifactId>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <licenseLocation>${env.clover.licenseLocation}</licenseLocation>
                     <generatePdf>false</generatePdf>
@@ -607,7 +620,7 @@
                     the previous unless a different folder is used for the root
                     <historyDir>${basedir}/clover/history</historyDir>
                     -->
-                    <jdk>1.7</jdk>
+                    <jdk>17</jdk>
                     <includesTestSourceRoots>false</includesTestSourceRoots>
                     <skip>${clover.skip}</skip>
 
@@ -627,68 +640,6 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
                     <skipDeploy>true</skipDeploy>
-                    <reportPlugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jxr-plugin</artifactId>
-                            <configuration>
-                                <aggregate>true</aggregate>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-report-plugin</artifactId>
-                            <configuration>
-                                <aggregate>true</aggregate>
-                            </configuration>
-                        </plugin>
-
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
-                        </plugin>
-
-                        <!-- ============== -->
-                        <!--     FindBugs   -->
-                        <!-- ============== -->
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>findbugs-maven-plugin</artifactId>
-                            <configuration>
-                                <!--
-                                <xmlOutput>true</xmlOutput>
-                                <xmlOutputDirectory>target</xmlOutputDirectory>
-                                -->
-                                <threshold>Normal</threshold>
-                                <effort>Default</effort>
-                                <!--
-                                <debug>true</debug>
-                                <relaxed>true</relaxed>
-                                -->
-                                <skip>${findbugs.skip}</skip>
-                            </configuration>
-                        </plugin>
-
-                        <!-- =========== -->
-                        <!--     PMD     -->
-                        <!-- =========== -->
-
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-pmd-plugin</artifactId>
-                            <configuration>
-                                <targetJdk>1.7</targetJdk>
-                            </configuration>
-                        </plugin>
-
-                        <!-- ============== -->
-                        <!--     jDepend    -->
-                        <!-- ============== -->
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>jdepend-maven-plugin</artifactId>
-                        </plugin>
-                    </reportPlugins>
                 </configuration>
             </plugin>
 
@@ -777,6 +728,70 @@
         </plugins>
     </build>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+            
+            <!-- ============== -->
+            <!--     FindBugs   -->
+            <!-- ============== -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration>
+                    <!--
+                    <xmlOutput>true</xmlOutput>
+                    <xmlOutputDirectory>target</xmlOutputDirectory>
+                    -->
+                    <threshold>Normal</threshold>
+                    <effort>Default</effort>
+                    <!--
+                    <debug>true</debug>
+                    <relaxed>true</relaxed>
+                    -->
+                    <skip>${findbugs.skip}</skip>
+                </configuration>
+            </plugin>
+            
+            <!-- =========== -->
+            <!--     PMD     -->
+            <!-- =========== -->
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetJdk>17</targetJdk>
+                </configuration>
+            </plugin>
+            
+            <!-- ============== -->
+            <!--     jDepend    -->
+            <!-- ============== -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
 
     <!-- profiles for equinox, knopflerfish, and felix                 -->
     <!-- to use these profiles invoke maven with -Pprofile-name, e.g. -->
@@ -866,7 +881,7 @@
 
             <dependencies>
                 <dependency>
-                    <groupId>com.cenqua.clover</groupId>
+                    <groupId>org.openclover</groupId>
                     <artifactId>clover</artifactId>
                     <version>${clover.ver}</version>
                     <type>jar</type>
@@ -947,7 +962,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -961,7 +975,6 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
                         <extensions>true</extensions>
                         <executions>
                             <execution>
