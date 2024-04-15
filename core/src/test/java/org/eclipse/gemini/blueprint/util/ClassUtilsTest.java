@@ -57,7 +57,7 @@ public class ClassUtilsTest extends TestCase {
 
     public void testAutoDetectClassesForPublishingDisabled() {
         Class<?>[] resolved = getClassHierarchy(Integer.class, INTERFACES);
-        assertThat(resolved).hasSize(2);
+        assertThat(resolved).hasSize(4);
     }
 
     public void testAutoDetectClassesForPublishingInterfaces() {

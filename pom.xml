@@ -56,10 +56,6 @@
 
         <findbugs.skip>false</findbugs.skip>
 
-        <!-- security options for integration testing -->
-        <security.argLine />
-        <policy.url>..${file.separator}policy.all</policy.url>
-
         <!-- common version ranges -->
         <spring.version.range.nq>[${spring.base.version},7)</spring.version.range.nq>
         <spring.version.range>"${spring.version.range.nq}"</spring.version.range>
@@ -414,7 +410,7 @@
                 <plugin>
                     <groupId>biz.aQute.bnd</groupId>
                     <artifactId>bnd-maven-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>6.0.0</version>
                     <executions>
                         <execution>
                             <goals>
@@ -854,14 +850,6 @@
             <modules>
                 <module>integration-tests</module>
             </modules>
-        </profile>
-
-        <!-- Java 2 security enabled profile -->
-        <profile>
-            <id>security</id>
-            <properties>
-                <security.argLine>-Djava.security.manager -Djava.security.policy=${policy.url}</security.argLine>
-            </properties>
         </profile>
 
         <!-- clover profile -->
