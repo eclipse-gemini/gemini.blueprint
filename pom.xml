@@ -260,13 +260,13 @@
 
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.core</artifactId>
+                <artifactId>org.core</artifactId>
                 <version>${osgi.ver}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.compendium</artifactId>
+                <artifactId>osgi.cmpn</artifactId>
                 <version>${osgi.ver}</version>
             </dependency>
 
@@ -845,7 +845,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
+                    <artifactId>org.core</artifactId>
                     <scope>compile</scope>
                 </dependency>
             </dependencies>
@@ -919,7 +919,7 @@
                        they are simply compiled and not executed, thus we need this generic dependency.
                     -->
                     <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
+                    <artifactId>org.core</artifactId>
                     <scope>compile</scope>
                 </dependency>
             </dependencies>
