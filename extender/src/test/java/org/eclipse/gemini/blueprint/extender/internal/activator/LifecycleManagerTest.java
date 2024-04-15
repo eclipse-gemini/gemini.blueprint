@@ -96,7 +96,7 @@ public class LifecycleManagerTest {
         withFailingApplicationContextClose();
 
         shutdownContext();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();
@@ -130,7 +130,7 @@ public class LifecycleManagerTest {
         addContextToLifecycleManager();
 
         destroy();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();

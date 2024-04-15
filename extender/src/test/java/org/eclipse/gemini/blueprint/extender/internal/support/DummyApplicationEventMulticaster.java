@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
+import java.util.function.Predicate;
+
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationEventMulticaster;
@@ -45,6 +47,12 @@ public class DummyApplicationEventMulticaster implements ApplicationEventMultica
 	}
 
 	public void addApplicationListenerBean(String listenerBeanName) {
+	}
+
+	public void removeApplicationListeners(Predicate predicate) {
+	}
+
+	public void removeApplicationListenerBeans(Predicate predicate) {
 	}
 
 }
