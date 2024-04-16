@@ -15,8 +15,6 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.dependencies.startup;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
@@ -425,16 +423,7 @@ public class DependencyWaiterApplicationContextExecutor implements OsgiBundleApp
 
 		final StringBuilder message = new StringBuilder();
 		message.append("Unable to create application context for [");
-		if (System.getSecurityManager() != null) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					message.append(OsgiStringUtils.nullSafeSymbolicName(getBundle()));
-					return null;
-				}
-			});
-		} else {
-			message.append(OsgiStringUtils.nullSafeSymbolicName(getBundle()));
-		}
+		message.append(OsgiStringUtils.nullSafeSymbolicName(getBundle()));
 
 		message.append("], unsatisfied dependencies: ");
 		message.append(buf.toString());
@@ -472,15 +461,7 @@ public class DependencyWaiterApplicationContextExecutor implements OsgiBundleApp
 		log.warn("Timeout occurred before finding service dependencies for [" + delegateContext.getDisplayName() + "]");
 
 		String bundleName = null;
-		if (System.getSecurityManager() != null) {
-			bundleName = AccessController.doPrivileged(new PrivilegedAction<String>() {
-				public String run() {
-					return OsgiStringUtils.nullSafeSymbolicName(getBundle());
-				}
-			});
-		} else {
-			bundleName = OsgiStringUtils.nullSafeSymbolicName(getBundle());
-		}
+		bundleName = OsgiStringUtils.nullSafeSymbolicName(getBundle());
 
 		// generate exception
 		e =

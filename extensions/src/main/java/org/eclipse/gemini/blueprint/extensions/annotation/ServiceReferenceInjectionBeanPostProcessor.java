@@ -26,7 +26,7 @@ import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -45,7 +45,7 @@ import java.util.SortedSet;
  *
  * @author Andy Piper
  */
-public class ServiceReferenceInjectionBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements
+public class ServiceReferenceInjectionBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor,
 		BundleContextAware, BeanFactoryAware, BeanClassLoaderAware {
 
 	private BundleContext bundleContext;

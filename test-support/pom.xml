@@ -5,7 +5,7 @@
     <parent>
         <artifactId>gemini-blueprint</artifactId>
         <groupId>org.eclipse.gemini.blueprint</groupId>
-        <version>4.0.0.BUILD-SNAPSHOT</version>
+        <version>6.0.0.BUILD-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -113,6 +113,7 @@
                                 <value>${osgi.test.platform}</value>
                             </property>
                         </systemProperties>
+                        <argLine>--add-opens=java.base/java.net=ALL-UNNAMED</argLine>
                     </configuration>
                 </plugin>
             </plugins>

@@ -83,8 +83,7 @@
 		</section>		
 		<section id="gemini-blueprint-2.0.x:security">
 			<title>Java 2 Security Integration</title>
-			<para>Continuing the work in Spring DM 1.2.x, Gemini Blueprint executes all user code using its credentials (the managed bundle permissions). 
-			See <xref linkend="appendix-security"/> for more information.</para>
+			<para>Continuing the work in Spring DM 1.2.x, Gemini Blueprint executes all user code using its credentials (the managed bundle permissions).</para>
 		</section>
 	</section>
 
@@ -98,7 +97,7 @@
 			<para>Since 1.2.x, Spring DM is aware of <ulink url="http://java.sun.com/javase/technologies/security/#overview">secured</ulink> 
 			environments by making use of dedicated <ulink url="http://java.sun.com/j2se/1.4.2/docs/guide/security/doprivileged.html">privileged blocks</ulink> 
 			for executing security sensitive code. Thus, Spring DM can run as a <emphasis>trusted</emphasis> library without requiring escalated 
-			permissions for its managed bundles. See <xref linkend="appendix-security"/> for more information.</para>
+			permissions for its managed bundles.</para>
 		</section>
 		<section id="gemini-blueprint-1.2.x:compendium">
 			<title>Compendium Services Support</title>

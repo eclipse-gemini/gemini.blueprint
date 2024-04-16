@@ -17,10 +17,6 @@ package org.eclipse.gemini.blueprint.extender.internal.support;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -157,38 +153,14 @@ public class NamespacePlugins implements NamespaceHandlerResolver, EntityResolve
 	}
 
 	public NamespaceHandler resolve(final String namespaceUri) {
-		if (System.getSecurityManager() != null) {
-			return AccessController.doPrivileged(new PrivilegedAction<NamespaceHandler>() {
-
-				public NamespaceHandler run() {
-					return doResolve(namespaceUri);
-				}
-			});
-
-		} else {
-			return doResolve(namespaceUri);
-		}
+		return doResolve(namespaceUri);
 	}
 
 	public InputSource resolveEntity(final String publicId, final String systemId) throws SAXException, IOException {
-		if (System.getSecurityManager() != null) {
-			try {
-				return AccessController.doPrivileged(new PrivilegedExceptionAction<InputSource>() {
-
-					public InputSource run() throws Exception {
-						return doResolveEntity(publicId, systemId);
-					}
-				});
-			} catch (PrivilegedActionException pae) {
-				Exception cause = pae.getException();
-				handleInputSourceException(cause);
-			}
-		} else {
-			try {
-				return doResolveEntity(publicId, systemId);
-			} catch (Exception ex) {
-				handleInputSourceException(ex);
-			}
+		try {
+			return doResolveEntity(publicId, systemId);
+		} catch (Exception ex) {
+			handleInputSourceException(ex);
 		}
 
 		return null;

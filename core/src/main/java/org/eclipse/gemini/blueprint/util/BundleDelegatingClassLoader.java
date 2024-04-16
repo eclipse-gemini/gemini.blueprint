@@ -22,8 +22,6 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
@@ -108,12 +106,7 @@ public class BundleDelegatingClassLoader extends ClassLoader implements BundleRe
 	 * @return class loader adapter over the given bundle and class loader
 	 */
 	public static BundleDelegatingClassLoader createBundleClassLoaderFor(final Bundle bundle, final ClassLoader bridge) {
-		return AccessController.doPrivileged(new PrivilegedAction<BundleDelegatingClassLoader>() {
-
-			public BundleDelegatingClassLoader run() {
-				return new BundleDelegatingClassLoader(bundle, bridge);
-			}
-		});
+		return new BundleDelegatingClassLoader(bundle, bridge);
 	}
 
 	/**

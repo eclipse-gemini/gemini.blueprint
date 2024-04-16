@@ -15,10 +15,6 @@
 package org.eclipse.gemini.blueprint.context.support.internal.classloader;
 
 import java.net.URL;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,16 +87,7 @@ public class ChainedClassLoader extends ClassLoader {
 	}
 
 	public URL getResource(final String name) {
-		if (System.getSecurityManager() != null) {
-			return AccessController.doPrivileged(new PrivilegedAction<URL>() {
-
-				public URL run() {
-					return doGetResource(name);
-				}
-			});
-		} else {
-			return doGetResource(name);
-		}
+		return doGetResource(name);
 	}
 
 	private URL doGetResource(String name) {
@@ -133,21 +120,7 @@ public class ChainedClassLoader extends ClassLoader {
 	}
 
 	public Class<?> loadClass(final String name) throws ClassNotFoundException {
-
-		if (System.getSecurityManager() != null) {
-			try {
-				return AccessController.doPrivileged(new PrivilegedExceptionAction<Class<?>>() {
-
-					public Class<?> run() throws Exception {
-						return doLoadClass(name);
-					}
-				});
-			} catch (PrivilegedActionException pae) {
-				throw (ClassNotFoundException) pae.getException();
-			}
-		} else {
-			return doLoadClass(name);
-		}
+		return doLoadClass(name);
 	}
 
 	private Class<?> doLoadClass(String name) throws ClassNotFoundException {
@@ -197,15 +170,7 @@ public class ChainedClassLoader extends ClassLoader {
 	 */
 	public void addClassLoader(final Class<?> clazz) {
 		Assert.notNull(clazz, "a non-null class required");
-		if (System.getSecurityManager() != null) {
-			addClassLoader(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-				public ClassLoader run() {
-					return ClassUtils.getClassLoader(clazz);
-				}
-			}));
-		} else {
-			addClassLoader(ClassUtils.getClassLoader(clazz));
-		}
+		addClassLoader(ClassUtils.getClassLoader(clazz));
 	}
 
 	/**
