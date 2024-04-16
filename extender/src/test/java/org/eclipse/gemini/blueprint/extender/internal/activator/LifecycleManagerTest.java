@@ -26,9 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Version;
 
-import static java.lang.Thread.yield;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.isA;
@@ -148,8 +146,9 @@ public class LifecycleManagerTest {
 
     private Bundle createBundleWithoutBundleContext() {
         Bundle bundle = mock(Bundle.class);
-        Version version = new Version(1, 0, 0);
-        doReturn(version).when(bundle).getVersion();
+        // Seems 'bundle.getVersion()' is not called and Mock complains about that!
+        //Version version = new Version(1, 0, 0);
+        //doReturn(version).when(bundle).getVersion();
         return bundle;
     }
 

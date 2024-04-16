@@ -24,6 +24,7 @@
 
         <!-- Spring version -->
         <spring.maven.artifact.version>6.0.18_1</spring.maven.artifact.version>
+        <spring.maven.test.version>6.0.12_1</spring.maven.test.version>
         <spring.base.version>6.0.0</spring.base.version>
 
         <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
@@ -41,7 +42,7 @@
         <osgi.ver>6.0.0</osgi.ver>
         <!-- platform versions -->
         <!-- equinox - repackaged in ${basedir}/lib/equinox -->
-        <equinox.ver>3.12.0</equinox.ver>
+        <equinox.ver>3.17.100</equinox.ver>
         <!-- Knopflerfish -->
         <kf.ver>7.1.2</kf.ver>
         <!-- Felix 4.4.x supports OSGi R5 -->
@@ -249,7 +250,7 @@
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.spring-test</artifactId>
-                <version>${spring.maven.artifact.version}</version>
+                <version>${spring.maven.test.version}</version>
             </dependency>
 
             <dependency>
@@ -344,7 +345,14 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.25.3</version>
+            <version>3.24.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.13</version>
             <scope>test</scope>
         </dependency>
 

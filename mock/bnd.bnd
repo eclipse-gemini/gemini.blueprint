@@ -1,5 +1,8 @@
 Export-Package: org.eclipse.gemini.blueprint.mock.*;version=${project.version}
 
+Import-Package: !java.*, \
+ *;resolution:=optional
+
 Bundle-Name: ${project.artifactId}
 Bundle-SymbolicName: ${spring.osgi.symbolic.name}
 Bundle-Vendor: Eclipse Foundation
