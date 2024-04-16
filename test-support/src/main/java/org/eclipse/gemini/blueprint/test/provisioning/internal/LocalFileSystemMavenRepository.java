@@ -17,8 +17,6 @@ package org.eclipse.gemini.blueprint.test.provisioning.internal;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -86,14 +84,8 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 
 		final String[] sysProperties = new String[2];
 		// check system property
-		AccessController.doPrivileged(new PrivilegedAction() {
-
-			public Object run() {
-				sysProperties[0] = System.getProperty(SYS_PROPERTY);
-				sysProperties[1] = System.getProperty(USER_HOME_PROPERTY);
-				return null;
-			}
-		});
+		sysProperties[0] = System.getProperty(SYS_PROPERTY);
+		sysProperties[1] = System.getProperty(USER_HOME_PROPERTY);
 		String localRepository = sysProperties[0];
 		String userHome = sysProperties[1];
 
@@ -173,25 +165,20 @@ public class LocalFileSystemMavenRepository implements ArtifactLocator {
 	public Resource locateArtifact(final String groupId, final String artifactId, final String version, final String type) {
 		init();
 
-		return (Resource) AccessController.doPrivileged(new PrivilegedAction() {
+		try {
 
-			public Object run() {
-				try {
-
-					return localMavenBuildArtifact(groupId, artifactId, version, type);
-				}
-				catch (IllegalStateException illStateEx) {
-					Resource localMavenBundle = localMavenBundle(groupId, artifactId, version, type);
-					if (log.isDebugEnabled()) {
-						String buf = "[" + groupId + "|" + artifactId + "|" + version + "]";
-						log.debug(buf
-								+ " local maven build artifact detection failed, falling back to local maven bundle "
-								+ localMavenBundle.getDescription());
-					}
-					return localMavenBundle;
-				}
+			return localMavenBuildArtifact(groupId, artifactId, version, type);
+		}
+		catch (IllegalStateException illStateEx) {
+			Resource localMavenBundle = localMavenBundle(groupId, artifactId, version, type);
+			if (log.isDebugEnabled()) {
+				String buf = "[" + groupId + "|" + artifactId + "|" + version + "]";
+				log.debug(buf
+						+ " local maven build artifact detection failed, falling back to local maven bundle "
+						+ localMavenBundle.getDescription());
 			}
-		});
+			return localMavenBundle;
+		}
 	}
 
 	/**

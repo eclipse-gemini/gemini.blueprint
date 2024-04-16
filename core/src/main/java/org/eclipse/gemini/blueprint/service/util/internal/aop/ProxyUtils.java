@@ -14,8 +14,6 @@
 
 package org.eclipse.gemini.blueprint.service.util.internal.aop;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.List;
 
 import org.aopalliance.aop.Advice;
@@ -56,18 +54,8 @@ public abstract class ProxyUtils {
 		// factory.setOptimize(true);
 		factory.setFrozen(true);
 		factory.setOpaque(true);
-		boolean isSecurityOn = (System.getSecurityManager() != null);
 		try {
-			if (isSecurityOn) {
-				return AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						return factory.getProxy(classLoader);
-					}
-				});
-			} else {
-				return factory.getProxy(classLoader);
-			}
-
+			return factory.getProxy(classLoader);
 		} catch (NoClassDefFoundError ncdfe) {
 			DebugUtils.debugClassLoadingThrowable(ncdfe, bundleContext.getBundle(), classes);
 			throw ncdfe;

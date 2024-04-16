@@ -15,17 +15,11 @@
 package org.eclipse.gemini.blueprint.config.internal.adapter;
 
 import java.lang.reflect.Method;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.gemini.blueprint.context.support.internal.security.SecurityUtils;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
 import org.eclipse.gemini.blueprint.util.internal.ReflectionUtils;
@@ -113,20 +107,11 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 
 		bindMethods = CustomListenerAdapterUtils.determineCustomMethods(clazz, bindMethod, isBlueprintCompliant);
 
-		boolean isSecurityEnabled = System.getSecurityManager() != null;
 		final Class<?> clz = clazz;
 
 		// determine methods using ServiceReference signature
 		if (StringUtils.hasText(bindMethod)) {
-			if (isSecurityEnabled) {
-				bindReference = AccessController.doPrivileged(new PrivilegedAction<Method>() {
-					public Method run() {
-						return findServiceReferenceMethod(clz, bindMethod);
-					}
-				});
-			} else {
-				bindReference = findServiceReferenceMethod(clz, bindMethod);
-			}
+			bindReference = findServiceReferenceMethod(clz, bindMethod);
 
 			if (bindMethods.isEmpty()) {
 				String beanName = (target == null ? "" : " bean [" + targetBeanName + "] ;");
@@ -138,15 +123,7 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 		unbindMethods = CustomListenerAdapterUtils.determineCustomMethods(clazz, unbindMethod, isBlueprintCompliant);
 
 		if (StringUtils.hasText(unbindMethod)) {
-			if (isSecurityEnabled) {
-				unbindReference = AccessController.doPrivileged(new PrivilegedAction<Method>() {
-					public Method run() {
-						return findServiceReferenceMethod(clz, unbindMethod);
-					}
-				});
-			} else {
-				unbindReference = findServiceReferenceMethod(clz, unbindMethod);
-			}
+			unbindReference = findServiceReferenceMethod(clz, unbindMethod);
 
 			if (unbindMethods.isEmpty()) {
 				String beanName = (target == null ? "" : " bean [" + targetBeanName + "] ;");
@@ -227,49 +204,20 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 		if (!initialized)
 			retrieveTarget();
 
-		boolean isSecurityEnabled = (System.getSecurityManager() != null);
-		AccessControlContext acc = null;
-
-		if (isSecurityEnabled) {
-			acc = SecurityUtils.getAccFrom(beanFactory);
-		}
-
 		// first call interface method (if it exists)
 		if (isLifecycleListener) {
 			if (trace)
 				log.trace("Invoking listener interface methods");
 
 			try {
-				if (isSecurityEnabled) {
-					AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-						public Object run() throws Exception {
-							((OsgiServiceLifecycleListener) target).bind(service, properties);
-							return null;
-						}
-					}, acc);
-				} else {
-					((OsgiServiceLifecycleListener) target).bind(service, properties);
-				}
+				((OsgiServiceLifecycleListener) target).bind(service, properties);
 			} catch (Exception ex) {
-				if (ex instanceof PrivilegedActionException) {
-					ex = ((PrivilegedActionException) ex).getException();
-				}
 				log.warn("standard bind method on [" + target.getClass().getName() + "] threw exception", ex);
 			}
 		}
 
-		if (isSecurityEnabled) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					CustomListenerAdapterUtils.invokeCustomMethods(target, bindMethods, service, properties);
-					invokeCustomServiceReferenceMethod(target, bindReference, service);
-					return null;
-				}
-			}, acc);
-		} else {
-			CustomListenerAdapterUtils.invokeCustomMethods(target, bindMethods, service, properties);
-			invokeCustomServiceReferenceMethod(target, bindReference, service);
-		}
+		CustomListenerAdapterUtils.invokeCustomMethods(target, bindMethods, service, properties);
+		invokeCustomServiceReferenceMethod(target, bindReference, service);
 	}
 
 	public void unbind(final Object service, final Map properties) throws Exception {
@@ -281,45 +229,19 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 			log.trace("Invoking unbind method for service " + ObjectUtils.identityToString(service) + " with props="
 					+ properties);
 
-		boolean isSecurityEnabled = (System.getSecurityManager() != null);
-		AccessControlContext acc = null;
-
-		if (isSecurityEnabled) {
-			acc = SecurityUtils.getAccFrom(beanFactory);
-		}
-
 		// first call interface method (if it exists)
 		if (isLifecycleListener) {
 			if (trace)
 				log.trace("Invoking listener interface methods");
 			try {
-				if (isSecurityEnabled) {
-					AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-						public Object run() throws Exception {
-							((OsgiServiceLifecycleListener) target).unbind(service, properties);
-							return null;
-						}
-					}, acc);
-				} else {
-					((OsgiServiceLifecycleListener) target).unbind(service, properties);
-				}
+				((OsgiServiceLifecycleListener) target).unbind(service, properties);
 			} catch (Exception ex) {
 				log.warn("Standard unbind method on [" + target.getClass().getName() + "] threw exception", ex);
 			}
 		}
 
-		if (isSecurityEnabled) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					CustomListenerAdapterUtils.invokeCustomMethods(target, unbindMethods, service, properties);
-					invokeCustomServiceReferenceMethod(target, unbindReference, service);
-					return null;
-				}
-			}, acc);
-		} else {
-			CustomListenerAdapterUtils.invokeCustomMethods(target, unbindMethods, service, properties);
-			invokeCustomServiceReferenceMethod(target, unbindReference, service);
-		}
+		CustomListenerAdapterUtils.invokeCustomMethods(target, unbindMethods, service, properties);
+		invokeCustomServiceReferenceMethod(target, unbindReference, service);
 	}
 
 	/**

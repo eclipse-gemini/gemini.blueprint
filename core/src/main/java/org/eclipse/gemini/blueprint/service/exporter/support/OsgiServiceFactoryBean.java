@@ -20,7 +20,6 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.eclipse.gemini.blueprint.context.support.internal.classloader.ClassLoaderFactory;
 import org.eclipse.gemini.blueprint.context.support.internal.scope.OsgiBundleScope;
-import org.eclipse.gemini.blueprint.context.support.internal.security.SecurityUtils;
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServicePropertiesResolver;
 import org.eclipse.gemini.blueprint.service.exporter.support.internal.controller.ExporterController;
 import org.eclipse.gemini.blueprint.service.exporter.support.internal.controller.ExporterInternalActions;
@@ -43,9 +42,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -360,17 +356,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 		if (isBeanBundleScoped())
 			serviceFactory = new OsgiBundleScope.BundleScopeServiceFactory(serviceFactory);
 
-		if (System.getSecurityManager() != null) {
-			AccessControlContext acc = SecurityUtils.getAccFrom(beanFactory);
-			final ServiceFactory serviceFactoryFinal = serviceFactory;
-			return AccessController.doPrivileged(new PrivilegedAction<ServiceRegistration>() {
-				public ServiceRegistration run() {
-					return bundleContext.registerService(names, serviceFactoryFinal, serviceProperties);
-				}
-			}, acc);
-		} else {
-			return bundleContext.registerService(names, serviceFactory, serviceProperties);
-		}
+		return bundleContext.registerService(names, serviceFactory, serviceProperties);
 	}
 
 	private boolean isBeanBundleScoped() {

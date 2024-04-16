@@ -5,7 +5,7 @@
     <parent>
         <artifactId>gemini-blueprint</artifactId>
         <groupId>org.eclipse.gemini.blueprint</groupId>
-        <version>4.0.0.BUILD-SNAPSHOT</version>
+        <version>6.0.0.BUILD-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -45,8 +45,8 @@
 
         <dependency>
             <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-all</artifactId>
-            <version>5.2</version>
+            <artifactId>asm</artifactId>
+            <version>9.7</version>
         </dependency>
 
         <dependency>
@@ -113,6 +113,7 @@
                                 <value>${osgi.test.platform}</value>
                             </property>
                         </systemProperties>
+                        <argLine>--add-opens=java.base/java.net=ALL-UNNAMED</argLine>
                     </configuration>
                 </plugin>
             </plugins>
@@ -135,7 +136,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
+                <version>3.5.2</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
