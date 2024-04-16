@@ -30,7 +30,7 @@ class ReflectionOsgiHolder extends OsgiTestInfoHolder {
 
 	private final Object instance;
 
-	private final Method GET_TEST_BUNDLE_ID, GET_TEST_CLASS_NAME, GET_TEST_METHOD_NAME, ADD_TEST_ERROR,
+	private final Method SET_TEST_BUNDLE_ID, GET_TEST_BUNDLE_ID, GET_TEST_CLASS_NAME, GET_TEST_METHOD_NAME, ADD_TEST_ERROR,
 			ADD_TEST_FAILURE;
 
 
@@ -45,6 +45,7 @@ class ReflectionOsgiHolder extends OsgiTestInfoHolder {
 		Assert.notNull(twinInstance);
 		this.instance = twinInstance;
 		Class<?> clazz = instance.getClass();
+		SET_TEST_BUNDLE_ID = ReflectionUtils.findMethod(clazz, "setTestBundleId", Long.class);
 		GET_TEST_BUNDLE_ID = ReflectionUtils.findMethod(clazz, "getTestBundleId");
 		GET_TEST_CLASS_NAME = ReflectionUtils.findMethod(clazz, "getTestClassName");
 		GET_TEST_METHOD_NAME = ReflectionUtils.findMethod(clazz, "getTestMethodName");
@@ -52,6 +53,10 @@ class ReflectionOsgiHolder extends OsgiTestInfoHolder {
 		ADD_TEST_ERROR = ReflectionUtils.findMethod(clazz, "addTestError", Throwable.class);
 		ADD_TEST_FAILURE = ReflectionUtils.findMethod(clazz, "addTestFailure", Throwable.class);
 
+	}
+
+	public void setTestBundleId(Long testBundleId) {
+		ReflectionUtils.invokeMethod(SET_TEST_BUNDLE_ID, instance, testBundleId);
 	}
 
 	public Long getTestBundleId() {
