@@ -21,17 +21,15 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Version;
 
-import static java.lang.Thread.yield;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.*;
 
 /**
@@ -96,7 +94,7 @@ public class LifecycleManagerTest {
         withFailingApplicationContextClose();
 
         shutdownContext();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();
@@ -130,7 +128,7 @@ public class LifecycleManagerTest {
         addContextToLifecycleManager();
 
         destroy();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();
@@ -143,13 +141,14 @@ public class LifecycleManagerTest {
     }
 
     private void verifyContextCreationIsNotAttempted() throws Exception {
-        verify(this.contextCreator, never()).createApplicationContext(Matchers.<BundleContext>any());
+        verify(this.contextCreator, never()).createApplicationContext(Mockito.<BundleContext>any());
     }
 
     private Bundle createBundleWithoutBundleContext() {
         Bundle bundle = mock(Bundle.class);
-        Version version = new Version(1, 0, 0);
-        doReturn(version).when(bundle).getVersion();
+        // Seems 'bundle.getVersion()' is not called and Mock complains about that!
+        //Version version = new Version(1, 0, 0);
+        //doReturn(version).when(bundle).getVersion();
         return bundle;
     }
 

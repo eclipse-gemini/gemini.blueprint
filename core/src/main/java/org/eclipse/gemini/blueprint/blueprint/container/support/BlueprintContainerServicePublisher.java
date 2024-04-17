@@ -14,15 +14,11 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container.support;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.gemini.blueprint.context.support.internal.security.SecurityUtils;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
 import org.osgi.framework.Bundle;
@@ -100,18 +96,8 @@ public class BlueprintContainerServicePublisher implements ApplicationListener<A
 		if (log.isDebugEnabled())
 			log.debug("Publishing service under classes " + ObjectUtils.nullSafeToString(serviceNames));
 
-		AccessControlContext acc = SecurityUtils.getAccFrom(applicationContext);
-
 		// publish service
-		if (System.getSecurityManager() != null) {
-			registration = AccessController.doPrivileged(new PrivilegedAction<ServiceRegistration>() {
-				public ServiceRegistration run() {
-					return bundleContext.registerService(serviceNames, blueprintContainer, serviceProperties);
-				}
-			}, acc);
-		} else {
-			registration = bundleContext.registerService(serviceNames, blueprintContainer, serviceProperties);
-		}
+		registration = bundleContext.registerService(serviceNames, blueprintContainer, serviceProperties);
 	}
 
 	private void unregisterService() {

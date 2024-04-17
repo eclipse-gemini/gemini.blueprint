@@ -15,8 +15,6 @@
 package org.eclipse.gemini.blueprint.util.internal;
 
 import java.lang.reflect.Modifier;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -145,22 +143,10 @@ public abstract class ClassUtils {
 
 		final ClassLoader classLoader = getFwkClassLoader();
 
-		if (System.getSecurityManager() != null) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					addNonOsgiClassLoader(classLoader, lookupList, lookupMap);
-					// get the system class loader
-					ClassLoader sysLoader = ClassLoader.getSystemClassLoader();
-					addNonOsgiClassLoader(sysLoader, lookupList, lookupMap);
-					return null;
-				}
-			});
-		} else {
-			addNonOsgiClassLoader(classLoader, lookupList, lookupMap);
-			// get the system class loader
-			ClassLoader sysLoader = ClassLoader.getSystemClassLoader();
-			addNonOsgiClassLoader(sysLoader, lookupList, lookupMap);
-		}
+		addNonOsgiClassLoader(classLoader, lookupList, lookupMap);
+		// get the system class loader
+		ClassLoader sysLoader = ClassLoader.getSystemClassLoader();
+		addNonOsgiClassLoader(sysLoader, lookupList, lookupMap);
 
 		// wrap the fields as read-only collections
 		knownNonOsgiLoaders = Collections.unmodifiableList(lookupList);
@@ -169,15 +155,7 @@ public abstract class ClassUtils {
 	}
 
 	public static ClassLoader getFwkClassLoader() {
-		if (System.getSecurityManager() != null) {
-			return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-				public ClassLoader run() {
-					return Bundle.class.getClassLoader();
-				}
-			});
-		} else {
-			return Bundle.class.getClassLoader();
-		}
+		return Bundle.class.getClassLoader();
 	}
 
 	/**
@@ -614,19 +592,10 @@ public abstract class ClassUtils {
 	 * @return a 'particular' (non JDK/OSGi) class if one is found. Else the first available entry is returned.
 	 */
 	public static Class<?> getParticularClass(Class<?>[] classes) {
-		boolean hasSecurity = (System.getSecurityManager() != null);
 		for (int i = 0; i < classes.length; i++) {
 			final Class<?> clazz = classes[i];
 			ClassLoader loader = null;
-			if (hasSecurity) {
-				loader = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-					public ClassLoader run() {
-						return clazz.getClassLoader();
-					}
-				});
-			} else {
-				loader = clazz.getClassLoader();
-			}
+			loader = clazz.getClassLoader();
 			// quick boot/system check
 			if (loader != null) {
 				// consider known loaders

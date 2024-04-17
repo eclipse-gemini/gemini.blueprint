@@ -38,7 +38,9 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
@@ -166,6 +168,11 @@ public class MockBundleContext implements BundleContext {
         }
     }
 
+    @Override
+    public <S> ServiceObjects<S> getServiceObjects(ServiceReference<S> reference) {
+        return null;
+    }
+
     private static Class<?> getClass(Type type) {
         if (type instanceof Class) {
           return (Class) type;
@@ -277,6 +284,13 @@ public class MockBundleContext implements BundleContext {
     public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String, ?> properties) {
         @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"})
         ServiceRegistration<S> registration = (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
+        return registration;
+    }
+
+    @Override
+    public <S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory, Dictionary<String, ?> properties) {
+        @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"})
+        ServiceRegistration<S> registration = (ServiceRegistration<S>) registerService(clazz.getName(), factory, properties);
         return registration;
     }
 

@@ -354,7 +354,7 @@ public class DependencyVisitor extends ClassVisitor {
 	};
 
 	public DependencyVisitor() {
-		super(Opcodes.ASM5);
+		super(Opcodes.ASM7);
 	}
 
 	private AnnotationVisitor visitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start, Label[] end, int[] index, String desc, boolean visible) {

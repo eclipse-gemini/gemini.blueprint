@@ -6,7 +6,7 @@ Private-Package: \
  org.eclipse.gemini.blueprint.test.*, \
  org.objectweb.*
 
-Import-Package: \
+Import-Package: !java.*, \
  !org.eclipse.gemini.blueprint.extender.internal.*, \
  !org.eclipse.gemini.blueprint.extender.support.internal.*, \
  org.osgi.framework;version=1.3, \

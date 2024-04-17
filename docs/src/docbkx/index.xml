@@ -98,7 +98,6 @@
   <part id="appendixes">
       <title>Appendixes</title>
       <xi:include href="appendix/introduction.xml"/>
-      <xi:include href="appendix/appendix-security.xml"/>
       <xi:include href="appendix/appendix-pde.xml"/>
       <xi:include href="appendix/appendix-tips.xml"/>
       <xi:include href="appendix/appendix-roadmap.xml"/>

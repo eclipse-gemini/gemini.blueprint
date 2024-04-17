@@ -25,15 +25,17 @@ import org.osgi.framework.BundleContext;
 public abstract class CommonPlatformTest extends TestCase {
 
 	private AbstractOsgiPlatform platform;
-
+	private String systemPackages = "";
 
 	protected void setUp() throws Exception {
+		systemPackages = System.getProperty("org.osgi.framework.system.packages", "");
 		platform = createPlatform();
 	}
 
 	protected void tearDown() throws Exception {
 		platform.stop();
 		platform = null;
+		System.setProperty("org.osgi.framework.system.packages", systemPackages);
 	}
 
 	abstract AbstractOsgiPlatform createPlatform();

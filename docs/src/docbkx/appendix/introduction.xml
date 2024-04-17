@@ -10,11 +10,6 @@
       backward-compatible form in future point releases. We anticipate these
       features moving into the core specification over time.</para>
       -->
-      <para><xref linkend="appendix-security"/> provides information on how to run Gemini Blueprint 
-      in an OSGi environment with a <classname>SecurityManager</classname> enabled 
-      (Java 2 Security activated).
-      </para>
-
       <para><xref linkend="appendix-pde-integration"/> describes how to integrate Gemini Blueprint
       with Eclipse Plug-in Development Environment.</para>
       

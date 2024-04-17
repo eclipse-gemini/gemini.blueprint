@@ -15,8 +15,6 @@
 package org.eclipse.gemini.blueprint.test.platform;
 
 import java.lang.reflect.Field;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.adaptor.EclipseStarter;
@@ -71,13 +69,7 @@ public class EquinoxPlatform extends AbstractOsgiPlatform {
 //			EclipseStarter.main(new String[0]);
 
 //			final Field field = EclipseStarter.class.getDeclaredField("context");
-
-//			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-//				public Object run() {
-//					field.setAccessible(true);
-//					return null;
-//				}
-//			});
+//			field.setAccessible(true);
 //			context = (BundleContext) field.get(null);
             context = EclipseStarter.startup(new String[0], null);
 		}
