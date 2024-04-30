@@ -14,29 +14,31 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.eclipse.gemini.blueprint.blueprint.CollectionTestComponent;
 import org.eclipse.gemini.blueprint.blueprint.MyCustomDictionary;
 import org.eclipse.gemini.blueprint.blueprint.MyCustomList;
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintConverterService;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.eclipse.gemini.blueprint.context.support.PublicBlueprintDocumentLoader;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 
 /**
  * @author Costin Leau
  */
-public class TestBlueprintBuiltinConvertersTest extends TestCase {
+public class TestBlueprintBuiltinConvertersTest {
 
 	private static final String CONFIG = "builtin-converters.xml";
 
@@ -45,7 +47,8 @@ public class TestBlueprintBuiltinConvertersTest extends TestCase {
 	protected MockBundleContext bundleContext;
 	private BlueprintContainer blueprintContainer;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 
 		context = new GenericApplicationContext();
@@ -62,15 +65,18 @@ public class TestBlueprintBuiltinConvertersTest extends TestCase {
 		blueprintContainer = new SpringBlueprintContainer(context);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testConvertersAvailable() throws Exception {
 		System.out.println(blueprintContainer.getComponentIds());
 	}
 
+	@Test
 	public void testCollection() throws Exception {
 		CollectionTestComponent cpn = context.getBean("arrayToCollection", CollectionTestComponent.class);
 		Object value = cpn.getPropertyValue();
@@ -80,6 +86,7 @@ public class TestBlueprintBuiltinConvertersTest extends TestCase {
 		assertEquals(3, col.size());
 	}
 
+	@Test
 	public void testSetToCollection() throws Exception {
 		CollectionTestComponent cpn = context.getBean("setToCollection", CollectionTestComponent.class);
 		Object value = cpn.getPropertyValue();
@@ -89,6 +96,7 @@ public class TestBlueprintBuiltinConvertersTest extends TestCase {
 		assertEquals(2, col.size());
 	}
 
+	@Test
 	public void testCustomCollection() throws Exception {
 		CollectionTestComponent cpn = context.getBean("customCollection", CollectionTestComponent.class);
 		Object value = cpn.getPropertyValue();

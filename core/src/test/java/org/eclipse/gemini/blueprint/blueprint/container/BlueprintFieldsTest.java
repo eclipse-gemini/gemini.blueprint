@@ -14,9 +14,12 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.beans.PropertyDescriptor;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
 import org.springframework.beans.BeanWrapper;
@@ -26,8 +29,8 @@ import org.springframework.beans.PropertyAccessorFactory;
  * 
  * @author Costin Leau
  */
-public class BlueprintFieldsTest extends TestCase {
-
+public class BlueprintFieldsTest {
+	@Test
 	public void testUseBlueprintExceptions() throws Exception {
 		OsgiServiceProxyFactoryBean fb = new OsgiServiceProxyFactoryBean();
 		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(fb);

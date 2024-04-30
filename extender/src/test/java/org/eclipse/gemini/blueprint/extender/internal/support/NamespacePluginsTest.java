@@ -14,9 +14,14 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.extender.internal.support.NamespacePlugins;
 import org.eclipse.gemini.blueprint.mock.MockBundle;
@@ -30,21 +35,22 @@ import org.xml.sax.SAXException;
  * 
  * @author Adrian Colyer
  */
-public class NamespacePluginsTest extends TestCase {
+public class NamespacePluginsTest {
 
 	private NamespacePlugins namespacePlugins;
 
-
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
 		this.namespacePlugins = new NamespacePlugins();
 	}
 
+	@Test
 	public void testCantResolveWithNoPlugins() throws IOException, SAXException {
 		assertNull("Should be unable to resolve namespace", this.namespacePlugins.resolve("http://org.xyz"));
 		assertNull("Should be unable to resolve entity", this.namespacePlugins.resolveEntity("pub-id", "sys-id"));
 	}
 
+	@Test
 	public void testCanResolveNamespaceFromBundleAfterAddingPlugin() throws IOException, SAXException {
 		Bundle b = new MockBundle();
 		this.namespacePlugins.addPlugin(b, false, true);
@@ -53,6 +59,7 @@ public class NamespacePluginsTest extends TestCase {
 		assertTrue("should be TestHandler", handler instanceof TestHandler);
 	}
 
+	@Test
 	public void testCantResolveNamespaceAfterRemovingPlugin() throws IOException, SAXException {
 		Bundle b = new MockBundle();
 		this.namespacePlugins.addPlugin(b, false, true);
@@ -61,6 +68,7 @@ public class NamespacePluginsTest extends TestCase {
 			this.namespacePlugins.resolve("http://www.springframework.org/schema/testme"));
 	}
 
+	@Test
 	public void testCanResolveEntityAfterAddingPlugin() throws IOException, SAXException {
 		Bundle b = new MockBundle();
 		this.namespacePlugins.addPlugin(b, false, true);
@@ -69,6 +77,7 @@ public class NamespacePluginsTest extends TestCase {
 		assertNotNull("Should find resolver", resolver);
 	}
 
+	@Test
 	public void testCantResolveEntityAfterRemovingPlugin() throws IOException, SAXException {
 		Bundle b = new MockBundle();
 		this.namespacePlugins.addPlugin(b, false, true);

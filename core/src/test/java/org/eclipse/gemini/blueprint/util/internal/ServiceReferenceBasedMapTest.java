@@ -14,30 +14,38 @@
 
 package org.eclipse.gemini.blueprint.util.internal;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.osgi.framework.ServiceReference;
 
-public class ServiceReferenceBasedMapTest extends TestCase {
+public class ServiceReferenceBasedMapTest {
 
 	private ServiceReference reference;
 	private Map map;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		reference = new MockServiceReference();
 		createMap();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		reference = null;
 		map = null;
 	}
@@ -46,6 +54,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		map = new ServiceReferenceBasedMap(reference);
 	}
 
+	@Test
 	public void testClear() {
 		try {
 			map.clear();
@@ -55,6 +64,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testContainsKeyObject() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
@@ -63,6 +73,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		assertTrue(map.containsKey("joe"));
 	}
 
+	@Test
 	public void testContainsValueObject() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
@@ -71,6 +82,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		assertTrue(map.containsValue("satriani"));
 	}
 
+	@Test
 	public void testEntrySet() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
@@ -86,6 +98,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testGetObject() {
 		Properties prop = new Properties();
 		prop.setProperty("joe", "satriani");
@@ -94,6 +107,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		assertEquals("satriani", map.get("joe"));
 	}
 
+	@Test
 	public void testPutObjectObject() {
 		try {
 			map.put(new Object(), new Object());
@@ -103,6 +117,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testPutAllMap() {
 		try {
 			map.putAll(new HashMap());
@@ -112,6 +127,7 @@ public class ServiceReferenceBasedMapTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testRemoveObject() {
 		try {
 			map.remove(new Object());

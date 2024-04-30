@@ -14,9 +14,13 @@
 
 package org.eclipse.gemini.blueprint.config;
 
+import static org.junit.Assert.fail;
+
 import java.io.Serializable;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.osgi.framework.BundleContext;
@@ -29,11 +33,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
-public class InvalidOsgiDefaultsTest extends TestCase {
+public class InvalidOsgiDefaultsTest {
 
 	private GenericApplicationContext appContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		BundleContext bundleContext = new MockBundleContext() {
 			// service reference already registered
 			public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
@@ -47,11 +52,13 @@ public class InvalidOsgiDefaultsTest extends TestCase {
 
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 		appContext = null;
 	}
 
+	@Test
 	public void testInvalidDefaultsCheck() throws Exception {
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(appContext);
 		

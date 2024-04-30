@@ -14,11 +14,19 @@
 
 package org.eclipse.gemini.blueprint.context.internal.classloader;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.context.support.internal.classloader.ChainedClassLoader;
@@ -27,13 +35,13 @@ import org.osgi.framework.Bundle;
 /**
  * @author Costin Leau
  */
-public class ChainedClassLoaderTest extends TestCase {
+public class ChainedClassLoaderTest {
 
 	private ChainedClassLoader chainedLoader;
 	private ClassLoader emptyCL;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		emptyCL = new URLClassLoader(new URL[0], null) {
 
 			public Class<?> loadClass(String name) throws ClassNotFoundException {
@@ -48,11 +56,13 @@ public class ChainedClassLoaderTest extends TestCase {
 		chainedLoader = new ChainedClassLoader(new ClassLoader[] { emptyCL }, emptyCL);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		chainedLoader = null;
 		emptyCL = null;
 	}
 
+	@Test
 	public void testChainedClassLoaderClassLoaderArray() throws Exception {
 		String className = "java.lang.Object";
 		try {
@@ -67,6 +77,7 @@ public class ChainedClassLoaderTest extends TestCase {
 		chainedLoader.loadClass(className);
 	}
 
+	@Test
 	public void testParentClassLoader() throws Exception {
 		chainedLoader = new ChainedClassLoader(new ClassLoader[] { emptyCL });
 		ClassLoader parent = chainedLoader.getParent();
@@ -75,6 +86,7 @@ public class ChainedClassLoaderTest extends TestCase {
 		assertTrue("does the test run on a SUN VM or is it embedded?", parent.getClass().getName().indexOf("App") >= 0);
 	}
 
+	@Test
 	public void testChainedClassLoaderClassLoaderArrayClassLoader() throws Exception {
 		String className = "java.lang.Object";
 
@@ -95,22 +107,26 @@ public class ChainedClassLoaderTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testGetResourceString() throws Exception {
 		assertNull(chainedLoader.getResource("java/lang/Object.class"));
 		chainedLoader.addClassLoader(Object.class);
 		assertNotNull(chainedLoader.getResource("java/lang/Object.class"));
 	}
 
+	@Test
 	public void testAddClassLoaderClass() throws Exception {
 		chainedLoader.addClassLoader(Object.class);
 		chainedLoader.loadClass("java.lang.Object");
 	}
 
+	@Test
 	public void testAddClassLoaderClassLoader() throws Exception {
 		chainedLoader.addClassLoader(Bundle.class.getClassLoader());
 		chainedLoader.loadClass("org.osgi.framework.Bundle");
 	}
 
+	@Test
 	public void testNonOSGiClassLoaderInsertOrder() throws Exception {
 		ClassLoader appLoader = ClassLoader.getSystemClassLoader();
 		ClassLoader extLoader = appLoader.getParent();

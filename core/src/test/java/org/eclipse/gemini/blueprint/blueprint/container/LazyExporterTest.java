@@ -14,7 +14,9 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintEditorRegistrar;
@@ -32,7 +34,7 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 /**
  * @author Costin Leau
  */
-public class LazyExporterTest extends TestCase {
+public class LazyExporterTest {
 
 	private static final String CONFIG = "lazy-exporter.xml";
 
@@ -41,7 +43,8 @@ public class LazyExporterTest extends TestCase {
 	protected MockBundleContext bundleContext;
 	private BlueprintContainer blueprintContainer;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 
 		context = new GenericApplicationContext();
@@ -62,11 +65,13 @@ public class LazyExporterTest extends TestCase {
 		blueprintContainer = new SpringBlueprintContainer(context);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testLazyExporter() throws Exception {
 		System.out.println(blueprintContainer.getComponentIds());
 	}

@@ -14,12 +14,20 @@
 
 package org.eclipse.gemini.blueprint.mock;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
@@ -30,12 +38,12 @@ import org.osgi.framework.Constants;
  * @author Costin Leau
  * 
  */
-public class MockServiceReferenceTest extends TestCase {
+public class MockServiceReferenceTest {
 
 	MockServiceReference mock;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		mock = new MockServiceReference();
 	}
 
@@ -43,6 +51,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#MockServiceReference()}.
 	 */
+	@Test
 	public void testMockServiceReference() {
 		assertNotNull(mock.getBundle());
 		assertNotNull(mock.getPropertyKeys());
@@ -52,6 +61,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#MockServiceReference(org.osgi.framework.Bundle)}.
 	 */
+	@Test
 	public void testMockServiceReferenceBundle() {
 		Bundle bundle = new MockBundle();
 		mock = new MockServiceReference(bundle);
@@ -65,6 +75,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#MockServiceReference(org.osgi.framework.Bundle, java.util.Hashtable, org.osgi.framework.ServiceRegistration)}.
 	 */
+	@Test
 	public void testMockServiceReferenceBundleHashtable() {
 		mock = new MockServiceReference(null, null, null);
 		assertNotNull(mock.getBundle());
@@ -75,6 +86,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#getBundle()}.
 	 */
+	@Test
 	public void testGetBundle() {
 		assertNotNull(mock.getBundle());
 	}
@@ -83,6 +95,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#getProperty(java.lang.String)}.
 	 */
+	@Test
 	public void testGetProperty() {
 		assertNull(mock.getProperty("foo"));
 	}
@@ -91,6 +104,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#getPropertyKeys()}.
 	 */
+	@Test
 	public void testGetPropertyKeys() {
 		assertNotNull(mock.getPropertyKeys());
 	}
@@ -99,6 +113,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#getUsingBundles()}.
 	 */
+	@Test
 	public void testGetUsingBundles() {
 		assertNotNull(mock.getUsingBundles());
 	}
@@ -107,6 +122,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#isAssignableTo(org.osgi.framework.Bundle, java.lang.String)}.
 	 */
+	@Test
 	public void testIsAssignableTo() {
 		assertFalse(mock.isAssignableTo(new MockBundle(), "foo"));
 	}
@@ -115,6 +131,7 @@ public class MockServiceReferenceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceReference#setProperties(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testSetProperties() {
 		Dictionary props = new Hashtable();
 		String key = "foo";
@@ -126,6 +143,7 @@ public class MockServiceReferenceTest extends TestCase {
 		assertSame(value, mock.getProperty(key));
 	}
 
+	@Test
 	public void testMandatoryProperties() {
 		Object serviceId = mock.getProperty(Constants.SERVICE_ID);
 		assertNotNull(serviceId);
@@ -135,6 +153,7 @@ public class MockServiceReferenceTest extends TestCase {
 		assertTrue(objectClass instanceof String[]);
 	}
 
+	@Test
 	public void testMandatoryPropertiesDontChange() {
 		Object serviceId = mock.getProperty(Constants.SERVICE_ID);
 		Object objectClass = mock.getProperty(Constants.OBJECTCLASS);
@@ -152,6 +171,7 @@ public class MockServiceReferenceTest extends TestCase {
 		assertSame(objectClass, mock.getProperty(Constants.OBJECTCLASS));
 	}
 
+	@Test
 	public void testCompareReferencesWithTheSameId() throws Exception {
 		MockServiceReference refA = createReference(new Long(1), null);
 		MockServiceReference refB = createReference(new Long(1), null);
@@ -161,6 +181,7 @@ public class MockServiceReferenceTest extends TestCase {
 		assertEquals(0, refB.compareTo(refA));
 	}
 
+	@Test
 	public void testServiceRefsWithDifferentIdAndNoRanking() throws Exception {
 		MockServiceReference refA = createReference(new Long(1), null);
 		MockServiceReference refB = createReference(new Long(2), null);
@@ -171,18 +192,20 @@ public class MockServiceReferenceTest extends TestCase {
 		assertTrue(refB.compareTo(refA) < 0);
 	}
 
+	@Test
 	public void testServiceRefsWithDifferentIdAndDifferentRanking() throws Exception {
-		MockServiceReference refA = createReference(new Long(1), new Integer(0));
-		MockServiceReference refB = createReference(new Long(2), new Integer(1));
+		MockServiceReference refA = createReference(new Long(1), Integer.valueOf(0));
+		MockServiceReference refB = createReference(new Long(2), Integer.valueOf(1));
 
 		// refB is higher then refA (due to ranking)
 		assertTrue(refA.compareTo(refB) < 0);
 		assertTrue(refB.compareTo(refA) > 0);
 	}
 
+	@Test
 	public void testServiceRefsWithSameRankAndDifId() throws Exception {
-		MockServiceReference refA = createReference(new Long(1), new Integer(5));
-		MockServiceReference refB = createReference(new Long(2), new Integer(5));
+		MockServiceReference refA = createReference(new Long(1), Integer.valueOf(5));
+		MockServiceReference refB = createReference(new Long(2), Integer.valueOf(5));
 
 		// same ranking, means id equality applies
 		assertTrue(refA.compareTo(refB) > 0);

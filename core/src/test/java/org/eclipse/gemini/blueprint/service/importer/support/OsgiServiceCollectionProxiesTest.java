@@ -14,11 +14,19 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.ServiceReferenceProxy;
@@ -38,7 +46,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceCollectionProxiesTest extends TestCase {
+public class OsgiServiceCollectionProxiesTest {
 
 	private OsgiServiceCollection col;
 
@@ -48,7 +56,8 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 
 	private ServiceProxyCreator proxyCreator;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		services = new LinkedHashMap();
 
 		BundleContext ctx = new MockBundleContext() {
@@ -70,10 +79,12 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 						ImportContextClassLoaderEnum.UNMANAGED, false, false);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		col = null;
 	}
 
+	@Test
 	public void testHashCodeBetweenProxyAndTarget() {
 		Date date = new Date(123);
 
@@ -86,6 +97,7 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 
 	}
 
+	@Test
 	public void testHashCodeBetweenProxies() {
 		Date date = new Date(123);
 
@@ -97,6 +109,7 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 		assertEquals("proxies for the same service should have the same hashcode", proxy.hashCode(), proxy2.hashCode());
 	}
 
+	@Test
 	public void testEqualsBetweenProxyAndTarget() {
 		Date date = new Date(123);
 
@@ -108,6 +121,7 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 		assertFalse("proxy and service should not be equal", date.equals(proxy));
 	}
 
+	@Test
 	public void testEqualsBetweenProxies() {
 		Date date = new Date(123);
 
@@ -119,6 +133,7 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 		assertEquals("proxies for the same target should be equal", proxy, proxy2);
 	}
 
+	@Test
 	public void testHashCodeBetweenProxyAndItself() {
 		Date date = new Date(123);
 
@@ -130,6 +145,7 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 		assertEquals("proxy should consistent hashcode", proxy.hashCode(), proxy.hashCode());
 	}
 
+	@Test
 	public void testEqualsBetweenProxyAndItself() {
 		Date date = new Date(123);
 
@@ -140,6 +156,7 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 		assertEquals("proxy should be equal to itself", proxy, proxy);
 	}
 
+	@Test
 	public void testServiceReferenceProxy() throws Exception {
 		Date date = new Date(123);
 		ServiceReference ref = new MockServiceReference(classInterfaces);
@@ -152,6 +169,7 @@ public class OsgiServiceCollectionProxiesTest extends TestCase {
 		assertSame(ref, referenceProxy.getTargetServiceReference());
 	}
 
+	@Test
 	public void testServiceReferenceProxyEquality() throws Exception {
 
 		Date date = new Date(123);

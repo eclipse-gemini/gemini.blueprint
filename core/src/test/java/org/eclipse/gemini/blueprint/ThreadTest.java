@@ -14,9 +14,11 @@
 
 package org.eclipse.gemini.blueprint;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
 
-public class ThreadTest extends TestCase {
+import org.junit.Test;
+
+public class ThreadTest {
 
 	public static class TestThread implements Runnable {
 		private int counter;
@@ -31,6 +33,7 @@ public class ThreadTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testThreadInterrupt() throws Exception {
 		Thread th = new Thread(new TestThread());
 		th.start();

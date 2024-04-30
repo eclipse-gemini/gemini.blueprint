@@ -17,9 +17,13 @@ package org.eclipse.gemini.blueprint.service;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertTrue;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.springframework.aop.framework.ProxyFactory;
@@ -31,11 +35,11 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * @since 2.0
  */
-public class OsgiServiceUtilsTest extends TestCase {
+public class OsgiServiceUtilsTest {
 	private BundleContext bundleContext;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
 		this.bundleContext = createMock(BundleContext.class);
 	}
 
@@ -139,6 +143,7 @@ public class OsgiServiceUtilsTest extends TestCase {
 		return createNiceMock(ServiceReference.class);
 	}
 
+	@Test
 	public void testSimpleClassDetermination() throws Exception {
 		Class<?>[] classes = new Class<?>[] { Object.class, Serializable.class, Cloneable.class };
 		Class<?>[] expected = new Class<?>[] { Serializable.class, Cloneable.class };
@@ -147,6 +152,7 @@ public class OsgiServiceUtilsTest extends TestCase {
 		assertTrue(Arrays.equals(expected, clazz));
 	}
 
+	@Test
 	public void testIntefacesAlreadyContainedInTheSpecifiedClass() throws Exception {
 		Class<?>[] classes = new Class<?>[] { Serializable.class, Number.class, Comparable.class, Object.class };
 		Class<?>[] expected = new Class<?>[] { Number.class, Comparable.class };
@@ -154,6 +160,7 @@ public class OsgiServiceUtilsTest extends TestCase {
 		assertTrue(Arrays.equals(expected, clazz));
 	}
 
+	@Test
 	public void testMultipleClassesAndInterfaces() throws Exception {
 		Class<?>[] classes = new Class<?>[] { Serializable.class, Number.class, Comparable.class, Object.class, Long.class,
 				Integer.class };
@@ -162,7 +169,9 @@ public class OsgiServiceUtilsTest extends TestCase {
 		assertTrue(Arrays.equals(expected, clazz));
 	}
 
-	public void tstProxyCreation() throws Exception {
+	@Test
+	@Ignore
+	public void testProxyCreation() throws Exception {
 		ProxyFactory pf = new ProxyFactory();
 		pf.setInterfaces(new Class<?>[] { Serializable.class, Comparable.class });
 		//pf.setTargetClass(Number.class);

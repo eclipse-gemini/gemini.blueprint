@@ -17,7 +17,9 @@ package org.eclipse.gemini.blueprint.compendium.config;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
 
@@ -34,12 +36,12 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 /**
  * @author Costin Leau
  */
-public class CmConfigAndCtxPropertiesConfigurationTest extends TestCase {
+public class CmConfigAndCtxPropertiesConfigurationTest {
 
     private ConfigurationAdmin admin;
 
-
-    protected void setUp() throws Exception {
+    @Before
+    public void setup() throws Exception {
         admin = createMock(ConfigurationAdmin.class);
         Configuration cfg = createMock(Configuration.class);
 
@@ -67,10 +69,12 @@ public class CmConfigAndCtxPropertiesConfigurationTest extends TestCase {
         appContext.refresh();
     }
 
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         verify(admin);
     }
 
+    @Test
     public void testValidateConfiguration() throws Exception {
 
     }

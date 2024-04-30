@@ -14,7 +14,14 @@
 
 package org.eclipse.gemini.blueprint.context;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.gemini.blueprint.context.support.internal.scope.OsgiBundleScope;
 import org.springframework.beans.BeansException;
@@ -26,32 +33,27 @@ import org.springframework.beans.factory.ObjectFactory;
  * @author Costin Leau
  * 
  */
-public class OsgiBundleScopeTest extends TestCase {
+public class OsgiBundleScopeTest {
 
 	ObjectFactory objFactory;
 
 	OsgiBundleScope scope;
 
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		scope = new OsgiBundleScope();
 		OsgiBundleScope.EXTERNAL_BUNDLE.set(null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		objFactory = null;
 		scope.destroy();
 		scope = null;
 	}
 
+	@Test
 	public void testLocalBeans() {
 		ObjectFactory factory = new ObjectFactory() {
 
@@ -71,12 +73,14 @@ public class OsgiBundleScopeTest extends TestCase {
 		assertSame("instance not cached", bar, bar2);
 	}
 
+	@Test
 	public void testIsExternalBundleCalling() {
 		assertFalse(OsgiBundleScope.EXTERNAL_BUNDLE.get() != null);
 		OsgiBundleScope.EXTERNAL_BUNDLE.set(new Object());
 		assertTrue(OsgiBundleScope.EXTERNAL_BUNDLE.get() != null);
 	}
 
+	@Test
 	public void testLocalDestructionCallback() {
 
 		final Object[] callbackCalls = new Object[1];
@@ -92,6 +96,7 @@ public class OsgiBundleScopeTest extends TestCase {
 		assertSame(Boolean.TRUE, callbackCalls[0]);
 	}
 
+	@Test
 	public void testDestructionCallbackPassedAround() {
 		OsgiBundleScope.EXTERNAL_BUNDLE.set(new Object());
 

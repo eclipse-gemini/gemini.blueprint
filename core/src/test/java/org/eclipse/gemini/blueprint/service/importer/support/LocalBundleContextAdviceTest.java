@@ -14,17 +14,20 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
 import java.lang.reflect.Method;
 
-import junit.framework.TestCase;
-
 import org.eclipse.gemini.blueprint.internal.service.interceptor.MockMethodInvocation;
-import org.eclipse.gemini.blueprint.service.importer.support.LocalBundleContext;
-import org.osgi.framework.BundleContext;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.osgi.framework.BundleContext;
 import org.springframework.util.ReflectionUtils;
 
-public class LocalBundleContextAdviceTest extends TestCase {
+public class LocalBundleContextAdviceTest {
 
 	private MockMethodInvocation invocation;
 
@@ -32,7 +35,8 @@ public class LocalBundleContextAdviceTest extends TestCase {
 
 	private BundleContext context;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		Method m = ReflectionUtils.findMethod(Object.class, "hashCode");
 		context = new MockBundleContext();
 		interceptor = new LocalBundleContextAdvice(context);
@@ -46,12 +50,14 @@ public class LocalBundleContextAdviceTest extends TestCase {
 
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		invocation = null;
 		interceptor = null;
 		context = null;
 	}
 
+	@Test
 	public void testInvoke() throws Throwable {
 		assertNull(LocalBundleContext.getInvokerBundleContext());
 		interceptor.invoke(invocation);

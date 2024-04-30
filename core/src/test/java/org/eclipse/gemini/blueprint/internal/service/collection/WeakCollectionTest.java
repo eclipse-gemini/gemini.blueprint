@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertNull;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.GCTests;
 
@@ -30,8 +32,8 @@ import org.eclipse.gemini.blueprint.GCTests;
  * @author Costin Leau
  * 
  */
-public class WeakCollectionTest extends TestCase {
-
+public class WeakCollectionTest {
+	@Test
 	public void testWeakList() {
 		List list = new ArrayList();
 
@@ -47,6 +49,7 @@ public class WeakCollectionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testWeakHashMap() {
 		Map weakMap = new WeakHashMap();
 

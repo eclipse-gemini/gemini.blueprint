@@ -14,10 +14,17 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.Iterator;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceCollection;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Mock test for OsgiServiceCollection.
@@ -29,8 +36,9 @@ public class OsgiServiceCollectionTest extends AbstractOsgiCollectionTest {
 
 	private Iterator iter;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
+		super.setup();
 		iter = col.iterator();
 	}
 
@@ -39,12 +47,14 @@ public class OsgiServiceCollectionTest extends AbstractOsgiCollectionTest {
 				Wrapper.class, Comparable.class }), false);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		super.tearDown();
 		col = null;
 		iter = null;
 	}
 
+	@Test
 	public void testAddServiceBySize() throws Exception {
 		assertEquals(0, col.size());
 
@@ -59,6 +69,7 @@ public class OsgiServiceCollectionTest extends AbstractOsgiCollectionTest {
 		assertEquals(2, col.size());
 	}
 
+	@Test
 	public void testAddServiceByIterating() throws Exception {
 		DateWrapper service = new DateWrapper(123);
 		addService(service);
@@ -76,6 +87,7 @@ public class OsgiServiceCollectionTest extends AbstractOsgiCollectionTest {
 		assertFalse(iter.hasNext());
 	}
 
+	@Test
 	public void testRemoveService() {
 		assertEquals(0, col.size());
 
@@ -89,6 +101,7 @@ public class OsgiServiceCollectionTest extends AbstractOsgiCollectionTest {
 
 	}
 
+	@Test
 	public void testRemoveServiceWhileIterating() throws Exception {
 		long time1 = 123;
 		DateWrapper date1 = new DateWrapper(time1);

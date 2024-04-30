@@ -14,7 +14,9 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticasterAdapter;
 import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
 import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
@@ -25,6 +27,10 @@ import org.osgi.framework.BundleContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
@@ -32,13 +38,14 @@ import java.util.List;
 /**
  * @author Costin Leau
  */
-public class ExtenderConfigurationCustomSettingsTest extends TestCase {
+public class ExtenderConfigurationCustomSettingsTest {
 
 	private ExtenderConfiguration config;
 	private BundleContext bundleContext;
 	private Bundle bundle;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundle = new MockBundle() {
 
 			public Enumeration findEntries(String path, String filePattern, boolean recurse) {
@@ -52,53 +59,64 @@ public class ExtenderConfigurationCustomSettingsTest extends TestCase {
         config.start(this.bundleContext);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		config.stop(this.bundleContext);
 		config = null;
 	}
 
+	@Test
 	public void testTaskExecutor() throws Exception {
 		assertTrue(config.getTaskExecutor() instanceof ThreadPoolTaskExecutor);
 		assertEquals("conf-extender-thread", ((ThreadPoolTaskExecutor) config.getTaskExecutor()).getThreadNamePrefix());
 	}
 
+	@Test
 	public void testShutdownTaskExecutor() throws Exception {
 		TaskExecutor executor = config.getShutdownTaskExecutor();
 		assertTrue(executor instanceof ThreadPoolTaskExecutor);
 	}
 
+	@Test
 	public void testEventMulticaster() throws Exception {
 		assertTrue(config.getEventMulticaster() instanceof OsgiBundleApplicationContextEventMulticasterAdapter);
 	}
 
+	@Test
 	public void testApplicationContextCreator() throws Exception {
 		assertTrue(config.getContextCreator() instanceof DummyContextCreator);
 	}
 
+	@Test
 	public void testShutdownWaitTime() throws Exception {
 		// 300 ms
 		assertEquals(300, config.getShutdownWaitTime());
 	}
 
+	@Test
     public void testShutdownAsynchronously() throws Exception {
         assertFalse(config.shouldShutdownAsynchronously());
     }
 
+	@Test
     public void testShouldProcessAnnotation() throws Exception {
 		assertTrue(config.shouldProcessAnnotation());
 	}
 
+	@Test
 	public void testDependencyWaitTime() throws Exception {
 		// 200 ms
 		assertEquals(200, config.getDependencyWaitTime());
 	}
 
+	@Test
 	public void testPostProcessors() throws Exception {
 		List postProcessors = config.getPostProcessors();
 		assertEquals(1, postProcessors.size());
 		assertTrue(postProcessors.get(0) instanceof DummyProcessor);
 	}
 
+	@Test
 	public void testDependencyFactories() throws Exception {
 		List factories = config.getDependencyFactories();
 		assertEquals("wrong number of dependencies factories registered by default", 1, factories.size());

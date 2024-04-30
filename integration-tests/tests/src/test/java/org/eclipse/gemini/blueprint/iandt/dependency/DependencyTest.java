@@ -69,13 +69,13 @@ public class DependencyTest extends BaseIntegrationTest {
 		assertNotNull("Cannot find the simple service 3 bundle", simpleService3Bundle);
 		assertNotNull("dependencyTest can't be resolved", dependencyTestBundle);
 
-		assertNotSame("simple service bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleServiceBundle.getState()));
 
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService2Bundle.getState()));
 
-		assertNotSame("simple service 3 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 3 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService3Bundle.getState()));
 
 		startDependencyAsynch(dependencyTestBundle);

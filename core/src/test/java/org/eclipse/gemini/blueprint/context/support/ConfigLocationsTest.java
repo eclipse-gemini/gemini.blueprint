@@ -14,31 +14,34 @@
 
 package org.eclipse.gemini.blueprint.context.support;
 
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 
  * @author Costin Leau
  */
-public class ConfigLocationsTest extends TestCase {
+public class ConfigLocationsTest {
 
 	private OsgiBundleXmlApplicationContext context;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		context = new OsgiBundleXmlApplicationContext();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context = null;
 	}
 
+	@Test
 	public void testExpandConfigFolders() throws Exception {
 		String[] cfgs = new String[] { "cnf/", "/cnf/" };
 		context.setConfigLocations(cfgs);

@@ -14,28 +14,37 @@
 
 package org.springframework.osgi.iandt.trivial.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.springframework.osgi.iandt.trivial.TrivialClass;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TrivialTest extends TestCase {
+public class TrivialTest {
 
     private TrivialClass trivial;
 
-    public void setUp() {
-	this.trivial = new TrivialClass();
+    @Before
+    public void setup() {
+    	this.trivial = new TrivialClass();
     }
 
+    @Test
     public void testTrueValue() {
-	assertTrue(trivial.trueValue());
+    	assertTrue(trivial.trueValue());
     }
 
+    @Test
     public void testFalseValue() {
-	assertFalse(trivial.falseValue());
+    	assertFalse(trivial.falseValue());
     }
 
+    @Test
     public void testIntValue() {
-	assertEquals(10,trivial.ten());
+    	assertEquals(10,trivial.ten());
     }
 
 

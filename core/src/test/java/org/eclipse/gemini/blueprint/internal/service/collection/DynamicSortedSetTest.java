@@ -14,12 +14,20 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.DynamicSortedSet;
 
@@ -27,7 +35,7 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.collection
  * @author Costin Leau
  * 
  */
-public class DynamicSortedSetTest extends TestCase {
+public class DynamicSortedSetTest {
 
 	private SortedSet dynamicSortedSet;
 
@@ -39,12 +47,13 @@ public class DynamicSortedSetTest extends TestCase {
 
 	private Integer three;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		dynamicSortedSet = new DynamicSortedSet();
 
-		one = new Integer(1);
-		two = new Integer(2);
-		three = new Integer(3);
+		one = Integer.valueOf(1);
+		two = Integer.valueOf(2);
+		three = Integer.valueOf(3);
 
 		list = new ArrayList();
 		list.add(one);
@@ -54,7 +63,8 @@ public class DynamicSortedSetTest extends TestCase {
 
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dynamicSortedSet = null;
 		list = null;
 		one = null;
@@ -62,6 +72,7 @@ public class DynamicSortedSetTest extends TestCase {
 		three = null;
 	}
 
+	@Test
 	public void testAdd() {
 		assertTrue(dynamicSortedSet.add(one));
 		assertFalse(dynamicSortedSet.add(one));
@@ -69,6 +80,7 @@ public class DynamicSortedSetTest extends TestCase {
 		assertFalse(dynamicSortedSet.add(three));
 	}
 
+	@Test
 	public void testAddNullForbidden() {
 		try {
 			dynamicSortedSet.add(null);
@@ -79,18 +91,21 @@ public class DynamicSortedSetTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testAddAll() {
 		assertTrue(dynamicSortedSet.isEmpty());
 		assertTrue(dynamicSortedSet.addAll(list));
 		assertEquals(3, dynamicSortedSet.size());
 	}
 
+	@Test
 	public void testAddAllOnExistingSet() {
 		dynamicSortedSet.add(two);
 		assertTrue(dynamicSortedSet.addAll(list));
 		assertEquals(3, dynamicSortedSet.size());
 	}
 
+	@Test
 	public void testRemove() {
 		dynamicSortedSet.add(one);
 		dynamicSortedSet.add(two);
@@ -106,6 +121,7 @@ public class DynamicSortedSetTest extends TestCase {
 		assertEquals(1, dynamicSortedSet.size());
 	}
 
+	@Test
 	public void testRemoveNullForbidden() {
 		try {
 			dynamicSortedSet.remove(null);
@@ -116,14 +132,16 @@ public class DynamicSortedSetTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testRemoveAll() {
 		dynamicSortedSet.add(two);
-		dynamicSortedSet.add(new Integer(4));
+		dynamicSortedSet.add(Integer.valueOf(4));
 
 		assertTrue(dynamicSortedSet.removeAll(list));
 		assertEquals(1, dynamicSortedSet.size());
 	}
 
+	@Test
 	public void testFirst() {
 		dynamicSortedSet.add(three);
 		assertSame(three, dynamicSortedSet.first());
@@ -138,6 +156,7 @@ public class DynamicSortedSetTest extends TestCase {
 
 	}
 
+	@Test
 	public void testFirstWithEmptySet() {
 		assertTrue(dynamicSortedSet.isEmpty());
 		try {
@@ -149,6 +168,7 @@ public class DynamicSortedSetTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testLast() {
 		dynamicSortedSet.add(one);
 		assertSame(one, dynamicSortedSet.last());
@@ -162,6 +182,7 @@ public class DynamicSortedSetTest extends TestCase {
 		assertSame(three, dynamicSortedSet.last());
 	}
 
+	@Test
 	public void testLastWithEmptySet() {
 		assertTrue(dynamicSortedSet.isEmpty());
 		try {

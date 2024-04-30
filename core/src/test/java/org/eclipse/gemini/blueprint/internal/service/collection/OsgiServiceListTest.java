@@ -14,11 +14,19 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.ListIterator;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceCollection;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceList;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 
@@ -26,8 +34,9 @@ public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 
 	private ListIterator iter;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
+		super.setup();
 
 		col = (OsgiServiceList) super.col;
 		iter = col.listIterator();
@@ -38,12 +47,14 @@ public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 				Wrapper.class, Comparable.class }), false);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		super.tearDown();
 		col = null;
 		iter = null;
 	}
 
+	@Test
 	public void testAddDuplicates() {
 		long time1 = 123;
 		Date date1 = new Date(time1);
@@ -58,6 +69,7 @@ public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 		assertEquals("duplicate not added", 3, col.size());
 	}
 
+	@Test
 	public void testRemoveDuplicate() {
 		long time1 = 123;
 		Date date1 = new Date(time1);
@@ -75,6 +87,7 @@ public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 		assertEquals(1, col.size());
 	}
 
+	@Test
 	public void testListIteratorWhileAdding() {
 		long time1 = 123;
 		Wrapper date = new DateWrapper(time1);
@@ -88,6 +101,7 @@ public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 		assertEquals(new Long(time1), ((Wrapper) iter.next()).execute());
 	}
 
+	@Test
 	public void testListIteratorWhileRemoving() {
 
 		long time1 = 123;

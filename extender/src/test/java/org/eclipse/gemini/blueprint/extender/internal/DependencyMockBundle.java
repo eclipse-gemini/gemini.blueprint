@@ -73,7 +73,7 @@ public class DependencyMockBundle extends MockBundle {
 		// set Properties
 		Dictionary props = new Properties();
 
-		props.put(Constants.SERVICE_RANKING, new Integer((index < serviceRanking.length ? serviceRanking[index]
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf((index < serviceRanking.length ? serviceRanking[index]
 				: serviceRanking[0])));
 		long id = (index < serviceId.length ? serviceId[index] : serviceId[0]);
 		if (id >= 0)

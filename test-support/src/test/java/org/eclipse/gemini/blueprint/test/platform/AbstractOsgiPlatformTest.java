@@ -14,12 +14,20 @@
 
 package org.eclipse.gemini.blueprint.test.platform;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.framework.BundleContext;
@@ -28,13 +36,13 @@ import org.osgi.framework.BundleContext;
  * @author Costin Leau
  * 
  */
-public class AbstractOsgiPlatformTest extends TestCase {
+public class AbstractOsgiPlatformTest {
 
 	private AbstractOsgiPlatform platform;
 	private Properties prop = new Properties();
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 
 		final BundleContext ctx = new MockBundleContext();
 		prop.setProperty("foo", "bar");
@@ -58,7 +66,8 @@ public class AbstractOsgiPlatformTest extends TestCase {
 		};
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		prop = null;
 		platform = null;
 	}
@@ -67,6 +76,7 @@ public class AbstractOsgiPlatformTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.test.platform.AbstractOsgiPlatform#getConfigurationProperties()}.
 	 */
+	@Test
 	public void testGetConfigurationProperties() {
 		Properties cfg = platform.getConfigurationProperties();
 		assertNotNull(cfg);
@@ -87,6 +97,7 @@ public class AbstractOsgiPlatformTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.test.platform.AbstractOsgiPlatform#getPlatformProperties()}.
 	 */
+	@Test
 	public void testGetPlatformProperties() {
 		assertSame(prop, platform.getPlatformProperties());
 	}
@@ -95,6 +106,7 @@ public class AbstractOsgiPlatformTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.test.platform.AbstractOsgiPlatform#createTempDir(java.lang.String)}.
 	 */
+	@Test
 	public void testCreateTempDir() {
 		File tmpDir = platform.createTempDir("bla");
 		assertNotNull(tmpDir);

@@ -16,12 +16,13 @@ package org.eclipse.gemini.blueprint.blueprint.container;
 
 import java.util.Collection;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintEditorRegistrar;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.eclipse.gemini.blueprint.context.support.PublicBlueprintDocumentLoader;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.springframework.beans.BeansException;
@@ -30,12 +31,11 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 
 /**
  * @author Costin Leau
  */
-public class TestLazyBeansTest extends TestCase {
+public class TestLazyBeansTest {
 
 	private static final String CONFIG = "lazy-beans.xml";
 
@@ -44,7 +44,8 @@ public class TestLazyBeansTest extends TestCase {
 	protected MockBundleContext bundleContext;
 	private BlueprintContainer blueprintContainer;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 
 		context = new GenericApplicationContext();
@@ -67,16 +68,19 @@ public class TestLazyBeansTest extends TestCase {
 		blueprintContainer = new SpringBlueprintContainer(context);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testConvertersAvailable() throws Exception {
 		System.out.println(blueprintContainer.getComponentIds());
 		blueprintContainer.getComponentInstance("lazyCollection");
 	}
 
+	@Test
 	public void testBeanCount() throws Exception {
 		Collection<ComponentMetadata> metadata = blueprintContainer.getMetadata(ComponentMetadata.class);
 		System.out.println(metadata.size());

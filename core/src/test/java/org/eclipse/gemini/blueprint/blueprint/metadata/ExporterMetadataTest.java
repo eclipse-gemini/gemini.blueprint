@@ -14,12 +14,16 @@
 
 package org.eclipse.gemini.blueprint.blueprint.metadata;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.MapEntry;
 import org.osgi.service.blueprint.reflect.RefMetadata;
@@ -46,6 +50,7 @@ public class ExporterMetadataTest extends BaseMetadataTest {
 		return referenceMetadata;
 	}
 
+	@Test
 	public void testSimpleBean() throws Exception {
 		ServiceMetadata metadata = getReferenceMetadata("simple");
 		assertEquals(ServiceMetadata.AUTO_EXPORT_DISABLED, metadata.getAutoExport());
@@ -61,6 +66,7 @@ public class ExporterMetadataTest extends BaseMetadataTest {
 		// assertEquals("lip", props.get("fat"));
 	}
 
+	@Test
 	public void testNestedBean() throws Exception {
 		ServiceMetadata metadata = getReferenceMetadata("nested");
 		//assertEquals(ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, metadata.getAutoExport());

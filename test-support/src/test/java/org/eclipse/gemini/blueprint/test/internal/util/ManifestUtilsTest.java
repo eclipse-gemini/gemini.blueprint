@@ -14,12 +14,16 @@
 
 package org.eclipse.gemini.blueprint.test.internal.util;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.test.internal.util.jar.JarUtils;
 import org.eclipse.gemini.blueprint.test.internal.util.jar.ManifestUtils;
@@ -34,21 +38,24 @@ import org.springframework.util.StringUtils;
  * 
  * @author Costin Leau
  */
-public class ManifestUtilsTest extends TestCase {
+public class ManifestUtilsTest {
 
 	private Storage storage;
 
 	private JarInputStream in;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		storage = new MemoryStorage();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		storage.dispose();
 		IOUtils.closeStream(in);
 	}
 
+	@Test
 	public void testEmptyManifest() throws Exception {
 		Manifest mf = new Manifest();
 		mf.getMainAttributes().putValue("foo", "bar");
@@ -57,6 +64,7 @@ public class ManifestUtilsTest extends TestCase {
 		assertEquals(mf, in.getManifest());
 	}
 
+	@Test
 	public void testJarUtilsReadResource() throws Exception {
 		Manifest mf = new Manifest();
 		mf.getMainAttributes().putValue("foo", "bar");
@@ -64,6 +72,7 @@ public class ManifestUtilsTest extends TestCase {
 		assertEquals(mf, JarUtils.getManifest(storage.getResource()));
 	}
 
+	@Test
 	public void testExportEntries() throws Exception {
 		Manifest mf = new Manifest();
 		Attributes attrs = mf.getMainAttributes();

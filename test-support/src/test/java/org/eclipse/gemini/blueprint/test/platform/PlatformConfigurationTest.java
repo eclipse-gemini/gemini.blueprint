@@ -14,9 +14,11 @@
 
 package org.eclipse.gemini.blueprint.test.platform;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import org.osgi.framework.BundleContext;
 
@@ -26,11 +28,11 @@ import org.osgi.framework.BundleContext;
  * @author Costin Leau
  * 
  */
-public class PlatformConfigurationTest extends TestCase {
+public class PlatformConfigurationTest {
 
 	private OsgiPlatform platform;
 
-
+	@Test
 	public void testOverridenConfiguration() throws Exception {
 		platform = new AbstractOsgiPlatform() {
 

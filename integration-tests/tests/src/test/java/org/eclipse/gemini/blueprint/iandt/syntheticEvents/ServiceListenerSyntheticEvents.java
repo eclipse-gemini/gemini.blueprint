@@ -82,18 +82,18 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		polygon = new Polygon();
 
 		Dictionary polygonProp = new Properties();
-		polygonProp.put(Constants.SERVICE_RANKING, new Integer(1));
+		polygonProp.put(Constants.SERVICE_RANKING, Integer.valueOf(1));
 		// first register polygon
 		polygonReg = bundleContext.registerService(Shape.class.getName(), polygon, polygonProp);
 
 		// then rectangle
 		Dictionary rectangleProp = new Properties();
-		rectangleProp.put(Constants.SERVICE_RANKING, new Integer(10));
+		rectangleProp.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		rectangleReg = bundleContext.registerService(Shape.class.getName(), rectangle, rectangleProp);
 
 		// then area
 		Dictionary areaProp = new Properties();
-		areaProp.put(Constants.SERVICE_RANKING, new Integer(100));
+		areaProp.put(Constants.SERVICE_RANKING, Integer.valueOf(100));
 		areaReg = bundleContext.registerService(Shape.class.getName(), area, areaProp);
 
 	}

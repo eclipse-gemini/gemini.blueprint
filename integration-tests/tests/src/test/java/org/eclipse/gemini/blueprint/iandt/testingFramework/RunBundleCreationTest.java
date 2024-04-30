@@ -15,7 +15,8 @@
 
 package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import junit.framework.TestFailure;
 import junit.framework.TestResult;
 
@@ -26,24 +27,26 @@ import junit.framework.TestResult;
  * @author Hal Hildebrand
  * @author Costin Leau
  */
-public class RunBundleCreationTest extends TestCase {
+public class RunBundleCreationTest {
 
 	private TestCase test;
 
 	private TestResult result;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		test = new BundleCreationTst();
 		result = new TestResult();
 	}
 
+	@Test
 	public void testAssertionPass() {
 		executeTest("testAssertionPass");
 		assertEquals(0, result.errorCount());
 		assertEquals(0, result.failureCount());
 	}
 
+	@Test
 	public void testAssertionFailure() {
 		executeTest("testAssertionFailure");
 		assertEquals("failure counted as error", 0, result.errorCount());
@@ -51,30 +54,35 @@ public class RunBundleCreationTest extends TestCase {
 
 	}
 
+	@Test
 	public void testFailure() {
 		executeTest("testFailure");
 		assertEquals("failure counted as error", 0, result.errorCount());
 		assertEquals("failure ignored", 1, result.failureCount());
 	}
 
+	@Test
 	public void testException() {
 		executeTest("testException");
 		assertEquals("error not considered", 1, result.errorCount());
 		assertEquals("error considered failure", 0, result.failureCount());
 	}
 
+	@Test
 	public void testExceptionClass() throws Exception {
 		executeTest("testException");
 		TestFailure failure = (TestFailure) result.errors().nextElement();
 		assertTrue(failure.thrownException() instanceof RuntimeException);
 	}
 
+	@Test
 	public void testError() {
 		executeTest("testError");
 		assertEquals("error not considered", 1, result.errorCount());
 		assertEquals("error considered failure", 0, result.failureCount());
 	}
 
+	@Test
 	public void testErrorClass() throws Exception {
 		executeTest("testError");
 		TestFailure failure = (TestFailure) result.errors().nextElement();

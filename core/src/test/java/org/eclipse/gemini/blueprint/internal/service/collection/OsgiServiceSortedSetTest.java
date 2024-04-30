@@ -14,10 +14,17 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Iterator;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceCollection;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceSortedSet;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -28,13 +35,15 @@ public class OsgiServiceSortedSetTest extends AbstractOsgiCollectionTest {
 
 	private Iterator iter;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
+		super.setup();
 		col = (OsgiServiceSortedSet) super.col;
 		iter = col.iterator();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		super.tearDown();
 		col = null;
 		iter = null;
@@ -45,6 +54,7 @@ public class OsgiServiceSortedSetTest extends AbstractOsgiCollectionTest {
 				Wrapper.class, Comparable.class }), false);
 	}
 
+	@Test
 	public void testOrderingWhileAdding() {
 		Wrapper date1 = new DateWrapper(1);
 		Wrapper date2 = new DateWrapper(2);
@@ -68,6 +78,7 @@ public class OsgiServiceSortedSetTest extends AbstractOsgiCollectionTest {
 		assertEquals(date3.toString(), col.last().toString());
 	}
 
+	@Test
 	public void testOrderingWhileRemoving() {
 		Wrapper date1 = new DateWrapper(1);
 		Wrapper date2 = new DateWrapper(2);
@@ -91,6 +102,7 @@ public class OsgiServiceSortedSetTest extends AbstractOsgiCollectionTest {
 
 	}
 
+	@Test
 	public void testOrderingWhileIterating() {
 		Wrapper date1 = new DateWrapper(1);
 		Wrapper date2 = new DateWrapper(2);
@@ -109,6 +121,7 @@ public class OsgiServiceSortedSetTest extends AbstractOsgiCollectionTest {
 		assertEquals(date3.toString(), iter.next().toString());
 	}
 
+	@Test
 	public void testRemovalWhileIterating() {
 		Wrapper date1 = new DateWrapper(1);
 		Wrapper date2 = new DateWrapper(2);

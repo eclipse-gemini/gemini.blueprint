@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.activator;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Iterator;
@@ -34,10 +36,11 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class ListListenerAdapterTest extends TestCase {
+public class ListListenerAdapterTest {
 
     private final class TestBundleContext extends MockBundleContext {
 
@@ -94,21 +97,20 @@ public class ListListenerAdapterTest extends TestCase {
 
     private ListListenerAdapter adapter;
     
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setup() throws Exception {
         fired = false;
         ctx = new TestBundleContext();
         adapter = new ListListenerAdapter(ctx);
         adapter.afterPropertiesSet();
     }
     
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         adapter.destroy();
-        super.tearDown();
     }
 
+    @Test
     public void testNormal() throws Exception {
 
         OsgiBundleApplicationContextListener<OsgiBundleApplicationContextEvent> listener = new OsgiBundleApplicationContextListener<OsgiBundleApplicationContextEvent>() {
@@ -122,9 +124,10 @@ public class ListListenerAdapterTest extends TestCase {
         
         adapter.onOsgiApplicationEvent(new BootstrappingDependenciesEvent(new OsgiBundleXmlApplicationContext(), new MockBundle(),
             new ArrayList<OsgiServiceDependencyEvent>(), null, 0));
-        Assert.assertTrue(fired);
+        assertTrue(fired);
     }
 
+    @Test
     public void testEventFiltering() throws Exception {
 
         OsgiBundleApplicationContextListener<OsgiBundleContextClosedEvent> listener = new OsgiBundleApplicationContextListener<OsgiBundleContextClosedEvent>() {
@@ -140,6 +143,6 @@ public class ListListenerAdapterTest extends TestCase {
             new ArrayList<OsgiServiceDependencyEvent>(), null, 0));
         
         adapter.onOsgiApplicationEvent(new OsgiBundleContextClosedEvent(new OsgiBundleXmlApplicationContext(), new MockBundle()));
-        Assert.assertTrue(fired);
+        assertTrue(fired);
     }
 }

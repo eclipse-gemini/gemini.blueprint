@@ -14,12 +14,22 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.util.internal.MapBasedDictionary;
 
@@ -29,24 +39,27 @@ import org.eclipse.gemini.blueprint.util.internal.MapBasedDictionary;
  * @author Costin Leau
  * 
  */
-public class MapBasedDictionaryTest extends TestCase {
+public class MapBasedDictionaryTest {
 
 	private Dictionary dict;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		dict = new MapBasedDictionary();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dict = null;
 	}
 
+	@Test
 	public void testDictionaryWithNullMap() {
 		dict = new MapBasedDictionary((Map) null);
 		assertTrue(dict.isEmpty());
 	}
 
+	@Test
 	public void testElements() {
 		dict.put(new Object(), new Object());
 		Object value = new Object();
@@ -64,6 +77,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertFalse(enm.hasMoreElements());
 	}
 
+	@Test
 	public void testKeys() {
 		Object key = new Object();
 		Object value = new Object();
@@ -78,6 +92,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertFalse(enm.hasMoreElements());
 	}
 
+	@Test
 	public void testGetObject() {
 		Object key = new Object();
 		Object value = new Object();
@@ -91,6 +106,7 @@ public class MapBasedDictionaryTest extends TestCase {
 
 	}
 
+	@Test
 	public void testGetNullObject() {
 		try {
 			dict.get(null);
@@ -101,6 +117,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testRemoveObject() {
 		assertNull(dict.remove(new Object()));
 
@@ -112,6 +129,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertNull(dict.remove(key));
 	}
 
+	@Test
 	public void testRemoveNullObject() {
 		try {
 			dict.remove(null);
@@ -123,6 +141,7 @@ public class MapBasedDictionaryTest extends TestCase {
 
 	}
 
+	@Test
 	public void testPutObjectObject() {
 		assertNull(dict.put(new Object(), new Object()));
 
@@ -133,6 +152,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertSame(value, dict.put(key, value));
 	}
 
+	@Test
 	public void testPutNullValue() {
 		try {
 			dict.put(new Object(), null);
@@ -143,6 +163,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testPutNullKey() {
 		try {
 			dict.put(null, new Object());
@@ -153,6 +174,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSize() {
 		assertEquals(0, dict.size());
 		dict.put(new Object(), new Object());
@@ -164,6 +186,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertEquals(2, dict.size());
 	}
 
+	@Test
 	public void testDictionaryWithDictionary() {
 		Dictionary dict = new Properties();
 		dict.put("joe", "satriani");
@@ -172,6 +195,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertEquals(wrapper, dict);
 	}
 
+	@Test
 	public void testPutAllDictionary() {
 		Dictionary dict = new Properties();
 		dict.put("joe", "satriani");
@@ -181,6 +205,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertEquals(wrapper, dict);
 	}
 
+	@Test
 	public void testValues() throws Exception {
 		Dictionary dict = new Properties();
 		dict.put("joe", "satriani");
@@ -197,6 +222,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testClear() throws Exception {
 		Dictionary dict = new Properties();
 		dict.put("joe", "satriani");
@@ -208,6 +234,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertEquals(0, wrapper.size());
 	}
 
+	@Test
 	public void testContainsKey() throws Exception {
 		Dictionary dict = new Properties();
 		dict.put("joe", "satriani");
@@ -217,6 +244,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertTrue(wrapper.containsKey("joe"));
 	}
 
+	@Test
 	public void testValue() throws Exception {
 		Dictionary dict = new Properties();
 		dict.put("joe", "satriani");
@@ -226,6 +254,7 @@ public class MapBasedDictionaryTest extends TestCase {
 		assertTrue(wrapper.containsValue("satriani"));
 	}
 
+	@Test
 	public void testHashCode() throws Exception {
 		MapBasedDictionary wrapper1 = new MapBasedDictionary();
 		MapBasedDictionary wrapper2 = new MapBasedDictionary();

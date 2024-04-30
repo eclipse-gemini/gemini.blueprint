@@ -16,7 +16,7 @@ package org.eclipse.gemini.blueprint.extender.internal.dependencies;
 
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.eclipse.gemini.blueprint.extender.internal.DependencyMockBundle;
 import org.eclipse.gemini.blueprint.extender.internal.dependencies.shutdown.ShutdownSorter;
 import org.osgi.framework.Bundle;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Costin Leau
  */
-public class BlueprintShutdownSorterTest extends TestCase {
+public class BlueprintShutdownSorterTest {
 
     /**
      * <pre>
@@ -42,6 +42,7 @@ public class BlueprintShutdownSorterTest extends TestCase {
      * </pre>
      * Expected order is C, A, B, E, D
      */
+	@Test
     public void testCase1() throws Exception {
         DependencyMockBundle a = new DependencyMockBundle("A");
         DependencyMockBundle b = new DependencyMockBundle("B");
@@ -70,6 +71,7 @@ public class BlueprintShutdownSorterTest extends TestCase {
      * }
      * </pre>
      */
+	@Test
     public void testCase2() throws Exception {
         DependencyMockBundle a = new DependencyMockBundle("A");
         DependencyMockBundle b = new DependencyMockBundle("B");
@@ -90,6 +92,7 @@ public class BlueprintShutdownSorterTest extends TestCase {
      * that dependency should not affect the shutdown ordering as gemini blueprint is only responsible for
      * orderly shutting down the bundles it is managing.
      */
+	@Test
     public void testUnmanagedBundlesAreIgnoredForShutdownOrdering() throws Exception {
         DependencyMockBundle a = new DependencyMockBundle("A");
         DependencyMockBundle b = new DependencyMockBundle("B");
@@ -112,6 +115,7 @@ public class BlueprintShutdownSorterTest extends TestCase {
      * that dependency should not affect the shutdown ordering as gemini blueprint is only responsible for
      * orderly shutting down the bundles it is managing.
      */
+	@Test
     public void testReferencesToSelfProvidedServicesAreIgnoredForShutdownOrdering() throws Exception {
         DependencyMockBundle a = new DependencyMockBundle("A");
         DependencyMockBundle b = new DependencyMockBundle("B");

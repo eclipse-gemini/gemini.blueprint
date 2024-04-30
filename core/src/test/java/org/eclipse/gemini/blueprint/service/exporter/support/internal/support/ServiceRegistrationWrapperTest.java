@@ -18,22 +18,28 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener;
 import org.eclipse.gemini.blueprint.service.exporter.SimpleOsgiServiceRegistrationListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
-public class ServiceRegistrationWrapperTest extends TestCase {
+public class ServiceRegistrationWrapperTest {
 
 	private ServiceRegistration registration;
 
 	private ServiceRegistration actualRegistration;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		actualRegistration = createMock(ServiceRegistration.class);
 
 		final ListenerNotifier notifier =
@@ -54,11 +60,13 @@ public class ServiceRegistrationWrapperTest extends TestCase {
 		SimpleOsgiServiceRegistrationListener.UNREGISTERED = 0;
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		verify(actualRegistration);
 		registration = null;
 	}
 
+	@Test
 	public void testGetReference() {
 		ServiceReference reference = new MockServiceReference();
 		expect(actualRegistration.getReference()).andReturn(reference);
@@ -67,6 +75,7 @@ public class ServiceRegistrationWrapperTest extends TestCase {
 		assertSame(reference, registration.getReference());
 	}
 
+	@Test
 	public void testSetProperties() {
 		Dictionary props = new Hashtable();
 		actualRegistration.setProperties(props);
@@ -76,6 +85,7 @@ public class ServiceRegistrationWrapperTest extends TestCase {
 		registration.setProperties(props);
 	}
 
+	@Test
 	public void testUnregister() {
 		ServiceReference reference = new MockServiceReference();
 		expect(actualRegistration.getReference()).andReturn(reference);
@@ -85,6 +95,7 @@ public class ServiceRegistrationWrapperTest extends TestCase {
 		registration.unregister();
 	}
 
+	@Test
 	public void testUnregistrationNotified() {
 		assertEquals(0, SimpleOsgiServiceRegistrationListener.UNREGISTERED);
 
@@ -99,6 +110,7 @@ public class ServiceRegistrationWrapperTest extends TestCase {
 		assertEquals(1, SimpleOsgiServiceRegistrationListener.UNREGISTERED);
 	}
 
+	@Test
 	public void testExceptionProperlyPropagates() {
 		assertEquals(0, SimpleOsgiServiceRegistrationListener.UNREGISTERED);
 		IllegalStateException excep = new IllegalStateException();

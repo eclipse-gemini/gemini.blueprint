@@ -16,9 +16,9 @@ package org.eclipse.gemini.blueprint.blueprint;
 
 import java.lang.reflect.Constructor;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ReflectionTest extends TestCase {
+public class ReflectionTest {
 
 	static class Foo {
 		public Foo(boolean bool) {
@@ -30,6 +30,7 @@ public class ReflectionTest extends TestCase {
 		}
 	};
 
+	@Test
 	public void testPrimitive() throws Exception {
 		Constructor[] constructors = Foo.class.getDeclaredConstructors();
 		for (Constructor constructor : constructors) {

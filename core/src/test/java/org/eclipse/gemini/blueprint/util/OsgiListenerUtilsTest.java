@@ -14,12 +14,18 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.util.OsgiListenerUtils;
 import org.osgi.framework.InvalidSyntaxException;
@@ -33,15 +39,15 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiListenerUtilsTest extends TestCase {
+public class OsgiListenerUtilsTest {
 
 	private MockBundleContext bundleContext;
 	private Map services;
 	private ServiceReference ref1, ref2, ref3;
 	private Object service1, service2, service3;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 
 		ref1 = new MockServiceReference();
 		ref2 = new MockServiceReference();
@@ -77,7 +83,8 @@ public class OsgiListenerUtilsTest extends TestCase {
 
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		bundleContext = null;
 	}
 
@@ -85,6 +92,7 @@ public class OsgiListenerUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiListenerUtils#addServiceListener(org.osgi.framework.BundleContext, org.osgi.framework.ServiceListener, java.lang.String)}.
 	 */
+	@Test
 	public void testAddServiceListenerBundleContextServiceListenerString() {
 		final List refs = new ArrayList();
 
@@ -109,6 +117,7 @@ public class OsgiListenerUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiListenerUtils#addSingleServiceListener(org.osgi.framework.BundleContext, org.osgi.framework.ServiceListener, java.lang.String)}.
 	 */
+	@Test
 	public void testAddSingleServiceListenerBundleContextServiceListenerString() {
 		final List refs = new ArrayList();
 
@@ -131,6 +140,7 @@ public class OsgiListenerUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiListenerUtils#removeServiceListener(org.osgi.framework.BundleContext, org.osgi.framework.ServiceListener)}.
 	 */
+	@Test
 	public void testRemoveServiceListenerBundleContextServiceListener() {
 		ServiceListener listener = new ServiceListener() {
 

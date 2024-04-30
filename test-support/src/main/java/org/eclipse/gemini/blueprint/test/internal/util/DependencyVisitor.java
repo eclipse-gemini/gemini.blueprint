@@ -716,9 +716,9 @@ public class DependencyVisitor extends ClassVisitor {
 			return;
 		String p = getGroupKey(name);
 		if (current.containsKey(p)) {
-			current.put(p, new Integer(((Integer) current.get(p)).intValue() + 1));
+			current.put(p, Integer.valueOf(((Integer) current.get(p)).intValue() + 1));
 		} else {
-			current.put(p, new Integer(1));
+			current.put(p, Integer.valueOf(1));
 		}
 	}
 
