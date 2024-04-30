@@ -160,7 +160,7 @@ public class DefaultMandatoryDependencyManager implements MandatoryServiceDepend
 	private ConfigurableListableBeanFactory beanFactory;
 
 	public void addServiceExporter(Object exporter, String exporterBeanName) {
-		Assert.hasText(exporterBeanName);
+		Assert.hasText(exporterBeanName, "exporterBeanName is required");
 
 		if (exportersSeen.putIfAbsent(exporterBeanName, VALUE) == null) {
 

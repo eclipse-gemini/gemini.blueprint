@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support.internal.aop;
 
+import java.util.Dictionary;
+
 import org.eclipse.gemini.blueprint.service.importer.ServiceReferenceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.util.ServiceComparatorUtil;
 import org.osgi.framework.Bundle;
@@ -38,7 +40,7 @@ class SwappingServiceReferenceProxy implements ServiceReferenceProxy {
 	private ServiceReference delegate;
 
 	synchronized ServiceReference swapDelegates(ServiceReference newDelegate) {
-		Assert.notNull(newDelegate);
+		Assert.notNull(newDelegate, "newDelegate is required");
 		ServiceReference old = this.delegate;
 		this.delegate = newDelegate;
 
@@ -47,6 +49,11 @@ class SwappingServiceReferenceProxy implements ServiceReferenceProxy {
 
 	public synchronized Bundle getBundle() {
 		return (delegate == null ? null : delegate.getBundle());
+	}
+	
+	@Override
+	public Dictionary getProperties() {
+		return (delegate == null ? null : delegate.getProperties());
 	}
 
 	public synchronized Object getProperty(String key) {

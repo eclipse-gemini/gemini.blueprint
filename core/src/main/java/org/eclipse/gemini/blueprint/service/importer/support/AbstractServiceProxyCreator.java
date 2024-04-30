@@ -63,8 +63,8 @@ abstract class AbstractServiceProxyCreator implements ServiceProxyCreator {
 
 	AbstractServiceProxyCreator(Class<?>[] classes, ClassLoader aopClassLoader, ClassLoader bundleClassLoader,
 			BundleContext bundleContext, ImportContextClassLoaderEnum iccl) {
-		Assert.notNull(bundleContext);
-		Assert.notNull(aopClassLoader);
+		Assert.notNull(bundleContext, "bundleContext is required");
+		Assert.notNull(aopClassLoader, "aopClassLoader is required");
 
 		this.classes = classes;
 		this.bundleContext = bundleContext;

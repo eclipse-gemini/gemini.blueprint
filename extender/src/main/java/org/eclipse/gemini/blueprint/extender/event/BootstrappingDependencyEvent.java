@@ -43,7 +43,7 @@ public class BootstrappingDependencyEvent extends OsgiBundleApplicationContextEv
 	 */
 	public BootstrappingDependencyEvent(ApplicationContext source, Bundle bundle, OsgiServiceDependencyEvent nestedEvent) {
 		super(source, bundle);
-		Assert.notNull(nestedEvent);
+		Assert.notNull(nestedEvent, "nestedEvent is required");
 		this.dependencyEvent = nestedEvent;
 	}
 

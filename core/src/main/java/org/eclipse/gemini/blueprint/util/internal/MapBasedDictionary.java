@@ -60,7 +60,7 @@ public class MapBasedDictionary<K, V> extends Dictionary<K, V> implements Map<K,
 
 
 		public IteratorBasedEnumeration(Iterator<E> it) {
-			Assert.notNull(it);
+			Assert.notNull(it, "iterator is required");
 			this.it = it;
 		}
 

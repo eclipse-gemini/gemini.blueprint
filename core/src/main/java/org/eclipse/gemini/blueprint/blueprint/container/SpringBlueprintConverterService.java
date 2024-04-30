@@ -14,15 +14,11 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintEditorRegistrar;
-import org.eclipse.gemini.blueprint.context.support.internal.security.SecurityUtils;
 import org.osgi.service.blueprint.container.Converter;
 import org.osgi.service.blueprint.container.ReifiedType;
 import org.springframework.beans.SimpleTypeConverter;
@@ -93,19 +89,8 @@ public class SpringBlueprintConverterService implements ConversionService {
 			return source;
 		
 		final ReifiedType type = TypeFactory.getType(targetType);
-		boolean hasSecurity = (System.getSecurityManager() != null);
-		AccessControlContext acc = (hasSecurity ? SecurityUtils.getAccFrom(cbf) : null);
-		Object result;
 
-		if (hasSecurity) {
-			result = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					return doConvert(source, type);
-				}
-			}, acc);
-		} else {
-			result = doConvert(source, type);
-		}
+		Object result = doConvert(source, type);
 
 		if (result != null) {
 			return result;

@@ -455,8 +455,8 @@ public class ServiceDynamicInterceptor extends ServiceInvoker implements Initial
 	}
 
 	public void afterPropertiesSet() {
-		Assert.notNull(proxy);
-		Assert.notNull(eventSource);
+		Assert.notNull(proxy, "proxy was not initialized properly");
+		Assert.notNull(eventSource, "eventSource was not initialized properly");
 
 		boolean debug = log.isDebugEnabled();
 

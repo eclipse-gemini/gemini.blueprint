@@ -14,24 +14,34 @@
 
 package org.eclipse.gemini.blueprint.test;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Field;
-import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.eclipse.gemini.blueprint.test.internal.OsgiJUnitTest;
 import org.eclipse.gemini.blueprint.test.internal.TestRunnerService;
 import org.eclipse.gemini.blueprint.test.internal.holder.OsgiTestInfoHolder;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-public class JUnitTestActivatorTest extends TestCase {
+import junit.framework.TestCase;
+
+public class JUnitTestActivatorTest {
 
 	private JUnitTestActivator activator;
 
@@ -74,11 +84,12 @@ public class JUnitTestActivatorTest extends TestCase {
 
 	}
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		activator = new JUnitTestActivator();
 	}
 
+	@Test
 	public void testStart() throws Exception {
 		BundleContext ctx = createMock(BundleContext.class);
 
@@ -95,6 +106,7 @@ public class JUnitTestActivatorTest extends TestCase {
 		verify(ctx, runner);
 	}
 
+	@Test
 	public void testStop() throws Exception {
 		ServiceReference ref = new MockServiceReference();
 		ServiceRegistration reg = createMock(ServiceRegistration.class);
@@ -114,6 +126,7 @@ public class JUnitTestActivatorTest extends TestCase {
 		verify(ctx, reg);
 	}
 
+	@Test
 	public void testLoadTest() throws Exception {
 		BundleContext ctx = new MockBundleContext();
 		TestRunnerService runner = createMock(TestRunnerService.class);

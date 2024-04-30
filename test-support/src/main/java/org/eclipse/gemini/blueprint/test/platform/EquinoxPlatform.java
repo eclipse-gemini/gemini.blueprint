@@ -14,9 +14,6 @@
 
 package org.eclipse.gemini.blueprint.test.platform;
 
-import java.lang.reflect.Field;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.adaptor.EclipseStarter;

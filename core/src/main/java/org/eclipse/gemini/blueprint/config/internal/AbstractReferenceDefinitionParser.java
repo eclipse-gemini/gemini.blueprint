@@ -166,7 +166,7 @@ public abstract class AbstractReferenceDefinitionParser extends AbstractBeanDefi
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
 
 		Class<?> beanClass = getBeanClass(element);
-		Assert.notNull(beanClass);
+		Assert.notNull(beanClass, "Could not determine bean class for element");
 
 		if (beanClass != null) {
 			builder.getRawBeanDefinition().setBeanClass(beanClass);

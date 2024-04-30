@@ -38,7 +38,9 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
@@ -245,9 +247,13 @@ public class MockBundleContext implements BundleContext {
 		}
 		return installBundle(location);
 	}
+	
+	public ServiceRegistration registerService(Dictionary properties) {
+		return new MockServiceRegistration(properties);
+	}
 
 	public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) {
-		MockServiceRegistration reg = new MockServiceRegistration(properties);
+		MockServiceRegistration reg = (MockServiceRegistration)registerService(properties);
 
 		// disabled for now
 		// MockServiceReference ref = new MockServiceReference(this.bundle,
@@ -279,6 +285,21 @@ public class MockBundleContext implements BundleContext {
         ServiceRegistration<S> registration = (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
         return registration;
     }
+    
+    @Override
+	public <S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory,
+			Dictionary<String, ?> properties) {
+    	ServiceRegistration<S> registration = (ServiceRegistration<S>) registerService(properties);
+    	S service = factory.getService(getBundle(), registration);
+    	registration = (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
+		return registration;
+	}
+
+	@Override
+	public <S> ServiceObjects<S> getServiceObjects(ServiceReference<S> reference) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
     public void removeServiceListener(ServiceListener listener) {
 		serviceListeners.remove(listener);

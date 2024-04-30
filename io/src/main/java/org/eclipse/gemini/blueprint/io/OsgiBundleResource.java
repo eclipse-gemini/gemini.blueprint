@@ -419,13 +419,12 @@ public class OsgiBundleResource extends AbstractResource implements ContextResou
 	 * @return an array of URLs
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
 	ContextResource[] getAllUrlsFromBundleSpace(String location) throws IOException {
 		if (bundle == null)
 			throw new IllegalArgumentException(
 				"cannot locate items in bundle-space w/o a bundle; specify one when creating this resolver");
 
-		Assert.notNull(location);
+		Assert.notNull(location, "location is required");
 		Set<UrlContextResource> resources = new LinkedHashSet<UrlContextResource>(5);
 
 		location = StringUtils.cleanPath(location);

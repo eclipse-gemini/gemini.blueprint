@@ -82,8 +82,8 @@ public abstract class OsgiPlatformDetector {
 	}
 
 	private static boolean determinePlatform(BundleContext context, String[] labels) {
-		Assert.notNull(context);
-		Assert.notNull(labels);
+		Assert.notNull(context, "context is required");
+		Assert.notNull(labels, "labels is required");
 
 		String vendorProperty = context.getProperty(Constants.FRAMEWORK_VENDOR);
 		if (vendorProperty == null) {

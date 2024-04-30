@@ -57,7 +57,7 @@ public class PackageAdminResolver implements DependencyResolver {
 
 
 	public PackageAdminResolver(BundleContext bundleContext) {
-		Assert.notNull(bundleContext);
+		Assert.notNull(bundleContext, "bundleContext is required");
 		this.bundleContext = bundleContext;
 	}
 

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>gemini-blueprint</artifactId>
         <groupId>org.eclipse.gemini.blueprint</groupId>
-        <version>3.0.1.BUILD-SNAPSHOT</version>
+        <version>4.0.0.BUILD-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -61,12 +61,12 @@
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
+            <artifactId>osgi.core</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
+            <artifactId>osgi.cmpn</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

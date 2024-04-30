@@ -14,7 +14,7 @@
 
 package org.eclipse.gemini.blueprint.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.AbstractDelegatedExecutionApplicationContext;
@@ -53,29 +53,34 @@ import static org.eclipse.gemini.blueprint.util.internal.ClassUtils.getClassHier
  * @author Costin Leau
  * @author Olaf Otto
  */
-public class ClassUtilsTest extends TestCase {
+public class ClassUtilsTest {
 
+	@Test
     public void testAutoDetectClassesForPublishingDisabled() {
         Class<?>[] resolved = getClassHierarchy(Integer.class, INTERFACES);
-        assertThat(resolved).hasSize(2);
+        assertThat(resolved).hasSize(4);
     }
 
+	@Test
     public void testAutoDetectClassesForPublishingInterfaces() {
         Class<?>[] resolved = getClassHierarchy(HashMap.class, INTERFACES);
         assertThat(resolved).containsExactly(Map.class, Cloneable.class, Serializable.class);
     }
 
+	@Test
     public void testAutoDetectClassesForPublishingClassHierarchy() {
         Class<?>[] resolved = getClassHierarchy(HashMap.class, CLASS_HIERARCHY);
         assertThat(resolved).containsExactly(HashMap.class, AbstractMap.class);
     }
 
+	@Test
     public void testAutoDetectClassesForPublishingAll() {
         Class<?>[] resolved = getClassHierarchy(HashMap.class, ALL_CLASSES);
 
         assertThat(resolved).containsExactly(HashMap.class, Map.class, Cloneable.class, Serializable.class, AbstractMap.class);
     }
 
+	@Test
     public void testInterfacesHierarchy() {
         Class<?>[] resolved = ClassUtils.getAllInterfaces(DelegatedExecutionOsgiBundleApplicationContext.class);
 
@@ -85,6 +90,7 @@ public class ClassUtilsTest extends TestCase {
                 ResourcePatternResolver.class, BeanFactory.class, ResourceLoader.class, AutoCloseable.class);
     }
 
+	@Test
     public void testAppContextClassHierarchy() {
         Class<?>[] resolved = getClassHierarchy(OsgiBundleXmlApplicationContext.class, ALL_CLASSES);
 

@@ -88,7 +88,7 @@ public class ServiceReferenceBasedMap extends AbstractMap {
 
 
 	public ServiceReferenceBasedMap(ServiceReference ref) {
-		Assert.notNull(ref);
+		Assert.notNull(ref, "ref is required");
 		this.reference = ref;
 	}
 
@@ -101,7 +101,7 @@ public class ServiceReferenceBasedMap extends AbstractMap {
 	}
 
 	public boolean containsValue(Object value) {
-		Assert.notNull(value);
+		Assert.notNull(value, "value is required");
 		String[] keys = reference.getPropertyKeys();
 		for (int i = 0; i < keys.length; i++) {
 			if (value.equals(reference.getProperty(keys[i])))

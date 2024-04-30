@@ -169,7 +169,7 @@ public abstract class AbstractOsgiServiceImportFactoryBean implements FactoryBea
 	 * @see ImportContextClassLoaderEnum
 	 */
 	public void setImportContextClassLoader(ImportContextClassLoaderEnum contextClassLoader) {
-		Assert.notNull(contextClassLoader);
+		Assert.notNull(contextClassLoader, "contextClassLoader is required");
 		this.contextClassLoader = contextClassLoader;
 	}
 
@@ -279,7 +279,7 @@ public abstract class AbstractOsgiServiceImportFactoryBean implements FactoryBea
 	 * @param availability
 	 */
 	public void setAvailability(Availability availability) {
-		Assert.notNull(availability);
+		Assert.notNull(availability, "availability is required");
 		this.availability = availability;
 	}
 

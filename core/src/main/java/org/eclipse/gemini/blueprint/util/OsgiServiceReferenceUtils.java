@@ -195,7 +195,7 @@ public abstract class OsgiServiceReferenceUtils {
 	 * @return service id
 	 */
 	public static long getServiceId(ServiceReference reference) {
-		Assert.notNull(reference);
+		Assert.notNull(reference, "reference is required");
 		return ((Long) reference.getProperty(Constants.SERVICE_ID)).longValue();
 	}
 
@@ -206,7 +206,7 @@ public abstract class OsgiServiceReferenceUtils {
 	 * @return service ranking
 	 */
 	public static int getServiceRanking(ServiceReference reference) {
-		Assert.notNull(reference);
+		Assert.notNull(reference, "reference is required");
 
 		Object ranking = reference.getProperty(Constants.SERVICE_RANKING);
 		// if the property is not supplied or of incorrect type, use a
@@ -221,7 +221,7 @@ public abstract class OsgiServiceReferenceUtils {
 	 * @return service advertised class names
 	 */
 	public static String[] getServiceObjectClasses(ServiceReference reference) {
-		Assert.notNull(reference);
+		Assert.notNull(reference, "reference is required");
 		return (String[]) reference.getProperty(Constants.OBJECTCLASS);
 	}
 
@@ -248,7 +248,7 @@ public abstract class OsgiServiceReferenceUtils {
 	 * @return a <code>Map</code> containing the service reference properties taken as a snapshot
 	 */
 	public static Map getServicePropertiesSnapshotAsMap(ServiceReference reference) {
-		Assert.notNull(reference);
+		Assert.notNull(reference, "reference is required");
 		String[] keys = reference.getPropertyKeys();
 
 		Map map = new LinkedHashMap(keys.length);
@@ -288,7 +288,7 @@ public abstract class OsgiServiceReferenceUtils {
 	 * @see #getServiceProperties(ServiceReference)
 	 */
 	public static Map getServicePropertiesAsMap(ServiceReference reference) {
-		Assert.notNull(reference);
+		Assert.notNull(reference, "reference is required");
 		return new ServiceReferenceBasedMap(reference);
 
 	}

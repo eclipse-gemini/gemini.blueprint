@@ -172,7 +172,7 @@ public class NamespaceManager implements InitializingBean, DisposableBean {
 	 * @param bundle handler bundle
 	 */
 	public void maybeRemoveNameSpaceHandlerFor(Bundle bundle) {
-		Assert.notNull(bundle);
+		Assert.notNull(bundle, "bundle is required");
 		boolean removed = this.namespacePlugins.removePlugin(bundle);
 		if (removed && log.isDebugEnabled()) {
 			log.debug("Removed namespace handler resolver for " + OsgiStringUtils.nullSafeNameAndSymName(bundle));

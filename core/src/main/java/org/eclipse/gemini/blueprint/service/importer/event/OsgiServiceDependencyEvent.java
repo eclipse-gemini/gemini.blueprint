@@ -38,7 +38,7 @@ public abstract class OsgiServiceDependencyEvent extends ApplicationEvent {
 	 */
 	public OsgiServiceDependencyEvent(Object source, OsgiServiceDependency dependency) {
 		super(source);
-		Assert.notNull(dependency);
+		Assert.notNull(dependency, "dependency is required");
 		this.dependency = dependency;
 	}
 
