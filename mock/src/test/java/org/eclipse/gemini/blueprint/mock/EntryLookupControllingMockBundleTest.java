@@ -14,37 +14,46 @@
 
 package org.eclipse.gemini.blueprint.mock;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.eclipse.gemini.blueprint.mock.EntryLookupControllingMockBundle;
-
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 
  * @author Costin Leau
  * 
  */
-public class EntryLookupControllingMockBundleTest extends TestCase {
+public class EntryLookupControllingMockBundleTest {
 
 	private EntryLookupControllingMockBundle bundle;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundle = new EntryLookupControllingMockBundle(new Properties());
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		bundle = null;
 	}
 
+	@Test
 	public void testGetEntry() throws Exception {
 		URL url = new URL("http://bo/ho");
 		bundle.setEntryReturnOnNextCallToGetEntry(url);
 		assertSame(url, bundle.getEntry("bla"));
 	}
 
+	@Test
 	public void testFindEntries() throws Exception {
 		String[] source = new String[] {"A"};
 		bundle.setResultsToReturnOnNextCallToFindEntries(source);

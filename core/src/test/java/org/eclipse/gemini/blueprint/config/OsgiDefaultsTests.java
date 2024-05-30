@@ -14,9 +14,13 @@
 
 package org.eclipse.gemini.blueprint.config;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.Serializable;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
@@ -37,11 +41,12 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiDefaultsTests extends TestCase {
+public class OsgiDefaultsTests {
 
 	private GenericApplicationContext appContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		BundleContext bundleContext = new MockBundleContext() {
 			// service reference already registered
 			public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
@@ -58,43 +63,51 @@ public class OsgiDefaultsTests extends TestCase {
 		appContext.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 		appContext = null;
 	}
 
+	@Test
 	public void testLocalDefinitionForTimeout() throws Exception {
 		OsgiServiceProxyFactoryBean fb = (OsgiServiceProxyFactoryBean) appContext.getBean("&refWLocalConfig");
 		assertEquals(55, getTimeout(fb));
 	}
 
+	@Test
 	public void testLocalDefinitionForCardinalityOnMultiImporter() throws Exception {
 		OsgiServiceCollectionProxyFactoryBean fb =
 				(OsgiServiceCollectionProxyFactoryBean) appContext.getBean("&colWLocalConfig");
 		assertEquals(Availability.MANDATORY, getCardinality(fb));
 	}
 
+	@Test
 	public void testLocalDefinitionForCardinalityOnSingleImporter() throws Exception {
 		OsgiServiceProxyFactoryBean fb = (OsgiServiceProxyFactoryBean) appContext.getBean("&refWLocalConfig");
 		assertEquals(Availability.MANDATORY, getCardinality(fb));
 	}
 
+	@Test
 	public void testTimeoutDefault() throws Exception {
 		OsgiServiceProxyFactoryBean fb = (OsgiServiceProxyFactoryBean) appContext.getBean("&refWDefaults");
 		assertEquals("default osgi timeout not applied", 10, getTimeout(fb));
 	}
 
+	@Test
 	public void testCardinalityDefaultOnSingleImporter() throws Exception {
 		OsgiServiceProxyFactoryBean fb = (OsgiServiceProxyFactoryBean) appContext.getBean("&refWDefaults");
 		assertEquals(Availability.OPTIONAL, getCardinality(fb));
 	}
 
+	@Test
 	public void testCardinalityDefaultOnMultiImporter() throws Exception {
 		OsgiServiceCollectionProxyFactoryBean fb =
 				(OsgiServiceCollectionProxyFactoryBean) appContext.getBean("&colWDefaults");
 		assertEquals(Availability.OPTIONAL, getCardinality(fb));
 	}
 
+	@Test
 	public void testNormalBeanInjection() throws Exception {
 		appContext.getBean("nestedURLValue");
 	}

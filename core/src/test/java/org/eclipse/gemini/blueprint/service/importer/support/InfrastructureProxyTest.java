@@ -14,9 +14,16 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
@@ -32,7 +39,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * 
  * @author Costin Leau
  */
-public class InfrastructureProxyTest extends TestCase {
+public class InfrastructureProxyTest {
 
 	private StaticServiceProxyCreator proxyCreator;
 
@@ -46,14 +53,17 @@ public class InfrastructureProxyTest extends TestCase {
 		return new StaticServiceProxyCreator(classes, cl, cl, ctx, ImportContextClassLoaderEnum.UNMANAGED, true, false);
 	}
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		proxyCreator = createProxyCreator(null, classes);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		proxyCreator = null;
 	}
 
+	@Test
 	public void testCreatedProxy() throws Exception {
 		MockServiceReference ref = new MockServiceReference();
 
@@ -62,6 +72,7 @@ public class InfrastructureProxyTest extends TestCase {
 		assertTrue(proxy instanceof InfrastructureProxy);
 	}
 
+	@Test
 	public void testTargetProxy() throws Exception {
 		final MockServiceReference ref = new MockServiceReference();
 		final Object service = new Object();
@@ -91,7 +102,9 @@ public class InfrastructureProxyTest extends TestCase {
 	}
 
 	// FIXME: disabled due to some strange certificates problem with Equinox
-	public void tstBlueprintExceptions() throws Exception {
+	@Test
+	@Ignore
+	public void testBlueprintExceptions() throws Exception {
 		MockServiceReference ref = new MockServiceReference(new String[] { Comparable.class.getName() });
 		MockBundleContext ctx = new MockBundleContext() {
 

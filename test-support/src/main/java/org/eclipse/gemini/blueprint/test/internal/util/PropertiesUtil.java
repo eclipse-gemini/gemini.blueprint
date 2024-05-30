@@ -248,7 +248,7 @@ public abstract class PropertiesUtil {
 			return EMPTY_PROPERTIES;
         }
 
-		Assert.notNull(properties);
+		Assert.notNull(properties, "properties is required");
 
 		Properties excluded = (properties instanceof OrderedProperties ? new OrderedProperties() : new Properties());
 
@@ -278,7 +278,7 @@ public abstract class PropertiesUtil {
 			return EMPTY_PROPERTIES;
         }
 
-		Assert.notNull(properties);
+		Assert.notNull(properties, "properties is required");
 		Properties excluded = (properties instanceof OrderedProperties ? new OrderedProperties() : new Properties());
 
 		for (Enumeration enm = properties.keys(); enm.hasMoreElements();) {
@@ -305,7 +305,7 @@ public abstract class PropertiesUtil {
 	 * @return
 	 */
 	public static Properties expandProperties(Properties props) {
-		Assert.notNull(props);
+		Assert.notNull(props, "props is required");
 
 		Set entrySet = props.entrySet();
 

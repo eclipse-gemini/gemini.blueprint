@@ -17,7 +17,7 @@ package org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.suppo
 import java.util.Dictionary;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintConfigUtils;
 import org.osgi.framework.Constants;
@@ -25,8 +25,8 @@ import org.osgi.framework.Constants;
 /**
  * @author Costin Leau
  */
-public class BlueprintConfigUtilsTest extends TestCase {
-
+public class BlueprintConfigUtilsTest {
+	@Test
 	public void testNoWaitForDependencies() throws Exception {
 		Dictionary props = new Properties();
 		props.put(Constants.BUNDLE_SYMBOLICNAME, "foo.bar; " + BlueprintConfigUtils.BLUEPRINT_GRACE_PERIOD + ":=false");
@@ -34,12 +34,14 @@ public class BlueprintConfigUtilsTest extends TestCase {
 
 	}
 
+	@Test
 	public void testWaitForDependencies() throws Exception {
 		Dictionary props = new Properties();
 		props.put(Constants.BUNDLE_SYMBOLICNAME, "foo.bar; " + BlueprintConfigUtils.BLUEPRINT_GRACE_PERIOD + ":=true");
 		assertTrue(BlueprintConfigUtils.getWaitForDependencies(props));
 	}
 
+	@Test
 	public void testNoWaitDefinedForDependencies() throws Exception {
 		Dictionary props = new Properties();
 		props.put(Constants.BUNDLE_SYMBOLICNAME, "foo.bar");

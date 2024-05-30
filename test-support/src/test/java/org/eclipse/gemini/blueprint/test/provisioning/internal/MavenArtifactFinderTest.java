@@ -14,17 +14,22 @@
 
 package org.eclipse.gemini.blueprint.test.provisioning.internal;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class MavenArtifactFinderTest extends TestCase {
+public class MavenArtifactFinderTest {
 
 	private static final String GROUP_ID = "foo";
 	private static final String PATH = "src/test/resources/org/eclipse/gemini/blueprint/test";
 
-
+	@Test
 	public void testFindMyArtifact() throws IOException {
 		MavenPackagedArtifactFinder finder = new MavenPackagedArtifactFinder(GROUP_ID, "test-artifact", "1.0-SNAPSHOT",
 			"jar");
@@ -33,6 +38,7 @@ public class MavenArtifactFinderTest extends TestCase {
 		assertTrue(found.exists());
 	}
 
+	@Test
 	public void testFindChildArtifact() throws IOException {
 		MavenPackagedArtifactFinder finder = new MavenPackagedArtifactFinder(GROUP_ID, "test-child-artifact",
 			"1.0-SNAPSHOT", "jar");
@@ -41,6 +47,7 @@ public class MavenArtifactFinderTest extends TestCase {
 		assertTrue(found.exists());
 	}
 
+	@Test
 	public void testFindParentArtifact() throws IOException {
 		MavenPackagedArtifactFinder finder = new MavenPackagedArtifactFinder(GROUP_ID, "test-artifact", "1.0-SNAPSHOT",
 			"jar");
@@ -49,6 +56,7 @@ public class MavenArtifactFinderTest extends TestCase {
 		assertTrue(found.exists());
 	}
 
+	@Test
 	public void testSameArtifactIdInTwoDifferentGroupsWithGroup1() throws Exception {
 		MavenPackagedArtifactFinder finder = new MavenPackagedArtifactFinder("group1", "artifact", "1.0", "jar");
 		File found = finder.findPackagedArtifact(new File(PATH));
@@ -59,6 +67,7 @@ public class MavenArtifactFinderTest extends TestCase {
 		assertFalse(found.getAbsolutePath().indexOf("group2") > -1);
 	}
 
+	@Test
 	public void testSameArtifactIdInTwoDifferentGroupsWithGroup2() throws Exception {
 		MavenPackagedArtifactFinder finder = new MavenPackagedArtifactFinder("group2", "artifact", "1.0", "jar");
 		File found = finder.findPackagedArtifact(new File(PATH));
@@ -69,6 +78,7 @@ public class MavenArtifactFinderTest extends TestCase {
 		assertFalse(found.getAbsolutePath().indexOf("group1") > -1);
 	}
 
+	@Test
 	public void testPomWithoutAGroupId() throws Exception {
 		MavenPackagedArtifactFinder finder = new MavenPackagedArtifactFinder("non-existing", "badpom", "1.0", "jar");
 		try {

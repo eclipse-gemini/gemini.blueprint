@@ -14,9 +14,14 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.DynamicCollection;
 
@@ -27,29 +32,33 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.collection
  * 
  */
 @SuppressWarnings("unchecked")
-public class DynamicCollectionTest extends TestCase {
+public class DynamicCollectionTest {
 
 	private Collection dynamicCollection;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		dynamicCollection = new DynamicCollection();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dynamicCollection = null;
 	}
 
+	@Test
 	public void testAdd() {
 		assertTrue(dynamicCollection.add(new Object()));
 	}
 
+	@Test
 	public void testAddDuplicate() {
 		Object obj = new Object();
 		assertTrue(dynamicCollection.add(obj));
 		assertTrue(dynamicCollection.add(obj));
 	}
 
+	@Test
 	public void testRemove() {
 		Object obj = new Object();
 		assertFalse(dynamicCollection.remove(obj));
@@ -58,6 +67,7 @@ public class DynamicCollectionTest extends TestCase {
 		assertFalse(dynamicCollection.remove(obj));
 	}
 
+	@Test
 	public void testRemoveDuplicate() {
 		Object obj = new Object();
 		assertFalse(dynamicCollection.remove(obj));

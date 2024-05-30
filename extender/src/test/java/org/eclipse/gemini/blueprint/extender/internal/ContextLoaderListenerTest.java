@@ -14,13 +14,16 @@
 
 package org.eclipse.gemini.blueprint.extender.internal;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Properties;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.extender.internal.activator.ContextLoaderListener;
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.eclipse.gemini.blueprint.extender.internal.support.TestTaskExecutor;
@@ -29,6 +32,9 @@ import org.eclipse.gemini.blueprint.mock.EntryLookupControllingMockBundle;
 import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -40,16 +46,17 @@ import org.springframework.core.io.ClassPathResource;
  * @author Adrian Colyer
  * 
  */
-public abstract class ContextLoaderListenerTest extends TestCase {
+public abstract class ContextLoaderListenerTest {
 	private ContextLoaderListener listener;
     // TODO: mock & train once there are any applications of this base class.
     private ExtenderConfiguration configuration;
 
-    protected void setUp() throws Exception {
-		super.setUp();
+    @Before
+    public void setup() throws Exception {
 		this.listener = new ContextLoaderListener(this.configuration);
 	}
 
+    @Test
 	public void testStart() throws Exception {
 		BundleContext context = createMock(BundleContext.class);
 		// platform determination
@@ -79,7 +86,9 @@ public abstract class ContextLoaderListenerTest extends TestCase {
 		verify(context);
 	}
 
-	public void tstTaskExecutor() throws Exception {
+    @Test
+    @Ignore
+	public void testTaskExecutor() throws Exception {
 		Dictionary headers = new Hashtable();
 		headers.put(Constants.BUNDLE_NAME, "Extender mock bundle");
 		final EntryLookupControllingMockBundle aBundle = new EntryLookupControllingMockBundle(headers);

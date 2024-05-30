@@ -14,9 +14,13 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Arrays;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.osgi.framework.BundleContext;
@@ -32,15 +36,15 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class SpringDmRfc124Test extends TestCase {
+public class SpringDmRfc124Test {
 
 	private static final String CONFIG = "spring-dm-rfc124.xml";
 
 	private GenericApplicationContext context;
 	private XmlBeanDefinitionReader reader;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		BundleContext bundleContext = new MockBundleContext() {
 
 			// service reference already registered
@@ -58,11 +62,13 @@ public class SpringDmRfc124Test extends TestCase {
 		context.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testContainerSanity() throws Exception {
 		System.out.println(Arrays.toString(context.getBeanDefinitionNames()));
 		assertEquals(5, context.getBeanDefinitionCount());

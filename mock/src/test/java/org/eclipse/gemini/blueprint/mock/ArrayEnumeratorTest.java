@@ -14,18 +14,23 @@
 
 package org.eclipse.gemini.blueprint.mock;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
-import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
-
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
  * 
  */
-public class ArrayEnumeratorTest extends TestCase {
+public class ArrayEnumeratorTest {
 
 	private Enumeration enm;
 
@@ -35,7 +40,8 @@ public class ArrayEnumeratorTest extends TestCase {
 	 * (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		source = new Object[] { "A", "B", "C" };
 		enm = new ArrayEnumerator(source);
 	}
@@ -44,7 +50,8 @@ public class ArrayEnumeratorTest extends TestCase {
 	 * (non-Javadoc)
 	 * @see junit.framework.TestCase#tearDown()
 	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		enm = null;
 		source = null;
 	}
@@ -53,10 +60,12 @@ public class ArrayEnumeratorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.ArrayEnumerator#hasMoreElements()}.
 	 */
+	@Test
 	public void testHasMoreElements() {
 		assertTrue(enm.hasMoreElements());
 	}
 
+	@Test
 	public void testHasMoreElementsWithEmptySource() {
 		enm = new ArrayEnumerator(new Object[0]);
 		assertFalse(enm.hasMoreElements());
@@ -66,12 +75,14 @@ public class ArrayEnumeratorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.ArrayEnumerator#nextElement()}.
 	 */
+	@Test
 	public void testNextElement() {
 		assertEquals("A", enm.nextElement());
 		assertEquals("B", enm.nextElement());
 		assertEquals("C", enm.nextElement());
 	}
 
+	@Test
 	public void testNextElementException() {
 		enm = new ArrayEnumerator(new Object[0]);
 		try {

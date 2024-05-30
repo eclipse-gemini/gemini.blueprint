@@ -14,9 +14,14 @@
 
 package org.eclipse.gemini.blueprint.internal.service.interceptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Method;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
@@ -31,7 +36,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceStaticInterceptorTest extends TestCase {
+public class OsgiServiceStaticInterceptorTest {
 
 	private ServiceStaticInterceptor interceptor;
 
@@ -39,7 +44,8 @@ public class OsgiServiceStaticInterceptorTest extends TestCase {
 
 	private ClassLoader classLoader = getClass().getClassLoader();
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		service = new Object();
 
 		ServiceReference reference = new MockServiceReference();
@@ -53,11 +59,13 @@ public class OsgiServiceStaticInterceptorTest extends TestCase {
 		interceptor = new ServiceStaticInterceptor(ctx, reference);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		service = null;
 		interceptor = null;
 	}
 
+	@Test
 	public void testNullWrapper() throws Exception {
 		try {
 			interceptor = new ServiceStaticInterceptor(null, null);
@@ -68,14 +76,16 @@ public class OsgiServiceStaticInterceptorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testInvocationOnService() throws Throwable {
 		Object target = new Object();
 		Method m = target.getClass().getDeclaredMethod("hashCode", null);
 
 		MethodInvocation invocation = new MockMethodInvocation(m);
-		assertEquals(new Integer(service.hashCode()), interceptor.invoke(invocation));
+		assertEquals(Integer.valueOf(service.hashCode()), interceptor.invoke(invocation));
 	}
 
+	@Test
 	public void testInvocationWhenServiceNA() throws Throwable {
 		// service n/a
 		ServiceReference reference = new MockServiceReference() {

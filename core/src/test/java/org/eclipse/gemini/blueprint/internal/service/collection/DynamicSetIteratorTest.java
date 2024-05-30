@@ -14,16 +14,22 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.DynamicSet;
 
-public class DynamicSetIteratorTest extends TestCase {
+public class DynamicSetIteratorTest {
 
 	private Set dynamicSet;
 
@@ -35,17 +41,19 @@ public class DynamicSetIteratorTest extends TestCase {
 
 	private Integer three;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		dynamicSet = new DynamicSet();
 		iter = dynamicSet.iterator();
 
-		one = new Integer(1);
-		two = new Integer(2);
-		three = new Integer(3);
+		one = Integer.valueOf(1);
+		two = Integer.valueOf(2);
+		three = Integer.valueOf(3);
 
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dynamicSet = null;
 		iter = null;
 		one = null;
@@ -53,6 +61,7 @@ public class DynamicSetIteratorTest extends TestCase {
 		three = null;
 	}
 
+	@Test
 	public void testIteratingWhileAdding() {
 		assertFalse(iter.hasNext());
 		dynamicSet.add(one);
@@ -66,6 +75,7 @@ public class DynamicSetIteratorTest extends TestCase {
 		assertSame(three, iter.next());
 	}
 
+	@Test
 	public void testIteratingWhileAddingDuplicate() {
 		assertFalse(iter.hasNext());
 		dynamicSet.add(one);
@@ -75,6 +85,7 @@ public class DynamicSetIteratorTest extends TestCase {
 		assertFalse(iter.hasNext());
 	}
 
+	@Test
 	public void testIteratingWhileRemovingValidItem() {
 		assertFalse(iter.hasNext());
 		dynamicSet.add(one);
@@ -88,6 +99,7 @@ public class DynamicSetIteratorTest extends TestCase {
 		assertSame(three, iter.next());
 	}
 
+	@Test
 	public void testIteratingWhileAddingCollection() {
 		assertFalse(iter.hasNext());
 		List list = new ArrayList();

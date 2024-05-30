@@ -20,7 +20,7 @@ package org.eclipse.gemini.blueprint.test.platform;
  * 
  */
 public class FelixPlatformTest extends CommonPlatformTest {
-
+	@Override
 	AbstractOsgiPlatform createPlatform() {
 		return new FelixPlatform();
 	}

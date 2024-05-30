@@ -14,27 +14,30 @@
 
 package org.eclipse.gemini.blueprint.context.support;
 
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.createStrictControl;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
-
 import org.easymock.IMocksControl;
-
+import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
+import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
-import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
-import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.io.Resource;
@@ -42,14 +45,15 @@ import org.springframework.core.io.Resource;
 /**
  * @author Costin Leau
  */
-public class AbstractRefreshableOsgiBundleApplicationContextTest extends TestCase {
+public class AbstractRefreshableOsgiBundleApplicationContextTest {
 
     private AbstractOsgiBundleApplicationContext context;
     private IMocksControl mocksControl;
     private Bundle bundle;
     private BundleContext bundleCtx;
 
-    protected void setUp() throws Exception {
+    @Before
+    public void setup() throws Exception {
         context = new AbstractOsgiBundleApplicationContext() {
 
             protected void loadBeanDefinitions(DefaultListableBeanFactory arg0) throws IOException, BeansException {
@@ -63,10 +67,12 @@ public class AbstractRefreshableOsgiBundleApplicationContextTest extends TestCas
         expect(bundleCtx.getBundle()).andReturn(bundle);
     }
 
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         context = null;
     }
 
+    @Test
     public void testBundleContext() throws Exception {
 
         String location = "osgibundle://someLocation";
@@ -92,6 +98,7 @@ public class AbstractRefreshableOsgiBundleApplicationContextTest extends TestCas
         verify(bundle, bundleCtx);
     }
 
+    @Test
     public void testServicePublicationBetweenRefreshes() throws Exception {
         // [0] = service registration
         // [1] = service unregistration

@@ -14,25 +14,27 @@
 
 package org.eclipse.gemini.blueprint.blueprint.container;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collection;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.blueprint.container.support.internal.config.CycleOrderingProcessor;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.eclipse.gemini.blueprint.context.support.PublicBlueprintDocumentLoader;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 
 /**
  * @author Costin Leau
  */
-public class CycleTest extends TestCase {
+public class CycleTest {
 
 	private static final String CONFIG = "cycle.xml";
 
@@ -41,7 +43,8 @@ public class CycleTest extends TestCase {
 	protected MockBundleContext bundleContext;
 	private BlueprintContainer blueprintContainer;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 
 		context = new GenericApplicationContext();
@@ -56,11 +59,13 @@ public class CycleTest extends TestCase {
 		blueprintContainer = new SpringBlueprintContainer(context);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testCycle() throws Exception {
 		blueprintContainer.getComponentInstance("a");
 		assertEquals(0, getDependsOn("a").size());

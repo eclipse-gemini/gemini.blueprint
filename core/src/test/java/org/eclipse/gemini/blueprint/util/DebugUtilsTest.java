@@ -14,10 +14,10 @@
 
 package org.eclipse.gemini.blueprint.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 import org.eclipse.gemini.blueprint.TestUtils;
-import org.eclipse.gemini.blueprint.util.DebugUtils;
+import org.junit.Test;
 import org.osgi.framework.Version;
 
 /**
@@ -26,29 +26,33 @@ import org.osgi.framework.Version;
  * @author Costin Leau
  * 
  */
-public class DebugUtilsTest extends TestCase {
+public class DebugUtilsTest {
 
 	private Version getVersion(String statement, String pkg) {
 		return (Version) TestUtils.invokeStaticMethod(DebugUtils.class, "getVersion", new String[] { statement, pkg });
 	}
 
+	@Test
 	public void testNoVersion() throws Exception {
 		String pkg = "foo";
 		assertEquals(Version.emptyVersion, getVersion(pkg, pkg));
 	}
 
+	@Test
 	public void testSingleVersion() throws Exception {
 		String pkg = "foo";
 		String version = "1.2";
 		assertEquals(Version.parseVersion(version), getVersion(pkg + ";version=" + version, pkg));
 	}
 
+	@Test
 	public void testVersionRange() throws Exception {
 		String pkg = "foo";
 		String version = "1.2.0.bla";
 		assertEquals(Version.parseVersion(version), getVersion(pkg + ";version=\"[" + version + ",3.4\")", pkg));
 	}
 
+	@Test
 	public void testVersionRangePlusExtraDirective() throws Exception {
 		String pkg = "foo";
 		String version = "1.2.0.bla";
@@ -56,11 +60,13 @@ public class DebugUtilsTest extends TestCase {
 				+ ",3.4\");resolution:=optional", pkg));
 	}
 
+	@Test
 	public void testNoVersionPlusExtraDirective() throws Exception {
 		String pkg = "foo";
 		assertEquals(Version.emptyVersion, getVersion(pkg + ";resolution:=optional", pkg));
 	}
 
+	@Test
 	public void testSingleVersionPlusExtraDirective() throws Exception {
 		String pkg = "foo";
 		String version = "1.2.0.bla";
@@ -68,6 +74,7 @@ public class DebugUtilsTest extends TestCase {
 			pkg));
 	}
 
+	@Test
 	public void testSingleVersionWithQuotes() throws Exception {
 		String pkg = "foo";
 		String version = "3.4.5.pausesti";

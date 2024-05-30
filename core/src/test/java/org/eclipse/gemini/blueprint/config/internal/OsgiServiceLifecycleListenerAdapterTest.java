@@ -22,9 +22,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import org.eclipse.gemini.blueprint.config.internal.adapter.OsgiServiceLifecycleListenerAdapter;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
@@ -38,7 +44,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 /**
  * @author Costin Leau
  */
-public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
+public class OsgiServiceLifecycleListenerAdapterTest {
 
 	protected static class JustListener implements OsgiServiceLifecycleListener {
 
@@ -228,7 +234,8 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 
 	private static final String BEAN_NAME = "bla";
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		JustListener.BIND_CALLS = 0;
 		JustListener.UNBIND_CALLS = 0;
 		OverloadedCustomMethods.BIND_SERVICES = new ArrayList();
@@ -238,12 +245,14 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		CustomListener.UNBIND_CALLS = 0;
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		listener = null;
 		OverloadedCustomMethods.BIND_SERVICES = null;
 		OverloadedCustomMethods.UNBIND_SERVICES = null;
 	}
 
+	@Test
 	public void testWrapperOverListener() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new JustListener()));
@@ -266,6 +275,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals(2, JustListener.BIND_CALLS);
 	}
 
+	@Test
 	public void testWrapperOverNoInvalidClass() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setTargetBeanName(BEAN_NAME);
@@ -280,6 +290,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testWrapperWithIncorrectCustomMethodNames() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setTargetBeanName(BEAN_NAME);
@@ -295,6 +306,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testWrapperWithCorrectCustomMethodNamesButIncorrectArgumentTypes() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setTarget(new CustomListener());
@@ -312,9 +324,9 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 
 		assertEquals(0, CustomListener.BIND_CALLS);
 		assertEquals(0, CustomListener.UNBIND_CALLS);
-
 	}
 
+	@Test
 	public void testWrapperWithCustomMethods() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new CustomListener()));
@@ -343,6 +355,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals(2, CustomListener.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testWrapperWithCustomMethodsAndNullParameters() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new CustomListener()));
@@ -361,6 +374,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals("null services allowed", 1, CustomListener.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testWrapperWithBothCustomAndInterfaceMethods() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new CustomAndListener()));
@@ -380,9 +394,9 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		listener.unbind(service, null);
 		assertEquals(2, CustomAndListener.BIND_CALLS);
 		assertEquals(2, CustomAndListener.UNBIND_CALLS);
-
 	}
 
+	@Test
 	public void testWrapperWithCustomOverloadedMethodsAndDifferentServiceTypes() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new OverloadedCustomMethods()));
@@ -424,6 +438,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertSame("incorrect call order", objService, OverloadedCustomMethods.UNBIND_SERVICES.get(2));
 	}
 
+	@Test
 	public void testExceptionOnListenerMethod() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new ExceptionListener()));
@@ -444,6 +459,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals(1, JustListener.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testExceptionOnCustomMethods() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new ExceptionCustomListener()));
@@ -464,6 +480,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals("should have called overloaded method with type Object", 1, ExceptionCustomListener.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testStandardListenerWithListeningMethodsSpecifiedAsCustomOnes() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new JustListener()));
@@ -484,6 +501,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals(4, JustListener.BIND_CALLS);
 	}
 
+	@Test
 	public void testListenerWithOverloadedTypesAndMultipleParameterTypes() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new DictionaryAndMapCustomListener()));
@@ -507,6 +525,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals("only one unbind method should be called", 1, JustListener.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testOverridingMethodsDiscovery() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new OverridingMethodListener()));
@@ -528,6 +547,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 
 	}
 
+	@Test
 	public void testJustCustomBindMethod() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new JustBind()));
@@ -544,6 +564,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals(0, JustListener.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testJustCustomUnbindMethod() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new JustUnbind()));
@@ -560,6 +581,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals(1, JustListener.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testCustomServiceRefBind() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new CustomServiceRefListener()));
@@ -574,9 +596,9 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 
 		assertEquals(1, JustListener.BIND_CALLS);
 		assertEquals(0, JustListener.UNBIND_CALLS);
-
 	}
 
+	@Test
 	public void testCustomServiceRefUnbind() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new CustomServiceRefListener()));
@@ -593,7 +615,7 @@ public class OsgiServiceLifecycleListenerAdapterTest extends TestCase {
 		assertEquals(1, JustListener.UNBIND_CALLS);
 	}
 	
-	
+	@Test
 	public void testCustomServiceRefAndObjectWOMapBind() throws Exception {
 		listener = new OsgiServiceLifecycleListenerAdapter();
 		listener.setBeanFactory(createMockBF(new CustomServiceRefAndObjectWOMapListener()));

@@ -49,7 +49,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 			"org.eclipse.gemini.blueprint.iandt", "simple.service", getSpringDMVersion()).getURL().toExternalForm());
 		assertNotNull("Cannot find the simple service bundle", simpleServiceBundle);
 
-		assertNotSame("simple service bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleServiceBundle.getState()));
 		startDependency(simpleServiceBundle);
 
@@ -57,7 +57,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 		Bundle simpleServiceDuplicateBundle = bundleContext.installBundle(getLocator().locateArtifact(
 			"org.eclipse.gemini.blueprint.iandt", "simple.service.identical", getSpringDMVersion()).getURL().toExternalForm());
 		assertNotNull("Cannot find the simple service duplicate bundle", simpleServiceDuplicateBundle);
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleServiceDuplicateBundle.getState()));
 		startDependency(simpleServiceDuplicateBundle);
 

@@ -34,7 +34,7 @@ public class InfrastructureOsgiProxyAdvice extends DelegatingIntroductionInterce
 
 
 	public InfrastructureOsgiProxyAdvice(ServiceInvoker serviceInvoker) {
-		Assert.notNull(serviceInvoker);
+		Assert.notNull(serviceInvoker, "serviceInvoker is required");
 		this.invoker = serviceInvoker;
 	}
 

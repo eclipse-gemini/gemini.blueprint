@@ -58,7 +58,7 @@ public class MavenArtifactLookupTest extends BaseIntegrationTest {
 
 		assertNotNull("Cannot find the simple service 2 bundle", simpleService2Bundle);
 
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService2Bundle.getState()));
 
 		assertEquals("Unxpected initial binding of service", 0, MyListener.BOUND_COUNT);

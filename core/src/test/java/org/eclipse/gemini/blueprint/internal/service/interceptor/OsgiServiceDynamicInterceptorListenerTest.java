@@ -14,11 +14,17 @@
 
 package org.eclipse.gemini.blueprint.internal.service.interceptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
 import org.eclipse.gemini.blueprint.service.importer.ServiceReferenceProxy;
@@ -37,7 +43,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
+public class OsgiServiceDynamicInterceptorListenerTest {
 
 	private ServiceDynamicInterceptor interceptor;
 
@@ -47,7 +53,8 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 
 	private ServiceReference[] refs;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		listener = new SimpleTargetSourceLifecycleListener();
 
 		refs = new ServiceReference[] { new MockServiceReference() };
@@ -72,12 +79,14 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		SimpleTargetSourceLifecycleListener.UNBIND = 0;
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		interceptor = null;
 		listener = null;
 		bundleContext = null;
 	}
 
+	@Test
 	public void testBind() {
 		assertEquals(0, SimpleTargetSourceLifecycleListener.BIND);
 		assertEquals(0, SimpleTargetSourceLifecycleListener.UNBIND);
@@ -88,6 +97,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		assertEquals(0, SimpleTargetSourceLifecycleListener.UNBIND);
 	}
 
+	@Test
 	public void testUnbind() {
 		interceptor.afterPropertiesSet();
 
@@ -106,6 +116,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		assertEquals(1, SimpleTargetSourceLifecycleListener.UNBIND);
 	}
 
+	@Test
 	public void testRebindWhenNewServiceAppears() {
 		interceptor.afterPropertiesSet();
 
@@ -128,6 +139,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		assertEquals(0, SimpleTargetSourceLifecycleListener.UNBIND);
 	}
 
+	@Test
 	public void testRebindWhenServiceGoesDownButAReplacementIsFound() {
 		interceptor.afterPropertiesSet();
 
@@ -144,6 +156,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		assertEquals(0, SimpleTargetSourceLifecycleListener.UNBIND);
 	}
 
+	@Test
 	public void testStickinessWhenABetterServiceIsAvailable() throws Exception {
 		interceptor.setSticky(true);
 		interceptor.afterPropertiesSet();
@@ -166,6 +179,7 @@ public class OsgiServiceDynamicInterceptorListenerTest extends TestCase {
 		assertEquals(0, SimpleTargetSourceLifecycleListener.UNBIND);
 	}
 
+	@Test
 	public void testStickinessWhenServiceGoesDown() throws Exception {
 		interceptor.setSticky(true);
 		interceptor.afterPropertiesSet();

@@ -14,7 +14,11 @@
 
 package org.eclipse.gemini.blueprint.config;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
@@ -30,10 +34,11 @@ import org.springframework.core.io.ClassPathResource;
  * @author Costin Leau
  * 
  */
-public class OsgiSingleReferenceParserWithInvalidFilesTest extends TestCase {
+public class OsgiSingleReferenceParserWithInvalidFilesTest {
 	private GenericApplicationContext appContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		BundleContext bundleContext = new MockBundleContext() {
 			// service reference already registered
 			public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
@@ -46,7 +51,8 @@ public class OsgiSingleReferenceParserWithInvalidFilesTest extends TestCase {
 		appContext.setClassLoader(getClass().getClassLoader());
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 		appContext = null;
 	}
@@ -67,13 +73,17 @@ public class OsgiSingleReferenceParserWithInvalidFilesTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testInlineInterfaceAndNestedInterfaces() throws Exception {
 		expectException("osgiSingleReferenceInvalidInterface.xml");
 	}
 
+	@Test
 	public void testListenerWithNestedDefinitionAndInlinedRefVariant1() throws Exception {
 		expectException("osgiSingleReferenceWithInvalidListener1.xml");
 	}
+	
+	@Test
 	public void testListenerWithNestedDefinitionAndInlinedRefVariant2() throws Exception {
 		expectException("osgiSingleReferenceWithInvalidListener2.xml");
 	}

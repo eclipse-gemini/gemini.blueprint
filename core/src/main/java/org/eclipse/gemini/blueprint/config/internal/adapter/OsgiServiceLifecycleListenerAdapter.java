@@ -15,17 +15,14 @@
 package org.eclipse.gemini.blueprint.config.internal.adapter;
 
 import java.lang.reflect.Method;
-import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.gemini.blueprint.context.support.internal.security.SecurityUtils;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
 import org.eclipse.gemini.blueprint.util.internal.ReflectionUtils;
@@ -80,7 +77,7 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 	private boolean initialized;
 
 	public void afterPropertiesSet() {
-		Assert.notNull(beanFactory);
+		Assert.notNull(beanFactory, "beanFactory is required");
 		Assert.isTrue(target != null || StringUtils.hasText(targetBeanName),
 				"one of 'target' or 'targetBeanName' properties has to be set");
 
@@ -227,29 +224,13 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 		if (!initialized)
 			retrieveTarget();
 
-		boolean isSecurityEnabled = (System.getSecurityManager() != null);
-		AccessControlContext acc = null;
-
-		if (isSecurityEnabled) {
-			acc = SecurityUtils.getAccFrom(beanFactory);
-		}
-
 		// first call interface method (if it exists)
 		if (isLifecycleListener) {
 			if (trace)
 				log.trace("Invoking listener interface methods");
 
 			try {
-				if (isSecurityEnabled) {
-					AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-						public Object run() throws Exception {
-							((OsgiServiceLifecycleListener) target).bind(service, properties);
-							return null;
-						}
-					}, acc);
-				} else {
-					((OsgiServiceLifecycleListener) target).bind(service, properties);
-				}
+				((OsgiServiceLifecycleListener) target).bind(service, properties);
 			} catch (Exception ex) {
 				if (ex instanceof PrivilegedActionException) {
 					ex = ((PrivilegedActionException) ex).getException();
@@ -258,18 +239,8 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 			}
 		}
 
-		if (isSecurityEnabled) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					CustomListenerAdapterUtils.invokeCustomMethods(target, bindMethods, service, properties);
-					invokeCustomServiceReferenceMethod(target, bindReference, service);
-					return null;
-				}
-			}, acc);
-		} else {
-			CustomListenerAdapterUtils.invokeCustomMethods(target, bindMethods, service, properties);
-			invokeCustomServiceReferenceMethod(target, bindReference, service);
-		}
+		CustomListenerAdapterUtils.invokeCustomMethods(target, bindMethods, service, properties);
+		invokeCustomServiceReferenceMethod(target, bindReference, service);
 	}
 
 	public void unbind(final Object service, final Map properties) throws Exception {
@@ -281,45 +252,19 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 			log.trace("Invoking unbind method for service " + ObjectUtils.identityToString(service) + " with props="
 					+ properties);
 
-		boolean isSecurityEnabled = (System.getSecurityManager() != null);
-		AccessControlContext acc = null;
-
-		if (isSecurityEnabled) {
-			acc = SecurityUtils.getAccFrom(beanFactory);
-		}
-
 		// first call interface method (if it exists)
 		if (isLifecycleListener) {
 			if (trace)
 				log.trace("Invoking listener interface methods");
 			try {
-				if (isSecurityEnabled) {
-					AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-						public Object run() throws Exception {
-							((OsgiServiceLifecycleListener) target).unbind(service, properties);
-							return null;
-						}
-					}, acc);
-				} else {
-					((OsgiServiceLifecycleListener) target).unbind(service, properties);
-				}
+				((OsgiServiceLifecycleListener) target).unbind(service, properties);
 			} catch (Exception ex) {
 				log.warn("Standard unbind method on [" + target.getClass().getName() + "] threw exception", ex);
 			}
 		}
 
-		if (isSecurityEnabled) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					CustomListenerAdapterUtils.invokeCustomMethods(target, unbindMethods, service, properties);
-					invokeCustomServiceReferenceMethod(target, unbindReference, service);
-					return null;
-				}
-			}, acc);
-		} else {
-			CustomListenerAdapterUtils.invokeCustomMethods(target, unbindMethods, service, properties);
-			invokeCustomServiceReferenceMethod(target, unbindReference, service);
-		}
+		CustomListenerAdapterUtils.invokeCustomMethods(target, unbindMethods, service, properties);
+		invokeCustomServiceReferenceMethod(target, unbindReference, service);
 	}
 
 	/**

@@ -14,10 +14,20 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support.internal.aop;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Arrays;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
@@ -29,58 +39,67 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class SwappingServiceReferenceProxyTest extends TestCase {
+public class SwappingServiceReferenceProxyTest {
 
 	private SwappingServiceReferenceProxy reference;
 	private ServiceReference serviceReference;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		Properties props = new Properties();
 		props.setProperty("composer", "Rachmaninoff");
 		reference = new SwappingServiceReferenceProxy();
 		serviceReference = new MockServiceReference();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		reference = null;
 		serviceReference = null;
 	}
 
+	@Test
 	public void testHashCode() {
 		assertTrue(reference.hashCode() != 0);
 	}
 
+	@Test
 	public void testGetBundle() {
 		assertNull(reference.getBundle());
 	}
 
+	@Test
 	public void testGetProperty() {
 		assertNull(reference.getProperty("foo"));
 	}
 
+	@Test
 	public void testGetPropertyKeys() {
 		String[] array = reference.getPropertyKeys();
 		assertNotNull(array);
 		assertEquals(0, array.length);
 	}
 
+	@Test
 	public void testGetUsingBundles() {
 		Bundle[] array = reference.getUsingBundles();
 		assertNotNull(array);
 		assertEquals(0, array.length);
 	}
 
+	@Test
 	public void testIsAssignableTo() {
 		assertFalse(reference.isAssignableTo(new MockBundle(), "Object"));
 	}
 
+	@Test
 	public void testGetTargetServiceReference() {
 		assertNull(reference.getTargetServiceReference());
 		assertNull(reference.swapDelegates(serviceReference));
 		assertSame(serviceReference, reference.getTargetServiceReference());
 	}
 
+	@Test
 	public void testEqualsObject() {
 		SwappingServiceReferenceProxy anotherRef = new SwappingServiceReferenceProxy();
 		assertEquals(anotherRef, reference);
@@ -91,6 +110,7 @@ public class SwappingServiceReferenceProxyTest extends TestCase {
 		assertEquals(reference, reference);
 	}
 
+	@Test
 	public void testSwapDelegates() {
 		int originalHashCode = reference.hashCode();
 		assertNull(reference.swapDelegates(serviceReference));
@@ -99,6 +119,7 @@ public class SwappingServiceReferenceProxyTest extends TestCase {
 		assertSame(serviceReference, reference.getTargetServiceReference());
 	}
 
+	@Test
 	public void testHashCodeWithNotNullDelegate() {
 		int originalHashCode = reference.hashCode();
 		reference.swapDelegates(serviceReference);
@@ -106,27 +127,32 @@ public class SwappingServiceReferenceProxyTest extends TestCase {
 		assertEquals(reference.hashCode(), reference.hashCode());
 	}
 
+	@Test
 	public void testGetBundleWithNotNullDelegate() {
 		reference.swapDelegates(serviceReference);
 		assertSame(serviceReference.getBundle(), reference.getBundle());
 	}
 
+	@Test
 	public void testGetPropertyWithNotNullDelegate() {
 		reference.swapDelegates(serviceReference);
 		assertSame(serviceReference.getProperty("composer"), reference.getProperty("composer"));
 		assertSame(serviceReference.getProperty("foo"), reference.getProperty("foo"));
 	}
 
+	@Test
 	public void testGetPropertyKeysWithNotNullDelegate() {
 		reference.swapDelegates(serviceReference);
 		assertTrue(Arrays.equals(serviceReference.getPropertyKeys(), reference.getPropertyKeys()));
 	}
 
+	@Test
 	public void testGetUsingBundlesWithNotNullDelegate() {
 		reference.swapDelegates(serviceReference);
 		assertTrue(Arrays.equals(serviceReference.getUsingBundles(), reference.getUsingBundles()));
 	}
 
+	@Test
 	public void testIsAssignableToWithNotNullDelegate() {
 		MockBundle bundle = new MockBundle();
 		String className = "Object";
@@ -134,6 +160,7 @@ public class SwappingServiceReferenceProxyTest extends TestCase {
 		assertEquals(serviceReference.isAssignableTo(bundle, className), reference.isAssignableTo(bundle, className));
 	}
 
+	@Test
 	public void testEqualsObjectWithNotNullDelegate() {
 		reference.swapDelegates(serviceReference);
 		SwappingServiceReferenceProxy anotherRef = new SwappingServiceReferenceProxy();
@@ -146,14 +173,17 @@ public class SwappingServiceReferenceProxyTest extends TestCase {
 		assertEquals(reference, reference);
 	}
 
+	@Test
 	public void testCompareToItself() throws Exception {
 		assertEquals(0, reference.compareTo(reference));
 	}
 
+	@Test
 	public void testDefaultCompareTo() throws Exception {
 		assertEquals(0, reference.compareTo(new SwappingServiceReferenceProxy()));
 	}
 
+	@Test
 	public void testCompareToDifferentService() throws Exception {
 		SwappingServiceReferenceProxy proxy = new SwappingServiceReferenceProxy();
 		proxy.swapDelegates(new MockServiceReference());

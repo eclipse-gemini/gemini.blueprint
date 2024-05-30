@@ -17,26 +17,29 @@ package org.eclipse.gemini.blueprint.mock;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.osgi.framework.ServiceReference;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 /**
  * @author Costin Leau
  * 
  */
-public class MockServiceRegistrationTest extends TestCase {
+public class MockServiceRegistrationTest {
 
 	MockServiceRegistration mock;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		mock = new MockServiceRegistration();
 	}
 
@@ -44,6 +47,7 @@ public class MockServiceRegistrationTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceRegistration#MockServiceRegistration()}.
 	 */
+	@Test
 	public void testMockServiceRegistration() {
 		assertNotNull(mock.getReference());
 		assertNotNull(mock.getReference().getPropertyKeys());
@@ -53,6 +57,7 @@ public class MockServiceRegistrationTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceRegistration#MockServiceRegistration(java.util.Hashtable)}.
 	 */
+	@Test
 	public void testMockServiceRegistrationHashtable() {
 		Dictionary props = new Hashtable();
 		Object value = new Object();
@@ -67,6 +72,7 @@ public class MockServiceRegistrationTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceRegistration#getReference()}.
 	 */
+	@Test
 	public void testGetReference() {
 		assertNotNull(mock.getReference());
 	}
@@ -75,6 +81,7 @@ public class MockServiceRegistrationTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceRegistration#setReference(org.osgi.framework.ServiceReference)}.
 	 */
+	@Test
 	public void testSetReference() {
 		ServiceReference ref = new MockServiceReference();
 		mock.setReference(ref);
@@ -85,6 +92,7 @@ public class MockServiceRegistrationTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockServiceRegistration#setProperties(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testSetProperties() {
 		Dictionary props = new Hashtable();
 		Object value = new Object();
@@ -105,6 +113,7 @@ public class MockServiceRegistrationTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testHashCode() {
 		MockServiceReference ref = new MockServiceReference();
 		mock.setReference(ref);
@@ -116,11 +125,13 @@ public class MockServiceRegistrationTest extends TestCase {
 
 	}
 
+	@Test
 	public void testHashCodeWithDifferentServiceRef() {
 		MockServiceRegistration other = new MockServiceRegistration();
 		assertFalse(mock.hashCode() == other.hashCode());
 	}
 
+	@Test
 	public void testHashCodeSelf() {
 		assertEquals(mock.hashCode(), mock.hashCode());
 
@@ -128,6 +139,7 @@ public class MockServiceRegistrationTest extends TestCase {
 		assertEquals(mock.hashCode(), mock.hashCode());
 	}
 
+	@Test
 	public void testEqualsTrue() {
 		MockServiceReference ref = new MockServiceReference();
 		mock.setReference(ref);
@@ -138,11 +150,13 @@ public class MockServiceRegistrationTest extends TestCase {
 		assertEquals(mock, other);
 	}
 
+	@Test
 	public void testEqualsFalse() {
 		MockServiceRegistration other = new MockServiceRegistration();
 		assertFalse(mock.equals(other));
 	}
 
+	@Test
 	public void testEqualsThis() {
 		assertEquals(mock, mock);
 	}

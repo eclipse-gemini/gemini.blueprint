@@ -14,7 +14,11 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 import org.eclipse.gemini.blueprint.context.support.PublicBlueprintDocumentLoader;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -26,14 +30,15 @@ import org.springframework.core.io.ClassPathResource;
  * 
  * @author Costin Leau
  */
-public class SchemaWithLocationTest extends TestCase {
+public class SchemaWithLocationTest {
 
 	private static final String CONFIG = "schemaWithoutLocation.xml";
 
 	private GenericApplicationContext context;
 	private XmlBeanDefinitionReader reader;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		context = new GenericApplicationContext();
 		context.setClassLoader(getClass().getClassLoader());
 		reader = new XmlBeanDefinitionReader(context);
@@ -42,11 +47,13 @@ public class SchemaWithLocationTest extends TestCase {
 		context.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testContainerSanity() throws Exception {
 		assertEquals(1, context.getBeanDefinitionCount());
 	}

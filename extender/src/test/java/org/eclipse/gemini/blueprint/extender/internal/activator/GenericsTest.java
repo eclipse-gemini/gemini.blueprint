@@ -14,9 +14,12 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.activator;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import org.springframework.core.GenericTypeResolver;
+
+import static org.junit.Assert.assertSame;
+
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextListener;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextClosedEvent;
@@ -27,7 +30,7 @@ import org.eclipse.gemini.blueprint.extender.internal.activator.GenericsTest.Som
  * 
  * @author Costin Leau
  */
-public class GenericsTest extends TestCase {
+public class GenericsTest {
 
 	public static class SomeClass {
 		public static class AnotherClass {
@@ -40,21 +43,25 @@ public class GenericsTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testRawType() throws Exception {
 		assertSame(OsgiBundleApplicationContextEvent.class, GenericTypeResolver.resolveTypeArgument(RawListener.class,
 				OsgiBundleApplicationContextListener.class));
 	}
 
+	@Test
 	public void testGenericType() throws Exception {
 		assertSame(OsgiBundleApplicationContextEvent.class, GenericTypeResolver.resolveTypeArgument(
 				GenericListener.class, OsgiBundleApplicationContextListener.class));
 	}
 
+	@Test
 	public void testSpecializedType() throws Exception {
 		assertSame(OsgiBundleContextClosedEvent.class, GenericTypeResolver.resolveTypeArgument(
 				SpecializedListener.class, OsgiBundleApplicationContextListener.class));
 	}
 
+	@Test
 	public void testNestedListener() throws Exception {
 		assertSame(OsgiBundleContextClosedEvent.class, GenericTypeResolver.resolveTypeArgument(NestedListener.class,
 				OsgiBundleApplicationContextListener.class));

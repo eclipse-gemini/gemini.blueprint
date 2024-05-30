@@ -14,32 +14,35 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.util.OsgiPlatformDetector;
+import org.eclipse.gemini.blueprint.mock.MockBundle;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.eclipse.gemini.blueprint.mock.MockBundle;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 
 /**
  * @author Adrian Colyer
  *
  */
-public class OsgiPlatformDetectorTest extends TestCase {
+public class OsgiPlatformDetectorTest {
 
 	private Bundle mockBundle;
 	private Properties props;
 	
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
 		this.mockBundle = new MockBundle();
 		this.props = new Properties();
 	}
 	
+	@Test
 	public void testEquinoxDetection() {
 		props.put(Constants.FRAMEWORK_VENDOR,"Eclipse");
 		BundleContext bc = new MockBundleContext(mockBundle,props);
@@ -48,6 +51,7 @@ public class OsgiPlatformDetectorTest extends TestCase {
 		assertFalse(OsgiPlatformDetector.isFelix(bc));
 	}
 	
+	@Test
 	public void testKnopflerfishDetection() {
 		props.put(Constants.FRAMEWORK_VENDOR,"Knopflerfish");
 		BundleContext bc = new MockBundleContext(mockBundle,props);
@@ -56,6 +60,7 @@ public class OsgiPlatformDetectorTest extends TestCase {
 		assertFalse(OsgiPlatformDetector.isFelix(bc));
 	}
 	
+	@Test
 	public void testFelixDetection() {
 		props.put(Constants.FRAMEWORK_VENDOR,"Apache Software Foundation");
 		BundleContext bc = new MockBundleContext(mockBundle,props);

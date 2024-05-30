@@ -75,7 +75,7 @@ abstract class TrackingUtil {
 				return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
 			} else if (method.getName().equals("hashCode")) {
 				// Use hashCode of Session proxy.
-				return new Integer(System.identityHashCode(proxy));
+				return Integer.valueOf(System.identityHashCode(proxy));
 			}
 
 			Object target = null;

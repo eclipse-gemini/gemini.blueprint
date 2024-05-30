@@ -14,11 +14,19 @@
 
 package org.eclipse.gemini.blueprint.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.Serializable;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.assertj.core.api.Assertions;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
@@ -34,23 +42,26 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  * @author Costin Leau
  * 
  */
-public class OsgiFilterUtilsTest extends TestCase {
+public class OsgiFilterUtilsTest {
 
 	private String[] classes;
 
 	private Dictionary dictionary;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		classes = new String[] { Object.class.getName(), Cloneable.class.getName(), Serializable.class.getName() };
 		dictionary = new Hashtable();
 		dictionary.put(Constants.OBJECTCLASS, classes);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dictionary = null;
 		classes = null;
 	}
 
+	@Test
 	public void testNoArgument() {
 		try {
 			OsgiFilterUtils.unifyFilter((String) null, null);
@@ -61,6 +72,7 @@ public class OsgiFilterUtilsTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testClassArrayWithGarbage() {
 		String[] garbage = new String[] { null, null };
 		try {
@@ -72,12 +84,14 @@ public class OsgiFilterUtilsTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testOnlyClassArgument() {
 		String filter = OsgiFilterUtils.unifyFilter(classes[0], null);
 		assertNotNull(filter);
 		assertTrue(OsgiFilterUtils.isValidFilter(filter));
 	}
 
+	@Test
 	public void testJustClassWithNoFilter() {
 		String fl = OsgiFilterUtils.unifyFilter(classes[0], null);
 		String filter = OsgiFilterUtils.unifyFilter((String) null, fl);
@@ -85,18 +99,21 @@ public class OsgiFilterUtilsTest extends TestCase {
 		assertEquals("filter shouldn't have been modified", fl, filter);
 	}
 
+	@Test
 	public void testClassWithExistingFilter() {
 		String filter = "(o=univ*of*mich*)";
 		String fl = OsgiFilterUtils.unifyFilter(classes[0], filter);
 		assertTrue(OsgiFilterUtils.isValidFilter(fl));
 	}
 
+	@Test
 	public void testMultipleClassesWithExistingFilter() {
 		String filter = "(|(sn=Jensen)(cn=Babs J*))";
 		String fl = OsgiFilterUtils.unifyFilter(classes, filter);
 		assertTrue(OsgiFilterUtils.isValidFilter(fl));
 	}
 
+	@Test
 	public void testMultipleClassesAddedOneByOne() {
 		String filter = OsgiFilterUtils.unifyFilter(classes[0], null);
 		filter = OsgiFilterUtils.unifyFilter(classes[1], filter);
@@ -108,6 +125,7 @@ public class OsgiFilterUtilsTest extends TestCase {
 		assertTrue(osgiFilter.matchCase(dictionary));
 	}
 
+	@Test
 	public void testMultipleClassesAddedAtOnce() {
 		String filter = OsgiFilterUtils.unifyFilter(classes, null);
 		Filter osgiFilter = OsgiFilterUtils.createFilter(filter);
@@ -115,6 +133,7 @@ public class OsgiFilterUtilsTest extends TestCase {
 		assertTrue(osgiFilter.matchCase(dictionary));
 	}
 
+	@Test
 	public void testNonMatching() {
 		String filter = OsgiFilterUtils.unifyFilter(classes, null);
 		Filter osgiFilter = OsgiFilterUtils.createFilter(filter);
@@ -124,6 +143,7 @@ public class OsgiFilterUtilsTest extends TestCase {
 		assertFalse(osgiFilter.matchCase(dictionary));
 	}
 
+	@Test
 	public void testNoKeyOrItemSpecified() {
 		try {
 			OsgiFilterUtils.unifyFilter(null, null, null);
@@ -134,6 +154,7 @@ public class OsgiFilterUtilsTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNoKeySpecified() {
 		try {
 			OsgiFilterUtils.unifyFilter(null, new String[] { classes[0] }, null);
@@ -143,6 +164,7 @@ public class OsgiFilterUtilsTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNoItemSpecified() {
 		try {
 			OsgiFilterUtils.unifyFilter(Constants.OBJECTCLASS, null, null);
@@ -152,17 +174,20 @@ public class OsgiFilterUtilsTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNoKeyOrItemButFilterSpecified() {
 		String filter = OsgiFilterUtils.unifyFilter("beanName", new String[] { "myBean" }, null);
 		assertTrue(OsgiFilterUtils.isValidFilter(filter));
 	}
 
+	@Test
 	public void testAddItemsUnderMultipleKeys() {
 		String filterA = OsgiFilterUtils.unifyFilter("firstKey", new String[] { "A", "B", "valueA" }, "(c=*)");
 		String filterB = OsgiFilterUtils.unifyFilter("secondKey", new String[] { "X", "Y", "valueZ" }, filterA);
 		assertTrue(OsgiFilterUtils.isValidFilter(filterB));
 	}
 
+	@Test
 	public void testUnifyWhenNoItemIsSpecified() {
 		String fl = "(c=*)";
 		String filter = OsgiFilterUtils.unifyFilter("someKey", null, fl);
@@ -180,6 +205,7 @@ public class OsgiFilterUtilsTest extends TestCase {
 	 * As per OSGI r5 spec, https://www.scribd.com/document/137122057/osgi-core-5-0-0, the characters
 	 * <code> \ * ( )</code>  must be escaped using a \ character.
 	 */
+	@Test
 	public void testFiltersFromServiceReferencesAreEscaped() {
 		MockServiceReference serviceReference = new MockServiceReference();
 		Dictionary<String, String> properties = new Hashtable<>();

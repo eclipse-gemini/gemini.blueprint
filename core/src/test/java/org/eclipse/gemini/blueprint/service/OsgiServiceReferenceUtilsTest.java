@@ -18,9 +18,15 @@ import java.io.Serializable;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import org.easymock.IMocksControl;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
@@ -34,7 +40,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceReferenceUtilsTest extends TestCase {
+public class OsgiServiceReferenceUtilsTest {
 
 	private String[] classes;
 
@@ -46,11 +52,8 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 
 	IMocksControl ctrl;
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		classes = new String[] { Object.class.getName(), Cloneable.class.getName(), Serializable.class.getName() };
 
 		// lowest service reference
@@ -75,11 +78,8 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		classes = null;
 	}
 
@@ -87,6 +87,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils#getServiceReference(org.osgi.framework.BundleContext, java.lang.String[])}.
 	 */
+	@Test
 	public void testServiceSortingAlgorithm() throws Exception {
 		String filter = OsgiFilterUtils.unifyFilter(classes, null);
 		expect(context.getServiceReferences(classes[0], filter)).andReturn(new ServiceReference[] { ref1 });
@@ -101,6 +102,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils#getServiceReference(org.osgi.framework.BundleContext, java.lang.String, java.lang.String)}.
 	 */
+	@Test
 	public void testGetServiceReferenceBundleContextStringString() throws Exception {
 
 		expect(context.getServiceReferences(Object.class.getName(), null)).andReturn(new ServiceReference[] { ref1, ref3, ref2 });
@@ -116,6 +118,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils#getServiceReference(org.osgi.framework.BundleContext, java.lang.String[], java.lang.String)}.
 	 */
+	@Test
 	public void testGetServiceReferenceBundleContextStringArrayString() throws Exception {
 		String smallFilter = "(cn=John)";
 		String filter = OsgiFilterUtils.unifyFilter(classes, smallFilter);
@@ -131,6 +134,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils#getServiceReference(org.osgi.framework.BundleContext, java.lang.String)}.
 	 */
+	@Test
 	public void testAlwaysGetAnArrayOfServiceReferences() throws Exception {
 		expect(context.getServiceReferences(Object.class.getName(), null)).andReturn(null);
 		ctrl.replay();
@@ -144,6 +148,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils#getServiceId(org.osgi.framework.ServiceReference)}.
 	 */
+	@Test
 	public void testGetServiceId() {
 		long id = 12345;
 		Dictionary dict = new Hashtable();
@@ -156,6 +161,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils#getServiceRanking(org.osgi.framework.ServiceReference)}.
 	 */
+	@Test
 	public void testGetServiceRankingAvailable() {
 		int ranking = 12345;
 		Dictionary dict = new Hashtable();
@@ -164,6 +170,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 		assertEquals(ranking, OsgiServiceReferenceUtils.getServiceRanking(ref));
 	}
 
+	@Test
 	public void testGetServiceRankingWithInvalidClass() {
 		int ranking = 12345;
 		Dictionary dict = new Hashtable();
@@ -172,6 +179,7 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 		assertEquals(0, OsgiServiceReferenceUtils.getServiceRanking(ref));
 	}
 
+	@Test
 	public void testGetServiceRankingWithNonExistingRanking() {
 		Dictionary dict = new Hashtable() {
 			// forbid adding the service ranking
@@ -187,5 +195,4 @@ public class OsgiServiceReferenceUtilsTest extends TestCase {
 		assertNull(ref.getProperty(Constants.SERVICE_RANKING));
 		assertEquals(0, OsgiServiceReferenceUtils.getServiceRanking(ref));
 	}
-
 }

@@ -14,7 +14,12 @@
 
 package org.eclipse.gemini.blueprint.test.provisioning.internal;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Test;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -23,15 +28,16 @@ import org.springframework.core.io.Resource;
  * @author Costin Leau
  * 
  */
-public class LocalFileSystemMavenRepositoryTest extends TestCase {
+public class LocalFileSystemMavenRepositoryTest {
 
 	private LocalFileSystemMavenRepository repository;
 
-
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		System.getProperties().remove("localRepository");
 	}
 
+	@Test
 	public void testSystemProperty() throws Exception {
 		String SYS_PROP = "fake/sys/location";
 		System.setProperty("localRepository", SYS_PROP);
@@ -40,6 +46,7 @@ public class LocalFileSystemMavenRepositoryTest extends TestCase {
 			SYS_PROP) >= -1);
 	}
 
+	@Test
 	public void testLocalSettingsFile() throws Exception {
 		repository = new LocalFileSystemMavenRepository();
 		Resource res = new ClassPathResource("/org/eclipse/gemini/blueprint/test/provisioning/internal/settings.xml");

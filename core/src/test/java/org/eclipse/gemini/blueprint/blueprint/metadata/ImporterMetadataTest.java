@@ -14,10 +14,15 @@
 
 package org.eclipse.gemini.blueprint.blueprint.metadata;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.junit.Test;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanProperty;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
@@ -48,6 +53,7 @@ public class ImporterMetadataTest extends BaseMetadataTest {
 		return referenceMetadata;
 	}
 
+	@Test
 	public void testSimpleBean() throws Exception {
 		ServiceReferenceMetadata metadata = getReferenceMetadata("simple");
 		System.out.println(metadata.getClass().getName());
@@ -58,6 +64,7 @@ public class ImporterMetadataTest extends BaseMetadataTest {
 		assertEquals(0, metadata.getReferenceListeners().size());
 	}
 
+	@Test
 	public void testBeanWithOptions() throws Exception {
 		ServiceReferenceMetadata metadata = getReferenceMetadata("options");
 		assertEquals("(name=foo)", metadata.getFilter());
@@ -68,6 +75,7 @@ public class ImporterMetadataTest extends BaseMetadataTest {
 		assertEquals(1, listeners.size());
 	}
 
+	@Test
 	public void testMultipleInterfaces() throws Exception {
 		ServiceReferenceMetadata metadata = getReferenceMetadata("multipleInterfaces");
 		String intf = metadata.getInterface();
@@ -76,6 +84,7 @@ public class ImporterMetadataTest extends BaseMetadataTest {
 		assertEquals(0, metadata.getReferenceListeners().size());
 	}
 
+	@Test
 	public void testMultipleListeners() throws Exception {
 		ServiceReferenceMetadata metadata = getReferenceMetadata("multipleListeners");
 		Collection<ReferenceListener> listeners = metadata.getReferenceListeners();
@@ -92,12 +101,14 @@ public class ImporterMetadataTest extends BaseMetadataTest {
 		assertTrue(listener.getListenerComponent() instanceof RefMetadata);
 	}
 
+	@Test
 	public void testTimeout() throws Exception {
 		ServiceReferenceMetadata metadata = getReferenceMetadata("timeout");
 		assertTrue(metadata instanceof ReferenceMetadata);
 		assertEquals(1234, ((ReferenceMetadata) metadata).getTimeout());
 	}
 
+	@Test
 	public void testNestedMandatoryReference() throws Exception {
 		BeanMetadata metadata = (BeanMetadata) blueprintContainer.getComponentMetadata("nestedReference");
 		BeanProperty prop = (BeanProperty) metadata.getProperties().get(0);
@@ -108,6 +119,7 @@ public class ImporterMetadataTest extends BaseMetadataTest {
 		assertEquals(ReferenceMetadata.ACTIVATION_LAZY, ref.getActivation());
 	}
 
+	@Test
 	public void testNestedMandatoryCollectionReference() throws Exception {
 		BeanMetadata metadata = (BeanMetadata) blueprintContainer.getComponentMetadata("nestedCollectionReference");
 		BeanProperty prop = (BeanProperty) metadata.getProperties().get(0);

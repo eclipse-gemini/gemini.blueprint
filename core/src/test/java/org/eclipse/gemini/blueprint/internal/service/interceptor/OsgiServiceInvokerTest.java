@@ -14,7 +14,12 @@
 
 package org.eclipse.gemini.blueprint.internal.service.interceptor;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.aop.ServiceInvoker;
@@ -23,19 +28,14 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.aop.Servic
  * @author Costin Leau
  * 
  */
-public class OsgiServiceInvokerTest extends TestCase {
+public class OsgiServiceInvokerTest {
 
 	private ServiceInvoker invoker;
 
 	private Object target;
 
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		target = new Object();
 		invoker = new ServiceInvoker() {
 
@@ -48,7 +48,8 @@ public class OsgiServiceInvokerTest extends TestCase {
 		};
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		target = null;
 		invoker = null;
 	}
@@ -57,12 +58,14 @@ public class OsgiServiceInvokerTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.service.interceptor.ServiceInvoker#invoke(org.aopalliance.intercept.MethodInvocation)}.
 	 */
+	@Test
 	public void testInvoke() throws Throwable {
 		MethodInvocation invocation = new MockMethodInvocation(Object.class.getMethod("hashCode", null));
 		Object result = invoker.invoke(invocation);
-		assertEquals("different target invoked", new Integer(target.hashCode()), result);
+		assertEquals("different target invoked", Integer.valueOf(target.hashCode()), result);
 	}
 
+	@Test
 	public void testExceptionUnwrapping() throws Throwable {
 		MethodInvocation invocation = new MockMethodInvocation(Integer.class.getMethod("parseInt",
 			new Class<?>[] { String.class }), new Object[] { "invalid number" });

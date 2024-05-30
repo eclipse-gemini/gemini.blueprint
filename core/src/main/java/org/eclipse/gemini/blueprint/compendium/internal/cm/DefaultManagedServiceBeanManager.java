@@ -69,7 +69,7 @@ public class DefaultManagedServiceBeanManager implements DisposableBean, Managed
 		if (log.isTraceEnabled())
 			log.trace("Stopped tracking instance " + bean.getClass().getName() + "@" + hashCode);
 
-		instanceRegistry.remove(new Integer(hashCode));
+		instanceRegistry.remove(Integer.valueOf(hashCode));
 	}
 
 	public void updated(Map properties) {

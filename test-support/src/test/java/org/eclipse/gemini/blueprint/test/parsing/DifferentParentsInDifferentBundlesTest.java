@@ -14,20 +14,21 @@
 
 package org.eclipse.gemini.blueprint.test.parsing;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Field;
 import java.util.jar.Manifest;
 
 import javax.print.event.PrintEvent;
-
-import junit.framework.TestCase;
 
 import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
 import org.eclipse.gemini.blueprint.test.parsing.packageA.BaseClassFromAnotherPackageTest;
 import org.eclipse.gemini.blueprint.test.parsing.packageB.BaseClassFromAnotherPackageAndBundleTest;
 import org.eclipse.gemini.blueprint.test.parsing.packageC.TestInDifferentPackageThenItsParentsTest;
 import org.eclipse.gemini.blueprint.test.parsing.packageZ.FinalTestClassTest;
+import org.junit.Test;
 import org.osgi.framework.Constants;
-import org.springframework.util.ObjectUtils;
 
 /**
  * Integration that checks if the class hierarchy is properly parsed. Note this test doesn't run in OSGi, it just
@@ -36,8 +37,8 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * 
  */
-public class DifferentParentsInDifferentBundlesTest extends TestCase {
-
+public class DifferentParentsInDifferentBundlesTest {
+	@Test
 	public void testCheckBaseClassesHierarchy() throws Exception {
 		// create class
 		// make sure the packaging puts some of the tests parent in a different class
@@ -57,6 +58,7 @@ public class DifferentParentsInDifferentBundlesTest extends TestCase {
 		assertTrue("contained parent dependencies not considered", contains(importPackage, "javax.imageio"));
 	}
 
+	@Test
 	public void testSuperClassInterfacesConsidered() throws Exception {
 		FinalTestClassTest test = new FinalTestClassTest() {
 		};
@@ -71,6 +73,7 @@ public class DifferentParentsInDifferentBundlesTest extends TestCase {
 		assertTrue("interface present on superclass ignored", contains(importPackage, "javax.print"));
 	}
 
+	@Test
 	public void testAnonymousInnerClasses() throws Exception {
 		FinalTestClassTest test = new FinalTestClassTest() {
 

@@ -227,7 +227,7 @@ public abstract class OsgiBundleUtils {
 	 * @return true if the given bundle is a fragment, false otherwise
 	 */
 	public static boolean isSystemBundle(Bundle bundle) {
-		Assert.notNull(bundle);
+		Assert.notNull(bundle, "bundle is required");
 		return (bundle.getBundleId() == 0);
 	}
 
@@ -271,7 +271,7 @@ public abstract class OsgiBundleUtils {
 	 * @return the header value
 	 */
 	public static Version getHeaderAsVersion(Bundle bundle, String header) {
-		Assert.notNull(bundle);
+		Assert.notNull(bundle, "bundle is required");
 		return Version.parseVersion((String) bundle.getHeaders().get(header));
 	}
 }

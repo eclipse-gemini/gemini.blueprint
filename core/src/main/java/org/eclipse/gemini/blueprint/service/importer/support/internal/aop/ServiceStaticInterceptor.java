@@ -45,8 +45,8 @@ public class ServiceStaticInterceptor extends ServiceInvoker {
 	private volatile Object target = null;
 
 	public ServiceStaticInterceptor(BundleContext context, ServiceReference reference) {
-		Assert.notNull(context);
-		Assert.notNull(reference, "a not null service reference is required");
+		Assert.notNull(context, "context is required");
+		Assert.notNull(reference, "reference is required");
 		this.bundleContext = context;
 		this.reference = reference;
 		this.filter = OsgiFilterUtils.createFilter(OsgiFilterUtils.getFilter(reference));

@@ -14,10 +14,16 @@
 
 package org.eclipse.gemini.blueprint.compendium.internal.cm;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.compendium.internal.cm.ManagedFactoryDisposableInvoker.DestructionCodes;
 import org.springframework.beans.factory.DisposableBean;
@@ -25,7 +31,7 @@ import org.springframework.beans.factory.DisposableBean;
 /**
  * @author Costin Leau
  */
-public class ManagedFactoryDisposableInvokerTest extends TestCase {
+public class ManagedFactoryDisposableInvokerTest {
 
 	enum Action {
 		INTERFACE, SPRING_CUSTOM_METHOD, OSGI_CUSTOM_METHOD;
@@ -79,19 +85,18 @@ public class ManagedFactoryDisposableInvokerTest extends TestCase {
 	private ManagedFactoryDisposableInvoker invoker;
 
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
 		actions = new ArrayList<Action>();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	@After
+	public void tearDown() throws Exception {
 		invoker = null;
 		actions = null;
 	}
 
+	@Test
 	public void testDefinitionWithCustomMethods() throws Exception {
 		C c = new C();
 		invoker = new ManagedFactoryDisposableInvoker(C.class, "stop");
@@ -103,6 +108,7 @@ public class ManagedFactoryDisposableInvokerTest extends TestCase {
 		assertSame(Action.OSGI_CUSTOM_METHOD, actions.get(2));
 	}
 
+	@Test
 	public void testInterfaceAndSpringMethod() throws Exception {
 		B b = new B();
 		invoker = new ManagedFactoryDisposableInvoker(B.class, "stop");
@@ -113,6 +119,7 @@ public class ManagedFactoryDisposableInvokerTest extends TestCase {
 		assertSame(Action.SPRING_CUSTOM_METHOD, actions.get(1));
 	}
 
+	@Test
 	public void testInterfaceAndOsgiMethod() throws Exception {
 		D d = new D();
 		invoker = new ManagedFactoryDisposableInvoker(D.class, "stop");
@@ -123,6 +130,7 @@ public class ManagedFactoryDisposableInvokerTest extends TestCase {
 		assertSame(Action.OSGI_CUSTOM_METHOD, actions.get(1));
 	}
 
+	@Test
 	public void testSpringAndOsgiMethod() throws Exception {
 		E e = new E();
 		invoker = new ManagedFactoryDisposableInvoker(E.class, "stop");
@@ -133,6 +141,7 @@ public class ManagedFactoryDisposableInvokerTest extends TestCase {
 		assertSame(Action.OSGI_CUSTOM_METHOD, actions.get(1));
 	}
 
+	@Test
 	public void testNoMethod() throws Exception {
 		invoker = new ManagedFactoryDisposableInvoker(Object.class, "stop");
 		doInvoke(new Object());

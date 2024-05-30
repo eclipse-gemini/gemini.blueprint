@@ -16,6 +16,7 @@ package org.eclipse.gemini.blueprint;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.PropertiesEditor;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -24,14 +25,15 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import java.util.Dictionary;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 @ContextConfiguration(locations = "dict-editor.xml", initializers = DictionaryEditorTest.class)
 public class DictionaryEditorTest extends AbstractJUnit4SpringContextTests implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     private Dictionary dictionary;
-
+	
     @Autowired
+    @Qualifier("dictionary")
     public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
     }
@@ -43,7 +45,7 @@ public class DictionaryEditorTest extends AbstractJUnit4SpringContextTests imple
 
     @Test
     public void testInjectedValue() {
-        assertSame(applicationContext.getBean("dictionary"), dictionary);
+        assertSame(dictionary, applicationContext.getBean("dictionary"));
     }
 
     @Override

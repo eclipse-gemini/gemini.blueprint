@@ -15,17 +15,12 @@
 package org.eclipse.gemini.blueprint.config.internal.adapter;
 
 import java.lang.reflect.Method;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.gemini.blueprint.context.support.internal.security.SecurityUtils;
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -70,7 +65,7 @@ public class OsgiServiceRegistrationListenerAdapter implements OsgiServiceRegist
 	private boolean isBlueprintCompliant = false;
 
 	public void afterPropertiesSet() {
-		Assert.notNull(beanFactory);
+		Assert.notNull(beanFactory, "beanFactory is not initialized properly");
 		Assert.isTrue(target != null || StringUtils.hasText(targetBeanName),
 				"one of 'target' or 'targetBeanName' properties has to be set");
 
@@ -127,28 +122,13 @@ public class OsgiServiceRegistrationListenerAdapter implements OsgiServiceRegist
 		if (!initialized)
 			retrieveTarget();
 
-		boolean isSecurityEnabled = System.getSecurityManager() != null;
-		AccessControlContext acc = null;
-		if (isSecurityEnabled) {
-			acc = SecurityUtils.getAccFrom(beanFactory);
-		}
-
 		// first call interface method (if it exists)
 		if (isListener) {
 			if (trace)
 				log.trace("Invoking listener interface methods");
 
 			try {
-				if (isSecurityEnabled) {
-					AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-						public Object run() throws Exception {
-							((OsgiServiceRegistrationListener) target).registered(service, serviceProperties);
-							return null;
-						}
-					}, acc);
-				} else {
-					((OsgiServiceRegistrationListener) target).registered(service, serviceProperties);
-				}
+				((OsgiServiceRegistrationListener) target).registered(service, serviceProperties);
 			} catch (Exception ex) {
 				if (ex instanceof PrivilegedActionException) {
 					ex = ((PrivilegedActionException) ex).getException();
@@ -157,17 +137,7 @@ public class OsgiServiceRegistrationListenerAdapter implements OsgiServiceRegist
 			}
 		}
 
-		if (isSecurityEnabled) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					CustomListenerAdapterUtils.invokeCustomMethods(target, registrationMethods, service,
-							serviceProperties);
-					return null;
-				}
-			}, acc);
-		} else {
-			CustomListenerAdapterUtils.invokeCustomMethods(target, registrationMethods, service, serviceProperties);
-		}
+		CustomListenerAdapterUtils.invokeCustomMethods(target, registrationMethods, service, serviceProperties);
 	}
 
 	public void unregistered(final Object service, final Map serviceProperties) {
@@ -180,45 +150,19 @@ public class OsgiServiceRegistrationListenerAdapter implements OsgiServiceRegist
 		if (!initialized)
 			retrieveTarget();
 
-		boolean isSecurityEnabled = System.getSecurityManager() != null;
-		AccessControlContext acc = null;
-
-		if (isSecurityEnabled) {
-			acc = SecurityUtils.getAccFrom(beanFactory);
-		}
-
 		// first call interface method (if it exists)
 		if (isListener) {
 			if (trace)
 				log.trace("Invoking listener interface methods");
 
 			try {
-				if (isSecurityEnabled) {
-					AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-						public Object run() throws Exception {
-							((OsgiServiceRegistrationListener) target).unregistered(service, serviceProperties);
-							return null;
-						}
-					}, acc);
-				} else {
-					((OsgiServiceRegistrationListener) target).unregistered(service, serviceProperties);
-				}
+				((OsgiServiceRegistrationListener) target).unregistered(service, serviceProperties);
 			} catch (Exception ex) {
 				log.warn("Standard unregistered method on [" + target.getClass().getName() + "] threw exception", ex);
 			}
 		}
 
-		if (isSecurityEnabled) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					CustomListenerAdapterUtils.invokeCustomMethods(target, unregistrationMethods, service,
-							serviceProperties);
-					return null;
-				}
-			}, acc);
-		} else {
-			CustomListenerAdapterUtils.invokeCustomMethods(target, unregistrationMethods, service, serviceProperties);
-		}
+		CustomListenerAdapterUtils.invokeCustomMethods(target, unregistrationMethods, service, serviceProperties);
 	}
 
 	/**

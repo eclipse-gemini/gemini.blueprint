@@ -45,7 +45,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
 import org.springframework.beans.factory.support.AbstractBeanFactory;
-import org.springframework.beans.factory.support.SecurityContextProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.support.AbstractRefreshableApplicationContext;
@@ -228,16 +227,6 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 
 		beanFactory.addBeanPostProcessor(new BundleContextAwareProcessor(this.bundleContext));
 		beanFactory.ignoreDependencyInterface(BundleContextAware.class);
-
-		if (beanFactory instanceof AbstractBeanFactory) {
-			AbstractBeanFactory bf = (AbstractBeanFactory) beanFactory;
-			bf.setSecurityContextProvider(new SecurityContextProvider() {
-
-				public AccessControlContext getAccessControlContext() {
-					return acc;
-				}
-			});
-		}
 
 		enforceExporterImporterDependency(beanFactory);
 

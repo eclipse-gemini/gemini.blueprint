@@ -14,7 +14,14 @@
 
 package org.eclipse.gemini.blueprint.blueprint.metadata;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import java.util.Set;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Basic test for the ModuleContext API. Some of the metadata calls are checked by different tests.
@@ -29,15 +36,19 @@ public class BundleContextApiTest extends BaseMetadataTest {
 		return "/org/eclipse/gemini/blueprint/blueprint/config/mixed-rfc124-beans.xml";
 	}
 
+	@Test
 	public void testComponentNames() throws Exception {
 		Set<String> names = blueprintContainer.getComponentIds();
 		assertEquals(7, names.size());
 	}
 
+	@Test
+	@Ignore
 	public void tstBundleContext() {
 		//assertSame(bundleContext, blueprintContainer.getBundleContext());
 	}
 
+	@Test
 	public void testComponent() {
 		checkBeanAssertion("simple-component");
 		checkBeanAssertion("nested-bean");
@@ -47,6 +58,7 @@ public class BundleContextApiTest extends BaseMetadataTest {
 		assertSame(applicationContext.getBean(name), blueprintContainer.getComponentInstance(name));
 	}
 
+	@Test
 	public void testComponentMetadata() {
 		assertNotNull(blueprintContainer.getComponentMetadata("simple-component"));
 		assertNotNull(blueprintContainer.getComponentMetadata("nested-bean"));

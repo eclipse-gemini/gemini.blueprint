@@ -14,7 +14,12 @@
 
 package org.eclipse.gemini.blueprint.config;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.osgi.framework.BundleContext;
@@ -29,7 +34,7 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  * @author Costin Leau
  * 
  */
-public class NestedReferencesTest extends TestCase {
+public class NestedReferencesTest {
 
 	public static class Holder {
 		private Object data;
@@ -45,7 +50,8 @@ public class NestedReferencesTest extends TestCase {
 
 	private GenericApplicationContext appContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 
 		BundleContext bundleContext = new MockBundleContext() {
 			// service reference already registered
@@ -64,33 +70,39 @@ public class NestedReferencesTest extends TestCase {
 		appContext.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 	}
 
+	@Test
 	public void testNestedBeansMadeTopLevel() throws Exception {
 		// 5 top-level plus 4 promoted beans
 		assertEquals(5 + 4, appContext.getBeanDefinitionCount());
 	}
 
+	@Test
 	public void testNestedReferenceWithName() {
 		Object bean = appContext.getBean("satriani#org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean#0");
 		Holder holder = (Holder) appContext.getBean("nestedNamedReference", Holder.class);
 		assertSame(bean, holder.data);
 	}
 
+	@Test
 	public void testNestedReferenceWithoutName() throws Exception {
 		Object bean = appContext.getBean("org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean#0");
 		Holder holder = (Holder) appContext.getBean("nestedAnonymousReference", Holder.class);
 		assertSame(bean, holder.data);
 	}
 
+	@Test
 	public void testNestedCollectionWithName() throws Exception {
 		Object bean = appContext.getBean("dire-straits#org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean#0");
 		Holder holder = (Holder) appContext.getBean("nestedNamedCollection", Holder.class);
 		assertSame(bean, holder.data);
 	}
 
+	@Test
 	public void testNesteCollectionWithoutName() throws Exception {
 		Object bean = appContext.getBean("org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean#0");
 		Holder holder = (Holder) appContext.getBean("nestedAnonymousCollection", Holder.class);

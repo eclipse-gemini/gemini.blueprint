@@ -14,7 +14,14 @@
 
 package org.eclipse.gemini.blueprint.io;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.osgi.framework.Bundle;
@@ -27,18 +34,14 @@ import org.springframework.core.io.UrlResource;
  * @author Costin Leau
  * 
  */
-public class OsgiBundleResourcePatternResolverTest extends TestCase {
+public class OsgiBundleResourcePatternResolverTest {
 
 	OsgiBundleResourcePatternResolver resolver;
 
 	Bundle bundle;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundle = new MockBundle();
 		resolver = new OsgiBundleResourcePatternResolver(bundle);
 
@@ -48,6 +51,7 @@ public class OsgiBundleResourcePatternResolverTest extends TestCase {
 	 * Test method for
 	 * {@link org.springframework.osgi.context.OsgiBundleResourcePatternResolver#OsgiBundleResourcePatternResolver(org.osgi.framework.Bundle)}.
 	 */
+	@Test
 	public void testOsgiBundleResourcePatternResolverBundle() {
 		ResourceLoader res = resolver.getResourceLoader();
 		assertTrue(res instanceof OsgiBundleResourceLoader);
@@ -60,6 +64,7 @@ public class OsgiBundleResourcePatternResolverTest extends TestCase {
 	 * Test method for
 	 * {@link org.springframework.osgi.context.OsgiBundleResourcePatternResolver#OsgiBundleResourcePatternResolver(org.springframework.core.io.ResourceLoader)}.
 	 */
+	@Test
 	public void testOsgiBundleResourcePatternResolverResourceLoader() {
 		ResourceLoader resLoader = new DefaultResourceLoader();
 		resolver = new OsgiBundleResourcePatternResolver(resLoader);
@@ -73,6 +78,7 @@ public class OsgiBundleResourcePatternResolverTest extends TestCase {
 	 * Test method for
 	 * {@link org.springframework.osgi.context.OsgiBundleResourcePatternResolver#getResources(java.lang.String)}.
 	 */
+	@Test
 	public void testGetResourcesString() throws Exception {
 		Resource[] res;
 

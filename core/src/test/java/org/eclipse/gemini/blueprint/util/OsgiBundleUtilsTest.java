@@ -14,27 +14,27 @@
 
 package org.eclipse.gemini.blueprint.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
-import org.osgi.framework.Bundle;
 import org.eclipse.gemini.blueprint.mock.MockBundle;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Costin Leau
  * 
  */
-public class OsgiBundleUtilsTest extends TestCase {
+public class OsgiBundleUtilsTest {
 
 	private Bundle bundle;
 
 	private static int state;
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		OsgiBundleUtilsTest.state = Bundle.UNINSTALLED;
 		bundle = new MockBundle() {
 			public int getState() {
@@ -43,14 +43,12 @@ public class OsgiBundleUtilsTest extends TestCase {
 		};
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		bundle = null;
 	}
 
+	@Test
 	public void testIsInActiveBundleState() throws Exception {
 		OsgiBundleUtilsTest.state = Bundle.ACTIVE;
 		assertTrue(OsgiBundleUtils.isBundleActive(bundle));
@@ -62,6 +60,7 @@ public class OsgiBundleUtilsTest extends TestCase {
 		assertFalse(OsgiBundleUtils.isBundleActive(bundle));
 	}
 
+	@Test
 	public void testIsBundleResolved() throws Exception {
 		OsgiBundleUtilsTest.state = Bundle.UNINSTALLED;
 		assertFalse(OsgiBundleUtils.isBundleResolved(bundle));
@@ -80,7 +79,5 @@ public class OsgiBundleUtilsTest extends TestCase {
 
 		OsgiBundleUtilsTest.state = Bundle.STARTING;
 		assertTrue(OsgiBundleUtils.isBundleResolved(bundle));
-
 	}
-
 }

@@ -14,12 +14,19 @@
 
 package org.eclipse.gemini.blueprint.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
@@ -40,11 +47,12 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiReferenceNamespaceHandlerTest extends TestCase {
+public class OsgiReferenceNamespaceHandlerTest {
 
 	private GenericApplicationContext appContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		// reset counter just to be sure
 		DummyListener.BIND_CALLS = 0;
 		DummyListener.UNBIND_CALLS = 0;
@@ -72,10 +80,12 @@ public class OsgiReferenceNamespaceHandlerTest extends TestCase {
 		appContext.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 	}
 
+	@Test
 	public void testSimpleReference() throws Exception {
 		Object factoryBean = appContext.getBean("&serializable");
 
@@ -94,6 +104,7 @@ public class OsgiReferenceNamespaceHandlerTest extends TestCase {
 
 	}
 
+	@Test
 	public void testFullReference() throws Exception {
 		OsgiServiceProxyFactoryBean factory = (OsgiServiceProxyFactoryBean) appContext.getBean("&full-options");
 		factory.getObject(); // required to initialise proxy and hook
@@ -131,6 +142,7 @@ public class OsgiReferenceNamespaceHandlerTest extends TestCase {
 		assertEquals(1, DummyListenerServiceSignature2.UNBIND_CALLS);
 	}
 
+	@Test
 	public void testMultipleInterfaces() throws Exception {
 		OsgiServiceProxyFactoryBean factory = (OsgiServiceProxyFactoryBean) appContext.getBean("&multi-interfaces");
 		Class<?>[] intfs = (Class[]) TestUtils.getFieldValue(factory, "interfaces");
@@ -140,6 +152,7 @@ public class OsgiReferenceNamespaceHandlerTest extends TestCase {
 		assertTrue(Arrays.equals(new Class<?>[] { Serializable.class, Externalizable.class }, intfs));
 	}
 
+	@Test
 	public void testBeanNameAttrToServiceBeanNameProperty() throws Exception {
 		OsgiServiceProxyFactoryBean factory = (OsgiServiceProxyFactoryBean) appContext.getBean("&importerWithBeanName");
 		Object obj = TestUtils.getFieldValue(factory, "serviceBeanName");

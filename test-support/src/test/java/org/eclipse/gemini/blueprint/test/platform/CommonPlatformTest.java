@@ -14,24 +14,30 @@
 
 package org.eclipse.gemini.blueprint.test.platform;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.BundleContext;
 
 /**
  * @author Costin Leau
  * 
  */
-public abstract class CommonPlatformTest extends TestCase {
+public abstract class CommonPlatformTest {
 
 	private AbstractOsgiPlatform platform;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		platform = createPlatform();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		platform.stop();
 		platform = null;
 	}
@@ -42,6 +48,7 @@ public abstract class CommonPlatformTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.test.platform.FelixPlatform#getPlatformProperties()}.
 	 */
+	@Test
 	public void testGetPlatformProperties() {
 		assertNotNull(platform.getPlatformProperties());
 	}
@@ -50,12 +57,14 @@ public abstract class CommonPlatformTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.test.platform.FelixPlatform#start()}.
 	 */
+	@Test
 	public void testStart() throws Exception {
 		assertNull(platform.getBundleContext());
 		platform.start();
 		assertNotNull(platform.getBundleContext());
 	}
 
+	@Test
 	public void testMultipleStart() throws Exception {
 		platform.start();
 		BundleContext ctx = platform.getBundleContext();
@@ -67,6 +76,7 @@ public abstract class CommonPlatformTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.test.platform.FelixPlatform#stop()}.
 	 */
+	@Test
 	public void testStop() throws Exception {
 		assertNull(platform.getBundleContext());
 		platform.start();
@@ -75,6 +85,7 @@ public abstract class CommonPlatformTest extends TestCase {
 		assertNull(platform.getBundleContext());
 	}
 
+	@Test
 	public void testMultipleStop() throws Exception {
 		platform.start();
 		assertNotNull(platform.getBundleContext());

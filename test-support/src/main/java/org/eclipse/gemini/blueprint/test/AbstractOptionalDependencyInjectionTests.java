@@ -36,6 +36,8 @@ import java.io.IOException;
  * 
  */
 public abstract class AbstractOptionalDependencyInjectionTests extends AbstractDependencyInjectionSpringContextTests {
+	
+	protected String name;
 
 	// The OSGi BundleContext (when executing the test as a bundle inside OSGi)
 	protected BundleContext bundleContext;
@@ -54,6 +56,12 @@ public abstract class AbstractOptionalDependencyInjectionTests extends AbstractD
 	// the disposable interface is added just so that byte code detect the org.springframework.beans.factory package
 	private static class EmptyOsgiApplicationContext extends AbstractDelegatedExecutionApplicationContext implements DisposableBean {
 		protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException, BeansException {}
+
+		@Override
+		public void destroy() throws Exception {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 
@@ -102,4 +110,7 @@ public abstract class AbstractOptionalDependencyInjectionTests extends AbstractD
 		return context;
 	}
 
+	public String getName() {
+		return name;
+	}
 }

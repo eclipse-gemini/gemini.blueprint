@@ -14,31 +14,34 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.eclipse.gemini.blueprint.mock.MockBundle;
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
-import org.eclipse.gemini.blueprint.mock.MockBundle;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
 /**
  * @author Costin Leau
  * 
  */
-public class OsgiStringUtilsTest extends TestCase {
+public class OsgiStringUtilsTest {
 
 	private static int state;
 
 	private Bundle bundle;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		OsgiStringUtilsTest.state = Bundle.UNINSTALLED;
 		bundle = new MockBundle() {
 
@@ -48,6 +51,7 @@ public class OsgiStringUtilsTest extends TestCase {
 		};
 	}
 
+	@Test
 	public void testGetBundleEventAsString() {
 		assertEquals("INSTALLED", OsgiStringUtils.nullSafeBundleEventToString(BundleEvent.INSTALLED));
 		assertEquals("STARTING", OsgiStringUtils.nullSafeBundleEventToString(BundleEvent.STARTING));
@@ -56,6 +60,7 @@ public class OsgiStringUtilsTest extends TestCase {
 		assertTrue(OsgiStringUtils.nullSafeBundleEventToString(-1324).startsWith("UNKNOWN"));
 	}
 
+	@Test
 	public void testGetBundleStateAsName() throws Exception {
 		OsgiStringUtilsTest.state = Bundle.ACTIVE;
 		assertEquals("ACTIVE", OsgiStringUtils.bundleStateAsString(bundle));
@@ -67,20 +72,24 @@ public class OsgiStringUtilsTest extends TestCase {
 		assertEquals("UNKNOWN STATE", OsgiStringUtils.bundleStateAsString(bundle));
 	}
 
+	@Test
 	public void testNullSafeToStringBundleEvent() throws Exception {
 		assertEquals("INSTALLED", OsgiStringUtils.nullSafeToString(new BundleEvent(BundleEvent.INSTALLED, bundle)));
 		assertEquals("UPDATED", OsgiStringUtils.nullSafeToString(new BundleEvent(BundleEvent.UPDATED, bundle)));
 		assertEquals("STOPPING", OsgiStringUtils.nullSafeToString(new BundleEvent(BundleEvent.STOPPING, bundle)));
 	}
 
+	@Test
 	public void testNullSafeToStringBundleEventNull() throws Exception {
 		assertNotNull(OsgiStringUtils.nullSafeToString((BundleEvent) null));
 	}
 
+	@Test
 	public void testNullSafeToStringBundleEventInvalidType() throws Exception {
 		assertEquals("UNKNOWN EVENT TYPE", OsgiStringUtils.nullSafeToString(new BundleEvent(-123, bundle)));
 	}
 
+	@Test
 	public void testNullSafeToStringServiceEvent() throws Exception {
 		ServiceReference ref = new MockServiceReference();
 		assertEquals("REGISTERED", OsgiStringUtils.nullSafeToString(new ServiceEvent(ServiceEvent.REGISTERED, ref)));
@@ -89,15 +98,18 @@ public class OsgiStringUtilsTest extends TestCase {
 			OsgiStringUtils.nullSafeToString(new ServiceEvent(ServiceEvent.UNREGISTERING, ref)));
 	}
 
+	@Test
 	public void testNullSafeToStringServiceEventNull() throws Exception {
 		assertNotNull(OsgiStringUtils.nullSafeToString((ServiceEvent) null));
 	}
 
+	@Test
 	public void testNullSafeToStringServiceEventInvalidType() throws Exception {
 		assertEquals("UNKNOWN EVENT TYPE", OsgiStringUtils.nullSafeToString(new ServiceEvent(-123,
 			new MockServiceReference())));
 	}
 
+	@Test
 	public void testNullSafeToStringFrameworkEvent() throws Exception {
 		Bundle bundle = new MockBundle();
 		Throwable th = new Exception();
@@ -117,15 +129,18 @@ public class OsgiStringUtilsTest extends TestCase {
 			FrameworkEvent.STARTLEVEL_CHANGED, bundle, th)));
 	}
 
+	@Test
 	public void testNullSafeToStringFrameworkEventNull() throws Exception {
 		assertNotNull(OsgiStringUtils.nullSafeToString((FrameworkEvent) null));
 	}
 
+	@Test
 	public void testNullSafeToStringFrameworkEventInvalidType() throws Exception {
 		assertEquals("UNKNOWN EVENT TYPE", OsgiStringUtils.nullSafeToString(new FrameworkEvent(-123, bundle,
 			new Exception())));
 	}
 
+	@Test
 	public void testNullSafeToStringServiceReference() throws Exception {
 		String symName = "symName";
 
@@ -141,6 +156,7 @@ public class OsgiStringUtilsTest extends TestCase {
 		assertTrue(out.indexOf(value) > -1);
 	}
 
+	@Test
 	public void testNullSafeToStringServiceReferenceNull() throws Exception {
 		assertNotNull(OsgiStringUtils.nullSafeToString((ServiceReference) null));
 	}

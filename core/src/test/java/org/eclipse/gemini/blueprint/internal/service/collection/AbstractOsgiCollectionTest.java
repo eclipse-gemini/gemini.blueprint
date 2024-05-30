@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.aop.ServiceProxyCreator;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceCollection;
@@ -40,7 +41,7 @@ import org.springframework.util.ClassUtils;
  * @author Costin Leau
  * 
  */
-public abstract class AbstractOsgiCollectionTest extends TestCase {
+public abstract class AbstractOsgiCollectionTest {
 
 	protected MockBundleContext context;
 
@@ -89,8 +90,8 @@ public abstract class AbstractOsgiCollectionTest extends TestCase {
 
 	};
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		services = new LinkedHashMap();
 
 		context = new MockBundleContext() {
@@ -116,7 +117,8 @@ public abstract class AbstractOsgiCollectionTest extends TestCase {
 		return new SimpleServiceJDKProxyCreator(context, classes, getClass().getClassLoader());
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		services = null;
 		context = null;
 	}

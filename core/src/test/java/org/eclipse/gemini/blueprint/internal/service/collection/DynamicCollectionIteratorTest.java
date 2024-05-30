@@ -14,12 +14,20 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.DynamicCollection;
 
@@ -30,24 +38,26 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.collection
  * @author Costin Leau
  * 
  */
-public class DynamicCollectionIteratorTest extends TestCase {
+public class DynamicCollectionIteratorTest {
 
 	private Collection dynamicCollection;
 
 	private Iterator iter;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		dynamicCollection = new DynamicCollection();
 		iter = dynamicCollection.iterator();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dynamicCollection = null;
 		iter = null;
 	}
 
 	// iterating tests
+	@Test
 	public void testAddWhileIterating() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -59,6 +69,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertFalse(iter.hasNext());
 	}
 
+	@Test
 	public void testRemoveWhileIterating() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -76,6 +87,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertSame(c, iter.next());
 	}
 
+	@Test
 	public void testRemovePreviouslyIteratedWhileIterating() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -94,6 +106,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertSame(b, iter.next());
 	}
 
+	@Test
 	public void testRemoveUniteratedWhileIterating() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -117,6 +130,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertSame(c, iter.next());
 	}
 
+	@Test
 	public void testIteratorRemove() throws Exception {
 		Object a = new Object();
 		Object b = new Object();
@@ -155,6 +169,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testRemoveAllWhileIterating() throws Exception {
 		Object a = new Object();
 		Object b = new Object();
@@ -175,6 +190,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertFalse(iter.hasNext());
 	}
 
+	@Test
 	public void testAddAllWhileIterating() throws Exception {
 		Object a = new Object();
 		Object b = new Object();
@@ -194,6 +210,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertSame(c, iter.next());
 	}
 
+	@Test
 	public void testRemoveObjectWhenTheCollectionContainsDuplicates() throws Exception {
 		Object a = new Object();
 		Object b = new Object();
@@ -227,6 +244,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertFalse(iter.hasNext());
 	}
 
+	@Test
 	public void testRemoveUnexistingObj() throws Exception {
 		Object a = new Object();
 		Object b = new Object();
@@ -241,6 +259,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertFalse(dynamicCollection.remove(b));
 	}
 
+	@Test
 	public void testCorrectExceptionThrownByIteratorWhenStructureChanges() {
 		Object a = new Object();
 
@@ -272,6 +291,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 	// consistency tests
 
 	// 1. hasNext() reflects the latest collection updates (adding stuff)
+	@Test
 	public void testConsistentIteratorWhileAdding() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -284,6 +304,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 	}
 
 	// 1. hasNext() reflect the changes when removing things
+	@Test
 	public void testConsistentIteratorWhileRemoving() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -296,6 +317,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 	}
 
 	// 2. hasNext() returns false -> next() throws Exception
+	@Test
 	public void testConsistentIteratorWithAddition() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -313,6 +335,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 
 	// 3. hasNext() = true -> next() will NOT throw an exception no matter the
 	// collection changes
+	@Test
 	public void testConsistentIterator() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -327,6 +350,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 
 	// 4. double check hasNext() true -> next() will return the last object for each
 	// iterator
+	@Test
 	public void testMultiIteratorHasNextConsistency() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -366,6 +390,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 	}
 
 	// similar test to the one above but the removal order is different
+	@Test
 	public void testMultiIteratorHasNextConsistencyGhostUpdate() throws Exception {
 		assertTrue(dynamicCollection.isEmpty());
 		assertFalse(iter.hasNext());
@@ -404,6 +429,7 @@ public class DynamicCollectionIteratorTest extends TestCase {
 		assertSame(c, iter3.next());
 	}
 
+	@Test
 	public void testMultipleIteratorsPositionAfterCompleteRemoval() throws Exception {
 		Iterator iter1 = dynamicCollection.iterator();
 		Object a = new Object();

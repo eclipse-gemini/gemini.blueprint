@@ -14,7 +14,8 @@
 
 package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import junit.framework.TestResult;
 import org.eclipse.gemini.blueprint.test.legacyspringsupport.ConditionalTestCase;
 
@@ -22,18 +23,19 @@ import org.eclipse.gemini.blueprint.test.legacyspringsupport.ConditionalTestCase
  * @author Costin Leau
  * 
  */
-public class SkipTestRunner extends TestCase {
+public class SkipTestRunner {
 
 	private TestCase test;
 
 	private TestResult result;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		test = new SkipTestsTst();
 		result = new TestResult();
 	}
 
+	@Test
 	public void testSkippedTestProperlyRecorded() throws Exception {
 		executeTest(SkipTestsTst.TEST_SKIPPED_1);
 		executeTest(SkipTestsTst.TEST_RAN);

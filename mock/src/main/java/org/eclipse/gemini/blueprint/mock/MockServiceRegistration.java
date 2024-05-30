@@ -27,11 +27,12 @@ import org.osgi.framework.ServiceRegistration;
  * of type {@link MockServiceReference}.
  * 
  * @author Costin Leau
+ * @param <S>
  * 
  */
-public class MockServiceRegistration implements ServiceRegistration {
+public class MockServiceRegistration<S> implements ServiceRegistration<S> {
 
-	private ServiceReference reference;
+	private ServiceReference<S> reference;
 
 
 	/**
@@ -64,7 +65,7 @@ public class MockServiceRegistration implements ServiceRegistration {
 		reference = new MockServiceReference(null, props, this, clazz);
 	}
 
-	public ServiceReference getReference() {
+	public ServiceReference<S> getReference() {
 		return reference;
 	}
 
@@ -73,7 +74,7 @@ public class MockServiceRegistration implements ServiceRegistration {
 	 * 
 	 * @param reference service reference
 	 */
-	public void setReference(ServiceReference reference) {
+	public void setReference(ServiceReference<S> reference) {
 		this.reference = reference;
 	}
 

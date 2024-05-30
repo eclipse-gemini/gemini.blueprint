@@ -14,6 +14,13 @@
 
 package org.eclipse.gemini.blueprint.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -22,7 +29,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
@@ -45,12 +54,12 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  * @author Costin Leau
  * 
  */
-public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
+public class OsgiReferenceCollectionNamespaceHandlerTest {
 
 	private GenericApplicationContext appContext;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		// reset counter just to be sure
 		DummyListener.BIND_CALLS = 0;
 		DummyListener.UNBIND_CALLS = 0;
@@ -79,10 +88,12 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		appContext.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 	}
 
+	@Test
 	public void testSimpleList() {
 		Object factoryBean = appContext.getBean("&simpleList");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -92,6 +103,7 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		assertTrue(bean instanceof List);
 	}
 
+	@Test
 	public void testSimpleSet() {
 		Object factoryBean = appContext.getBean("&simpleSet");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -101,6 +113,7 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		assertTrue(bean instanceof Set);
 	}
 
+	@Test
 	public void testSimpleListWithGreedyProxyingOn() throws Exception {
 		Object factoryBean = appContext.getBean("&simpleListWithGreedyProxying");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -111,12 +124,14 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		assertTrue(bean instanceof List);
 	}
 
+	@Test
 	public void testSimpleListWithDefaultProxying() throws Exception {
 		Object factoryBean = appContext.getBean("&simpleSet");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
 		assertEquals(Boolean.FALSE, (Boolean) TestUtils.getFieldValue(factoryBean, "greedyProxying"));
 	}
 
+	@Test
 	public void testImplicitSortedList() {
 		Object factoryBean = appContext.getBean("&implicitSortedList");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -130,6 +145,7 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		assertSame(appContext.getBean("defaultComparator"), exposedProxy.comparator());
 	}
 
+	@Test
 	public void testImplicitSortedSet() {
 		Object factoryBean = appContext.getBean("&implicitSortedSet");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -141,6 +157,7 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		assertSame(appContext.getBean("defaultComparator"), ((SortedSet) bean).comparator());
 	}
 
+	@Test
 	public void testSimpleSortedList() {
 		Object factoryBean = appContext.getBean("&implicitSortedList");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -153,6 +170,7 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		assertTrue(Arrays.equals(new Class<?>[] { Serializable.class }, intfs));
 	}
 
+	@Test
 	public void testSimpleSortedSet() {
 		Object factoryBean = appContext.getBean("&implicitSortedSet");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -165,6 +183,7 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 		assertTrue(Arrays.equals(new Class<?>[] { Externalizable.class }, intfs));
 	}
 
+	@Test
 	public void testSortedSetWithNaturalOrderingOnRefs() throws Exception {
 		Object factoryBean = appContext.getBean("&sortedSetWithNaturalOrderingOnRefs");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);
@@ -186,6 +205,7 @@ public class OsgiReferenceCollectionNamespaceHandlerTest extends TestCase {
 
 	}
 
+	@Test
 	public void testSortedListWithNaturalOrderingOnServs() throws Exception {
 		Object factoryBean = appContext.getBean("&sortedListWithNaturalOrderingOnServs");
 		assertTrue(factoryBean instanceof OsgiServiceCollectionProxyFactoryBean);

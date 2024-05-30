@@ -21,9 +21,14 @@ import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.eclipse.gemini.blueprint.config.internal.adapter.OsgiServiceRegistrationListenerAdapter;
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener;
 import org.eclipse.gemini.blueprint.util.internal.MapBasedDictionary;
@@ -36,7 +41,7 @@ import org.springframework.beans.factory.BeanFactory;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
+public class OsgiServiceRegistrationListenerAdapterTest {
 
 	protected static class JustListener implements OsgiServiceRegistrationListener {
 
@@ -200,7 +205,8 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 
 	private static final String BEAN_NAME = "bla";
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		JustListener.REG_CALLS = 0;
 		JustListener.UNREG_CALLS = 0;
 
@@ -215,13 +221,15 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		props = new MapBasedDictionary(0);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		listener = null;
 		CustomListener.REG_PROPS = null;
 		CustomListener.UNREG_PROPS = null;
 		props = null;
 	}
 
+	@Test
 	public void testWrapperOverListener() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new JustListener());
@@ -245,6 +253,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(2, JustListener.REG_CALLS);
 	}
 
+	@Test
 	public void testWrapperOverNoInvalidClass() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new Object());
@@ -256,6 +265,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testWrapperWithIncorrectCustomMethodNames() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new Object());
@@ -270,6 +280,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testWrapperWithCorrectCustomMethodNamesButIncorrectArgumentTypes() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new CustomListener());
@@ -290,6 +301,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 
 	}
 
+	@Test
 	public void testWrapperWithCustomMethods() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new CustomListener());
@@ -321,6 +333,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(2, CustomListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testWrapperWithCustomMethodsAndNullProperties() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new CustomListener());
@@ -339,6 +352,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals("null properties allowed", 1, CustomListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testWrapperWithBothCustomAndInterfaceMethods() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new CustomAndListener());
@@ -359,6 +373,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 
 	}
 
+	@Test
 	public void testExceptionOnListenerMethod() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new ExceptionListener());
@@ -378,6 +393,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(1, JustListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testExceptionOnCustomMethods() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new ExceptionCustomListener());
@@ -397,6 +413,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(1, ExceptionCustomListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testStandardListenerWithListeningMethodsSpecifiedAsCustomOnes() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new JustListener());
@@ -414,6 +431,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(4, JustListener.REG_CALLS);
 	}
 
+	@Test
 	public void testListenerWithOverloadedTypesAndMultipleParameterTypes() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new DictionaryAndMapCustomListener());
@@ -434,6 +452,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals("only one unregistered method should be called", 1, JustListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testJustCustomRegMethod() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new JustReg());
@@ -450,6 +469,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(0, JustListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testJustCustomUnregMethod() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new JustUnreg());
@@ -466,6 +486,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(1, JustListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testServiceFactoryListener() throws Exception {
 		listener = new OsgiServiceRegistrationListenerAdapter();
 		listener.setTarget(new ServiceFactoryListener());
@@ -491,6 +512,7 @@ public class OsgiServiceRegistrationListenerAdapterTest extends TestCase {
 		assertEquals(1, ServiceFactoryListener.UNREG_CALLS);
 	}
 
+	@Test
 	public void testExtServiceFactoryListener() throws Exception {
 
 		listener = new OsgiServiceRegistrationListenerAdapter();

@@ -14,19 +14,24 @@
 
 package org.eclipse.gemini.blueprint.service.exporter.support;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.HashMap;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener;
 import org.eclipse.gemini.blueprint.service.exporter.SimpleOsgiServiceRegistrationListener;
 import org.eclipse.gemini.blueprint.service.exporter.support.internal.support.ListenerNotifier;
 
-public class AbstractListenerAwareExporterTest extends TestCase {
+public class AbstractListenerAwareExporterTest {
 
 	private AbstractOsgiServiceExporter exporter;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		SimpleOsgiServiceRegistrationListener.REGISTERED = 0;
 		SimpleOsgiServiceRegistrationListener.UNREGISTERED = 0;
 
@@ -42,10 +47,12 @@ public class AbstractListenerAwareExporterTest extends TestCase {
 		exporter.setListeners(new OsgiServiceRegistrationListener[] { new SimpleOsgiServiceRegistrationListener() });
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		exporter = null;
 	}
 
+	@Test
 	public void testNotifyListenersOnRegistration() {
 		assertEquals(0, SimpleOsgiServiceRegistrationListener.REGISTERED);
 		assertEquals(0, SimpleOsgiServiceRegistrationListener.UNREGISTERED);
@@ -57,6 +64,7 @@ public class AbstractListenerAwareExporterTest extends TestCase {
 		assertEquals(0, SimpleOsgiServiceRegistrationListener.UNREGISTERED);
 	}
 
+	@Test
 	public void testNotifyListenersOnUnregistration() {
 		assertEquals(0, SimpleOsgiServiceRegistrationListener.REGISTERED);
 		assertEquals(0, SimpleOsgiServiceRegistrationListener.UNREGISTERED);

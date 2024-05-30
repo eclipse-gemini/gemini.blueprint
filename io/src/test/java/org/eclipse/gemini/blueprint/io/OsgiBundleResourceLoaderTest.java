@@ -16,9 +16,16 @@ package org.eclipse.gemini.blueprint.io;
 
 import java.net.URL;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
 import org.osgi.framework.Bundle;
 import org.springframework.core.io.Resource;
@@ -27,18 +34,20 @@ import org.springframework.core.io.Resource;
  * @author Costin Leau
  * 
  */
-public class OsgiBundleResourceLoaderTest extends TestCase {
+public class OsgiBundleResourceLoaderTest {
 
 	OsgiBundleResourceLoader loader;
 
 	Bundle bundle;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundle = createMock(Bundle.class);
 		loader = new OsgiBundleResourceLoader(bundle);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		loader = null;
 		bundle = null;
 	}
@@ -47,6 +56,7 @@ public class OsgiBundleResourceLoaderTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResourceLoader#getResource(java.lang.String)}.
 	 */
+	@Test
 	public void testGetClasspathResource() throws Exception {
 		String res = "foo.txt";
 		URL expected = new URL("file://" + res);
@@ -59,6 +69,7 @@ public class OsgiBundleResourceLoaderTest extends TestCase {
 		verify(bundle);
 	}
 
+	@Test
 	public void testGetBundleResource() throws Exception {
 		String res = "foo.txt";
 		URL url = new URL("file:/" + res);
@@ -71,6 +82,7 @@ public class OsgiBundleResourceLoaderTest extends TestCase {
 		verify(bundle);
 	}
 
+	@Test
 	public void testGetRelativeResource() throws Exception {
 		String res = "foo.txt";
 		URL expected = new URL("file:/" + res);
@@ -82,6 +94,7 @@ public class OsgiBundleResourceLoaderTest extends TestCase {
 		verify(bundle);
 	}
 
+	@Test
 	public void testGetFallbackResource() throws Exception {
 		String res = "foo.txt";
 		URL expected = new URL("http:/" + res);
@@ -93,6 +106,7 @@ public class OsgiBundleResourceLoaderTest extends TestCase {
 		verify(bundle);
 	}
 
+	@Test
 	public void testGetResourceByPath() throws Exception {
 		try {
 			loader.getResourceByPath(null);

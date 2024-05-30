@@ -15,10 +15,6 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.dependencies.startup;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,15 +34,12 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
 import org.eclipse.gemini.blueprint.extender.OsgiServiceDependencyFactory;
 import org.eclipse.gemini.blueprint.extender.event.BootstrappingDependenciesEvent;
 import org.eclipse.gemini.blueprint.extender.event.BootstrappingDependencyEvent;
-import org.eclipse.gemini.blueprint.extender.internal.util.PrivilegedUtils;
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceDependency;
 import org.eclipse.gemini.blueprint.service.importer.event.OsgiServiceDependencyEvent;
 import org.eclipse.gemini.blueprint.service.importer.event.OsgiServiceDependencyWaitEndedEvent;
@@ -275,24 +268,7 @@ public class DependencyServiceManager {
 
 	protected void findServiceDependencies() throws Exception {
 		try {
-			if (System.getSecurityManager() != null) {
-				final AccessControlContext acc = getAcc();
-
-				PrivilegedUtils.executeWithCustomTCCL(context.getClassLoader(),
-						new PrivilegedUtils.UnprivilegedThrowableExecution<Object>() {
-							public Object run() throws Throwable {
-								AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-									public Object run() throws Exception {
-										doFindDependencies();
-										return null;
-									}
-								}, acc);
-								return null;
-							}
-						});
-			} else {
-				doFindDependencies();
-			}
+			doFindDependencies();
 		} catch (Throwable th) {
 			if (th instanceof Exception)
 				throw ((Exception) th);
@@ -410,17 +386,7 @@ public class DependencyServiceManager {
 		// send dependency event before registering the filter
 		sendInitialBootstrappingEvents(getUnsatisfiedDependencies().keySet());
 
-		if (System.getSecurityManager() != null) {
-			AccessControlContext acc = getAcc();
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					OsgiListenerUtils.addServiceListener(bundleContext, listener, filter);
-					return null;
-				}
-			}, acc);
-		} else {
-			OsgiListenerUtils.addServiceListener(bundleContext, listener, filter);
-		}
+		OsgiListenerUtils.addServiceListener(bundleContext, listener, filter);
 	}
 
 	/**
@@ -538,14 +504,6 @@ public class DependencyServiceManager {
 
 	private void publishEvent(OsgiBundleApplicationContextEvent dependencyEvent) {
 		this.contextStateAccessor.getEventMulticaster().multicastEvent(dependencyEvent);
-	}
-
-	private AccessControlContext getAcc() {
-		AutowireCapableBeanFactory beanFactory = context.getAutowireCapableBeanFactory();
-		if (beanFactory instanceof ConfigurableBeanFactory) {
-			return ((ConfigurableBeanFactory) beanFactory).getAccessControlContext();
-		}
-		return null;
 	}
 	
     public boolean allDependenciesSatisfied() {

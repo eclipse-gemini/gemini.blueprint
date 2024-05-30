@@ -14,9 +14,16 @@
 
 package org.eclipse.gemini.blueprint.test.internal.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.InputStream;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.test.internal.util.jar.storage.Storage;
 import org.springframework.core.io.Resource;
@@ -30,7 +37,7 @@ import org.springframework.util.FileCopyUtils;
  * @author Costin Leau
  * 
  */
-public abstract class AbstractStorageTest extends TestCase {
+public abstract class AbstractStorageTest {
 
 	protected Storage storage;
 
@@ -41,14 +48,17 @@ public abstract class AbstractStorageTest extends TestCase {
 	 */
 	protected abstract Storage createStorage();
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		storage = createStorage();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		storage.dispose();
 	}
 
+	@Test
 	public void testInitialInputStream() throws Exception {
 		InputStream in = storage.getInputStream();
 		try {
@@ -59,15 +69,18 @@ public abstract class AbstractStorageTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIdenticalInputStreams() throws Exception {
 		assertTrue("streams not identical", compareStreams(storage.getInputStream(), storage.getInputStream()));
 	}
 
+	@Test
 	public void testIdenticalInputStreamsFromResource() throws Exception {
 		assertTrue("streams not identical", compareStreams(storage.getResource().getInputStream(), storage
 				.getResource().getInputStream()));
 	}
 
+	@Test
 	public void testReadWrite() throws Exception {
 		int wrote = FileCopyUtils.copy(getSampleContentAsInputStream(), storage.getOutputStream());
 		System.out.println("wrote " + wrote + " bytes");
@@ -75,12 +88,14 @@ public abstract class AbstractStorageTest extends TestCase {
 				.getInputStream()));
 	}
 
+	@Test
 	public void testResource() throws Exception {
 		Resource res = storage.getResource();
 		assertNotNull(res);
 		assertFalse("underlying storage is not reusable", res.isOpen());
 	}
 
+	@Test
 	public void testCompareInputStreamAndResourceInputStream() throws Exception {
 		InputStream in1 = storage.getInputStream();
 		InputStream in2 = storage.getResource().getInputStream();

@@ -14,11 +14,14 @@
 
 package org.eclipse.gemini.blueprint.compendium.internal.cm;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.util.internal.MapBasedDictionary;
 
@@ -26,7 +29,7 @@ import org.eclipse.gemini.blueprint.util.internal.MapBasedDictionary;
  * @author Costin Leau
  * 
  */
-public class UpdateMethodAdapterTest extends TestCase {
+public class UpdateMethodAdapterTest {
 
 	public class NoMethod {
 
@@ -72,35 +75,32 @@ public class UpdateMethodAdapterTest extends TestCase {
 		}
 	}
 
-
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-
+	@Test
 	public void testDetermineUpdateMethodWNoMethod() {
 		assertTrue(UpdateMethodAdapter.determineUpdateMethod(NoMethod.class, "update").isEmpty());
 	}
 
+	@Test
 	public void testDetermineUpdateMethodWMapMethod() {
 		assertEquals(1, UpdateMethodAdapter.determineUpdateMethod(OneMapMethod.class, "update").size());
 	}
 
+	@Test
 	public void testDetermineUpdateMethodWDictMethod() {
 		assertEquals(1, UpdateMethodAdapter.determineUpdateMethod(OneDictionaryMethod.class, "dictMethod").size());
 	}
 
+	@Test
 	public void testDetermineUpdateMethodWBothMethod() {
 		assertEquals(2, UpdateMethodAdapter.determineUpdateMethod(BothMethods.class, "update").size());
 	}
 
+	@Test
 	public void testDetermineUpdateMethodWNonPublicMethod() {
 		assertTrue(UpdateMethodAdapter.determineUpdateMethod(NonPublicMethod.class, "update").isEmpty());
 	}
 
+	@Test
 	public void testInvokeCustomMethodsOnMapMethod() {
 		OneMapMethod.INVOCATIONS = 0;
 		Map methods = UpdateMethodAdapter.determineUpdateMethod(OneMapMethod.class, "update");
@@ -108,6 +108,7 @@ public class UpdateMethodAdapterTest extends TestCase {
 		assertEquals(1, OneMapMethod.INVOCATIONS);
 	}
 
+	@Test
 	public void testInvokeCustomMethodsOnDictMethod() {
 		OneDictionaryMethod.INVOCATIONS = 0;
 		Map methods = UpdateMethodAdapter.determineUpdateMethod(OneDictionaryMethod.class, "dictMethod");
@@ -115,6 +116,7 @@ public class UpdateMethodAdapterTest extends TestCase {
 		assertEquals(1, OneDictionaryMethod.INVOCATIONS);
 	}
 
+	@Test
 	public void testInvokeCustomMethodsOnBothMethod() {
 		BothMethods.INVOCATIONS = 0;
 		Map methods = UpdateMethodAdapter.determineUpdateMethod(BothMethods.class, "update");

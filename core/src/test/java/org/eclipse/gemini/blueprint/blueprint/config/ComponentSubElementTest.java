@@ -14,13 +14,22 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.blueprint.TestComponent;
 import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
@@ -47,7 +56,7 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  * @author Costin Leau
  * 
  */
-public class ComponentSubElementTest extends TestCase {
+public class ComponentSubElementTest {
 
 	private static final String CONFIG = "component-subelements.xml";
 
@@ -56,7 +65,8 @@ public class ComponentSubElementTest extends TestCase {
 	private XmlBeanDefinitionReader reader;
 	protected MockBundleContext bundleContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 
 		context = new GenericApplicationContext();
@@ -76,15 +86,18 @@ public class ComponentSubElementTest extends TestCase {
 		BlueprintContainer = new SpringBlueprintContainer(context);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testNumberOfBeans() throws Exception {
 		assertTrue("not enough beans found", context.getBeanDefinitionCount() > 4);
 	}
 
+	@Test
 	public void testConstructorArg() throws Exception {
 		AbstractBeanDefinition def = (AbstractBeanDefinition) context.getBeanDefinition("constructor-arg");
 		assertEquals(Integer.class.getName(), def.getBeanClassName());
@@ -93,6 +106,7 @@ public class ComponentSubElementTest extends TestCase {
 		assertNotNull(argumentValue);
 	}
 
+	@Test
 	public void testConstructorRef() throws Exception {
 		AbstractBeanDefinition def = (AbstractBeanDefinition) context.getBeanDefinition("constructor-arg-ref");
 		assertEquals(String.class.getName(), def.getBeanClassName());
@@ -100,6 +114,7 @@ public class ComponentSubElementTest extends TestCase {
 		assertEquals(1, def.getConstructorArgumentValues().getArgumentCount());
 	}
 
+	@Test
 	public void testPropertyInline() throws Exception {
 		AbstractBeanDefinition def = (AbstractBeanDefinition) context.getBeanDefinition("propertyValueInline");
 		assertEquals(Socket.class.getName(), def.getBeanClassName());
@@ -109,12 +124,14 @@ public class ComponentSubElementTest extends TestCase {
 		assertTrue(propertyValue.getValue() instanceof BeanMetadataElement);
 	}
 
+	@Test
 	public void testValueRef() throws Exception {
 		AbstractBeanDefinition def = (AbstractBeanDefinition) context.getBeanDefinition("propertyValueRef");
 		assertEquals(Socket.class.getName(), def.getBeanClassName());
 		assertNotNull(def.getPropertyValues().getPropertyValue("sendBufferSize"));
 	}
 
+	@Test
 	public void testpropertyValueNested() throws Exception {
 		AbstractBeanDefinition def = (AbstractBeanDefinition) context.getBeanDefinition("propertyValueNested");
 		assertEquals(Socket.class.getName(), def.getBeanClassName());
@@ -122,6 +139,7 @@ public class ComponentSubElementTest extends TestCase {
 		assertTrue(nested.getValue() instanceof BeanDefinitionHolder);
 	}
 
+	@Test
 	public void testArray() throws Exception {
 		TestComponent cmpn = (TestComponent) context.getBean("array");
 		Object prop = cmpn.getPropA();
@@ -132,6 +150,7 @@ public class ComponentSubElementTest extends TestCase {
 		assertNull(array[2]);
 	}
 
+	@Test
 	public void testMixedCollection() throws Exception {
 		TestComponent cmpn = (TestComponent) context.getBean("mixedCollection");
 		Object prop = cmpn.getPropA();
@@ -140,10 +159,11 @@ public class ComponentSubElementTest extends TestCase {
 		assertEquals("literal", list.get(0));
 		assertEquals(Integer[].class, list.get(1).getClass());
 		assertEquals(int[].class, list.get(2).getClass());
-		assertEquals(new Integer(2), ((Integer[]) list.get(1))[0]);
+		assertEquals(Integer.valueOf(2), ((Integer[]) list.get(1))[0]);
 		assertEquals(5, ((int[]) list.get(2))[1]);
 	}
 
+	@Test
 	public void testList() throws Exception {
 		TestComponent cmpn = (TestComponent) context.getBean("list");
 		Object prop = cmpn.getPropA();
@@ -155,6 +175,7 @@ public class ComponentSubElementTest extends TestCase {
 		assertSame(context.getBean("idref"), list.get(3));
 	}
 
+	@Test
 	public void testSet() throws Exception {
 		TestComponent cmpn = (TestComponent) context.getBean("set");
 		Object prop = cmpn.getPropA();
@@ -176,6 +197,7 @@ public class ComponentSubElementTest extends TestCase {
 		assertEquals(context.getBean("list"), map.get(context.getBean("set")));
 	}
 
+	@Test
 	public void testProps() throws Exception {
 		TestComponent cmpn = (TestComponent) context.getBean("props");
 		Object prop = cmpn.getPropA();
@@ -185,10 +207,12 @@ public class ComponentSubElementTest extends TestCase {
 		assertEquals("smith", props.get("aero"));
 	}
 
+	@Test
 	public void testAmbigousComponent() throws Exception {
 		System.out.println(context.getBean("ambigousComponent"));
 	}
 
+	@Test
 	public void testDependsOnTest() throws Exception {
 		try {
 			System.out.println(BlueprintContainer.getComponentInstance("dependsOnComponent"));

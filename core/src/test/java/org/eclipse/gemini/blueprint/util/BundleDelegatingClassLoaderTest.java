@@ -14,7 +14,10 @@
 
 package org.eclipse.gemini.blueprint.util;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import static org.easymock.EasyMock.*;
 import org.osgi.framework.Bundle;
 import org.springframework.aop.framework.ProxyFactory;
@@ -24,12 +27,17 @@ import java.net.URL;
 import java.util.Enumeration;
 
 import static org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader.createBundleClassLoaderFor;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Costin Leau
  * 
  */
-public class BundleDelegatingClassLoaderTest extends TestCase {
+public class BundleDelegatingClassLoaderTest {
 
 	private BundleDelegatingClassLoader classLoader;
 
@@ -37,19 +45,23 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 
     private ClassLoader bridge;
 
-	protected void setUp() throws Exception {
+    @Before
+	public void setup() throws Exception {
 		bundle = createMock(Bundle.class);
 		classLoader = createBundleClassLoaderFor(bundle, ProxyFactory.class.getClassLoader());
         bridge = getClass().getClassLoader();
 	}
 
-	protected void tearDown() throws Exception {
+    @After
+	public void tearDown() throws Exception {
 		verify(bundle);
 		classLoader = null;
 		bundle = null;
 	}
 
-	public void tstEquals() {
+    @Test
+    @Ignore
+	public void testEquals() {
 		replay(bundle);
 
 		assertFalse(classLoader.equals(new Object()));
@@ -60,6 +72,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 		// assertEquals(bundle.hashCode(), clientClassLoader.hashCode());
 	}
 
+    @Test
 	public void testFindClass() throws Exception {
 		String className = "foo.bar";
 		String anotherClassName = "bar.foo";
@@ -78,6 +91,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 		}
 	}
 
+    @Test
 	public void testFindResource() throws Exception {
 		String resource = "file://bla-bla";
 		URL url = new URL(resource);
@@ -88,6 +102,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 		assertSame(url, classLoader.findResource(resource));
 	}
 
+    @Test
 	public void testFindResources() throws Exception {
 		String resource = "bla-bla";
         Enumeration enumeration = createMock(Enumeration.class);
@@ -98,6 +113,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
 		assertSame(enumeration, classLoader.findResources(resource));
 	}
 
+    @Test
     public void testGetResourcesFromBundleAndBridge() throws Exception {
         final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
         final URL bundleURL = new URL("file://bundle/resourceName");
@@ -122,6 +138,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
         assertTrue(resource.getFile().endsWith(resourceName));
     }
 
+    @Test
     public void testGetResourcesFromBundleOnly() throws Exception {
         final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
         final URL bundleURL = new URL("file://bundle/resourceName");
@@ -142,6 +159,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
         assertFalse(resources.hasMoreElements());
     }
 
+    @Test
     public void testGetResourcesFromBridgeOnly() throws Exception {
         final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
 
@@ -156,6 +174,7 @@ public class BundleDelegatingClassLoaderTest extends TestCase {
         assertFalse(resources.hasMoreElements());
     }
 
+    @Test
     public void testGetResourcesIsNullSafe() throws IOException {
         final String resourceName = "org/eclipse/gemini/blueprint/util/internal/resource.txt";
 

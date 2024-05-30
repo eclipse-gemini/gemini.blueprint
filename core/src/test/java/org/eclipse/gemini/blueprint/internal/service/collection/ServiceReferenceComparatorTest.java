@@ -14,11 +14,17 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.util.ServiceReferenceComparator;
 import org.osgi.framework.Constants;
@@ -29,19 +35,21 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class ServiceReferenceComparatorTest extends TestCase {
+public class ServiceReferenceComparatorTest {
 
 	private Comparator comparator;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		comparator = new ServiceReferenceComparator();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		comparator = null;
 	}
 
+	@Test
 	public void testServiceRefsWithTheSameId() throws Exception {
 		ServiceReference refA = createReference(new Long(1), null);
 		ServiceReference refB = createReference(new Long(1), null);
@@ -50,6 +58,7 @@ public class ServiceReferenceComparatorTest extends TestCase {
 		assertEquals(0, comparator.compare(refA, refB));
 	}
 
+	@Test
 	public void testServiceRefsWithDifferentIdAndNoRanking() throws Exception {
 		ServiceReference refA = createReference(new Long(1), null);
 		ServiceReference refB = createReference(new Long(2), null);
@@ -59,26 +68,30 @@ public class ServiceReferenceComparatorTest extends TestCase {
 		assertTrue(comparator.compare(refA, refB) > 0);
 	}
 
+	@Test
 	public void testServiceRefsWithDifferentIdAndDifferentRanking() throws Exception {
-		ServiceReference refA = createReference(new Long(1), new Integer(0));
-		ServiceReference refB = createReference(new Long(2), new Integer(1));
+		ServiceReference refA = createReference(new Long(1), Integer.valueOf(0));
+		ServiceReference refB = createReference(new Long(2), Integer.valueOf(1));
 
 		// refB is higher then refA (due to ranking)
 		assertTrue(comparator.compare(refA, refB) < 0);
 	}
 
+	@Test
 	public void testServiceRefsWithSameRankAndDifId() throws Exception {
-		ServiceReference refA = createReference(new Long(1), new Integer(5));
-		ServiceReference refB = createReference(new Long(2), new Integer(5));
+		ServiceReference refA = createReference(new Long(1), Integer.valueOf(5));
+		ServiceReference refB = createReference(new Long(2), Integer.valueOf(5));
 
 		// same ranking, means id equality applies
 		assertTrue(comparator.compare(refA, refB) > 0);
 	}
 
+	@Test
 	public void testNullObjects() throws Exception {
 		assertEquals(0, comparator.compare(null, null));
 	}
 
+	@Test
 	public void testNonNullWithNull() throws Exception {
 		try {
 			comparator.compare(new MockServiceReference(), null);

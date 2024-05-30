@@ -14,12 +14,17 @@
 
 package org.eclipse.gemini.blueprint.internal.service.interceptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.aop.ServiceDynamicInterceptor;
@@ -29,7 +34,7 @@ import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
-public class OsgiServiceDynamicInterceptorSyntheticEventsTest extends TestCase {
+public class OsgiServiceDynamicInterceptorSyntheticEventsTest {
 
 	private ServiceDynamicInterceptor interceptor;
 
@@ -45,8 +50,8 @@ public class OsgiServiceDynamicInterceptorSyntheticEventsTest extends TestCase {
 
 	private Object serviceProxy = new Object();
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 
 		// generate services references in reverse order to have them increasing service ids
 		ref3 = new MockServiceReference();
@@ -103,16 +108,19 @@ public class OsgiServiceDynamicInterceptorSyntheticEventsTest extends TestCase {
 		interceptor.setRetryTimeout(1);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		interceptor = null;
 		bundleContext = null;
 		listener = null;
 	}
 
+	@Test
 	public void testGetServices() throws Exception {
 		assertSame(ref3, OsgiServiceReferenceUtils.getServiceReference(bundleContext, (String) null));
 	}
 
+	@Test
 	public void testOnlyOneSyntheticEventOnRegistrationIfMultipleServicesPresent() throws Exception {
 		interceptor.afterPropertiesSet();
 		assertEquals(1, bindServices.size());
@@ -120,6 +128,7 @@ public class OsgiServiceDynamicInterceptorSyntheticEventsTest extends TestCase {
 		assertSame(serviceProxy, bindServices.get(0));
 	}
 
+	@Test
 	public void testOnlyOneSyntheticEventOnUnregistrationIfMultipleServicesPresent() throws Exception {
 		interceptor.afterPropertiesSet();
 		interceptor.destroy();

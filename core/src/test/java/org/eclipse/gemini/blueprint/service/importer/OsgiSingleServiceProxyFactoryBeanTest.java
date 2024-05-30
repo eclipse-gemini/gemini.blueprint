@@ -19,12 +19,16 @@ import java.io.Serializable;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -40,19 +44,20 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
+public class OsgiSingleServiceProxyFactoryBeanTest {
 
 	private OsgiServiceProxyFactoryBean serviceFactoryBean;
 
 	private BundleContext bundleContext;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
 		this.serviceFactoryBean = new OsgiServiceProxyFactoryBean();
 		this.serviceFactoryBean.setBeanClassLoader(getClass().getClassLoader());
 		this.bundleContext = createMock(BundleContext.class);
 	}
 
+	@Test
 	public void testAfterPropertiesSetNoBundle() throws Exception {
 		try {
 			this.serviceFactoryBean.afterPropertiesSet();
@@ -62,6 +67,7 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testAfterPropertiesSetNoClassLoader() throws Exception {
 		this.serviceFactoryBean.setBundleContext(this.bundleContext);
 		try {
@@ -72,6 +78,7 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testAfterPropertiesSetNoServiceType() throws Exception {
 		this.serviceFactoryBean.setBundleContext(this.bundleContext);
 		try {
@@ -82,6 +89,7 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testAfterPropertiesSetBadFilter() throws Exception {
 		this.serviceFactoryBean.setBundleContext(this.bundleContext);
 		this.serviceFactoryBean.setInterfaces(new Class<?>[] { ApplicationContext.class });
@@ -94,6 +102,7 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testGetObjectTypeCompositeInterface() {
 		this.serviceFactoryBean.setInterfaces(new Class<?>[] { ApplicationContext.class });
 		this.serviceFactoryBean.setBundleContext(this.bundleContext);
@@ -123,6 +132,7 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 	// correct behaviour of the ProxyFactoryBean when OsgiServiceUtils
 	// succesfully
 	// finds the service.
+	@Test
 	public void testGetObjectWithFilterOnly() throws Exception {
 		this.serviceFactoryBean.setBundleContext(new MockBundleContext());
 		this.serviceFactoryBean.setInterfaces(new Class<?>[] { Serializable.class });
@@ -142,12 +152,14 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 		assertTrue("should be proxied", proxy instanceof SpringProxy);
 	}
 
+	@Test
 	public void testClassLoadingOptionsConstant() throws Exception {
 		serviceFactoryBean.setImportContextClassLoader(ImportContextClassLoaderEnum.CLIENT);
 		serviceFactoryBean.setImportContextClassLoader(ImportContextClassLoaderEnum.SERVICE_PROVIDER);
 		serviceFactoryBean.setImportContextClassLoader(ImportContextClassLoaderEnum.UNMANAGED);
 	}
 	
+	@Test
 	public void testNoInterfaceSpecified() throws Exception {
 		serviceFactoryBean.setBundleContext(new MockBundleContext());
 		serviceFactoryBean.setInterfaces(null);

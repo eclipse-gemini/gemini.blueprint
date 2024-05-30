@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.test.internal;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
@@ -21,7 +23,9 @@ import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.test.internal.util.IOUtils;
 import org.eclipse.gemini.blueprint.test.internal.util.jar.JarCreator;
@@ -32,23 +36,25 @@ import org.eclipse.gemini.blueprint.test.internal.util.jar.storage.Storage;
  * @author Costin Leau
  * 
  */
-public class JarCreatorTests extends TestCase {
+public class JarCreatorTests {
 
 	private JarCreator creator;
 
 	private Storage storage;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		creator = new JarCreator();
 		storage = new MemoryStorage();
 		creator.setStorage(storage);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		storage.dispose();
 	}
 
+	@Test
 	public void testJarCreation() throws Exception {
 
 		final Manifest mf = new Manifest();
@@ -115,7 +121,6 @@ public class JarCreatorTests extends TestCase {
 		}
 		finally {
 			IOUtils.closeStream(jarStream);
-
 		}
 	}
 }

@@ -301,7 +301,7 @@ public class OsgiServiceCollection implements Collection, InitializingBean, Coll
 
 	public OsgiServiceCollection(Filter filter, BundleContext context, ClassLoader classLoader,
 			ServiceProxyCreator proxyCreator, boolean useServiceReference) {
-		Assert.notNull(classLoader, "ClassLoader is required");
+		Assert.notNull(classLoader, "classLoader is required");
 		Assert.notNull(context, "context is required");
 
 		this.filter = filter;
@@ -463,7 +463,7 @@ public class OsgiServiceCollection implements Collection, InitializingBean, Coll
 	 * @param listeners The listeners to set.
 	 */
 	public void setListeners(OsgiServiceLifecycleListener[] listeners) {
-		Assert.notNull(listeners);
+		Assert.notNull(listeners, "listeners is required");
 		this.listeners = listeners;
 	}
 
