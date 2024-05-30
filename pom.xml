@@ -39,6 +39,8 @@
 
         <!-- compiled against osgi Revision -->
         <osgi.ver>7.0.0</osgi.ver>
+        <osgi.framework.ver>1.10.0</osgi.framework.ver>
+        <osgi.service.cm.ver>1.6.0</osgi.service.cm.ver>
         <!-- platform versions -->
         <!-- equinox - repackaged in ${basedir}/lib/equinox -->
         <equinox.ver>3.31.0</equinox.ver>
