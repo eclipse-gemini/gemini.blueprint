@@ -14,8 +14,6 @@
 
 package org.eclipse.gemini.blueprint.test;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Properties;
 
 import org.eclipse.gemini.blueprint.test.internal.util.PropertiesUtil;
@@ -114,17 +112,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	}
 
 	private String readProperty(final String name) {
-		if (System.getSecurityManager() != null) {
-			return (String) AccessController.doPrivileged(new PrivilegedAction() {
-
-				public Object run() {
-					return System.getProperty(name);
-				}
-			});
-		}
-		else {
-			return System.getProperty(name);
-        }
+		return System.getProperty(name);
 	}
 
 	/**
@@ -262,14 +250,7 @@ public abstract class AbstractDependencyManagerTests extends AbstractSynchronize
 	 * start up related to the thread context class loader.
 	 */
 	protected void preProcessBundleContext(BundleContext platformBundleContext) throws Exception {
-		AccessController.doPrivileged(new PrivilegedAction() {
-
-			public Object run() {
-				System.setProperty("log4j.ignoreTCL", "true");
-				return null;
-			}
-		});
-
+	    System.setProperty("log4j.ignoreTCL", "true");
 		super.preProcessBundleContext(platformBundleContext);
 	}
 

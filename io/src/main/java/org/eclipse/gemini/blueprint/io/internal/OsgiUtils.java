@@ -16,8 +16,6 @@ package org.eclipse.gemini.blueprint.io.internal;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -97,18 +95,7 @@ public abstract class OsgiUtils {
 		if (bundle == null)
 			return null;
 
-		// run into a privileged block
-		if (System.getSecurityManager() != null) {
-			return AccessController.doPrivileged(new PrivilegedAction<BundleContext>() {
-
-				public BundleContext run() {
-					return getBundleContextWithPrivileges(bundle);
-				}
-			});
-		}
-		else {
-			return getBundleContextWithPrivileges(bundle);
-		}
+		return getBundleContextWithPrivileges(bundle);
 	}
 
 	private static BundleContext getBundleContextWithPrivileges(final Bundle bundle) {

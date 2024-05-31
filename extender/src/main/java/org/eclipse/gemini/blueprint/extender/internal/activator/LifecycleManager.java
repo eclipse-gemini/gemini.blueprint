@@ -26,7 +26,6 @@ import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.Depen
 import org.eclipse.gemini.blueprint.extender.internal.support.ExtenderConfiguration;
 import org.eclipse.gemini.blueprint.extender.internal.support.OsgiBeanFactoryPostProcessorAdapter;
 import org.eclipse.gemini.blueprint.extender.internal.util.concurrent.Counter;
-import org.eclipse.gemini.blueprint.extender.internal.util.concurrent.RunnableTimedExecution;
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
@@ -135,7 +134,7 @@ class LifecycleManager implements DisposableBean {
 		boolean debug = log.isDebugEnabled();
 		String bundleString = "[" + OsgiStringUtils.nullSafeNameAndSymName(bundle) + "]";
 
-		final Long bundleId = new Long(bundle.getBundleId());
+		final Long bundleId = Long.valueOf(bundle.getBundleId());
 
 		if (managedContexts.containsKey(bundleId)) {
 			if (debug) {
@@ -418,9 +417,9 @@ class LifecycleManager implements DisposableBean {
     public ConfigurableOsgiBundleApplicationContext getManagedContext(Bundle bundle) {
         ConfigurableOsgiBundleApplicationContext context = null;
         try {
-            Long id = new Long(bundle.getBundleId());
+            Long id = Long.valueOf(bundle.getBundleId());
             context = (ConfigurableOsgiBundleApplicationContext) managedContexts.get(id);
-        } catch (IllegalStateException _) {
+        } catch (IllegalStateException e) {
             // ignore
         }
         return context;

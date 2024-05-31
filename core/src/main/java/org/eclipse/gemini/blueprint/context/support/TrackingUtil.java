@@ -18,8 +18,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
@@ -53,7 +51,6 @@ abstract class TrackingUtil {
 		private final BundleContext context;
 		private final String filterClassName;
 		private final String filter;
-		private final boolean securityOn;
 
 		/**
 		 * flag used to bypass the OSGi space if the context becomes unavailable
@@ -65,7 +62,6 @@ abstract class TrackingUtil {
 			this.context = bundleContext;
 			this.filterClassName = filterClass;
 			this.filter = filter;
-			this.securityOn = (System.getSecurityManager() != null);
 		}
 
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -82,15 +78,7 @@ abstract class TrackingUtil {
 
 			if (!bundleContextInvalidated) {
 				try {
-					if (securityOn) {
-						target = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-							public Object run() {
-								return getTarget(context, filter);
-							}
-						});
-					} else {
-						target = getTarget(context, filter);
-					}
+				    target = getTarget(context, filter);
 				} catch (IllegalStateException ise) {
 					// context has been invalidated
 					bundleContextInvalidated = true;

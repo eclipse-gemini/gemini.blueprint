@@ -26,22 +26,16 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Version;
 
-import static java.lang.Thread.yield;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.isA;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Olaf Otto
  */
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class LifecycleManagerTest {
     @Mock
     private DelegatedExecutionOsgiBundleApplicationContext context;
@@ -100,7 +94,7 @@ public class LifecycleManagerTest {
         withFailingApplicationContextClose();
 
         shutdownContext();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();
@@ -134,7 +128,7 @@ public class LifecycleManagerTest {
         addContextToLifecycleManager();
 
         destroy();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();
@@ -152,8 +146,9 @@ public class LifecycleManagerTest {
 
     private Bundle createBundleWithoutBundleContext() {
         Bundle bundle = mock(Bundle.class);
-        Version version = new Version(1, 0, 0);
-        doReturn(version).when(bundle).getVersion();
+        // Seems 'bundle.getVersion()' is not called and Mock complains about that!
+        //Version version = new Version(1, 0, 0);
+        //doReturn(version).when(bundle).getVersion();
         return bundle;
     }
 

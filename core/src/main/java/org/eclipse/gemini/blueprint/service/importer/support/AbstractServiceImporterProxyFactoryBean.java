@@ -15,9 +15,6 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import org.eclipse.gemini.blueprint.context.support.internal.classloader.ChainedClassLoader;
 import org.eclipse.gemini.blueprint.context.support.internal.classloader.ClassLoaderFactory;
 import org.springframework.beans.factory.FactoryBean;
@@ -203,16 +200,7 @@ abstract class AbstractServiceImporterProxyFactoryBean extends AbstractOsgiServi
 	 */
 	public void setBeanClassLoader(final ClassLoader classLoader) {
 		super.setBeanClassLoader(classLoader);
-		if (System.getSecurityManager() != null) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					aopClassLoader = ClassLoaderFactory.getAopClassLoaderFor(classLoader);
-					return null;
-				}
-			});
-		} else {
-			aopClassLoader = ClassLoaderFactory.getAopClassLoaderFor(classLoader);
-		}
+		aopClassLoader = ClassLoaderFactory.getAopClassLoaderFor(classLoader);
 	}
 
 	/**

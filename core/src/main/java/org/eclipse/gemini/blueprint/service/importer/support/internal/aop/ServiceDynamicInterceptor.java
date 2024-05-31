@@ -14,8 +14,6 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support.internal.aop;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Collections;
 import java.util.List;
 
@@ -129,20 +127,9 @@ public class ServiceDynamicInterceptor extends ServiceInvoker implements Initial
 	private class Listener implements ServiceListener {
 
 		public void serviceChanged(ServiceEvent event) {
-			boolean hasSecurity = (System.getSecurityManager() != null);
-			ClassLoader tccl = null;
-			if (hasSecurity) {
-				tccl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-					public ClassLoader run() {
-						ClassLoader cl = Thread.currentThread().getContextClassLoader();
-						Thread.currentThread().setContextClassLoader(classLoader);
-						return cl;
-					}
-				});
-			} else {
-				tccl = Thread.currentThread().getContextClassLoader();
-				Thread.currentThread().setContextClassLoader(classLoader);
-			}
+			ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+            Thread.currentThread().setContextClassLoader(classLoader);
+
 			try {
 				ServiceReference ref = event.getServiceReference();
 
@@ -244,18 +231,7 @@ public class ServiceDynamicInterceptor extends ServiceInvoker implements Initial
 				log.fatal("Exception during service event handling", e);
 			} finally {
 				final ClassLoader finalTccl = tccl;
-				if (hasSecurity) {
-					AccessController.doPrivileged(new PrivilegedAction<Object>() {
-						public Object run() {
-							Thread.currentThread().setContextClassLoader(finalTccl);
-							return null;
-						}
-					});
-				}
-				else {
-					Thread.currentThread().setContextClassLoader(finalTccl);
-				}
-
+				Thread.currentThread().setContextClassLoader(finalTccl);
 			}
 		}
 

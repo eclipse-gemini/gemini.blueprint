@@ -15,9 +15,6 @@
 package org.eclipse.gemini.blueprint.config.internal.adapter;
 
 import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
 import java.util.List;
 import java.util.Map;
 
@@ -110,20 +107,11 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 
 		bindMethods = CustomListenerAdapterUtils.determineCustomMethods(clazz, bindMethod, isBlueprintCompliant);
 
-		boolean isSecurityEnabled = System.getSecurityManager() != null;
 		final Class<?> clz = clazz;
 
 		// determine methods using ServiceReference signature
 		if (StringUtils.hasText(bindMethod)) {
-			if (isSecurityEnabled) {
-				bindReference = AccessController.doPrivileged(new PrivilegedAction<Method>() {
-					public Method run() {
-						return findServiceReferenceMethod(clz, bindMethod);
-					}
-				});
-			} else {
-				bindReference = findServiceReferenceMethod(clz, bindMethod);
-			}
+			bindReference = findServiceReferenceMethod(clz, bindMethod);
 
 			if (bindMethods.isEmpty()) {
 				String beanName = (target == null ? "" : " bean [" + targetBeanName + "] ;");
@@ -135,15 +123,7 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 		unbindMethods = CustomListenerAdapterUtils.determineCustomMethods(clazz, unbindMethod, isBlueprintCompliant);
 
 		if (StringUtils.hasText(unbindMethod)) {
-			if (isSecurityEnabled) {
-				unbindReference = AccessController.doPrivileged(new PrivilegedAction<Method>() {
-					public Method run() {
-						return findServiceReferenceMethod(clz, unbindMethod);
-					}
-				});
-			} else {
-				unbindReference = findServiceReferenceMethod(clz, unbindMethod);
-			}
+			unbindReference = findServiceReferenceMethod(clz, unbindMethod);
 
 			if (unbindMethods.isEmpty()) {
 				String beanName = (target == null ? "" : " bean [" + targetBeanName + "] ;");
@@ -232,9 +212,6 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 			try {
 				((OsgiServiceLifecycleListener) target).bind(service, properties);
 			} catch (Exception ex) {
-				if (ex instanceof PrivilegedActionException) {
-					ex = ((PrivilegedActionException) ex).getException();
-				}
 				log.warn("standard bind method on [" + target.getClass().getName() + "] threw exception", ex);
 			}
 		}

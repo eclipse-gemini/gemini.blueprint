@@ -15,7 +15,6 @@
 package org.eclipse.gemini.blueprint.config.internal.adapter;
 
 import java.lang.reflect.Method;
-import java.security.PrivilegedActionException;
 import java.util.List;
 import java.util.Map;
 
@@ -130,9 +129,6 @@ public class OsgiServiceRegistrationListenerAdapter implements OsgiServiceRegist
 			try {
 				((OsgiServiceRegistrationListener) target).registered(service, serviceProperties);
 			} catch (Exception ex) {
-				if (ex instanceof PrivilegedActionException) {
-					ex = ((PrivilegedActionException) ex).getException();
-				}
 				log.warn("Standard registered method on [" + target.getClass().getName() + "] threw exception", ex);
 			}
 		}

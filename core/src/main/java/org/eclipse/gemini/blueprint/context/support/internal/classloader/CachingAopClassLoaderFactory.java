@@ -15,8 +15,6 @@
 package org.eclipse.gemini.blueprint.context.support.internal.classloader;
 
 import java.lang.ref.WeakReference;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -62,15 +60,8 @@ class CachingAopClassLoaderFactory implements InternalAopClassLoaderFactory {
 
 			// no associated class loader found, create one and put it in the cache
 			if (aopClassLoader == null) {
-				if (System.getSecurityManager() != null) {
-					aopClassLoader = AccessController.doPrivileged(new PrivilegedAction<ChainedClassLoader>() {
-						public ChainedClassLoader run() {
-							return doCreateClassLoader(classLoader);
-						}
-					});
-				} else {
-					aopClassLoader = doCreateClassLoader(classLoader);
-				}
+				aopClassLoader = doCreateClassLoader(classLoader);
+
 				// save the class loader as a weak reference (since it refers to the given class loader)
 				cache.put(classLoader, new WeakReference<ChainedClassLoader>(aopClassLoader));
 			}

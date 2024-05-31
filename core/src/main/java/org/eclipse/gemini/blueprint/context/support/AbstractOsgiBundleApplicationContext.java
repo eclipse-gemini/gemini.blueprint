@@ -17,10 +17,6 @@ package org.eclipse.gemini.blueprint.context.support;
 
 import java.beans.PropertyEditor;
 import java.io.IOException;
-import java.security.AccessControlContext;
-import java.security.AccessControlException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Dictionary;
 import java.util.Map;
 
@@ -44,7 +40,6 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
-import org.springframework.beans.factory.support.AbstractBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.support.AbstractRefreshableApplicationContext;
@@ -114,8 +109,6 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 	 */
 	private ResourcePatternResolver osgiPatternResolver;
 
-	private volatile AccessControlContext acc;
-
 	/**
 	 * Creates a new <code>AbstractOsgiBundleApplicationContext</code> with no parent.
 	 */
@@ -150,8 +143,6 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 
 		this.setDisplayName(ClassUtils.getShortName(getClass()) + "(bundle=" + getBundleSymbolicName() + ", config="
 				+ StringUtils.arrayToCommaDelimitedString(getConfigLocations()) + ")");
-
-		this.acc = AccessControlFactory.createContext(bundle);
 	}
 
 	public BundleContext getBundleContext() {
@@ -260,20 +251,14 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 	private void enforceExporterImporterDependency(ConfigurableListableBeanFactory beanFactory) {
 		Object instance = null;
 
-		instance = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-			public Object run() {
-				// create the service manager
-				ClassLoader loader = AbstractOsgiBundleApplicationContext.class.getClassLoader();
-				try {
-					Class<?> managerClass = loader.loadClass(EXPORTER_IMPORTER_DEPENDENCY_MANAGER);
-					return BeanUtils.instantiateClass(managerClass);
-				} catch (ClassNotFoundException cnfe) {
-					throw new ApplicationContextException("Cannot load class " + EXPORTER_IMPORTER_DEPENDENCY_MANAGER,
-							cnfe);
-				}
-			}
-		});
+		ClassLoader loader = AbstractOsgiBundleApplicationContext.class.getClassLoader();
+        try {
+            Class<?> managerClass = loader.loadClass(EXPORTER_IMPORTER_DEPENDENCY_MANAGER);
+            instance = BeanUtils.instantiateClass(managerClass);
+        } catch (ClassNotFoundException cnfe) {
+            throw new ApplicationContextException("Cannot load class " + EXPORTER_IMPORTER_DEPENDENCY_MANAGER,
+                    cnfe);
+        }
 
 		// sanity check
 		Assert.isInstanceOf(BeanFactoryAware.class, instance);
@@ -333,22 +318,7 @@ public abstract class AbstractOsgiBundleApplicationContext extends AbstractRefre
 				logger.debug("Publishing service under classes " + ObjectUtils.nullSafeToString(serviceNames));
 
 			// Publish under all the significant interfaces we see
-			boolean hasSecurity = (System.getSecurityManager() != null);
-
-			if (hasSecurity) {
-				try {
-					serviceRegistration = AccessController.doPrivileged(new PrivilegedAction<ServiceRegistration>() {
-						public ServiceRegistration run() {
-							return getBundleContext().registerService(serviceNames, AbstractOsgiBundleApplicationContext.this, serviceProperties);
-						}
-					}, acc);
-				} catch (AccessControlException ex) {
-					logger.error("Application context service publication aborted due to security issues "
-							+ "- does the bundle has the rights to publish the service ? ", ex);
-				}
-			} else {
-				serviceRegistration = getBundleContext().registerService(serviceNames, this, serviceProperties);
-			}
+			serviceRegistration = getBundleContext().registerService(serviceNames, this, serviceProperties);
 
 		} else {
 			if (logger.isInfoEnabled()) {

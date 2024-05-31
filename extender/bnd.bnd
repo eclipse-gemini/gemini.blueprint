@@ -2,11 +2,11 @@ Export-Package: !*.internal*, \
  org.eclipse.gemini.blueprint.extender.*;version=${project.version}, \
  org.osgi.service.blueprint;version=1;uses:="org.osgi.service.blueprint.container,org.osgi.service.blueprint.reflect"
 
-Import-Package: org.eclipse.gemini.blueprint.extensions.annotation;resolution:=optional;version="${gemini.blueprint.version.range.nq}", \
- org.osgi.service.blueprint.container;version="1.0.0";resolution:=optional, \
- org.osgi.service.blueprint.reflect;version="1.0.0";resolution:=optional, \
+Import-Package: !java.*, \
+ org.eclipse.gemini.blueprint.extensions.annotation;resolution:=optional;version="${gemini.blueprint.version.range.nq}", \
+ org.osgi.service.blueprint.container;version="1.0.2";resolution:=optional, \
+ org.osgi.service.blueprint.reflect;version="1.0.2";resolution:=optional, \
  org.osgi.framework;version=${osgi.framework.ver}, \
- org.aopalliance.*;version="0.0.0", \
  org.osgi.service.cm;version=${osgi.service.cm.ver};resolution:=optional, \
  org.osgi.service.event;version=1.1;resolution:=optional, \
  org.osgi.util.tracker;version=1.3, \

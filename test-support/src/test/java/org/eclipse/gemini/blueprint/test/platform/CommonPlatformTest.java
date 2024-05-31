@@ -28,11 +28,14 @@ import org.osgi.framework.BundleContext;
  * 
  */
 public abstract class CommonPlatformTest {
+    
+    private String systemPackages = "";
 
 	private AbstractOsgiPlatform platform;
 
 	@Before
 	public void setUp() throws Exception {
+	    systemPackages = System.getProperty("org.osgi.framework.system.packages", "");
 		platform = createPlatform();
 	}
 
@@ -40,6 +43,7 @@ public abstract class CommonPlatformTest {
 	public void tearDown() throws Exception {
 		platform.stop();
 		platform = null;
+		System.setProperty("org.osgi.framework.system.packages", systemPackages);
 	}
 
 	abstract AbstractOsgiPlatform createPlatform();

@@ -1,6 +1,9 @@
 Export-Package: \
  !*.internal.*, \
  org.eclipse.gemini.blueprint.extensions.*;version=${project.version}
+ 
+Import-Package: !java.*, \
+ *;resolution:=optional
 
 Bundle-Name: ${project.artifactId}
 Bundle-Version: ${project.version}
