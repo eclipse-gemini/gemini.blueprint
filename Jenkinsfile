@@ -77,12 +77,5 @@ spec:
         }
       }
     }
-    stage('Build with Equinox profile') {
-      steps {
-        container('maven') {
-          sh 'mvn verify -P it,equinox'
-        }
-      }
-    }
   }
 }
