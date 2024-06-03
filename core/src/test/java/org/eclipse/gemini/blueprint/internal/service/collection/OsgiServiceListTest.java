@@ -95,10 +95,10 @@ public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 		addService(date);
 
 		assertEquals(0, iter.nextIndex());
-		assertEquals(new Long(time1), ((Wrapper) iter.next()).execute());
+		assertEquals(Long.valueOf(time1), ((Wrapper) iter.next()).execute());
 		addService(date);
 		assertEquals(1, iter.nextIndex());
-		assertEquals(new Long(time1), ((Wrapper) iter.next()).execute());
+		assertEquals(Long.valueOf(time1), ((Wrapper) iter.next()).execute());
 	}
 
 	@Test
@@ -113,14 +113,14 @@ public class OsgiServiceListTest extends AbstractOsgiCollectionTest {
 		assertEquals(0, iter.nextIndex());
 		Wrapper proxy1 = (Wrapper) iter.next();
 
-		assertEquals(new Long(time1), proxy1.execute());
+		assertEquals(Long.valueOf(time1), proxy1.execute());
 		removeService(date);
 
 		assertEquals(1, iter.nextIndex());
 		assertFalse(iter.hasNext());
 		assertTrue(iter.hasPrevious());
 		Wrapper proxy2 = ((Wrapper) iter.previous());
-		assertEquals(new Long(time1), proxy2.execute());
+		assertEquals(Long.valueOf(time1), proxy2.execute());
 
 		assertSame(proxy1, proxy2);
 

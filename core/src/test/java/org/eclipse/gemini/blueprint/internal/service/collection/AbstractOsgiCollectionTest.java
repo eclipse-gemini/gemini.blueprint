@@ -65,7 +65,7 @@ public abstract class AbstractOsgiCollectionTest {
 		}
 
 		public Object execute() {
-			return new Long(date.getTime());
+			return Long.valueOf(date.getTime());
 		}
 
 		public boolean equals(Object other) {
@@ -85,7 +85,7 @@ public abstract class AbstractOsgiCollectionTest {
 		public int compareTo(Object o) {
 			Wrapper wr = (Wrapper) o;
 			Long time = (Long) wr.execute();
-			return new Long(date.getTime()).compareTo(time);
+			return Long.valueOf(date.getTime()).compareTo(time);
 		}
 
 	};

@@ -46,7 +46,7 @@ public class OsgiServiceSetTest extends AbstractOsgiCollectionTest {
 
 		serviceProps = new Properties();
 		// set the id to test uniqueness
-		serviceProps.put(Constants.SERVICE_ID, new Long(13));
+		serviceProps.put(Constants.SERVICE_ID, Long.valueOf(13));
 
 	}
 

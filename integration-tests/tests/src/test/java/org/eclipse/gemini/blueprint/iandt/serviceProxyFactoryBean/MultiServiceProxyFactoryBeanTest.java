@@ -66,7 +66,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 			assertFalse(iter.hasNext());
 
 			ArrayList a = new ArrayList();
-			a.add(new Long(10));
+			a.add(Long.valueOf(10));
 
 			registrations.add(publishService(a, ArrayList.class.getName()));
 
@@ -78,7 +78,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 
 			assertFalse(iter.hasNext());
 			a = new ArrayList();
-			a.add(new Long(100));
+			a.add(Long.valueOf(100));
 			registrations.add(publishService(a, ArrayList.class.getName()));
 			assertTrue(iter.hasNext());
 			service = iter.next();

@@ -51,8 +51,8 @@ public class ServiceReferenceComparatorTest {
 
 	@Test
 	public void testServiceRefsWithTheSameId() throws Exception {
-		ServiceReference refA = createReference(new Long(1), null);
-		ServiceReference refB = createReference(new Long(1), null);
+		ServiceReference refA = createReference(Long.valueOf(1), null);
+		ServiceReference refB = createReference(Long.valueOf(1), null);
 
 		// refA is higher then refB
 		assertEquals(0, comparator.compare(refA, refB));
@@ -60,8 +60,8 @@ public class ServiceReferenceComparatorTest {
 
 	@Test
 	public void testServiceRefsWithDifferentIdAndNoRanking() throws Exception {
-		ServiceReference refA = createReference(new Long(1), null);
-		ServiceReference refB = createReference(new Long(2), null);
+		ServiceReference refA = createReference(Long.valueOf(1), null);
+		ServiceReference refB = createReference(Long.valueOf(2), null);
 
 		// refA is higher then refB
 		// default ranking is equal
@@ -70,8 +70,8 @@ public class ServiceReferenceComparatorTest {
 
 	@Test
 	public void testServiceRefsWithDifferentIdAndDifferentRanking() throws Exception {
-		ServiceReference refA = createReference(new Long(1), Integer.valueOf(0));
-		ServiceReference refB = createReference(new Long(2), Integer.valueOf(1));
+		ServiceReference refA = createReference(Long.valueOf(1), Integer.valueOf(0));
+		ServiceReference refB = createReference(Long.valueOf(2), Integer.valueOf(1));
 
 		// refB is higher then refA (due to ranking)
 		assertTrue(comparator.compare(refA, refB) < 0);
@@ -79,8 +79,8 @@ public class ServiceReferenceComparatorTest {
 
 	@Test
 	public void testServiceRefsWithSameRankAndDifId() throws Exception {
-		ServiceReference refA = createReference(new Long(1), Integer.valueOf(5));
-		ServiceReference refB = createReference(new Long(2), Integer.valueOf(5));
+		ServiceReference refA = createReference(Long.valueOf(1), Integer.valueOf(5));
+		ServiceReference refB = createReference(Long.valueOf(2), Integer.valueOf(5));
 
 		// same ranking, means id equality applies
 		assertTrue(comparator.compare(refA, refB) > 0);

@@ -138,7 +138,7 @@ public class MockServiceReference<S> implements ServiceReference<S> {
 		// add mandatory properties
 		Object id = dict.get(Constants.SERVICE_ID);
 		if (id == null || !(id instanceof Long))
-			dict.put(Constants.SERVICE_ID, new Long(GLOBAL_SERVICE_ID++));
+			dict.put(Constants.SERVICE_ID, Long.valueOf(GLOBAL_SERVICE_ID++));
 
 		if (dict.get(Constants.OBJECTCLASS) == null)
 			dict.put(Constants.OBJECTCLASS, objectClass);

@@ -163,7 +163,7 @@ public class MockServiceReferenceTest {
 		assertSame(objectClass, mock.getProperty(Constants.OBJECTCLASS));
 
 		Dictionary anotherDict = new Hashtable();
-		anotherDict.put(Constants.SERVICE_ID, new Long(1234));
+		anotherDict.put(Constants.SERVICE_ID, Long.valueOf(1234));
 		anotherDict.put(Constants.OBJECTCLASS, new String[] { Date.class.getName() });
 		mock.setProperties(anotherDict);
 
@@ -173,8 +173,8 @@ public class MockServiceReferenceTest {
 
 	@Test
 	public void testCompareReferencesWithTheSameId() throws Exception {
-		MockServiceReference refA = createReference(new Long(1), null);
-		MockServiceReference refB = createReference(new Long(1), null);
+		MockServiceReference refA = createReference(Long.valueOf(1), null);
+		MockServiceReference refB = createReference(Long.valueOf(1), null);
 
 		// refA is higher then refB
 		assertEquals(0, refA.compareTo(refB));
@@ -183,8 +183,8 @@ public class MockServiceReferenceTest {
 
 	@Test
 	public void testServiceRefsWithDifferentIdAndNoRanking() throws Exception {
-		MockServiceReference refA = createReference(new Long(1), null);
-		MockServiceReference refB = createReference(new Long(2), null);
+		MockServiceReference refA = createReference(Long.valueOf(1), null);
+		MockServiceReference refB = createReference(Long.valueOf(2), null);
 
 		// refA is higher then refB
 		// default ranking is equal
@@ -194,8 +194,8 @@ public class MockServiceReferenceTest {
 
 	@Test
 	public void testServiceRefsWithDifferentIdAndDifferentRanking() throws Exception {
-		MockServiceReference refA = createReference(new Long(1), Integer.valueOf(0));
-		MockServiceReference refB = createReference(new Long(2), Integer.valueOf(1));
+		MockServiceReference refA = createReference(Long.valueOf(1), Integer.valueOf(0));
+		MockServiceReference refB = createReference(Long.valueOf(2), Integer.valueOf(1));
 
 		// refB is higher then refA (due to ranking)
 		assertTrue(refA.compareTo(refB) < 0);
@@ -204,8 +204,8 @@ public class MockServiceReferenceTest {
 
 	@Test
 	public void testServiceRefsWithSameRankAndDifId() throws Exception {
-		MockServiceReference refA = createReference(new Long(1), Integer.valueOf(5));
-		MockServiceReference refB = createReference(new Long(2), Integer.valueOf(5));
+		MockServiceReference refA = createReference(Long.valueOf(1), Integer.valueOf(5));
+		MockServiceReference refB = createReference(Long.valueOf(2), Integer.valueOf(5));
 
 		// same ranking, means id equality applies
 		assertTrue(refA.compareTo(refB) > 0);

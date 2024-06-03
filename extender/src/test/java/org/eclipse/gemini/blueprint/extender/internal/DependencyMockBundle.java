@@ -77,10 +77,10 @@ public class DependencyMockBundle extends MockBundle {
 				: serviceRanking[0])));
 		long id = (index < serviceId.length ? serviceId[index] : serviceId[0]);
 		if (id >= 0)
-			props.put(Constants.SERVICE_ID, new Long(id));
+			props.put(Constants.SERVICE_ID, Long.valueOf(id));
 
-		props.put(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY, new Long(id));
-		props.put(OsgiServicePropertiesResolver.BEAN_NAME_PROPERTY_KEY, new Long(id));
+		props.put(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY, Long.valueOf(id));
+		props.put(OsgiServicePropertiesResolver.BEAN_NAME_PROPERTY_KEY, Long.valueOf(id));
 
 		return props;
 	}
@@ -145,10 +145,10 @@ public class DependencyMockBundle extends MockBundle {
 
 			Properties props = new Properties();
 
-			props.put(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY, new Long(System
+			props.put(OsgiServicePropertiesResolver.SPRING_DM_BEAN_NAME_PROPERTY_KEY, Long.valueOf(System
 					.identityHashCode(dependencyBundle)));
 
-			props.put(OsgiServicePropertiesResolver.BEAN_NAME_PROPERTY_KEY, new Long(System
+			props.put(OsgiServicePropertiesResolver.BEAN_NAME_PROPERTY_KEY, Long.valueOf(System
 					.identityHashCode(dependencyBundle)));
 
 			inUseServices.put(dependencyBundle, new MockServiceReference() {

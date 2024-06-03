@@ -112,7 +112,7 @@ public class OsgiServiceCollectionTest extends AbstractOsgiCollectionTest {
 		addService(date2);
 
 		assertTrue(iter.hasNext());
-		assertEquals(new Long(time1), ((Wrapper) iter.next()).execute());
+		assertEquals(Long.valueOf(time1), ((Wrapper) iter.next()).execute());
 
 		assertTrue(iter.hasNext());
 		removeService(date2);
