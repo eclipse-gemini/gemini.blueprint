@@ -545,6 +545,25 @@
                     <version>3.21.2</version>
                 </plugin>
                 <plugin>
+     				<groupId>org.springframework.boot</groupId>
+     				<artifactId>spring-boot-maven-plugin</artifactId>
+     				<version>3.3.0</version>
+     				<configuration>
+						<skip>true</skip>
+        				<jvmArguments>
+            				-agentlib:native-image-agent=config-output-dir=target/native-image
+        				</jvmArguments>
+    				</configuration>
+     				<executions>
+	 					<execution>
+	     					<id>process-aot</id>
+	     					<goals>
+		 						<goal>process-aot</goal>
+	     					</goals>
+	 					</execution>
+     				</executions>
+				</plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
                     <version>3.2.5</version>
