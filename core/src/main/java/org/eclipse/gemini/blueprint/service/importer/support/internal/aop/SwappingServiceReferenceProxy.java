@@ -131,4 +131,13 @@ class SwappingServiceReferenceProxy implements ServiceReferenceProxy {
 		}
 		return ServiceComparatorUtil.compare(delegate, other);
 	}
+
+	@Override
+	public Object adapt(Class type) {
+		Object adapted = null;
+		if(delegate != null) {
+			adapted = delegate.adapt(type);
+		}
+		return adapted;
+	}
 }

@@ -195,4 +195,13 @@ public class SwappingServiceReferenceProxyTest {
 
 		}
 	}
+	
+	@Test
+	public void testAdapt() {
+		SwappingServiceReferenceProxy proxy = new SwappingServiceReferenceProxy();
+		MockServiceReference delegate = new MockServiceReference();
+		assertNull(proxy.adapt(MockBundle.class));
+		proxy.swapDelegates(delegate);
+		assertNotNull(proxy.adapt(MockBundle.class));
+	}
 }

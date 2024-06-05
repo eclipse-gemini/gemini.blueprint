@@ -28,9 +28,6 @@ import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import org.eclipse.gemini.blueprint.mock.MockBundle;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 
@@ -210,6 +207,12 @@ public class MockServiceReferenceTest {
 		// same ranking, means id equality applies
 		assertTrue(refA.compareTo(refB) > 0);
 		assertTrue(refB.compareTo(refA) < 0);
+	}
+	
+	@Test
+	public void testAdapt() {
+		assertNotNull(mock.adapt(MockBundle.class));
+		assertNull(mock.adapt(Integer.class));
 	}
 
 	private MockServiceReference createReference(Long id, Integer ranking) {

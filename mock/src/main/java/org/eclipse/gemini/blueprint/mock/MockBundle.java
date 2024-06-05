@@ -239,10 +239,13 @@ public class MockBundle implements Bundle {
 		return version;
 	}
 
-    @Override
-    public <A> A adapt(Class<A> type) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
+	@Override
+	public <A> A adapt(Class<A> type) {
+		A adapted = null;
+		if (this.getClass().equals(type))
+			adapted = (A) this;
+		return adapted;
+	}
 
     @Override
     public File getDataFile(String filename) {

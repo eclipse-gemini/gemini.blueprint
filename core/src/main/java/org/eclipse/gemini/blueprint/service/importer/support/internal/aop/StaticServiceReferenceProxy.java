@@ -89,4 +89,13 @@ public class StaticServiceReferenceProxy implements ServiceReferenceProxy {
 	public int compareTo(Object other) {
 		return ServiceComparatorUtil.compare(target, other);
 	}
+
+	@Override
+	public Object adapt(Class type) {
+		Object adapted = null;
+		if(target != null) {
+			adapted = target.adapt(type);
+		}
+		return adapted;
+	}
 }

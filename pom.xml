@@ -39,7 +39,8 @@
         <env.buildNumber />
 
         <!-- compiled against osgi Revision -->
-        <osgi.ver>7.0.0</osgi.ver>
+        <osgi.ver>8.0.0</osgi.ver>
+        <osgi.cmpn.ver>7.0.0</osgi.cmpn.ver>
         <osgi.framework.ver>1.10.0</osgi.framework.ver>
         <osgi.service.cm.ver>1.6.0</osgi.service.cm.ver>
         <!-- platform versions -->
@@ -280,7 +281,7 @@
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>osgi.cmpn</artifactId>
-                <version>${osgi.ver}</version>
+                <version>${osgi.cmpn.ver}</version>
             </dependency>
 
             <dependency>
@@ -783,7 +784,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
+                    <artifactId>osgi.core</artifactId>
                     <scope>compile</scope>
                 </dependency>
             </dependencies>
@@ -865,7 +866,7 @@
                        they are simply compiled and not executed, thus we need this generic dependency.
                     -->
                     <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
+                    <artifactId>osgi.core</artifactId>
                     <scope>compile</scope>
                 </dependency>
             </dependencies>

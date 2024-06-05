@@ -48,7 +48,6 @@ public class MockServiceReference<S> implements ServiceReference<S> {
 
 	private String[] objectClass = new String[] { Object.class.getName() };
 
-
 	/**
 	 * Constructs a new <code>MockServiceReference</code> instance using
 	 * defaults.
@@ -75,7 +74,6 @@ public class MockServiceReference<S> implements ServiceReference<S> {
 	 */
 	public MockServiceReference(String[] classes) {
 		this(null, null, null, classes);
-
 	}
 
 	/**
@@ -249,5 +247,14 @@ public class MockServiceReference<S> implements ServiceReference<S> {
 	@Override
 	public Dictionary<String, Object> getProperties() {
 		return properties;
+	}
+
+	@Override
+	public <A> A adapt(Class<A> type) {
+		A adapted = null;
+		if (this.bundle != null) {
+			adapted = bundle.adapt(type);
+		}
+		return adapted;
 	}
 }
