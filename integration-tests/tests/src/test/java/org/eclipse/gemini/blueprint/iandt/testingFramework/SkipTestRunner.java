@@ -16,7 +16,12 @@ package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import junit.framework.TestCase;
 import junit.framework.TestResult;
+
+import static org.junit.Assert.assertEquals;
+
 import org.eclipse.gemini.blueprint.test.legacyspringsupport.ConditionalTestCase;
 
 /**

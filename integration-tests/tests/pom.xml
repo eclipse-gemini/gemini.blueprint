@@ -15,6 +15,24 @@
     <url>http://www.eclipse.org/gemini/blueprint/</url>
 
     <dependencies>
+		<dependency>
+    		<groupId>org.osgi</groupId>
+    		<artifactId>org.osgi.framework</artifactId>
+    		<version>${osgi.framework.ver}</version>
+    		<scope>provided</scope>
+		</dependency>
+		<dependency>
+    		<groupId>org.osgi</groupId>
+    		<artifactId>org.osgi.util.tracker</artifactId>
+    		<version>${osgi.util.tracker.ver}</version>
+    		<scope>provided</scope>
+		</dependency>
+		<dependency>
+    		<groupId>org.osgi</groupId>
+    		<artifactId>org.osgi.service.packageadmin</artifactId>
+    		<version>${osgi.service.packageadmin.ver}</version>
+		</dependency>
+		
         <!-- config admin (from Felix) -->
         <dependency>
             <groupId>org.apache.felix</groupId>

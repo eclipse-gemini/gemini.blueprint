@@ -43,6 +43,8 @@
         <osgi.cmpn.ver>7.0.0</osgi.cmpn.ver>
         <osgi.framework.ver>1.10.0</osgi.framework.ver>
         <osgi.service.cm.ver>1.6.0</osgi.service.cm.ver>
+        <osgi.util.tracker.ver>1.5.4</osgi.util.tracker.ver>
+        <osgi.service.packageadmin.ver>1.2.1</osgi.service.packageadmin.ver>
         <!-- platform versions -->
         <!-- equinox - repackaged in ${basedir}/lib/equinox -->
         <equinox.ver>3.31.0</equinox.ver>

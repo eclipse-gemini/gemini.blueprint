@@ -15,8 +15,13 @@
 
 package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import junit.framework.TestCase;
 import junit.framework.TestFailure;
 import junit.framework.TestResult;
 
