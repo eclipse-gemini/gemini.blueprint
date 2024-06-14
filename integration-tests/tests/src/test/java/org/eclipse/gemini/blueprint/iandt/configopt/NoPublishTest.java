@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.configopt;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Point;
 
 import org.osgi.framework.Bundle;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * Integration test for publish-context directive.
@@ -26,7 +30,7 @@ import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
  * 
  */
 public class NoPublishTest extends BehaviorBaseTest {
-
+	@Test
 	public void testBehaviour() throws Exception {
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, nopublish-bundle,"
 				+ getSpringDMVersion();

@@ -14,6 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceproxy;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Date;
 
 import org.aopalliance.aop.Advice;
@@ -26,6 +32,7 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.aop.Servic
 import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
 import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import org.junit.Test;
 import org.springframework.util.ClassUtils;
 
 /**
@@ -65,12 +72,14 @@ public abstract class ServiceProxyTst extends AbstractConfigurableBundleCreatorT
 
 	}
 
+	@Test
 	public void testCglibLibraryVisibility() {
 		// note that cglib is not declared inside this bundle but should be seen
 		// by spring-core (which contains the util classes)
 		assertTrue(ClassUtils.isPresent("org.springframework.cglib.proxy.Enhancer", ProxyFactory.class.getClassLoader()));
 	}
 
+	@Test
 	public void testDynamicEndProxy() throws Exception {
 		long time = 123456;
 		Date date = new Date(time);

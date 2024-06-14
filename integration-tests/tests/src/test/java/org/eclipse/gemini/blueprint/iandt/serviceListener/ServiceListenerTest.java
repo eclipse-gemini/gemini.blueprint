@@ -15,15 +15,18 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceListener;
 
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
-import java.util.PropertyPermission;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.osgi.framework.AdminPermission;
-import org.osgi.framework.Bundle;
 import org.eclipse.gemini.blueprint.iandt.service.listener.MyListener;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
+import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Hal Hildebrand Date: Nov 14, 2006 Time: 8:18:15 AM
@@ -35,6 +38,7 @@ public class ServiceListenerTest extends BaseIntegrationTest {
 			"org.eclipse.gemini.blueprint.iandt, service.listener," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testServiceListener() throws Exception {
 		assertEquals("Expected initial binding of service", 1, MyListener.BOUND_COUNT);
 		assertEquals("Unexpected initial unbinding of service", 0, MyListener.UNBOUND_COUNT);

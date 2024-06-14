@@ -14,6 +14,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.servicedependency;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +27,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.iandt.tccl.TCCLService;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 import org.springframework.util.Assert;
 
 /**
@@ -53,11 +58,13 @@ public class MultipleExportersDependingOnOneImporterTest extends BaseIntegration
 	}
 
 	// test map-exporter
+	@Test
 	public void testDirectExporterImporterDependency() throws Exception {
 		doServiceTestOn("map", Map.class);
 	}
 
 	// test simple-bean
+	@Test
 	public void testTransitiveExporterImporterDependency() throws Exception {
 		doServiceTestOn("simple-bean", SimpleBean.class);
 	}
@@ -85,6 +92,7 @@ public class MultipleExportersDependingOnOneImporterTest extends BaseIntegration
 		assertSame(applicationContext.getBean(beanName), service);
 	}
 
+	@Test
 	public void testTwoExportersWithTheSameImporter() throws Exception {
 		// check that both exporters go down one mandatory goes down
 		ServiceReference exporterARef = bundleContext.getServiceReference(Map.class.getName());

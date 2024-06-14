@@ -14,8 +14,6 @@
 
 package org.eclipse.gemini.blueprint.test.internal;
 
-import junit.framework.TestCase;
-
 import org.osgi.framework.BundleContext;
 
 /**
@@ -45,25 +43,10 @@ public interface OsgiJUnitTest {
 	void osgiTearDown() throws Exception;
 
 	/**
-	 * Replacement for the 'traditional' runTest. Called by TestRunnerService.
-	 * 
-	 * @throws Throwable
-	 */
-	void osgiRunTest() throws Throwable;
-
-	/**
 	 * Provides the OSGi bundle context to the test
 	 * 
 	 * @param bundleContext
 	 */
 	void injectBundleContext(BundleContext bundleContext);
 
-	/**
-	 * Simple getter that returns the raw TestCase class. Used mainly when
-	 * applying OsgiJUnit functionality through decoration rather then
-	 * inheritance.
-	 * 
-	 * @return
-	 */
-	TestCase getTestCase();
 }

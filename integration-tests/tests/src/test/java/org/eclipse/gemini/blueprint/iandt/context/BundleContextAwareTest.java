@@ -14,9 +14,13 @@
 
 package org.eclipse.gemini.blueprint.iandt.context;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import java.io.Serializable;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
@@ -54,6 +58,7 @@ public class BundleContextAwareTest extends BaseIntegrationTest {
 		return new String[] { "/org/eclipse/gemini/blueprint/iandt/context/bundleContextAwareTest.xml" };
 	}
 
+	@Test
 	public void testBundleContextAware() throws Exception {
 		BundleContextAwareHolder holder = (BundleContextAwareHolder) applicationContext.getBean("bean");
 		assertNotNull(holder.getBundleContext());

@@ -14,18 +14,19 @@
 
 package org.eclipse.gemini.blueprint.iandt.event;
 
-import java.io.FilePermission;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PropertyPermission;
+import static org.junit.Assert.assertTrue;
 
-import org.osgi.framework.AdminPermission;
-import org.osgi.framework.Bundle;
-import org.springframework.core.io.Resource;
+import java.io.FilePermission;
+import java.util.List;
+
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextListener;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextFailedEvent;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextRefreshedEvent;
+import org.junit.Test;
+import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
+import org.springframework.core.io.Resource;
 
 /**
  * Integration test for the appCtx notification mechanism.
@@ -44,6 +45,7 @@ public class OsgiLifecycleNotificationTest extends AbstractEventTest {
 
 	}
 
+	@Test
 	public void testEventsForCtxThatWork() throws Exception {
 
 		listener = new OsgiBundleApplicationContextListener() {
@@ -79,6 +81,7 @@ public class OsgiLifecycleNotificationTest extends AbstractEventTest {
 		}
 	}
 
+	@Test
 	public void testEventsForCtxThatFail() throws Exception {
 
 		listener = new OsgiBundleApplicationContextListener() {

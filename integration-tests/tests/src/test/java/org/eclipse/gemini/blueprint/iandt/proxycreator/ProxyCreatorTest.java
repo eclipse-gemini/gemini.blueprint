@@ -14,13 +14,16 @@
 
 package org.eclipse.gemini.blueprint.iandt.proxycreator;
 
-import java.util.ArrayList;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
-import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 
 /**
  * Integration test that checks that a new classloader is created when the
@@ -34,11 +37,11 @@ public class ProxyCreatorTest extends BaseIntegrationTest {
 
 	private static final String PROXY_CREATOR_SYM_NAME = "org.eclipse.gemini.blueprint.iandt.proxy.creator";
 
-
 	protected String[] getTestBundlesNames() {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt,proxy.creator," + getSpringDMVersion()};
 	}
 
+	@Test
 	public void testNewProxiesCreatedOnBundleRefresh() throws Exception {
 		// get a hold of the bundle proxy creator bundle and update it
 		Bundle bundle = OsgiBundleUtils.findBundleBySymbolicName(bundleContext, PROXY_CREATOR_SYM_NAME);

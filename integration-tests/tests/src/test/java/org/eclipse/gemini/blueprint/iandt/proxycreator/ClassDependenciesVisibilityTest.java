@@ -14,18 +14,23 @@
 
 package org.eclipse.gemini.blueprint.iandt.proxycreator;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.security.Permission;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.event.DocumentEvent;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.eclipse.gemini.blueprint.service.importer.support.*;
-import org.osgi.framework.AdminPermission;
+import org.eclipse.gemini.blueprint.service.importer.support.Availability;
+import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
+import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
+import org.junit.Test;
 
 /**
  *
@@ -43,7 +48,7 @@ public class ClassDependenciesVisibilityTest extends BaseIntegrationTest {
 
 	private static String DEPENDENCY_CLASS = "javax.swing.text.Element";
 
-
+	@Test
 	public void testPackageDependency() throws Exception {
 		ClassLoader cl = applicationContext.getClassLoader();
 		System.out.println(cl);
@@ -65,6 +70,7 @@ public class ClassDependenciesVisibilityTest extends BaseIntegrationTest {
 
 	}
 
+	@Test
 	public void testJdkProxy() throws Exception {
 		InvocationHandler ih = new InvocationHandler() {
 
@@ -103,7 +109,6 @@ public class ClassDependenciesVisibilityTest extends BaseIntegrationTest {
 		packages.remove("javax.*");
 		packages.remove("javax.swing.*");
 
-
 		return packages;
 	}
 
@@ -115,7 +120,7 @@ public class ClassDependenciesVisibilityTest extends BaseIntegrationTest {
 	}
 
     @Override
-    protected boolean isDisabledInThisEnvironment(String testMethodName) {
+    public boolean isDisabledInThisEnvironment(String testMethodName) {
         // TODO: disabling this set of tests for now.
         return true;
     }

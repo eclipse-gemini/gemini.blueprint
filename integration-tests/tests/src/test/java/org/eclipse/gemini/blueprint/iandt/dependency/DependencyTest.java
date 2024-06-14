@@ -15,17 +15,21 @@
 
 package org.eclipse.gemini.blueprint.iandt.dependency;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+
 import java.io.FilePermission;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyPermission;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
-import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 
 /**
  * Crucial test for the asych, service-dependency waiting. Installs several
@@ -51,6 +55,7 @@ public class DependencyTest extends BaseIntegrationTest {
 	// simple.service2 - publishes service2
 	// simple.service3 - publishes service3
 	// simple 		   - publishes service
+	@Test
 	public void testDependencies() throws Exception {
 		// waitOnContextCreation("org.eclipse.gemini.blueprint.iandt.simpleservice");
 

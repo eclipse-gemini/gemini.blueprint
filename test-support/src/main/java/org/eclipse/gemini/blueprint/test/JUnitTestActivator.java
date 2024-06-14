@@ -16,16 +16,10 @@ package org.eclipse.gemini.blueprint.test;
 
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.eclipse.gemini.blueprint.test.internal.OsgiJUnitTest;
-import org.eclipse.gemini.blueprint.test.internal.TestRunnerService;
-import org.eclipse.gemini.blueprint.test.internal.holder.HolderLoader;
-import org.eclipse.gemini.blueprint.test.internal.holder.OsgiTestInfoHolder;
-import org.eclipse.gemini.blueprint.test.internal.support.OsgiJUnitTestAdapter;
+import org.eclipse.gemini.blueprint.test.internal.support.OsgiJUnitService;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
+import org.junit.runner.Runner;
+import org.junit.runner.notification.RunNotifier;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -43,63 +37,33 @@ import org.osgi.framework.ServiceRegistration;
  * @author Costin Leau
  */
 public class JUnitTestActivator implements BundleActivator {
-
-	private static final Log log = LogFactory.getLog(JUnitTestActivator.class);
-
 	private BundleContext context;
-	private ServiceReference<TestRunnerService> reference;
+	private ServiceReference<Runner> reference;
 	private ServiceRegistration<JUnitTestActivator> registration;
-	private TestRunnerService service;
-
+	private OsgiJUnitService service;
 
 	public void start(BundleContext bc) throws Exception {
 		this.context = bc;
 
-		reference = context.getServiceReference(TestRunnerService.class);
+		reference = context.getServiceReference(Runner.class);
 		if (reference == null) {
-			throw new IllegalArgumentException("cannot find service at " + TestRunnerService.class.getName());
-        }
-		service = context.getService(reference);
+			throw new IllegalArgumentException("cannot find service at " + OsgiJUnitService.class.getName());
+		}
+		service = (OsgiJUnitService)context.getService(reference);
+		service.setBundleContext(bc);
 		registration = context.registerService(JUnitTestActivator.class, this, new Hashtable<String, Object>());
 	}
 
 	/**
-	 * Starts executing an instance of OSGiJUnitTest on the TestRunnerService.
+	 * Starts executing an instance of OSGiJUnitTest on the Runner.
 	 */
 	void executeTest() {
-		service.runTest(loadTest());
-	}
-
-	/**
-	 * Loads the test instance inside OSGi and prepares it for execution.
-	 * 
-	 * @return
-	 */
-	private OsgiJUnitTest loadTest() {
-		OsgiTestInfoHolder holder = HolderLoader.INSTANCE.getHolder();
-		String testClass = holder.getTestClassName();
-		if (testClass == null)
-			throw new IllegalArgumentException("no test class specified");
-
-		try {
-			// use bundle to load the classes
-			Class<?> clazz = context.getBundle().loadClass(testClass);
-			TestCase test = (TestCase) clazz.newInstance();
-			// wrap the test with the OsgiJUnitTestAdapter
-			OsgiJUnitTest osgiTest = new OsgiJUnitTestAdapter(test);
-			osgiTest.injectBundleContext(context);
-			return osgiTest;
-
-		}
-		catch (Exception ex) {
-			log.error("failed to invoke test execution", ex);
-			throw new RuntimeException(ex);
-		}
+		service.run(new RunNotifier());
 	}
 
 	public void stop(BundleContext bc) throws Exception {
 		OsgiServiceUtils.unregisterService(registration);
-        reference = null;
+		reference = null;
 	}
 
 }

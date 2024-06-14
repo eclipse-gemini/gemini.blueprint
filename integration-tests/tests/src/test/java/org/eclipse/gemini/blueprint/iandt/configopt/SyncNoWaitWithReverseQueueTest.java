@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.configopt;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Shape;
 
 import org.osgi.framework.Bundle;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * Test the sync behaviour but this time, by first staring the dependency and the
@@ -34,6 +38,7 @@ public class SyncNoWaitWithReverseQueueTest extends BehaviorBaseTest {
 	private String bundleId = "org.eclipse.gemini.blueprint.iandt, sync-nowait-bundle,"
 			+ getSpringDMVersion();
 
+	@Test
 	public void testBehaviour() throws Exception {
 
 		// locate bundle
@@ -59,7 +64,5 @@ public class SyncNoWaitWithReverseQueueTest extends BehaviorBaseTest {
 		// dependency
 		// bundle has started
 		assertNotNull(bundleContext.getServiceReference(Shape.class.getName()));
-
 	}
-
 }

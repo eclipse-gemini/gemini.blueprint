@@ -14,6 +14,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import org.springframework.core.io.Resource;
 
 /**
@@ -23,41 +27,47 @@ import org.springframework.core.io.Resource;
  * 
  */
 public class BundleJarTest extends BaseIoTest {
-
+	@Test
 	public void testResourceFromJarOnly() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundlejar:/org/eclipse/gemini/blueprint/iandt/io/duplicate.file");
 		assertEquals(1, res.length);
 	}
 
+	@Test
 	public void testResourceFromJarOnlyWithFolderLevelWildcard() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundlejar:/**/duplicat*.file");
 		assertEquals(1, res.length);
 	}
 
+	@Test
 	public void testResourceFromFragmentsIgnored() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundlejar:/fragment*.file");
 		assertEquals(0, res.length);
 
 	}
 
+	@Test
 	public void testResourceWithWildcardAtFileLevelFromFragmentsIgnored() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundlejar:/*.file");
 		assertEquals(0, res.length);
 	}
 
 	// same as above
+	@Test
 	public void testResourceWithWildcardAtFolderLevelFromFragmentsIgnored() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundlejar:/**/fragment*.file");
 		assertEquals(0, res.length);
 	}
 
 	// check last modified
+	@Test
 	public void testLastModifiedWhileUsingJustTheOSGiAPI() throws Exception {
 		Resource resource = patternLoader.getResource("osgibundlejar:/org/eclipse/gemini/blueprint/iandt/io/duplicate.file");
 		assertTrue(resource.lastModified() > 0);
 	}
 
 	// wild pattern matching
+	@Test
 	public void testResourcesFromWildCardWithAndWithoutLeadingSlash() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundlejar:**/*");
 		Resource[] res2 = patternLoader.getResources("osgibundlejar:/**/*");

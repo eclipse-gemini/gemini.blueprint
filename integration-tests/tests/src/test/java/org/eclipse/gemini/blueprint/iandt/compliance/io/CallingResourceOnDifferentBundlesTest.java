@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.compliance.io;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.net.URL;
 import java.security.Permission;
@@ -28,6 +31,7 @@ import org.osgi.framework.SynchronousBundleListener;
 import org.eclipse.gemini.blueprint.test.platform.Platforms;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -43,6 +47,7 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 
 	private static final String LOCATION = "META-INF/";
 
+	@Test
 	public void testCallGetResourceOnADifferentBundle() throws Exception {
 		// find bundles
 		Bundle[] bundles = bundleContext.getBundles();
@@ -56,6 +61,7 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 		}
 	}
 
+	@Test
 	public void testCallGetResourcesOnADifferentBundle() throws Exception {
 		// find bundles
 		Bundle[] bundles = bundleContext.getBundles();
@@ -69,6 +75,7 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 		}
 	}
 
+	@Test
 	public void testCallGetResourceOnADifferentBundleRetrievedThroughBundleEvent() throws Exception {
 		String EXTRA_BUNDLE = "org.apache.servicemix.bundles.spring-core";
 
@@ -108,7 +115,7 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 		assertTrue("bundle listener hasn't been called", listenerCalled[0]);
 	}
 
-	protected boolean isDisabledInThisEnvironment(String testMethodName) {
+	public boolean isDisabledInThisEnvironment(String testMethodName) {
 		return ("testCallGetResourceOnADifferentBundle".equals(testMethodName) || "testCallGetResourcesOnADifferentBundle"
 				.equals(testMethodName))
 				&& (isFelix() || isKF());

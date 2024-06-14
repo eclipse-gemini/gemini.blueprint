@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.FilePermission;
 import java.util.ArrayList;
 import java.util.Enumeration;

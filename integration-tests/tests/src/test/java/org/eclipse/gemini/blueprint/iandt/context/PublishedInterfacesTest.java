@@ -14,9 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.context;
 
+import static org.junit.Assert.assertEquals;
+
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
@@ -28,7 +31,7 @@ import org.osgi.framework.Version;
  * 
  */
 public class PublishedInterfacesTest extends BaseIntegrationTest {
-
+	@Test
 	public void testXmlOsgiContext() throws Exception {
 		// At this point, only the automatically generated test application context should be published as an OSGi service.
 		checkedPublishedOSGiService(1);

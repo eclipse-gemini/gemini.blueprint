@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.net.URL;
 
@@ -23,6 +26,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.eclipse.gemini.blueprint.io.OsgiBundleResourcePatternResolver;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -33,7 +37,7 @@ public class EquinoxFileTests extends BaseIoTest {
 	private static final String REFERENCE_PROTOCOL = "reference:file:";
 	private static final String EXPANDED_BUNDLE_SYM_NAME = "org.eclipse.gemini.blueprint.iandt.io.expanded.bundle";
 
-
+	@Test
 	public void testResolveResourceWithFilePrefix() throws Exception {
 		Bundle bundle = OsgiBundleUtils.findBundleBySymbolicName(bundleContext, EXPANDED_BUNDLE_SYM_NAME);
 		assertTrue(bundle.getLocation().startsWith(REFERENCE_PROTOCOL));
@@ -42,6 +46,7 @@ public class EquinoxFileTests extends BaseIoTest {
 		assertTrue(res.getFile().exists());
 	}
 
+	@Test
 	public void testResolveResourceWithReferenceFilePrefix() throws Exception {
 		Bundle bundle = OsgiBundleUtils.findBundleBySymbolicName(bundleContext, EXPANDED_BUNDLE_SYM_NAME);
 		assertTrue(bundle.getLocation().startsWith(REFERENCE_PROTOCOL));
@@ -58,7 +63,7 @@ public class EquinoxFileTests extends BaseIoTest {
 		context.installBundle(REFERENCE_PROTOCOL + expandedBundle.getCanonicalPath());
 	}
 
-	protected boolean isDisabledInThisEnvironment(String testMethodName) {
+	public boolean isDisabledInThisEnvironment(String testMethodName) {
 		return !isEquinox();
 	}
 }

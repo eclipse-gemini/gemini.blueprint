@@ -14,9 +14,9 @@
 
 package org.eclipse.gemini.blueprint;
 
-import java.lang.ref.Reference;
+import static org.junit.Assert.fail;
 
-import junit.framework.Assert;
+import java.lang.ref.Reference;
 
 /**
  * Utility class providing methods related to 'Garbage Collector' and
@@ -62,6 +62,6 @@ public abstract class GCTests {
 			}
 		}
 
-		Assert.fail(message);
+		fail(message);
 	}
 }

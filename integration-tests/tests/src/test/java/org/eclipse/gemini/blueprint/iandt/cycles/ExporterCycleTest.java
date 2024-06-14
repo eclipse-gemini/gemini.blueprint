@@ -14,9 +14,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.cycles;
 
+import static org.junit.Assert.assertSame;
+
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
-import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
 
 /**
  * @author Costin Leau
@@ -26,22 +28,24 @@ public class ExporterCycleTest extends BaseIntegrationTest {
 
 	private ListenerA listenerA;
 	private ListenerB listenerB;
-	private ServiceRegistration registration;
+	private ServiceRegistration<?> registration;
 
 
 	protected String[] getConfigLocations() {
 		return new String[] { "/org/eclipse/gemini/blueprint/iandt/cycles/top-level-exporter.xml" };
 	}
 
+	@Test
 	public void testListenerA() throws Exception {
 		assertSame(registration, listenerA.getTarget());
 	}
 	
+	@Test
 	public void testListenerB() throws Exception {
 		assertSame(registration, listenerB.getTarget());
 	}
 
-	
+	@Test
 	public void testListenersBetweenThem() throws Exception {
 		assertSame(listenerB.getTarget(), listenerA.getTarget());
 	}
@@ -55,7 +59,7 @@ public class ExporterCycleTest extends BaseIntegrationTest {
 		this.listenerB = nestedListener;
 	}
 
-	public void setRegistration(ServiceRegistration registration) {
+	public void setRegistration(ServiceRegistration<?> registration) {
 		this.registration = registration;
 	}
 

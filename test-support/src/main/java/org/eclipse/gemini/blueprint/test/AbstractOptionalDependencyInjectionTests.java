@@ -17,7 +17,7 @@ package org.eclipse.gemini.blueprint.test;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.AbstractDelegatedExecutionApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
-import org.eclipse.gemini.blueprint.test.legacyspringsupport.AbstractDependencyInjectionSpringContextTests;
+import org.eclipse.gemini.blueprint.test.junit4.AbstractDependencyInjectionSpringContextTests;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;

@@ -14,6 +14,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.event;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +32,7 @@ import org.eclipse.gemini.blueprint.service.importer.OsgiServiceDependency;
 import org.eclipse.gemini.blueprint.service.importer.event.OsgiServiceDependencyEvent;
 import org.eclipse.gemini.blueprint.service.importer.event.OsgiServiceDependencyWaitEndedEvent;
 import org.eclipse.gemini.blueprint.service.importer.event.OsgiServiceDependencyWaitStartingEvent;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -62,6 +67,7 @@ public abstract class DepedencyEventTest extends AbstractEventTest {
 		};
 	}
 
+	@Test
 	public void testEventsForCtxThatWork() throws Exception {
 		// publish listener
 		registerEventListener();

@@ -14,6 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import org.springframework.core.io.Resource;
 
 /**
@@ -36,6 +42,7 @@ public class IoTests extends BaseIoTest {
 		return null;
 	}
 
+	@Test
 	public void testFileOutsideOSGi() throws Exception {
 		String fileLocation = "file:///" + thisClass.getFile().getAbsolutePath();
 		// use file system resource defaultLoader
@@ -52,6 +59,7 @@ public class IoTests extends BaseIoTest {
 		assertEquals(fileResource.getURL(), osgiResource.getURL());
 	}
 
+	@Test
 	public void testNonExistentFileOutsideOSGi() throws Exception {
 		String nonExistingLocation = thisClass.getURL().toExternalForm().concat("-bogus-extension");
 

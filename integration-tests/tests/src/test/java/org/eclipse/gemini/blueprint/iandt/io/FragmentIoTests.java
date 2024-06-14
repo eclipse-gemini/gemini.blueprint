@@ -14,11 +14,17 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Dictionary;
 
 import org.osgi.framework.Bundle;
 import org.springframework.core.io.Resource;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -28,29 +34,33 @@ import org.springframework.util.ObjectUtils;
  * 
  */
 public class FragmentIoTests extends BaseIoTest {
-
+	@Test
 	public void testFileWithTheSameNameInOwningBundleAndAttachedFragment() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "duplicate.file");
 		assertTrue("file with the same name available in bundles are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileWithTheSameNameInOwningBundleAndAttachedFragmentWithMatchingAtFileLevel() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "dupli*.file");
 		System.out.println(ObjectUtils.nullSafeToString(fragmentResource));
 		assertTrue("file with the same name available in bundles are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileWithTheSameNameInOwningBundleAndAttachedFragmentWithMatchingAtFileLevelOn1Char()
 			throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "duplic?te.file");
 		assertTrue("file with the same name available in bundles are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileWithTheSameNameInOwningBundleAndAttachedFragmentWithMatchingAtFolderLevel() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/org/eclipse/gemini/**/*.file");
 		assertTrue("file with the same name available in bundles are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileLevelWildCardMatchingIncludingFragmentResources() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "*.file");
 
@@ -58,6 +68,7 @@ public class FragmentIoTests extends BaseIoTest {
 		assertTrue(fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileLevelMatchingJustFragments() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/fragment*.file");
 
@@ -65,34 +76,40 @@ public class FragmentIoTests extends BaseIoTest {
 		assertTrue(fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileOnlyInOneFragment() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/fragment1.file");
 		assertEquals(1, fragmentResource.length);
 	}
 
+	@Test
 	public void testFileOnlyInAnotherFragment() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/fragment2.file");
 		assertEquals(1, fragmentResource.length);
 	}
 
+	@Test
 	public void testFileWithTheSameNameOnlyInAttachedFragmentsOnly() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "fragment-duplicate.file");
 		// should find at least 2
 		assertTrue("files with the same name available in attached fragments are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileWithTheSameNameOnlyInAttachedFragmentsOnlyWithMatchingAtFileLevel() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "fragment-dupli*.file");
 		// should find at least 2
 		assertTrue("files with the same name available in attached fragments are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileWithTheSameNameOnlyInAttachedFragmentsOnlyWithMatchingAtFileLevelOnOneChar() throws Exception {
 		Resource[] fragmentResource = patternLoader.getResources("osgibundle:/" + PACKAGE + "fragment-duplic?t?.file");
 		// should find at least 2
 		assertTrue("files with the same name available in attached fragments are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testFileWithTheSameNameOnlyInAttachedFragmentsOnlyWithMatchingAtFolderLevel() throws Exception {
 		Resource[] fragmentResource =
 				patternLoader.getResources("osgibundle:/org/eclipse/**/fragment-duplicate.file");
@@ -100,6 +117,7 @@ public class FragmentIoTests extends BaseIoTest {
 		assertTrue("files with the same name available in attached fragments are ignored", fragmentResource.length > 1);
 	}
 
+	@Test
 	public void testGetRootInBundleAndFragments() throws Exception {
 		Resource[] res = patternLoader.getResources("/");
 		assertTrue(res.length > 1);
@@ -107,12 +125,14 @@ public class FragmentIoTests extends BaseIoTest {
 		assertTrue("found only " + ObjectUtils.nullSafeToString(res), res.length > 1);
 	}
 
+	@Test
 	public void testFileLevelWildcardMatching() throws Exception {
 		// find res files
 		Resource[] res = patternLoader.getResources("osgibundle:/" + PACKAGE + "*.res");
 		assertEquals("found only " + ObjectUtils.nullSafeToString(res), 2, res.length);
 	}
 
+	@Test
 	public void testFileLevelPatternMatching() throws Exception {
 		// find just this class
 		Resource[] res = patternLoader.getResources("osgibundle:/" + PACKAGE + "IoTe*.class");
@@ -120,30 +140,35 @@ public class FragmentIoTests extends BaseIoTest {
 		assertEquals("found only " + ObjectUtils.nullSafeToString(res), 1, res.length);
 	}
 
+	@Test
 	public void testFileLevelCharPatternMatchingForOneChar() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundle:" + PACKAGE + "IoTe*ts.class");
 		// should find only 1
 		assertEquals("found only " + ObjectUtils.nullSafeToString(res), 1, res.length);
 	}
 
+	@Test
 	public void testFileLevelCharMatching() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundle:" + PACKAGE + "IoTe?ts.class");
 		// should find only 1
 		assertEquals("found only " + ObjectUtils.nullSafeToString(res), 1, res.length);
 	}
 
+	@Test
 	public void testFileLevelDoubleCharMatching() throws Exception {
 		Resource[] res = patternLoader.getResources("osgibundle:" + PACKAGE + "IoTe??s.class");
 		// should find only 1
 		assertEquals("found only " + ObjectUtils.nullSafeToString(res), 1, res.length);
 	}
 
+	@Test
 	public void testFolderLevelWildcardMatching() throws Exception {
 		// find all classes
 		Resource[] res = patternLoader.getResources("osgibundle:/**/io/*.class");
 		assertTrue("found only " + ObjectUtils.nullSafeToString(res), res.length > 3);
 	}
 
+	@Test
 	public void testNoPrefixMeansBundlePrefixOnClasses() throws Exception {
 		Resource[] wPrefix = patternLoader.getResources("osgibundle:**/*.class");
 		Resource[] woPrefix = patternLoader.getResources("**/*.class");
@@ -151,6 +176,7 @@ public class FragmentIoTests extends BaseIoTest {
 		assertTrue(ObjectUtils.nullSafeEquals(wPrefix, woPrefix));
 	}
 
+	@Test
 	public void testNoPrefixMeansBundlePrefixOnFiles() throws Exception {
 		Resource[] wPrefix = patternLoader.getResources("osgibundle:**/*.res");
 		Resource[] woPrefix = patternLoader.getResources("**/*.res");
@@ -158,12 +184,14 @@ public class FragmentIoTests extends BaseIoTest {
 		assertTrue(ObjectUtils.nullSafeEquals(wPrefix, woPrefix));
 	}
 
+	@Test
 	public void testClassPathFileLevelMatching() throws Exception {
 		// find this classe
 		Resource[] res = patternLoader.getResources("classpath:/" + PACKAGE + "FragmentIoTests.class");
 		assertEquals(1, res.length);
 	}
 
+	@Test
 	public void testFragmentAndHostHeaderMerging() throws Exception {
 		Dictionary hostHeaders = bundle.getHeaders();
 		assertNull(hostHeaders.get("Fragment-Header"));
@@ -171,6 +199,7 @@ public class FragmentIoTests extends BaseIoTest {
 		assertNull(hostHeaders.get("Fragment2-Header"));
 	}
 
+	@Test
 	public void testFragment1Headers() throws Exception {
 		Bundle fragment1 =
 				OsgiBundleUtils.findBundleBySymbolicName(bundleContext, "org.eclipse.gemini.blueprint.iandt.io.fragment.1");
@@ -180,6 +209,7 @@ public class FragmentIoTests extends BaseIoTest {
 		assertNull(fragment1Headers.get("Fragment2-Header"));
 	}
 	
+	@Test
 	public void testFragment2Headers() throws Exception {
 		Bundle fragment1 =
 				OsgiBundleUtils.findBundleBySymbolicName(bundleContext, "org.eclipse.gemini.blueprint.iandt.io.fragment.2");

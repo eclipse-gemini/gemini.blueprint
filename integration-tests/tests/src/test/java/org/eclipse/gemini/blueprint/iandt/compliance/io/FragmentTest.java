@@ -14,9 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.compliance.io;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.net.URL;
 
 import org.eclipse.gemini.blueprint.iandt.io.BaseIoTest;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 
 /**
@@ -42,56 +45,67 @@ public class FragmentTest extends BaseIoTest {
 	 * Check META-INF folders.
 	 * 
 	 */
+	@Test
 	public void testRootFoldersInFragmentsAndOwner() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "META-INF", false));
 		assertResourceArray(res, 3);
 	}
 
+	@Test
 	public void testRootFolderCommonInFragmentsAlone() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "fragment.folder", false));
 		assertResourceArray(res, 2);
 	}
 
+	@Test
 	public void testRootFolderOnlyInFragment1() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "fragment1.folder", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testNestedFolderOnlyInFragmentsRecursively() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "nested.folder", true));
 		assertResourceArray(res, 2);
 	}
 
+	@Test
 	public void testNestedFolderOnlyInFragments() {
 		Object[] res = copyEnumeration(bundle.findEntries("/fragment.folder", "nested.folder", false));
 		assertResourceArray(res, 2);
 	}
 
+	@Test
 	public void testRootFolderOnlyInFragment2() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "fragment2.folder", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testNestedFolderOnlyInFragment1() {
 		Object[] res = copyEnumeration(bundle.findEntries("/fragment1.folder", "nested.folder.1", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testNestedFolderOnlyInFragment2() {
 		Object[] res = copyEnumeration(bundle.findEntries("/fragment2.folder", "nested.folder.2", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testCommonFolderOnlyInFragmentsButNotInHost() {
 		Object[] res = copyEnumeration(bundle.findEntries("/fragment.folder", "nested.folder", false));
 		assertResourceArray(res, 2);
 	}
 
+	@Test
 	public void testCommonFolderInFragmentsAndHost() {
 		Object[] res = copyEnumeration(bundle.findEntries("/org/eclipse", "gemini", false));
 		assertResourceArray(res, 3);
 	}
 
+	@Test
 	public void testFolderOnlyInHost() {
 		Object[] res = copyEnumeration(bundle.findEntries("/org/eclipse/gemini/blueprint/iandt", "bundleScope", false));
 		assertResourceArray(res, 1);
@@ -101,41 +115,49 @@ public class FragmentTest extends BaseIoTest {
 	// File tests
 	//
 
+	@Test
 	public void testRootFileInBothFragmentsButNotInHost() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "fragment.file", false));
 		assertResourceArray(res, 2);
 	}
 
+	@Test
 	public void testRootFileOnlyInFragment1() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "fragment1.file", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testRootFileOnlyInFragment2() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "fragment2.file", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testRootFileOnlyInHostBundle() {
 		Object[] res = copyEnumeration(bundle.findEntries("/", "logback.xml", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testNestedFileOnlyInFragments() {
 		Object[] res = copyEnumeration(bundle.findEntries("/fragment.folder/nested.folder", "nested.file", false));
 		assertResourceArray(res, 2);
 	}
 
+	@Test
 	public void testNestedFileOnlyInFragment1() {
 		Object[] res = copyEnumeration(bundle.findEntries("/fragment1.folder/nested.folder.1", "nested.file.1.1", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testNestedFileOnlyInFragment2() {
 		Object[] res = copyEnumeration(bundle.findEntries("/fragment2.folder/nested.folder.2", "nested.file.2.2", false));
 		assertResourceArray(res, 1);
 	}
 
+	@Test
 	public void testDuplicateFilesInHostAndFragments() {
 		Object[] res = copyEnumeration(bundle.findEntries("/org/eclipse/gemini/blueprint/iandt/io", "duplicate.file", false));
 		assertResourceArray(res, 3);
@@ -145,12 +167,14 @@ public class FragmentTest extends BaseIoTest {
 	// Classpath tests
 	//
 
+	@Test
 	public void testGetResourceOnRootDir() throws Exception {
 		URL root = bundle.getResource("/");
 		System.out.println(root);
 		assertNotNull("root path not considered", root);
 	}
 
+	@Test
 	public void testGetResourceSOnRootDir() throws Exception {
 		Object[] res = copyEnumeration(bundle.getResources("/"));
 		// 3 paths should be found (1 host + 2 fragments)

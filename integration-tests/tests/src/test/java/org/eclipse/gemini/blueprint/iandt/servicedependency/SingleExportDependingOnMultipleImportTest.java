@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.servicedependency;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
@@ -24,6 +27,7 @@ import org.eclipse.gemini.blueprint.iandt.simpleservice.MyService;
 import org.eclipse.gemini.blueprint.iandt.simpleservice2.MyService2;
 import org.eclipse.gemini.blueprint.iandt.tccl.TCCLService;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 import org.springframework.util.Assert;
 
 /**
@@ -52,6 +56,7 @@ public class SingleExportDependingOnMultipleImportTest extends BaseIntegrationTe
 				"org.eclipse.gemini.blueprint.iandt, simple.service2," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testOneImporterCGoesDownAndThenUpAgain() throws Exception {
 		// importer C = TCCL bundle
 		// check exporter
@@ -64,6 +69,7 @@ public class SingleExportDependingOnMultipleImportTest extends BaseIntegrationTe
 		assertTrue("service C is up again, exporter should be up as well", isExporterStarted());
 	}
 
+	@Test
 	public void testImporterAGoesDownThenImporterBThenImporterAComesUpAgainAndThenB() throws Exception {
 		// check exporter
 		assertTrue("exporter should be running", isExporterStarted());
@@ -92,6 +98,7 @@ public class SingleExportDependingOnMultipleImportTest extends BaseIntegrationTe
 		assertTrue("service A + B up, exporter should be up as well", isExporterStarted());
 	}
 
+	@Test
 	public void testImportersGoDownOneAfterTheOtherAndTheExporterDoesNotStartUntilAllImportersAreUp() throws Exception {
 		// check exporter
 		assertTrue("exporter should be running", isExporterStarted());

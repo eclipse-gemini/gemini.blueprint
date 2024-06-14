@@ -14,6 +14,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import org.osgi.framework.Constants;
 import org.springframework.core.io.Resource;
 
@@ -27,6 +31,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 	// Wild-card tests
 	//
 
+	@Test
 	public void testBundleClassPath() throws Exception {
 		System.out.println("*** Bundle-ClassPath is " + bundle.getHeaders().get(Constants.BUNDLE_CLASSPATH));
 		Resource res[] = patternLoader.getResources("classpath*:/org/eclipse/gemini/blueprint/iandt/io/ClassSpaceWildcardTest.class");
@@ -35,6 +40,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 	}
 
 	// finds all files at root level
+	@Test
 	public void testWildcardAtRootFileLevel() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/*");
 		// only the bundle and its fragments should be considered (since no other META-INF/ is available on the classpath)
@@ -43,23 +49,27 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 	}
 
 	// similar as the root test but inside META-INF
+	@Test
 	public void testWildcardAtFolderLevel() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/META-INF/*");
 		assertEquals("not enough packages found", 1, res.length);
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testSingleClassWithWildcardAtFileLevel() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/org/eclipse/gemini/blueprint/iandt/io/Class*Test.class");
 		assertTrue("not enough packages found", res.length >= 1);
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testClassPathRootWildcard() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/**/blueprint/iandt/io/Class*Test.class");
 		assertTrue("not enough packages found", res.length >= 1);
 	}
 
+	@Test
 	public void testAllClassPathWildcardAtFolderLevel() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:/META-INF/*");
 		// only the bundle and its fragments should be considered (since no other META-INF/ is available on the classpath)
@@ -67,6 +77,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testAllClassPathWOWildcardAtFolderLevel() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:META-INF/");
 		// only the bundle and its fragments should be considered (since no other META-INF/ is available on the classpath)
@@ -74,24 +85,28 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testAllClassPathWithWildcardAtFileLevel() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/org/eclipse/gemini/blueprint/iandt/io/Class*WildcardTest.class");
 		assertEquals("not enough packages found", 1, res.length);
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testAllClassPathWithWithWildcardAtFileLevel() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:/org/eclipse/gemini/blueprint/iandt/io/Class*WildcardTest.class");
 		assertEquals("not enough packages found", 1, res.length);
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testAllClassPathRootWildcard() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/**/gemini/blueprint/**/ClassSpaceWildcardTest.class");
 		assertEquals("not enough packages found", 1, res.length);
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testAllClassPathRootWithWildcard() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:/**/gemini/blueprint/**/ClassSpaceWildcardTest.class");
 		assertEquals("not enough packages found", 1, res.length);
@@ -102,6 +117,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 	// Stress tests (as they pull a lot of content)
 	//
 
+	@Test
 	public void testMatchingALotOfClasses() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:/**/gemini/blueprint/iandt/io/*.class");
 		// at least 2 classes should be in there
@@ -112,6 +128,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 	// EQ = 48
 	// KF = 48
 	// FX = 38
+	@Test
 	public void testMatchingALotOfFolders() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:/**/gemini/blueprint/**");
 		System.out.println("resources count " + res.length);
@@ -123,6 +140,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 	// EQ = 147
 	// KF = 147
 	// FX = 135 (no fragment support)
+	@Test
 	public void testMatchingABulkOfResources() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:**/springframework/**");
 		Resource resWitSlash[] = patternLoader.getResources("classpath*:/**/springframework/**");
@@ -137,6 +155,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 	// EQ = 271 (since it considers the system bundle also)
 	// KF = 147 (doesn't consider system bundle)
 	// FX = 135
+	@Test
 	public void testMatchingAHugeSetOfResources() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath*:org/**");
 		Resource resWitSlash[] = patternLoader.getResources("classpath*:/org/**");
@@ -147,7 +166,7 @@ public class ClassSpaceWildcardTest extends BaseIoTest {
 		printPathWithinContext(res);
 	}
 
-	protected boolean isDisabledInThisEnvironment(String testMethodName) {
+	public boolean isDisabledInThisEnvironment(String testMethodName) {
 		// felix doesn't support fragments yet
 		return (isFelix() && (testMethodName.equals("testAllClassPathWildcardAtFolderLevel")
 				|| testMethodName.equals("testWildcardAtRootFileLevel") || testMethodName.equals("testAllClassPathWOWildcardAtFolderLevel")));

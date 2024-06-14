@@ -17,30 +17,21 @@ package org.eclipse.gemini.blueprint.iandt;
 import java.io.File;
 import java.io.FilePermission;
 import java.lang.reflect.ReflectPermission;
-import java.security.AllPermission;
 import java.security.Permission;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.PropertyPermission;
 import java.util.jar.Manifest;
 
-import org.osgi.framework.Bundle;
+import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
+import org.eclipse.gemini.blueprint.test.platform.OsgiPlatform;
+import org.eclipse.gemini.blueprint.test.provisioning.ArtifactLocator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundlePermission;
 import org.osgi.framework.Constants;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.SynchronousBundleListener;
 import org.springframework.core.io.Resource;
-import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
-import org.eclipse.gemini.blueprint.test.platform.OsgiPlatform;
-import org.eclipse.gemini.blueprint.test.provisioning.ArtifactLocator;
-import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**

@@ -14,7 +14,13 @@
 
 package org.eclipse.gemini.blueprint.iandt.cycles;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
+
+import org.junit.Test;
 
 /**
  * Integration test for checking cyclic injection between an importer and its
@@ -38,19 +44,20 @@ public class CollectionCycleTest extends BaseImporterCycleTest {
 		assertTrue(applicationContext.isSingleton("&importer"));
 	}
 
-	
+	@Test
 	public void testListenerA() throws Exception {
 		assertEquals(importer.toString(), listenerA.getTarget().toString());
 	}
 
+	@Test
 	public void testListenerB() throws Exception {
 		assertEquals(importer.toString(), listenerB.getTarget().toString());
 	}
 
+	@Test
 	public void testListenersBetweenThem() throws Exception {
 		Object a = listenerA.getTarget();
 		Object b = listenerB.getTarget();
 		assertSame(listenerA.getTarget(), listenerB.getTarget());
 	}
-
 }

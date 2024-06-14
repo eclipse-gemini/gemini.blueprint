@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.iandt.configopt;
 
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Shape;
 import java.awt.geom.Area;
 
@@ -21,6 +23,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
+import org.junit.Test;
 
 /**
  * Integration test for AsyncNoWait
@@ -36,6 +39,7 @@ public class AsyncNoWaitTest extends BehaviorBaseTest {
 		OsgiServiceUtils.unregisterService(registration);
 	}
 
+	@Test
 	public void testBehaviour() throws Exception {
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, async-nowait-bundle,"
 				+ getSpringDMVersion();

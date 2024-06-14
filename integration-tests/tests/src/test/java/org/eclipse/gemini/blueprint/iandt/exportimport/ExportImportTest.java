@@ -14,9 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.exportimport;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -28,12 +31,14 @@ public class ExportImportTest extends BaseIntegrationTest {
 		return new String[] { "org/eclipse/gemini/blueprint/iandt/exportimport/export-import.xml" };
 	}
 
+	@Test
 	public void testCollectionSize() throws Exception {
 		List list = (List) applicationContext.getBean("list");
 		assertEquals(2, list.size());
 		assertEquals(2, Listener.bind);
 	}
 	
+	@Test
 	public void testExportNA() throws Exception {
 		applicationContext.getBean("export-na");
 		System.out.println(Listener.unbind);

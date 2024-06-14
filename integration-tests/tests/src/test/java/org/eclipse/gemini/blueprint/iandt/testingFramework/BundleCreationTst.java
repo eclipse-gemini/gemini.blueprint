@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 
 /**
@@ -26,6 +29,10 @@ import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
  * 
  */
 public class BundleCreationTst extends BaseIntegrationTest {
+	
+	public BundleCreationTst() {
+
+	}
 
 	protected String[] getBundleLocations() {
 		// no test bundle is included
@@ -51,4 +58,5 @@ public class BundleCreationTst extends BaseIntegrationTest {
 	public void testError() {
 		throw new Error("this is an error");
 	}
+
 }

@@ -15,12 +15,18 @@
 
 package org.eclipse.gemini.blueprint.iandt.extender;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+
 import java.io.FilePermission;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -69,6 +75,7 @@ public class ExtenderTest extends BaseIntegrationTest {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt, lifecycle," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testLifecycle() throws Exception {
 		assertNull("Guinea pig has already been started", System
 				.getProperty("org.eclipse.gemini.blueprint.iandt.lifecycle.GuineaPig.close"));

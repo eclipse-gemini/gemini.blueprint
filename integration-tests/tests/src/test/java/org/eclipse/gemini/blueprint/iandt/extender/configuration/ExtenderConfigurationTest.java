@@ -16,12 +16,16 @@ package org.eclipse.gemini.blueprint.iandt.extender.configuration;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Properties;
@@ -48,6 +52,7 @@ public class ExtenderConfigurationTest extends BaseIntegrationTest {
 		return new String[] { "org/eclipse/gemini/blueprint/iandt/extender/configuration/config.xml" };
 	}
 
+	@Test
 	public void testExtenderConfigAppCtxPublished() throws Exception {
 		ServiceReference[] refs =
 				bundleContext.getAllServiceReferences("org.springframework.context.ApplicationContext", null);

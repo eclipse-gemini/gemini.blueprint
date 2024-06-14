@@ -14,12 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.importer;
 
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Shape;
 import java.awt.geom.Area;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -31,6 +33,7 @@ public class CollectionTest extends BaseIntegrationTest {
 		return new String[] { "org/eclipse/gemini/blueprint/iandt/importer/collection.xml" };
 	}
 
+	@Test
 	public void testServiceReferenceCollection() throws Exception {
 		List list = applicationContext.getBean("reference-list", List.class);
 		assertEquals(0, list.size());

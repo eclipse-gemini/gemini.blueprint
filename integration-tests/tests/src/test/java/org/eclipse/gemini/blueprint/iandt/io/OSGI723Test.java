@@ -27,6 +27,7 @@ import org.osgi.framework.BundleContext;
 import org.eclipse.gemini.blueprint.test.platform.OsgiPlatform;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 import org.springframework.util.FileCopyUtils;
 
 /**
@@ -98,6 +99,7 @@ public class OSGI723Test extends BaseIoTest {
 		}
 	}
 
+	@Test
 	public void testSpecialBundle() throws Exception {
 		Bundle bundle = OsgiBundleUtils.findBundleBySymbolicName(bundleContext, "issue.osgi-723");
 		System.out.println(bundle);

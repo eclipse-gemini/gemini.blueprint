@@ -14,8 +14,8 @@
 
 package org.eclipse.gemini.blueprint.test.internal.support;
 
-import org.eclipse.gemini.blueprint.test.internal.TestRunnerService;
 import org.eclipse.gemini.blueprint.test.internal.holder.HolderLoader;
+import org.junit.runner.Runner;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -29,11 +29,11 @@ import org.osgi.framework.ServiceRegistration;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration<TestRunnerService> registration;
+	private ServiceRegistration<Runner> registration;
 
 
 	public void start(BundleContext context) throws Exception {
-		registration = context.registerService(TestRunnerService.class, new OsgiJUnitService(), null);
+		registration = context.registerService(Runner.class, new OsgiJUnitService(context.getBundle().getClass()), null);
 
 		// add also the bundle id so that AbstractOsgiTest can determine its BundleContext when used in an environment
 		// where the system bundle is treated as a special case.

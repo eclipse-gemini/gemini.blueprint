@@ -14,9 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.jdk5.componentscanning;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Shape;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -34,18 +39,21 @@ public class OrderedComponentScanningTest extends BaseIntegrationTest {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt, sync-tail-bundle," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testComponentExistence() throws Exception {
 		assertTrue("component not found", applicationContext.containsBean(BEAN_NAME));
 		assertNotNull("component not injected in the test", bean);
 		assertNotNull("shape not injected in the test", shape);
 	}
 
+	@Test
 	public void testAutowireInjection() throws Exception {
 		assertNotNull(bean.getSetterInjection());
 		assertNotNull(bean.getConstructorInjection());
 		assertNotNull(bean.getFieldInjection());
 	}
 
+	@Test
 	public void testInjectionIdentity() throws Exception {
 		assertSame(shape, bean.getSetterInjection());
 		assertSame(shape, bean.getConstructorInjection());

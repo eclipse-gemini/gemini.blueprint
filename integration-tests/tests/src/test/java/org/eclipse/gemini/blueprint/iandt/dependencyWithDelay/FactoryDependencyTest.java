@@ -15,6 +15,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.dependencyWithDelay;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+
 import java.io.FilePermission;
 import java.util.List;
 
@@ -24,6 +28,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 
 /**
  * @author Hal Hildebrand Date: Aug 27, 2007 Time: 9:36:23 AM
@@ -45,6 +50,7 @@ public class FactoryDependencyTest extends BaseIntegrationTest {
 	// simple.service2 - publishes service2
 	// simple.service3 - publishes service3
 	// simple - publishes service1
+	@Test
 	public void testDependencies() throws Exception {
 		System.setProperty(DELAY_PROP, "10000");
 

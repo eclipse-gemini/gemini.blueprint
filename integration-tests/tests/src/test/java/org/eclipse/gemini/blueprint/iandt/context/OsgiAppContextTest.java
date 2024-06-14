@@ -15,8 +15,14 @@
 package org.eclipse.gemini.blueprint.iandt.context;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.springframework.context.ApplicationContext;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 
 /**
@@ -29,7 +35,7 @@ public class OsgiAppContextTest extends BaseIntegrationTest {
 
 	private BundleContext bundleContext;
 
-
+	@Test
 	public void testBundleContextAvailableAsBean() {
 		ApplicationContext ctx = applicationContext;
 		assertNotNull(ctx);
@@ -37,6 +43,7 @@ public class OsgiAppContextTest extends BaseIntegrationTest {
 			applicationContext.containsBean(ConfigurableOsgiBundleApplicationContext.BUNDLE_CONTEXT_BEAN_NAME));
 	}
 
+	@Test
 	public void testBundleContextInjected() {
 		assertNotNull("bundleContext hasn't been injected into the test", bundleContext);
 	}
@@ -45,6 +52,7 @@ public class OsgiAppContextTest extends BaseIntegrationTest {
 		this.bundleContext = bundleContext;
 	}
 
+	@Test
 	public void testBundleContextIsTheSame() {
 		assertSame(bundleContext,
 			applicationContext.getBean(ConfigurableOsgiBundleApplicationContext.BUNDLE_CONTEXT_BEAN_NAME));

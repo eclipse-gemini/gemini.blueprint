@@ -14,10 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.configopt;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.awt.Shape;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
+import org.junit.Test;
 
 /**
  * Simple test for bundles that provide a configuration file with dots.
@@ -31,6 +33,7 @@ public class ConfigFileWithDotsTest extends BaseIntegrationTest {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt, config-with-dots.bundle," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testShapeServicePublished() throws Exception {
 		assertNotNull(bundleContext.getServiceReference(Shape.class.getName()));
 	}

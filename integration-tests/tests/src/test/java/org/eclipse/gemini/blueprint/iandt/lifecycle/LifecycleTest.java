@@ -15,11 +15,18 @@
 
 package org.eclipse.gemini.blueprint.iandt.lifecycle;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -42,6 +49,7 @@ public class LifecycleTest extends BaseIntegrationTest {
         return new String[]{"org.eclipse.gemini.blueprint.iandt,lifecycle," + getSpringDMVersion()};
     }
 
+    @Test
     public void testLifecycle() throws Exception {
         assertNotSame("Guinea pig has already been shutdown", "true",
                 System.getProperty("org.eclipse.gemini.blueprint.iandt.lifecycle.GuineaPig.close"));

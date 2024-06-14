@@ -24,23 +24,23 @@ import org.osgi.framework.ServiceRegistration;
  * 
  */
 public abstract class ServiceBaseTest extends BaseIntegrationTest {
-	protected ServiceRegistration publishService(Object obj, String name) throws Exception {
+	protected ServiceRegistration<?> publishService(Object obj, String name) throws Exception {
 		return bundleContext.registerService(name, obj, null);
 	}
 
-	protected ServiceRegistration publishService(Object obj, String names[]) throws Exception {
+	protected ServiceRegistration<?> publishService(Object obj, String names[]) throws Exception {
 		return bundleContext.registerService(names, obj, null);
 	}
 
-	protected ServiceRegistration publishService(Object obj, String names[], Dictionary dict) throws Exception {
+	protected ServiceRegistration<?> publishService(Object obj, String names[], Dictionary dict) throws Exception {
 		return bundleContext.registerService(names, obj, null);
 	}
 
-	protected ServiceRegistration publishService(Object obj) throws Exception {
+	protected ServiceRegistration<?> publishService(Object obj) throws Exception {
 		return publishService(obj, obj.getClass().getName());
 	}
 
-	protected ServiceRegistration publishService(Object obj, Dictionary dict) throws Exception {
+	protected ServiceRegistration<?> publishService(Object obj, Dictionary dict) throws Exception {
 		return bundleContext.registerService(obj.getClass().getName(), obj, dict);
 	}
 

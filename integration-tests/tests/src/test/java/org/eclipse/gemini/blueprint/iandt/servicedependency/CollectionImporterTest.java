@@ -14,17 +14,20 @@
 
 package org.eclipse.gemini.blueprint.iandt.servicedependency;
 
-import java.io.FilePermission;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.osgi.framework.AdminPermission;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.iandt.simpleservice.MyService;
 import org.eclipse.gemini.blueprint.iandt.tccl.TCCLService;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
+import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 import org.springframework.util.Assert;
 
 /**
@@ -48,6 +51,7 @@ public class CollectionImporterTest extends BaseIntegrationTest {
 				"org.eclipse.gemini.blueprint.iandt, simple.service," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testExporterAWhenImporterAGoesDownAndUp() throws Exception {
 		assertTrue("exporterA should be running", isExporterAStarted());
 		logger.info("Taking down serviceA...");
@@ -59,6 +63,7 @@ public class CollectionImporterTest extends BaseIntegrationTest {
 		assertTrue("serviceA is up again, so should exporterA", isExporterAStarted());
 	}
 
+	@Test
 	public void testExporterBWhenImporterAGoesDownAndUp() throws Exception {
 		assertTrue("exporterB should be running", isExporterBStarted());
 		logger.info("Taking down serviceA...");
@@ -70,6 +75,7 @@ public class CollectionImporterTest extends BaseIntegrationTest {
 		assertTrue("service A is up again, so should exporterB", isExporterBStarted());
 	}
 
+	@Test
 	public void testExporterBWhenImporterAGoesDownThenImporterBThenBothUpAgain() throws Exception {
 		assertTrue("exporterB should be running", isExporterBStarted());
 

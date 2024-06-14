@@ -29,6 +29,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -131,6 +132,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 
 	// create appCtx each time since we depend we test startup/shutdown behaviour
 	// and cannot have shared states
+	@Test
 	public void testServiceReferenceEventsOnStartupWithMultipleServicesPresent() throws Exception {
 		registerMultipleServices();
 		createAppCtx();
@@ -139,6 +141,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		assertEquals("wrong service bound", area.toString(), referenceBindServices.get(0).toString());
 	}
 
+	@Test
 	public void testServiceReferenceEventsDuringLifetimeWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();
@@ -149,6 +152,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		assertEquals("wrong 3rd service bound", area.toString(), referenceBindServices.get(2).toString());
 	}
 
+	@Test
 	public void testServiceReferenceEventsOnShutdownWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();
@@ -159,6 +163,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		appCtx = null;
 	}
 
+	@Test
 	public void testServiceCollectionEventsOnStartupWithMultipleServicesPresent() throws Exception {
 		registerMultipleServices();
 		createAppCtx();
@@ -170,6 +175,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 
 	}
 
+	@Test
 	public void testServiceCollectionEventsDuringLifetimeWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();
@@ -180,6 +186,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		assertEquals("wrong 3rd service bound", area.toString(), collectionBindServices.get(2).toString());
 	}
 
+	@Test
 	public void testServiceCollectionEventsOnShutdownWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();

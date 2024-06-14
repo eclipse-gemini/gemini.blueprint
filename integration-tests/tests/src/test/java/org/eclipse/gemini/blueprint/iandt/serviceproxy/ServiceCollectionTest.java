@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceproxy;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -24,6 +27,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.springframework.aop.framework.DefaultAopProxyFactory;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceCollection;
 import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
+import org.junit.Test;
 import org.springframework.util.ClassUtils;
 
 abstract class ServiceCollectionTest extends BaseIntegrationTest {
@@ -53,6 +57,7 @@ abstract class ServiceCollectionTest extends BaseIntegrationTest {
 		return collection;
 	}
 
+	@Test
 	public void testCollectionListener() throws Exception {
 		Collection collection = createCollection();
 
@@ -73,6 +78,7 @@ abstract class ServiceCollectionTest extends BaseIntegrationTest {
 		assertEquals(size, collection.size());
 	}
 
+	@Test
 	public void testCollectionContent() throws Exception {
 		Collection collection = createCollection();
 		ServiceReference[] refs = bundleContext.getServiceReferences((String)null, null);

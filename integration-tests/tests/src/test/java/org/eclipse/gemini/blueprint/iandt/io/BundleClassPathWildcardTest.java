@@ -14,6 +14,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.JarURLConnection;
@@ -32,6 +37,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.eclipse.gemini.blueprint.io.OsgiBundleResourcePatternResolver;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -71,6 +77,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		return (String[]) ObjectUtils.addObjectToArray(super.getBundleContentPattern(), "bundleclasspath/**/*");
 	}
 
+	@Test
 	public void testClassPathFilesOnBundleClassPath() throws Exception {
 		// use org to make sure the bundle class is properly considered (especially for folder based classpath)
 		Resource[] res = patternLoader.getResources("classpath:org/**/*.file");
@@ -80,6 +87,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		assertTrue("bundle classpath jar not considered", containsString(res, "jar-folder.file"));
 	}
 
+	@Test
 	public void testAllClassPathFilesOnBundleClassPath() throws Exception {
 		// use org to make sure the bundle class is properly considered (especially for folder based classpath)
 		Resource[] res = patternLoader.getResources("classpath*:org/**/*.file");
@@ -89,6 +97,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		assertTrue("bundle classpath jar not considered", containsString(res, "jar-folder.file"));
 	}
 
+	@Test
 	public void testRootFileOnBundleClassPath() throws Exception {
 		// use org to make sure the bundle class is properly considered (especially for folder based classpath)
 		Resource[] res = patternLoader.getResources("classpath:*.file");
@@ -98,6 +107,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		assertTrue("bundle classpath jar not considered", containsString(res, "jar.file"));
 	}
 
+	@Test
 	public void testRootFileOnAllBundleClassPath() throws Exception {
 		// use org to make sure the bundle class is properly considered (especially for folder based classpath)
 		Resource[] res = patternLoader.getResources("classpath:*.file");
@@ -117,11 +127,13 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		return false;
 	}
 
+	@Test
 	public void testURLConnectionToJarInsideBundle() throws Exception {
 		Resource jar = patternLoader.getResource("bundleclasspath/simple.jar");
 		testJarConnectionOn(jar);
 	}
 
+	@Test
 	private void testJarConnectionOn(Resource jar) throws Exception {
 		String toString = jar.getURL().toExternalForm();
 		// force JarURLConnection
@@ -141,6 +153,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 			System.out.println(enm.nextElement());
 	}
 
+	@Test
 	public void testResourceAvailableOnlyInsideJarClasspath() throws Exception {
 		Resource[] resources = patternLoader.getResources("classpath*:jar.file");
 		assertNotNull(resources);
@@ -150,6 +163,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		assertTrue(resources[0].exists());
 	}
 
+	@Test
 	public void testResourceAvailableOnlyInsideFolderClasspath() throws Exception {
 		Resource[] resources = patternLoader.getResources("classpath*:org/eclipse/gemini/blueprint/iandt/compliance/io/folder-test.file");
 		assertNotNull(resources);
@@ -160,6 +174,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		printPathWithinContext(resources);
 	}
 
+	@Test
 	public void testResourceAvailableWithPatternOnPathsOnlyInsideFolderClasspath() throws Exception {
 		Resource[] resources = patternLoader.getResources("classpath*:org/eclipse/gemini/blueprint/iandt/**/folder-test.file");
 		assertNotNull(resources);
@@ -169,6 +184,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		printPathWithinContext(resources);
 	}
 
+	@Test
 	public void testResourceAvailableWithPatternOnlyInsideFolderClasspath() throws Exception {
 		Resource[] resources = patternLoader.getResources("classpath:org/eclipse/gemini/blueprint/iandt/**/folder-test.file");
 		assertNotNull(resources);
@@ -184,6 +200,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		return new OsgiBundleResourcePatternResolver(bnd);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourceInRootNotFound() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath:root.file");
@@ -193,6 +210,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourceInRootNotFoundOnAllClasspaths() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath*:root.file");
@@ -202,6 +220,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourceInClassPathFound() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath*:cp.file");
@@ -211,6 +230,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourceNestedInClassPathFound() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath*:/some/nested/nested.file");
@@ -220,6 +240,7 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		printPathWithinContext(res);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourceNestedInPkgInClassPathFound() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath*:/some/nested/pkg/pkg.file");
@@ -227,24 +248,28 @@ public class BundleClassPathWildcardTest extends BaseIoTest {
 		assertTrue("resource should be found since it's on the classpath", res[0].exists());
 	}
 
+	@Test
 	public void testNoRootCpBundleResourcePatternMatching() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath:/**/*.file");
 		assertEquals("incorrect number of resources found", 3, res.length);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourceMultipleRoots() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath*:/**/*.file");
 		assertEquals("incorrect number of resources found", 3, res.length);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourcePatternMatchingWithSpecifiedFolder() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath:/some/**/*.file");
 		assertEquals("incorrect number of resources found", 2, res.length);
 	}
 
+	@Test
 	public void testNoRootCpBundleResourceMultipleRootsSpecifiedFolder() throws Exception {
 		ResourcePatternResolver resolver = getNoRootCpBundleResourceResolver();
 		Resource[] res = resolver.getResources("classpath*:/some/**/*.file");

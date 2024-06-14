@@ -14,6 +14,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.extender;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Point;
 import java.io.FilePermission;
 import java.util.List;
@@ -23,6 +27,7 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.springframework.core.io.Resource;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -36,6 +41,7 @@ public class ExtenderVersionTest extends BaseIntegrationTest {
 
 	// given bundle should not be picked up by the extender since it expects a
 	// certain version
+	@Test
 	public void testBundleIgnoredBasedOnSpringExtenderVersion() throws Exception {
 
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, extender-version-bundle," + getSpringDMVersion();

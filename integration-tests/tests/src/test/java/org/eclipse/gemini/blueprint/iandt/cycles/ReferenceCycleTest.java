@@ -14,7 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.cycles;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import java.awt.Shape;
+
+import org.junit.Test;
 
 /**
  * Integration test for checking cyclic injection between an importer and its
@@ -26,19 +31,21 @@ public class ReferenceCycleTest extends BaseImporterCycleTest {
 
 	private Shape importer;
 
-
 	protected String[] getConfigLocations() {
 		return new String[] { "/org/eclipse/gemini/blueprint/iandt/cycles/top-level-reference-importer.xml" };
 	}
 
+	@Test
 	public void testListenerA() throws Exception {
 		assertEquals(importer.toString(), listenerA.getTarget().toString());
 	}
 
+	@Test
 	public void testListenerB() throws Exception {
 		assertEquals(importer.toString(), listenerB.getTarget().toString());
 	}
 
+	@Test
 	public void testListenersBetweenThem() throws Exception {
 		assertSame(listenerA.getTarget(), listenerB.getTarget());
 	}
@@ -46,5 +53,4 @@ public class ReferenceCycleTest extends BaseImporterCycleTest {
 	public void setImporter(Shape importer) {
 		this.importer = importer;
 	}
-
 }

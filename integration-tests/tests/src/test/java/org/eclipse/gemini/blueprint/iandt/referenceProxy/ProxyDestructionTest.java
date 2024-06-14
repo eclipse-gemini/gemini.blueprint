@@ -15,6 +15,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.referenceProxy;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
@@ -25,6 +28,7 @@ import org.eclipse.gemini.blueprint.iandt.reference.proxy.ServiceReferer;
 import org.eclipse.gemini.blueprint.iandt.simpleservice.MyService;
 import org.eclipse.gemini.blueprint.service.importer.ServiceProxyDestroyedException;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * @author Glyn Normington
@@ -44,6 +48,7 @@ public class ProxyDestructionTest extends BaseIntegrationTest {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testProxyDestruction() throws Exception {
 
 		MyService reference = ServiceReferer.serviceReference;

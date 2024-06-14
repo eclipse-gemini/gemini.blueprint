@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.propertyplaceholder;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FilePermission;
 import java.util.Dictionary;
@@ -30,6 +33,7 @@ import org.osgi.service.cm.ConfigurationPermission;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
+import org.junit.Test;
 
 /**
  * Integration test for OsgiPropertyPlaceholder.
@@ -106,11 +110,13 @@ public class PropertyPlaceholderTest extends BaseIntegrationTest {
 		config.update(DICT);
 	}
 
+	@Test
 	public void testFoundProperties() throws Exception {
 		String bean = (String) ctx.getBean("bean1");
 		assertEquals("horse", bean);
 	}
 
+	@Test
 	public void testFallbackProperties() throws Exception {
 		String bean = (String) ctx.getBean("bean2");
 		assertEquals("treasures", bean);

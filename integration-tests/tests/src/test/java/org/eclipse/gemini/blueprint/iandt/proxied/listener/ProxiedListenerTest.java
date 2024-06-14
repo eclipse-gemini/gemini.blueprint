@@ -20,6 +20,7 @@ import java.awt.geom.Area;
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.iandt.proxy.listener.Listener;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -34,6 +35,7 @@ public class ProxiedListenerTest extends BaseIntegrationTest {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt, proxy.listener," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testListenerProxy() throws Exception {
 		System.out.println(Listener.class.getName());
 		Object obj = new Area();

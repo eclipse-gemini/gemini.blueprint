@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.compliance.service;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import java.awt.Polygon;
 import java.awt.Shape;
 
@@ -23,6 +26,7 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -33,7 +37,7 @@ public class ServiceAvailableDuringUnregistrationTest extends BaseIntegrationTes
 
 	private Shape service;
 
-
+	@Test
 	public void testServiceAliveDuringUnregistration() throws Exception {
 		service = new Polygon();
 

@@ -14,18 +14,21 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Arrays;
 
+import org.eclipse.gemini.blueprint.io.OsgiBundleResourceLoader;
+import org.eclipse.gemini.blueprint.io.OsgiBundleResourcePatternResolver;
+import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.eclipse.gemini.blueprint.io.OsgiBundleResourceLoader;
-import org.eclipse.gemini.blueprint.io.OsgiBundleResourcePatternResolver;
-import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -92,6 +95,7 @@ public class OSGI799Test extends BaseIoTest {
 		return new OsgiBundleResourcePatternResolver(loader);
 	}
 
+	@Test
 	public void testExportedCustomCP() throws Exception {
 		ResourcePatternResolver resolver = getExporterPatternLoader();
 		Resource[] resources = resolver.getResources("classpath:/some/**/*.res");
@@ -99,6 +103,7 @@ public class OSGI799Test extends BaseIoTest {
 		assertEquals(3, resources.length);
 	}
 
+	@Test
 	public void testImportedCustomCP() throws Exception {
 		ResourcePatternResolver resolver = getImporterPatternLoader();
 		Resource[] resources = resolver.getResources("classpath:some/**/*.res");
@@ -106,6 +111,7 @@ public class OSGI799Test extends BaseIoTest {
 		assertEquals(3, resources.length);
 	}
 	
+	@Test
 	public void testExportedCustomFoldersCP() throws Exception {
 		ResourcePatternResolver resolver = getExporterPatternLoader();
 		Resource[] resources = resolver.getResources("classpath:/**/path/**/*");
@@ -113,6 +119,7 @@ public class OSGI799Test extends BaseIoTest {
 		assertEquals(8, resources.length);
 	}
 	
+	@Test
 	public void testImporterCustomFoldersCP() throws Exception {
 		ResourcePatternResolver resolver = getImporterPatternLoader();
 		Resource[] resources = resolver.getResources("classpath:/**/path/**/*");
@@ -120,6 +127,7 @@ public class OSGI799Test extends BaseIoTest {
 		assertEquals(5, resources.length);
 	}
 
+	@Test
 	public void testExportedCustomPatternFoldersCP() throws Exception {
 		ResourcePatternResolver resolver = getExporterPatternLoader();
 		Resource[] resources = resolver.getResources("classpath:/**/p?th/**/*");
@@ -127,6 +135,7 @@ public class OSGI799Test extends BaseIoTest {
 		assertEquals(8, resources.length);
 	}
 	
+	@Test
 	public void testImporterCustomPatternFoldersCP() throws Exception {
 		ResourcePatternResolver resolver = getImporterPatternLoader();
 		Resource[] resources = resolver.getResources("classpath:/**/p?th/**/*");
