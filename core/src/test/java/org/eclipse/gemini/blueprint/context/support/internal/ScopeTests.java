@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.context.support.internal;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
@@ -28,12 +32,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 
-public class ScopeTests extends TestCase {
+public class ScopeTests {
 
 	private static Object tag;
 
 	private static Runnable callback = null;
-
 
 	private static abstract class AbstractScope implements Scope {
 
@@ -88,8 +91,8 @@ public class ScopeTests extends TestCase {
 
 	}
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		Resource file = new ClassPathResource("scopes.xml");
 		bf = new ScopedScopedListableBeanFactory(file);
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(bf);
@@ -99,14 +102,15 @@ public class ScopeTests extends TestCase {
 		tag = null;
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		bf.destroySingletons();
 		callback = null;
 		tag = null;
 	}
 
+	@Test
 	public void testScopes() throws Exception {
-
 		assertNull(tag);
 		Object a = bf.getBean("a");
 		System.out.println("got a" + a);
@@ -128,6 +132,7 @@ public class ScopeTests extends TestCase {
 		System.out.println(ObjectUtils.nullSafeToString(ClassUtils.getAllInterfaces(scopedA)));
 	}
 
+	@Test
 	public void testCallback() throws Exception {
 		Object a = bf.getBean("a");
 		// assertNotNull(callback);
@@ -144,6 +149,5 @@ public class ScopeTests extends TestCase {
 		}
 
 		System.out.println(ObjectUtils.nullSafeToString(bf.getRegisteredScopeNames()));
-		//assertTrue(props.isEmpty());
 	}
 }

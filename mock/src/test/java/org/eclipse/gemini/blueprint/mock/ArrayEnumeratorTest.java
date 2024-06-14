@@ -36,20 +36,12 @@ public class ArrayEnumeratorTest {
 
 	private Object[] source;
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#setUp()
-	 */
 	@Before
 	public void setup() throws Exception {
 		source = new Object[] { "A", "B", "C" };
 		enm = new ArrayEnumerator(source);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#tearDown()
-	 */
 	@After
 	public void tearDown() throws Exception {
 		enm = null;

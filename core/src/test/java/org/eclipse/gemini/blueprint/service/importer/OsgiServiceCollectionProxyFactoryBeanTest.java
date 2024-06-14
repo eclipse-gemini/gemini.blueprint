@@ -14,37 +14,33 @@
 
 package org.eclipse.gemini.blueprint.service.importer;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-
-import junit.framework.TestCase;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.eclipse.gemini.blueprint.TestUtils;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
-import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
 import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.MemberType;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
 /**
  * @author Costin Leau
@@ -61,8 +57,6 @@ public class OsgiServiceCollectionProxyFactoryBeanTest {
 	@Before
 	public void setup() throws Exception {
 		this.serviceFactoryBean = new OsgiServiceCollectionProxyFactoryBean();
-		// this.serviceFactoryBean.setApplicationContext(new
-		// GenericApplicationContext());
 
 		ref = new MockServiceReference(new String[] { Runnable.class.getName() });
 
@@ -80,8 +74,7 @@ public class OsgiServiceCollectionProxyFactoryBeanTest {
 
 		serviceFactoryBean.setBundleContext(this.bundleContext);
 		serviceFactoryBean.setBeanClassLoader(getClass().getClassLoader());
-		serviceFactoryBean.setInterfaces(new Class<?>[] { TestCase.class });
-
+		serviceFactoryBean.setInterfaces(new Class<?>[] {Integer.class});
 	}
 
 	@After

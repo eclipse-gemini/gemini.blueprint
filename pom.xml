@@ -19,6 +19,10 @@
     <inceptionYear>2006</inceptionYear>
 
     <properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.release>17</maven.compiler.release>
+		
         <!-- Source file encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -575,9 +579,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                    <release>17</release>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <release>${maven.compiler.release}</release>
+                    <compilerArgs>
+          				<arg>--add-opens</arg>
+          				<arg>java.base/java.io=ALL-UNNAMED</arg>
+          				<arg>--add-opens</arg>
+          				<arg>java.base/java.lang=ALL-UNNAMED</arg>
+          				<arg>--add-opens</arg>
+          				<arg>java.base/java.net=ALL-UNNAMED</arg>
+          				<arg>--add-opens</arg>
+          				<arg>java.base/java.util=ALL-UNNAMED</arg>
+        			</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
