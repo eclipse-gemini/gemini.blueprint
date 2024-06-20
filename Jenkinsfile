@@ -56,7 +56,7 @@ spec:
     stage('Prepare integration testing bundes') {
       steps {
         container('maven') {
-          dir("integration-tests") {
+          dir("integration-tests/bundles") {
               sh 'mvn install'
           }
         }
@@ -65,8 +65,8 @@ spec:
     stage('Integration tests with Equinox profile') {
       steps {
         container('maven') {
-          dir("integration-tests") {
-            sh 'mvn verify -P equinox'
+          dir("integration-tests/tests") {
+            sh 'mvn clean verify -P equinox'
             junit '**/target/surefire-reports/*.xml'
           }
         }
@@ -75,8 +75,8 @@ spec:
     stage('Integration tests with Felix profile') {
       steps {
         container('maven') {
-          dir("integration-tests") {
-            sh 'mvn verify -P felix'
+          dir("integration-tests/tests") {
+            sh 'mvn clean verify -P felix'
             junit '**/target/surefire-reports/*.xml'
           }
         }
@@ -85,8 +85,8 @@ spec:
     stage('Integration tests with Knopflerfish profile') {
       steps {
         container('maven') {
-          dir("integration-tests") {
-            sh 'mvn verify -P knopflerfish'
+          dir("integration-tests/tests") {
+            sh 'mvn clean verify -P knopflerfish'
             junit '**/target/surefire-reports/*.xml'
           }
         }
