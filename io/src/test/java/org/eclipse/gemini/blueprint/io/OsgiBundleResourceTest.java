@@ -14,15 +14,26 @@
 
 package org.eclipse.gemini.blueprint.io;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.mock.ArrayEnumerator;
 import org.eclipse.gemini.blueprint.mock.MockBundle;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.springframework.core.io.FileSystemResourceLoader;
 import org.springframework.core.io.Resource;
@@ -32,7 +43,7 @@ import org.springframework.util.StringUtils;
  * @author Costin Leau
  * 
  */
-public class OsgiBundleResourceTest extends TestCase {
+public class OsgiBundleResourceTest {
 
 	private OsgiBundleResource resource;
 
@@ -40,8 +51,8 @@ public class OsgiBundleResourceTest extends TestCase {
 
 	private String path;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		path = OsgiBundleResourceTest.class.getName().replace('.', '/').concat(".class");
 		bundle = new MockBundle();
 		resource = new OsgiBundleResource(bundle, path);
@@ -51,6 +62,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#hashCode()}.
 	 */
+	@Test
 	public void testHashCode() {
 		assertEquals(path.hashCode(), resource.hashCode());
 	}
@@ -59,6 +71,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#OsgiBundleResource(org.osgi.framework.Bundle, java.lang.String)}.
 	 */
+	@Test
 	public void testOsgiBundleResource() {
 		assertSame(bundle, resource.getBundle());
 		assertEquals(path, resource.getPath());
@@ -68,6 +81,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getPath()}.
 	 */
+	@Test
 	public void testGetPath() {
 		assertEquals(path, resource.getPath());
 	}
@@ -76,6 +90,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getBundle()}.
 	 */
+	@Test
 	public void testGetBundle() {
 		assertSame(bundle, resource.getBundle());
 	}
@@ -84,6 +99,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getInputStream()}.
 	 */
+	@Test
 	public void testGetInputStream() throws Exception {
 		InputStream stream = resource.getInputStream();
 		assertNotNull(stream);
@@ -94,6 +110,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getURL()}.
 	 */
+	@Test
 	public void testGetURL() throws Exception {
 		assertNotNull(resource.getURL());
 
@@ -107,6 +124,7 @@ public class OsgiBundleResourceTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNonBundleUrlWhichExists() throws Exception {
 		File tmp = File.createTempFile("foo", "bar");
 		tmp.deleteOnExit();
@@ -116,12 +134,14 @@ public class OsgiBundleResourceTest extends TestCase {
 		tmp.delete();
 	}
 
+	@Test
 	public void testNonBundleUrlWhichDoesNotExist() throws Exception {
 		resource = new OsgiBundleResource(bundle, "file:foo123123");
 		resource.getURL();
 		assertFalse(resource.exists());
 	}
 
+	@Test
 	public void testFileWithSpecialCharsInTheNameBeingResolved() throws Exception {
         String name = Thread.currentThread().getContextClassLoader().getResource( "test-file" ).toString();
 		FileSystemResourceLoader fileLoader = new FileSystemResourceLoader();
@@ -133,6 +153,7 @@ public class OsgiBundleResourceTest extends TestCase {
 		testFileVsOsgiFileResolution(fileRes, resource);
 	}
 
+	@Test
 	public void testFileWithEmptyCharsInTheNameBeingResolved() throws Exception {
 		String name = Thread.currentThread().getContextClassLoader().getResource( "test file" ).toString();
 		FileSystemResourceLoader fileLoader = new FileSystemResourceLoader();
@@ -144,6 +165,7 @@ public class OsgiBundleResourceTest extends TestCase {
 		testFileVsOsgiFileResolution(fileRes, resource);
 	}
 
+	@Test
 	public void testFileWithNormalCharsInTheNameBeingResolved() throws Exception {
 		String name = Thread.currentThread().getContextClassLoader().getResource( "normal" ).toString();
 		FileSystemResourceLoader fileLoader = new FileSystemResourceLoader();
@@ -169,6 +191,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getResourceFromBundleSpace(java.lang.String)}.
 	 */
+	@Test
 	public void testGetResourceFromBundle() throws Exception {
 		Bundle mock = createMock(Bundle.class);
 
@@ -188,6 +211,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getResourceFromBundleClasspath(java.lang.String)}.
 	 */
+	@Test
 	public void testGetResourceFromBundleClasspath() throws Exception {
 		Bundle mock = createMock(Bundle.class);
 
@@ -207,6 +231,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#isRelativePath(java.lang.String)}.
 	 */
+	@Test
 	public void testIsRelativePath() {
 		assertTrue(resource.isRelativePath("foo"));
 		assertFalse(resource.isRelativePath("/foo"));
@@ -217,6 +242,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#createRelative(java.lang.String)}.
 	 */
+	@Test
 	public void testCreateRelativeString() {
 		String location = "foo";
 		Resource res = resource.createRelative(location);
@@ -228,6 +254,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getFilename()}.
 	 */
+	@Test
 	public void testGetFilename() {
 		assertNotNull(resource.getFilename());
 	}
@@ -236,6 +263,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#getDescription()}.
 	 */
+	@Test
 	public void testGetDescription() {
 		assertNotNull(resource.getDescription());
 	}
@@ -244,6 +272,7 @@ public class OsgiBundleResourceTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.io.OsgiBundleResource#equals(java.lang.Object)}.
 	 */
+	@Test
 	public void testEqualsObject() {
 		assertEquals(resource, new OsgiBundleResource(bundle, path));
 		assertEquals(resource, resource);
@@ -251,38 +280,45 @@ public class OsgiBundleResourceTest extends TestCase {
 		assertFalse(resource.equals(new OsgiBundleResource(new MockBundle(), path)));
 	}
 
+	@Test
 	public void testDefaultPathWithinContext() throws Exception {
 		assertEquals(path, resource.getPathWithinContext());
 	}
 
+	@Test
 	public void testPathWithinBundleSpace() throws Exception {
 		String contextPath = "folder/resource";
 		resource = new OsgiBundleResource(bundle, "osgibundle:" + contextPath);
 		assertEquals(contextPath, resource.getPathWithinContext());
 	}
 
+	@Test
 	public void testPathWithinClassSpace() throws Exception {
 		String contextPath = "folder/resource";
 		resource = new OsgiBundleResource(bundle, "classpath:" + contextPath);
 		assertEquals(contextPath, resource.getPathWithinContext());
 	}
 
+	@Test
 	public void testPathWithinJarSpace() throws Exception {
 		String contextPath = "folder/resource";
 		resource = new OsgiBundleResource(bundle, "osgibundlejar:" + contextPath);
 		assertEquals(contextPath, resource.getPathWithinContext());
 	}
 
+	@Test
 	public void testPathOutsideContext() throws Exception {
 		String contextPath = "folder/resource";
 		resource = new OsgiBundleResource(bundle, "file:" + contextPath);
 		assertNull(resource.getPathWithinContext());
 	}
 
+	@Test
 	public void testLastModified() throws Exception {
 		assertTrue("last modified should be non zero", resource.lastModified() > 0);
 	}
 	
+	@Test
 	public void testNonExistingFile() throws Exception {
 		resource = new OsgiBundleResource(bundle, "file:/some/non.existing.file");
 		File file = resource.getFile();

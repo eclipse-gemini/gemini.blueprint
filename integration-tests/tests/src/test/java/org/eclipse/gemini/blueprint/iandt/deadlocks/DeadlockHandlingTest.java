@@ -15,10 +15,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.deadlocks;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.FilePermission;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -43,6 +47,7 @@ public class DeadlockHandlingTest extends BaseIntegrationTest {
 	 * Spring/OSGi extender is deadlocked. If all goes well, the test will
 	 * gracefully end. If not, it will hang for quite a while.
 	 */
+	@Test
 	public void testErrorHandling() throws Exception {
 		Resource errorResource = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "deadlock",
 			getSpringDMVersion());

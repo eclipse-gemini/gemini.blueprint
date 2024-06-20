@@ -15,6 +15,7 @@
 package org.eclipse.gemini.blueprint.iandt.postprocessors;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -167,6 +168,7 @@ public class BeanDefinitionRegistryPostProcessorTest extends BaseIntegrationTest
         return new String[]{"/org/eclipse/gemini/blueprint/iandt/postprocessors/postprocessors.xml"};
     }
 
+    @Test
     public void testOrderOfRegistryAndFactoryPostProcessorInvocations() throws Exception {
         List<String> trackedInvocations = INVOCATION_TRACKER.get();
 

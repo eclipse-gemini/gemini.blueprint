@@ -14,7 +14,13 @@
 
 package org.eclipse.gemini.blueprint.internal.service.interceptor;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.support.DefaultRetryCallback;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.support.RetryCallback;
@@ -25,7 +31,7 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.support.Re
  * @author Costin Leau
  * 
  */
-public class RetryTemplateTest extends TestCase {
+public class RetryTemplateTest {
 
 	private static class EventRecorderRetryTemplate extends RetryTemplate {
 
@@ -164,8 +170,8 @@ public class RetryTemplateTest extends TestCase {
 
 	}
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		monitor = new Object();
 		callback = new DefaultRetryCallback<Object>() {
 
@@ -175,11 +181,13 @@ public class RetryTemplateTest extends TestCase {
 		};
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		template = null;
 	}
 
 	// reset test - a separate thread reset a template that waits for a long time
+	@Test
 	public void testTemplateReset() throws Exception {
 		long initialWaitTime = 20 * 1000;
 		template = new EventRecorderRetryTemplate(initialWaitTime, monitor);
@@ -214,6 +222,7 @@ public class RetryTemplateTest extends TestCase {
 
 	// simple test that keeps waking up the template for a number of times
 	// the callback counts the invocations and then returns nicely
+	@Test
 	public void testSpuriousWakeup() throws Exception {
 		// wait 20s
 		long initialWaitTime = 20 * 1000;
@@ -258,6 +267,7 @@ public class RetryTemplateTest extends TestCase {
 
 	// test that checks the template keeps waiting until the waiting period elapses
 	// if the callback returns falls even if there are (plenty) of wakeups
+	@Test
 	public void testFailingCallbackWithSpuriousWakeups() throws Exception {
 		// wait 10 secs
 		long initialWaitTime = 10 * 1000;
@@ -305,6 +315,7 @@ public class RetryTemplateTest extends TestCase {
 	// test the retry with a thread that keeps waking up the template
 	// then does a reset
 	// the test checks the event method
+	@Test
 	public void testSpuriousWakeupWithReset() throws Exception {
 
 		long initialWaitTime = 30 * 1000;

@@ -105,7 +105,7 @@ public abstract class ConfigUtils {
 
 
 	public static boolean matchExtenderVersionRange(Bundle bundle, String header, Version versionToMatch) {
-		Assert.notNull(bundle);
+		Assert.notNull(bundle, "bundle is required");
 		// get version range
 		String range = (String) bundle.getHeaders().get(header);
 

@@ -44,7 +44,7 @@ public class OsgiDefaultsDefinition {
 	private Availability availability = Availability.MANDATORY;
 
 	public OsgiDefaultsDefinition(Document document, ParserContext parserContext) {
-		Assert.notNull(document);
+		Assert.notNull(document, "document is required");
 		Element root = document.getDocumentElement();
 
 		ReferenceParsingUtil.checkAvailabilityAndCardinalityDuplication(root, DEFAULT_AVAILABILITY,

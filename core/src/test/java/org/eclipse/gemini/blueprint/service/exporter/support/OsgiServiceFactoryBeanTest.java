@@ -14,6 +14,19 @@
 
 package org.eclipse.gemini.blueprint.service.exporter.support;
 
+import static org.easymock.EasyMock.createControl;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -24,30 +37,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
-
 import org.easymock.IMocksControl;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener;
 import org.eclipse.gemini.blueprint.service.exporter.TestRegistrationListener;
-import org.eclipse.gemini.blueprint.service.exporter.support.DefaultInterfaceDetector;
-import org.eclipse.gemini.blueprint.service.exporter.support.OsgiServiceFactoryBean;
-import org.eclipse.gemini.blueprint.service.exporter.support.ServicePropertiesChangeEvent;
-import org.eclipse.gemini.blueprint.service.exporter.support.ServicePropertiesChangeListener;
-import org.eclipse.gemini.blueprint.service.exporter.support.ServicePropertiesListenerManager;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
 
 /**
  * @author Costin Leau
  */
-public class OsgiServiceFactoryBeanTest extends TestCase {
+public class OsgiServiceFactoryBeanTest {
 
     private OsgiServiceFactoryBean exporter;
 
@@ -91,7 +98,8 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
+    @Before
+    public void setup() throws Exception {
         exporter = new OsgiServiceFactoryBean();
         beanFactoryControl = createControl();
         beanFactory = this.beanFactoryControl.createMock(ConfigurableBeanFactory.class);
@@ -103,13 +111,15 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         exporter.setBundleContext(bundleContext);
     }
 
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         exporter = null;
         bundleContext = null;
         ctxCtrl = null;
         ctx = null;
     }
 
+    @Test
     public void testInitWithoutBundleContext() throws Exception {
         exporter.setBundleContext(null);
         exporter.setTarget(new Object());
@@ -122,6 +132,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         }
     }
 
+    @Test
     public void testInitWithoutBeanFactory() throws Exception {
         exporter.setBeanFactory(null);
         exporter.setTarget(new Object());
@@ -134,6 +145,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         }
     }
 
+    @Test
     public void testInitWithoutTargetOrTargetReference() throws Exception {
         try {
             this.exporter.afterPropertiesSet();
@@ -143,6 +155,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         }
     }
 
+    @Test
     public void testInitWithTargetAndTargetRerefence() throws Exception {
         final Object obj = new Object();
         exporter.setTarget(obj);
@@ -159,12 +172,14 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         }
     }
 
+    @Test
     public void testInitWithOnlyJustTarget() throws Exception {
         exporter.setTarget(new Object());
         exporter.setInterfaces(new Class<?>[]{Object.class});
         exporter.afterPropertiesSet();
     }
 
+    @Test
     public void testAutoDetectClassesForPublishingDisabled() throws Exception {
         exporter.setInterfaceDetector(DefaultInterfaceDetector.DISABLED);
         Class<?>[] clazz = DefaultInterfaceDetector.DISABLED.detect(Integer.class);
@@ -172,6 +187,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         assertEquals(0, clazz.length);
     }
 
+    @Test
     public void testAutoDetectClassesForPublishingInterfaces() throws Exception {
         exporter.setInterfaceDetector(DefaultInterfaceDetector.INTERFACES);
         Class<?>[] clazz = DefaultInterfaceDetector.INTERFACES.detect(HashMap.class);
@@ -180,6 +196,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         assertTrue(compareArrays(expected, clazz));
     }
 
+    @Test
     public void testAutoDetectClassesForPublishingClassHierarchy() throws Exception {
         exporter.setInterfaceDetector(DefaultInterfaceDetector.CLASS_HIERARCHY);
         Class<?>[] clazz = DefaultInterfaceDetector.CLASS_HIERARCHY.detect(HashMap.class);
@@ -187,6 +204,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         assertTrue(compareArrays(expected, clazz));
     }
 
+    @Test
     public void testAutoDetectClassesForPublishingAll() throws Exception {
         exporter.setInterfaceDetector(DefaultInterfaceDetector.ALL_CLASSES);
         Class<?>[] clazz = DefaultInterfaceDetector.ALL_CLASSES.detect(HashMap.class);
@@ -195,6 +213,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         assertTrue(compareArrays(expected, clazz));
     }
 
+    @Test
     public void testRegisterServiceWithNullClasses() throws Exception {
         try {
             exporter.registerService(null, new Properties());
@@ -204,6 +223,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         }
     }
 
+    @Test
     public void testRegisterServiceWOClasses() throws Exception {
         try {
             exporter.registerService(new Class[0], new Properties());
@@ -213,6 +233,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         }
     }
 
+    @Test
     public void testRegisterService() throws Exception {
         Class<?>[] clazz =
                 new Class<?>[]{Serializable.class, HashMap.class, Cloneable.class, Map.class, LinkedHashMap.class};
@@ -251,10 +272,12 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         assertSame(reg, exporter.registerService(clazz, props));
     }
 
+    @Test
     public void testUnregisterWithNullServiceReg() throws Exception {
         exporter.unregisterService(null);
     }
 
+    @Test
     public void testUnregisterService() throws Exception {
         ServiceRegistration reg = createMock(ServiceRegistration.class);
 
@@ -265,6 +288,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         verify(reg);
     }
 
+    @Test
     public void testUnregisterServiceAlreadyUnregistered() throws Exception {
         ServiceRegistration reg = createMock(ServiceRegistration.class);
 
@@ -275,6 +299,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         verify(reg);
     }
 
+    @Test
     public void testLazyBeanServiceWithUsualBean() throws Exception {
         final ServiceRegistration reg = new MockServiceRegistration();
         final ServiceFactory[] factory = new ServiceFactory[1];
@@ -308,6 +333,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         beanFactoryControl.verify();
     }
 
+    @Test
     public void testLazyBeanServiceWithServiceFactoryBean() throws Exception {
         final ServiceRegistration reg = new MockServiceRegistration();
         final ServiceFactory[] factory = new ServiceFactory[1];
@@ -346,6 +372,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         beanFactoryControl.verify();
     }
 
+    @Test
     public void testLazyBeanServiceWithTargetObjectSet() throws Exception {
         final ServiceRegistration reg = new MockServiceRegistration();
         final ServiceFactory[] factory = new ServiceFactory[1];
@@ -394,6 +421,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         return true;
     }
 
+    @Test
     public void testServiceFactory() throws Exception {
         ServiceFactory factory = new MockServiceFactory();
 
@@ -406,6 +434,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         exporter.afterPropertiesSet();
     }
 
+    @Test
     public void testUpdateableProperties() throws Exception {
         UpdateableProperties properties = new UpdateableProperties();
         properties.setProperty("steve", "vai");
@@ -429,6 +458,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         assertNotNull(reg.getReference().getProperty("updated"));
     }
 
+    @Test
     public void testPrototypeServiceFactory() throws Exception {
         ServiceFactory factory = new MockServiceFactory();
         String beanName = "prototype-sf";
@@ -444,6 +474,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         exporter.afterPropertiesSet();
     }
 
+    @Test
     public void testPrototypeServiceFactoryDestruction() throws Exception {
         ServiceFactory factory = new MockServiceFactory();
         String beanName = "prototype-sf";
@@ -462,6 +493,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         exporter.destroy();
     }
 
+    @Test
     public void testNonSingletonServiceFactoryRegistration() throws Exception {
         TestRegistrationListener listener = new TestRegistrationListener();
 
@@ -493,6 +525,7 @@ public class OsgiServiceFactoryBeanTest extends TestCase {
         assertNull(listener.unregistered.keySet().iterator().next());
     }
 
+    @Test
     public void testNonSingletonNonServiceFactoryRegistration() throws Exception {
         TestRegistrationListener listener = new TestRegistrationListener();
 

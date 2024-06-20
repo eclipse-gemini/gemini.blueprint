@@ -19,10 +19,11 @@ import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
 import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
+import org.junit.Test;
 
 import java.awt.*;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -32,6 +33,7 @@ import static org.junit.Assert.fail;
  */
 public class ReferenceInterruptTest extends BaseIntegrationTest {
 
+	@Test
 	public void testProxyInterrupt() throws Exception {
 		long initialWait = 20 * 1000;
 		final OsgiServiceProxyFactoryBean proxyFactory = new OsgiServiceProxyFactoryBean();

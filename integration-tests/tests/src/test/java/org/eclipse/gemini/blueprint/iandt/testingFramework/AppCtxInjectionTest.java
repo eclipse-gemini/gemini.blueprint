@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Arrays;
 import java.util.HashMap;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 
 /**
  * Test the injection executed on the current test. This verifies that the
@@ -35,7 +39,7 @@ public class AppCtxInjectionTest extends BaseIntegrationTest {
 		this.map = map;
 	}
 
-	@SuppressWarnings("deprecation")
+	@Test
 	public void testInjection() throws Exception {
 		System.out.println(Arrays.toString(applicationContext.getBeanDefinitionNames()));
 		assertNotNull(map);

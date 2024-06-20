@@ -25,8 +25,9 @@ import org.eclipse.gemini.blueprint.iandt.reference.proxy.ServiceReferer;
 import org.eclipse.gemini.blueprint.iandt.simpleservice.MyService;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 /**
@@ -39,6 +40,7 @@ public class ReferenceProxyTest extends BaseIntegrationTest {
 			"org.eclipse.gemini.blueprint.iandt, reference.proxy," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testReferenceProxyLifecycle() throws Exception {
 
 		MyService reference = ServiceReferer.serviceReference;

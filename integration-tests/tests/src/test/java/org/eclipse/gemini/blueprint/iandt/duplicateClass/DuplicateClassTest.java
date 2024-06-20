@@ -15,6 +15,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.duplicateClass;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.FilePermission;
 import java.util.List;
 import java.util.PropertyPermission;
@@ -26,6 +31,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.iandt.simpleservice.MyService;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 
 /**
  * Test which installs twice a bundle with the same symbolic name but with
@@ -42,6 +48,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 		return "classpath:org/eclipse/gemini/blueprint/iandt/duplicateClass/DuplicateClassTest.MF";
 	}
 
+	@Test
 	public void testDependencies() throws Exception {
 
 		// Simple Service bundle (provides the base package + 1 service)
@@ -49,7 +56,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 			"org.eclipse.gemini.blueprint.iandt", "simple.service", getSpringDMVersion()).getURL().toExternalForm());
 		assertNotNull("Cannot find the simple service bundle", simpleServiceBundle);
 
-		assertNotSame("simple service bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleServiceBundle.getState()));
 		startDependency(simpleServiceBundle);
 
@@ -57,7 +64,7 @@ public class DuplicateClassTest extends BaseIntegrationTest {
 		Bundle simpleServiceDuplicateBundle = bundleContext.installBundle(getLocator().locateArtifact(
 			"org.eclipse.gemini.blueprint.iandt", "simple.service.identical", getSpringDMVersion()).getURL().toExternalForm());
 		assertNotNull("Cannot find the simple service duplicate bundle", simpleServiceDuplicateBundle);
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleServiceDuplicateBundle.getState()));
 		startDependency(simpleServiceDuplicateBundle);
 

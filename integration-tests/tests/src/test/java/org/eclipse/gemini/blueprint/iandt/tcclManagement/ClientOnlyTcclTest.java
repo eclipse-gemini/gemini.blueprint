@@ -14,6 +14,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.tcclManagement;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -24,6 +29,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.eclipse.gemini.blueprint.iandt.tccl.TCCLService;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * Test for TCCL handling only on the client side. That is the service doesn't provide any handling.
@@ -57,12 +63,14 @@ public class ClientOnlyTcclTest extends BaseIntegrationTest {
 				"org.eclipse.gemini.blueprint.iandt,tccl," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testTCCLUnmanaged() throws Exception {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		TCCLService tccl = getUnmanagedTCCL();
 		assertSame(loader, tccl.getTCCL());
 	}
 
+	@Test
 	public void testTCCLUnmanagedWithNullClassLoader() throws Exception {
 		ClassLoader previous = Thread.currentThread().getContextClassLoader();
 		try {
@@ -74,6 +82,7 @@ public class ClientOnlyTcclTest extends BaseIntegrationTest {
 		}
 	}
 
+	@Test
 	public void testTCCLUnmanagedWithPredefinedClassLoader() throws Exception {
 		URLClassLoader dummyCL = new URLClassLoader(new URL[0]);
 
@@ -87,18 +96,21 @@ public class ClientOnlyTcclTest extends BaseIntegrationTest {
 		}
 	}
 
+	@Test
 	public void testClientTCCLOnClientClasses() throws Exception {
 		ClassLoader clientCL = getClientTCCL().getTCCL();
 		assertNotNull(clientCL);
 		assertNotNull(clientCL.loadClass(CLIENT_CLASS));
 	}
 
+	@Test
 	public void testClientTCCLOnClientResources() throws Exception {
 		ClassLoader clientCL = getClientTCCL().getTCCL();
 		assertNotNull(clientCL);
 		assertNotNull(clientCL.getResource(CLIENT_RESOURCE));
 	}
 
+	@Test
 	public void testClientTCCLWithServiceClasses() throws Exception {
 		ClassLoader current = Thread.currentThread().getContextClassLoader();
 		ClassLoader cl = getClientTCCL().getTCCL();
@@ -108,10 +120,12 @@ public class ClientOnlyTcclTest extends BaseIntegrationTest {
 		failToLoadClass(cl, SERVICE_CLASS);
 	}
 
+	@Test
 	public void testClientTCCLWithServiceResource() throws Exception {
 		assertNull(getClientTCCL().getTCCL().getResource(SERVICE_RESOURCE));
 	}
 
+	@Test
 	public void testServiceProvidedTCCLOnClasses() throws Exception {
 		refreshTCCLBundle();
 		ClassLoader cl = getServiceProviderTCCL().getTCCL();
@@ -119,14 +133,17 @@ public class ClientOnlyTcclTest extends BaseIntegrationTest {
 		cl.loadClass(SERVICE_CLASS);
 	}
 
+	@Test
 	public void testServiceProvidedTCCLOnResources() throws Exception {
 		assertNotNull(getServiceProviderTCCL().getTCCL().getResource(SERVICE_RESOURCE));
 	}
 
+	@Test
 	public void testServiceProviderTCCLOnClientClasses() throws Exception {
 		failToLoadClass(getServiceProviderTCCL().getTCCL(), CLIENT_CLASS);
 	}
 
+	@Test
 	public void testServiceProviderTCCLOnClientResources() throws Exception {
 		assertNull(getServiceProviderTCCL().getTCCL().getResource(CLIENT_RESOURCE));
 	}

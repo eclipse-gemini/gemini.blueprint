@@ -14,6 +14,13 @@
 
 package org.eclipse.gemini.blueprint.iandt.bundleScope;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.security.AllPermission;
 import java.util.List;
 import java.util.Properties;
@@ -26,6 +33,7 @@ import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationCon
 import org.eclipse.gemini.blueprint.iandt.scope.common.ScopeTestService;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
+import org.junit.Test;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -51,11 +59,13 @@ public class ScopingTest extends BaseIntegrationTest {
 		return new String[] { "/org/eclipse/gemini/blueprint/iandt/bundleScope/scope-context.xml" };
 	}
 
+	@Test
 	public void testEnvironmentValidity() throws Exception {
 		assertNotNull(getServiceA());
 		assertNotNull(getServiceB());
 	}
 
+	@Test
 	public void testServiceAScopeForCurrentBundle() throws Exception {
 		ScopeTestService serviceAcopy1 = getServiceA();
 		ScopeTestService serviceAcopy2 = getServiceA();
@@ -63,6 +73,7 @@ public class ScopingTest extends BaseIntegrationTest {
 		assertEquals("different bean instances given for the same bundle", serviceAcopy1, serviceAcopy2);
 	}
 
+	@Test
 	public void testServiceAScopeForBundleA() throws Exception {
 		ScopeTestService serviceAInBundleA = (ScopeTestService) org.eclipse.gemini.blueprint.iandt.scope.a.BeanReference.BEAN;
 
@@ -73,6 +84,7 @@ public class ScopingTest extends BaseIntegrationTest {
 			getServiceA().getServiceIdentity()));
 	}
 
+	@Test
 	public void testServiceAScopeForBundleB() throws Exception {
 		String symName = "org.eclipse.gemini.blueprint.iandt.scope.b";
 		ScopeTestService serviceAInBundleB = (ScopeTestService) getAppCtx(symName).getBean("serviceFromA");
@@ -81,6 +93,7 @@ public class ScopingTest extends BaseIntegrationTest {
 			getServiceA().getServiceIdentity()));
 	}
 
+	@Test
 	public void testServiceBInBundleBAndTestBundle() throws Exception {
 		ScopeTestService serviceAInBundleB = (ScopeTestService) org.eclipse.gemini.blueprint.iandt.scope.b.BeanReference.BEAN;
 
@@ -88,6 +101,7 @@ public class ScopingTest extends BaseIntegrationTest {
 			getServiceB().getServiceIdentity()));
 	}
 
+	@Test
 	public void testScopedBeanNotExported() throws Exception {
 		Properties props = (Properties) applicationContext.getBean("props");
 		// ask for it again
@@ -95,18 +109,21 @@ public class ScopingTest extends BaseIntegrationTest {
 		assertSame("different instances returned for the same scope", props, another);
 	}
 
+	@Test
 	public void testBeanReferenceAndLocalScopeInstanceForBundleA() throws Exception {
 		String symName = "org.eclipse.gemini.blueprint.iandt.scope.a";
 		assertSame("local references are different", getAppCtx(symName).getBean("a.service"),
 			org.eclipse.gemini.blueprint.iandt.scope.a.BeanReference.BEAN);
 	}
 
+	@Test
 	public void testBeanReferenceAndLocalScopeInstanceForBundleB() throws Exception {
 		String symName = "org.eclipse.gemini.blueprint.iandt.scope.b";
 		assertSame("local references are different", getAppCtx(symName).getBean("b.service"),
 			org.eclipse.gemini.blueprint.iandt.scope.b.BeanReference.BEAN);
 	}
 
+	@Test
 	public void testScopedBeanDestructionCallbackDuringContextRefresh() throws Exception {
 		Properties props = (Properties) applicationContext.getBean("props");
 		// add some content
@@ -126,6 +143,7 @@ public class ScopingTest extends BaseIntegrationTest {
 		assertTrue("destroy callback wasn't called/applied", props.isEmpty());
 	}
 
+	@Test
 	public void testExportedScopedBeansDestructionCallbackCalled() throws Exception {
 		Object rawServiceA = getServiceA();
 		assertTrue(rawServiceA instanceof Properties);

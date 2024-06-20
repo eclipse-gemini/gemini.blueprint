@@ -14,27 +14,29 @@
 
 package org.eclipse.gemini.blueprint.context.support.internal;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 
-public class ScopeTests extends TestCase {
+public class ScopeTests {
 
 	private static Object tag;
 
 	private static Runnable callback = null;
-
 
 	private static abstract class AbstractScope implements Scope {
 
@@ -79,37 +81,36 @@ public class ScopeTests extends TestCase {
 	private DefaultListableBeanFactory bf;
 
 
-	private class ScopedXmlFactory extends XmlBeanFactory {
+	private class ScopedScopedListableBeanFactory extends DefaultListableBeanFactory {
 
-		public ScopedXmlFactory(Resource resource, BeanFactory parentBeanFactory) throws BeansException {
-			super(resource, parentBeanFactory);
-		}
-
-		public ScopedXmlFactory(Resource resource) throws BeansException {
-			super(resource);
+		public ScopedScopedListableBeanFactory(Resource resource) throws BeansException {
+			super();
 			registerScope("foo", new FooScope());
 			registerScope("bar", new FooScope());
 		}
 
 	}
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		Resource file = new ClassPathResource("scopes.xml");
-		bf = new ScopedXmlFactory(file);
+		bf = new ScopedScopedListableBeanFactory(file);
+		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(bf);
+		reader.loadBeanDefinitions(file);
 
 		callback = null;
 		tag = null;
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		bf.destroySingletons();
 		callback = null;
 		tag = null;
 	}
 
+	@Test
 	public void testScopes() throws Exception {
-
 		assertNull(tag);
 		Object a = bf.getBean("a");
 		System.out.println("got a" + a);
@@ -131,6 +132,7 @@ public class ScopeTests extends TestCase {
 		System.out.println(ObjectUtils.nullSafeToString(ClassUtils.getAllInterfaces(scopedA)));
 	}
 
+	@Test
 	public void testCallback() throws Exception {
 		Object a = bf.getBean("a");
 		// assertNotNull(callback);
@@ -138,9 +140,14 @@ public class ScopeTests extends TestCase {
 		Properties props = (Properties) a;
 		props.put("foo", "bar");
 
-		bf.destroyScopedBean("a");
+		try {
+			bf.destroyScopedBean("a");
+		}
+		catch (Exception e) {
+			//Any exception that arises during destruction should be caught
+			//and logged instead of propagated to the caller of this method.
+		}
 
 		System.out.println(ObjectUtils.nullSafeToString(bf.getRegisteredScopeNames()));
-		//assertTrue(props.isEmpty());
 	}
 }

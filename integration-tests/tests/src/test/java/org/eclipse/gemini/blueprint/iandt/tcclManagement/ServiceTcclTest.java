@@ -14,6 +14,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.tcclManagement;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -22,6 +27,7 @@ import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.iandt.tccl.TCCLService;
+import org.junit.Test;
 
 /**
  * Test for TCCL handling from the server side. This test checks that the service provider has always priority no matter
@@ -56,6 +62,7 @@ public class ServiceTcclTest extends BaseIntegrationTest {
 				"org.eclipse.gemini.blueprint.iandt,tccl," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testSanity() throws Exception {
 		ServiceReference[] refs =
 				bundleContext.getServiceReferences("org.eclipse.gemini.blueprint.iandt.tccl.TCCLService",
@@ -63,12 +70,14 @@ public class ServiceTcclTest extends BaseIntegrationTest {
 		System.out.println(bundleContext.getService(refs[0]));
 	}
 
+	@Test
 	public void testServiceProviderTCCLAndUnmanagedClient() throws Exception {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		TCCLService tccl = getUnmanagedTCCL();
 		assertNotSame("service provide CL hasn't been set", loader, tccl.getTCCL());
 	}
 
+	@Test
 	public void testServiceProviderTCCLWithUnmanagedClientWithNullClassLoader() throws Exception {
 		ClassLoader previous = Thread.currentThread().getContextClassLoader();
 		try {
@@ -80,6 +89,7 @@ public class ServiceTcclTest extends BaseIntegrationTest {
 		}
 	}
 
+	@Test
 	public void testServiceProviderTCCLAndUnmanagedClientWithPredefinedClassLoader() throws Exception {
 		URLClassLoader dummyCL = new URLClassLoader(new URL[0]);
 
@@ -93,25 +103,30 @@ public class ServiceTcclTest extends BaseIntegrationTest {
 		}
 	}
 
+	@Test
 	public void testServiceProviderTCCLWithClientTCCLOnClasses() throws Exception {
 		failToLoadClass(getClientTCCL().getTCCL(), CLIENT_CLASS);
 	}
 
+	@Test
 	public void testServiceProviderTCCLWithClientTCCLOnResources() throws Exception {
 		assertNull(getClientTCCL().getTCCL().getResource(CLIENT_RESOURCE));
 	}
 
+	@Test
 	public void testServiceProviderTCCLWithClientTCCLWithServiceClasses() throws Exception {
 		ClassLoader cl = getClientTCCL().getTCCL();
 		cl.loadClass(SERVICE_PUBLIC_CLASS);
 		cl.loadClass(SERVICE_CLASS);
 	}
 
+	@Test
 	public void testServiceProviderTCCLWithClientTCCLWithServiceResource() throws Exception {
 		assertNotNull(getClientTCCL().getTCCL().getResource(SERVICE_PUBLIC_CLASS.replace(".", "/").concat(".class")));
 		assertNotNull(getClientTCCL().getTCCL().getResource(SERVICE_RESOURCE));
 	}
 
+	@Test
 	public void testServiceProvidedTCCLOnClasses() throws Exception {
 		ClassLoader cl = getServiceProviderTCCL().getTCCL();
 
@@ -119,14 +134,17 @@ public class ServiceTcclTest extends BaseIntegrationTest {
 		cl.loadClass(SERVICE_CLASS);
 	}
 
+	@Test
 	public void testServiceProvidedTCCLOnResources() throws Exception {
 		assertNotNull(getServiceProviderTCCL().getTCCL().getResource(SERVICE_RESOURCE));
 	}
 
+	@Test
 	public void testServiceProviderTCCLOnClientClasses() throws Exception {
 		failToLoadClass(getServiceProviderTCCL().getTCCL(), CLIENT_CLASS);
 	}
 
+	@Test
 	public void testServiceProviderTCCLOnClientResources() throws Exception {
 		assertNull(getServiceProviderTCCL().getTCCL().getResource(CLIENT_RESOURCE));
 	}

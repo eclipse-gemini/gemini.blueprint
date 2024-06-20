@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import java.io.IOException;
 
 import org.springframework.core.io.DefaultResourceLoader;
@@ -23,6 +26,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.eclipse.gemini.blueprint.io.OsgiBundleResourceLoader;
 import org.eclipse.gemini.blueprint.io.OsgiBundleResourcePatternResolver;
+import org.junit.Test;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -56,27 +60,33 @@ public class InvalidLocationsTest extends BaseIoTest {
 		return null;
 	}
 
+	@Test
 	public void testDefaultClassLoader() throws Exception {
 		testOneResource(new DefaultResourceLoader());
 	}
 
+	@Test
 	public void testOsgiResourceLoader() throws Exception {
 		testOneResource(osgiRL);
 	}
 
+	@Test
 	private void testOneResource(ResourceLoader loader) {
 		Resource res = loader.getResource(NON_EXISTING);
 		assertFalse(res.exists());
 	}
 
+	@Test
 	public void testDefaultPatternResourceLoader() throws Exception {
 		testMultipleResources(new PathMatchingResourcePatternResolver());
 	}
 
+	@Test
 	public void testPatternResourceLoader() throws Exception {
 		testMultipleResources(osgiRPR);
 	}
 
+	@Test
 	private void testMultipleResources(ResourcePatternResolver loader) throws IOException {
 		Resource[] res = loader.getResources(NON_EXISTING);
 		assertEquals("invalid resource array " + ObjectUtils.nullSafeToString(res), 1, res.length);

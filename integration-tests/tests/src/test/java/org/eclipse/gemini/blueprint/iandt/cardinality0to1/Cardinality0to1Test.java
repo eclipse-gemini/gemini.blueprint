@@ -15,21 +15,23 @@
 
 package org.eclipse.gemini.blueprint.iandt.cardinality0to1;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+
 import java.io.FilePermission;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyPermission;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.osgi.framework.AdminPermission;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.BundlePermission;
-import org.osgi.framework.PackagePermission;
-import org.osgi.framework.ServicePermission;
 import org.eclipse.gemini.blueprint.iandt.cardinality0to1.test.MyListener;
 import org.eclipse.gemini.blueprint.iandt.cardinality0to1.test.ReferenceContainer;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
+import org.junit.Test;
+import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 /**
  * @author Hal Hildebrand Date: Dec 6, 2006 Time: 6:04:42 PM
@@ -41,13 +43,14 @@ public class Cardinality0to1Test extends BaseIntegrationTest {
 			"org.eclipse.gemini.blueprint.iandt, cardinality0to1," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void test0to1Cardinality() throws Exception {
 		Bundle simpleService2Bundle = bundleContext.installBundle(getLocator().locateArtifact(
 			"org.eclipse.gemini.blueprint.iandt", "simple.service2", getSpringDMVersion()).getURL().toExternalForm());
 
 		assertNotNull("Cannot find the simple service 2 bundle", simpleService2Bundle);
 
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService2Bundle.getState()));
 
 		assertEquals("Unxpected initial binding of service", 0, MyListener.BOUND_COUNT);

@@ -18,9 +18,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.bundle.BundleActionEnum;
 import org.eclipse.gemini.blueprint.bundle.BundleFactoryBean;
@@ -40,7 +48,7 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  * @author Costin Leau
  * 
  */
-public class BundleFactoryBeanParserTest extends TestCase {
+public class BundleFactoryBeanParserTest {
 
 	private GenericApplicationContext appContext;
 
@@ -52,7 +60,8 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 	private static final String STREAM_TAG = "| stream |";
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		INSTALL_BUNDLE_ACTION = new ArrayList();
 
 		installBundle = createMock("installBundle", Bundle.class);
@@ -97,7 +106,8 @@ public class BundleFactoryBeanParserTest extends TestCase {
 
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 	}
 
@@ -110,15 +120,16 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		appContext.refresh();
 	}
 
+	@Test
 	public void testWithSymName() throws Exception {
 		refresh();
 		BundleFactoryBean fb = appContext.getBean("&wSymName", BundleFactoryBean.class);
 		assertSame(bundleA, fb.getObject());
 		assertNull(fb.getLocation());
 		assertNull(fb.getResource());
-
 	}
 
+	@Test
 	public void testLocationAndResource() throws Exception {
 		refresh();
 		BundleFactoryBean fb = appContext.getBean("&wLocation", BundleFactoryBean.class);
@@ -127,6 +138,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		assertNotNull(fb.getResource());
 	}
 
+	@Test
 	public void testStartBundle() throws Exception {
 		bundleToInstall[0] = startBundle;
 		startBundle.start();
@@ -143,6 +155,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		verify(startBundle);
 	}
 
+	@Test
 	public void testStopBundle() throws Exception {
 		bundleToInstall[0] = startBundle;
 
@@ -160,6 +173,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		verify(startBundle);
 	}
 
+	@Test
 	public void testUpdateBundle() throws Exception {
 		bundleToInstall[0] = updateBundle;
 
@@ -178,6 +192,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		verify(updateBundle);
 	}
 
+	@Test
 	public void testInstall() throws Exception {
 		bundleToInstall[0] = installBundle;
 
@@ -196,6 +211,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		verify(installBundle);
 	}
 
+	@Test
 	public void testInstallImpliedByUpdateUsingRealLocation() throws Exception {
 		bundleToInstall[0] = installBundle;
 
@@ -218,6 +234,7 @@ public class BundleFactoryBeanParserTest extends TestCase {
 		verify(installBundle);
 	}
 
+	@Test
 	public void testNestedBundleDeclaration() throws Exception {
 		Bundle bnd = createMock(Bundle.class);
 

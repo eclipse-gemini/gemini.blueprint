@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.nonosgicl;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,6 +28,7 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.Constants;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -83,6 +87,7 @@ public class NonOSGiLoaderProxyTest extends BaseIntegrationTest {
         }
     }
 
+	@Test
 	public void testProxy() throws Exception {
 		// publish service
 		bundleContext.registerService(new String[] { DataSource.class.getName(), Comparator.class.getName(),

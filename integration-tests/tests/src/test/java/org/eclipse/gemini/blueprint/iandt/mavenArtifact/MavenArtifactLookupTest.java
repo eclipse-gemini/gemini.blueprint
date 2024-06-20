@@ -15,6 +15,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.mavenArtifact;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+
 import java.io.FilePermission;
 import java.util.List;
 import java.util.PropertyPermission;
@@ -26,6 +31,7 @@ import org.osgi.framework.BundleException;
 import org.eclipse.gemini.blueprint.iandt.cardinality0to1.test.MyListener;
 import org.eclipse.gemini.blueprint.iandt.cardinality0to1.test.ReferenceContainer;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
+import org.junit.Test;
 
 /**
  * @author Hal Hildebrand
@@ -51,6 +57,7 @@ public class MavenArtifactLookupTest extends BaseIntegrationTest {
 			"org.eclipse.gemini.blueprint.iandt, cardinality0to1," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void test0to1Cardinality() throws Exception {
 
 		Bundle simpleService2Bundle = bundleContext.installBundle(getLocator().locateArtifact(
@@ -58,7 +65,7 @@ public class MavenArtifactLookupTest extends BaseIntegrationTest {
 
 		assertNotNull("Cannot find the simple service 2 bundle", simpleService2Bundle);
 
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService2Bundle.getState()));
 
 		assertEquals("Unxpected initial binding of service", 0, MyListener.BOUND_COUNT);

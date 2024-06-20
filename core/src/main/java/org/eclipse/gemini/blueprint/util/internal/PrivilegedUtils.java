@@ -14,10 +14,6 @@
 
 package org.eclipse.gemini.blueprint.util.internal;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-
 /**
  * Utility class for commons actions used within PrivilegedBlocks.
  * 
@@ -25,17 +21,6 @@ import java.security.PrivilegedActionException;
  * 
  */
 public abstract class PrivilegedUtils {
-
-	private static class GetTCCLAction implements PrivilegedAction<ClassLoader> {
-
-		public ClassLoader run() {
-			return Thread.currentThread().getContextClassLoader();
-		}
-
-		public ClassLoader getTCCL() {
-			return AccessController.doPrivileged(this);
-		}
-	}
 
 	public interface UnprivilegedThrowableExecution<T> {
 
@@ -47,10 +32,8 @@ public abstract class PrivilegedUtils {
 		public T run();
 	}
 
-	private static final GetTCCLAction getTCCLAction = new GetTCCLAction();
-
 	public static ClassLoader getTCCL() {
-		return getTCCLAction.getTCCL();
+	    return Thread.currentThread().getContextClassLoader();
 	}
 
 	/**
@@ -66,34 +49,13 @@ public abstract class PrivilegedUtils {
 	public static <T> T executeWithCustomTCCL(final ClassLoader customClassLoader,
 			final UnprivilegedExecution<T> execution) {
 		final Thread currentThread = Thread.currentThread();
-		final ClassLoader oldTCCL = getTCCLAction.getTCCL();
-
-		boolean hasSecurity = System.getSecurityManager() != null;
+		final ClassLoader oldTCCL = getTCCL();
 
 		try {
-			if (hasSecurity) {
-				AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-					public Object run() {
-						currentThread.setContextClassLoader(customClassLoader);
-						return null;
-					}
-				});
-			} else {
-				currentThread.setContextClassLoader(customClassLoader);
-			}
+			currentThread.setContextClassLoader(customClassLoader);
 			return execution.run();
 		} finally {
-			if (hasSecurity) {
-				AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						currentThread.setContextClassLoader(oldTCCL);
-						return null;
-					}
-				});
-			} else {
-				currentThread.setContextClassLoader(oldTCCL);
-			}
+			currentThread.setContextClassLoader(oldTCCL);
 		}
 	}
 
@@ -111,36 +73,15 @@ public abstract class PrivilegedUtils {
 	public static <T> T executeWithCustomTCCL(final ClassLoader customClassLoader,
 			final UnprivilegedThrowableExecution<T> execution) throws Throwable {
 		final Thread currentThread = Thread.currentThread();
-		final ClassLoader oldTCCL = getTCCLAction.getTCCL();
-
-		boolean hasSecurity = System.getSecurityManager() != null;
+		final ClassLoader oldTCCL = getTCCL();
 
 		try {
-			if (hasSecurity) {
-				AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-					public Object run() {
-						currentThread.setContextClassLoader(customClassLoader);
-						return null;
-					}
-				});
-			} else {
-				currentThread.setContextClassLoader(customClassLoader);
-			}
+			currentThread.setContextClassLoader(customClassLoader);
 			return execution.run();
-		} catch (PrivilegedActionException pae) {
-			throw pae.getCause();
+		} catch (Exception e) {
+			throw e.getCause();
 		} finally {
-			if (hasSecurity) {
-				AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						currentThread.setContextClassLoader(oldTCCL);
-						return null;
-					}
-				});
-			} else {
-				currentThread.setContextClassLoader(oldTCCL);
-			}
+			currentThread.setContextClassLoader(oldTCCL);
 		}
 	}
 }

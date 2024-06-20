@@ -32,9 +32,10 @@ import org.osgi.framework.ServiceRegistration;
  * {@link Constants#SERVICE_RANKING}.
  * 
  * @author Costin Leau
+ * @param <S>
  * 
  */
-public class MockServiceReference implements ServiceReference {
+public class MockServiceReference<S> implements ServiceReference<S> {
 
 	private Bundle bundle;
 
@@ -46,7 +47,6 @@ public class MockServiceReference implements ServiceReference {
 	private Dictionary properties;
 
 	private String[] objectClass = new String[] { Object.class.getName() };
-
 
 	/**
 	 * Constructs a new <code>MockServiceReference</code> instance using
@@ -74,7 +74,6 @@ public class MockServiceReference implements ServiceReference {
 	 */
 	public MockServiceReference(String[] classes) {
 		this(null, null, null, classes);
-
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class MockServiceReference implements ServiceReference {
 	 * 
 	 * @param registration service registration
 	 */
-	public MockServiceReference(ServiceRegistration registration) {
+	public MockServiceReference(ServiceRegistration<S> registration) {
 		this(null, null, registration);
 	}
 
@@ -107,7 +106,7 @@ public class MockServiceReference implements ServiceReference {
 	 * @param properties reference properties
 	 * @param registration associated service registrations
 	 */
-	public MockServiceReference(Bundle bundle, Dictionary properties, ServiceRegistration registration) {
+	public MockServiceReference(Bundle bundle, Dictionary properties, ServiceRegistration<S> registration) {
 		this(bundle, properties, registration, null);
 	}
 
@@ -137,14 +136,14 @@ public class MockServiceReference implements ServiceReference {
 		// add mandatory properties
 		Object id = dict.get(Constants.SERVICE_ID);
 		if (id == null || !(id instanceof Long))
-			dict.put(Constants.SERVICE_ID, new Long(GLOBAL_SERVICE_ID++));
+			dict.put(Constants.SERVICE_ID, Long.valueOf(GLOBAL_SERVICE_ID++));
 
 		if (dict.get(Constants.OBJECTCLASS) == null)
 			dict.put(Constants.OBJECTCLASS, objectClass);
 
 		Object ranking = dict.get(Constants.SERVICE_RANKING);
 		if (ranking == null || !(ranking instanceof Integer))
-			dict.put(Constants.SERVICE_RANKING, new Integer(0));
+			dict.put(Constants.SERVICE_RANKING, Integer.valueOf(0));
 
 		serviceId = ((Long) dict.get(Constants.SERVICE_ID)).longValue();
 	}
@@ -243,5 +242,19 @@ public class MockServiceReference implements ServiceReference {
 		}
 
 		return result;
+	}
+
+	@Override
+	public Dictionary<String, Object> getProperties() {
+		return properties;
+	}
+
+	@Override
+	public <A> A adapt(Class<A> type) {
+		A adapted = null;
+		if (this.bundle != null) {
+			adapted = bundle.adapt(type);
+		}
+		return adapted;
 	}
 }

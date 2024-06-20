@@ -14,39 +14,45 @@
 
 package org.eclipse.gemini.blueprint.compendium.config;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.compendium.internal.cm.ManagedServiceFactoryFactoryBean;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.service.exporter.support.DefaultInterfaceDetector;
 import org.eclipse.gemini.blueprint.service.exporter.support.ExportContextClassLoaderEnum;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 
 /**
  * Parsing test for ManagedServiceFactory/<managed-service-factory/>
  * 
  * @author Costin Leau
  */
-public class ManagedServiceFactoryTest extends TestCase {
+public class ManagedServiceFactoryTest {
 
 	private GenericApplicationContext appContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 
 
 		final Configuration cfg = createMock(Configuration.class);
@@ -75,16 +81,19 @@ public class ManagedServiceFactoryTest extends TestCase {
 		appContext.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 		appContext = null;
 	}
 
+	@Test
 	public void testBasicParsing() throws Exception {
 		Object factory = appContext.getBean("&simple");
 		assertTrue(factory instanceof ManagedServiceFactoryFactoryBean);
 	}
 
+	@Test
 	public void testBasicExportAttributes() throws Exception {
 		Object factory = appContext.getBean("&simple");
 		Object intfs = TestUtils.getFieldValue(factory, "interfaces");
@@ -93,24 +102,28 @@ public class ManagedServiceFactoryTest extends TestCase {
 		assertEquals(DefaultInterfaceDetector.ALL_CLASSES, autoExport);
 	}
 
+	@Test
 	public void testNestedInterfaceElement() throws Exception {
 		Object factory = appContext.getBean("&ccl");
 		Object intfs = TestUtils.getFieldValue(factory, "interfaces");
 		assertTrue(Arrays.equals((Object[]) intfs, new Class<?>[] { Map.class, Serializable.class }));
 	}
 
+	@Test
 	public void testCCLAttribute() throws Exception {
 		Object factory = appContext.getBean("&ccl");
 		Object ccl = TestUtils.getFieldValue(factory, "ccl");
 		assertEquals(ExportContextClassLoaderEnum.SERVICE_PROVIDER, ccl);
 	}
 
+	@Test
 	public void testContainerUpdateAttr() throws Exception {
 		Object factory = appContext.getBean("&container-update");
 		Object strategy = TestUtils.getFieldValue(factory, "autowireOnUpdate");
 		assertEquals(true, strategy);
 	}
 
+	@Test
 	public void testBeanManagedUpdateAttr() throws Exception {
 		Object factory = appContext.getBean("&bean-update");
 		Object strategy = TestUtils.getFieldValue(factory, "autowireOnUpdate");

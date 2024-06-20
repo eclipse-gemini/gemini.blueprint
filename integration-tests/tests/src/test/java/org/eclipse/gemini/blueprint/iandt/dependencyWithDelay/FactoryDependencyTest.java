@@ -15,6 +15,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.dependencyWithDelay;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+
 import java.io.FilePermission;
 import java.util.List;
 
@@ -24,6 +28,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 
 /**
  * @author Hal Hildebrand Date: Aug 27, 2007 Time: 9:36:23 AM
@@ -45,6 +50,7 @@ public class FactoryDependencyTest extends BaseIntegrationTest {
 	// simple.service2 - publishes service2
 	// simple.service3 - publishes service3
 	// simple - publishes service1
+	@Test
 	public void testDependencies() throws Exception {
 		System.setProperty(DELAY_PROP, "10000");
 
@@ -63,13 +69,13 @@ public class FactoryDependencyTest extends BaseIntegrationTest {
 		assertNotNull("Cannot find the simple service 3 bundle", simpleService3Bundle);
 		assertNotNull("dependencyTest can't be resolved", dependencyTestBundle);
 
-		assertNotSame("factory service bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("factory service bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			factoryServiceBundle.getState()));
 
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService2Bundle.getState()));
 
-		assertNotSame("simple service 3 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 3 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService3Bundle.getState()));
 
 		startDependencyAsynch(dependencyTestBundle);

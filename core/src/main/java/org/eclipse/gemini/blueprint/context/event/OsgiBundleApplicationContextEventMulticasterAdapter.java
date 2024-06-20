@@ -36,7 +36,7 @@ public class OsgiBundleApplicationContextEventMulticasterAdapter implements
 	 * @param delegatedMulticaster
 	 */
 	public OsgiBundleApplicationContextEventMulticasterAdapter(ApplicationEventMulticaster delegatedMulticaster) {
-		Assert.notNull(delegatedMulticaster);
+		Assert.notNull(delegatedMulticaster, "delegatedMulticaster is required");
 		this.delegatedMulticaster = delegatedMulticaster;
 	}
 
@@ -47,7 +47,7 @@ public class OsgiBundleApplicationContextEventMulticasterAdapter implements
 	 * listener instance. However, depending on the equals implementation, this might affect the object identity.
 	 */
 	public void addApplicationListener(OsgiBundleApplicationContextListener osgiListener) {
-		Assert.notNull(osgiListener);
+		Assert.notNull(osgiListener, "osgiListener is required");
 		delegatedMulticaster.addApplicationListener(ApplicationListenerAdapter.createAdapter(osgiListener));
 	}
 
@@ -66,7 +66,7 @@ public class OsgiBundleApplicationContextEventMulticasterAdapter implements
 	 * listener instance. However, depending on the equals implementation, this might affect the object identity.
 	 */
 	public void removeApplicationListener(OsgiBundleApplicationContextListener osgiListener) {
-		Assert.notNull(null);
+		Assert.notNull(null, "This method should never be called");
 		delegatedMulticaster.removeApplicationListener(ApplicationListenerAdapter.createAdapter(osgiListener));
 	}
 }

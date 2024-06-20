@@ -15,12 +15,13 @@
 
 package org.eclipse.gemini.blueprint.iandt.errors;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.FilePermission;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyPermission;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.springframework.core.io.Resource;
@@ -61,6 +62,7 @@ public class ErrorHandlingTest extends BaseIntegrationTest {
 	 * Consequently, please do not remove or modify this test unless you talk to
 	 * Hal. :)
 	 */
+	@Test
 	public void testErrorHandling() throws Exception {
 		Resource errorResource = getLocator().locateArtifact("org.eclipse.gemini.blueprint.iandt", "error",
 			getSpringDMVersion());

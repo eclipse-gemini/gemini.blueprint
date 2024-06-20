@@ -19,12 +19,13 @@ import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.ServiceProxyDestroyedException;
 import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
+import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.core.InfrastructureProxy;
 
 import java.util.*;
 
-import static junit.framework.Assert.fail;
+import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -46,6 +47,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 	}
 
 	// causes CGLIB problems
+	@Test
 	public void testFactoryBeanForMultipleServicesAsInterfaces() throws Exception {
 
 		fb.setAvailability(Availability.OPTIONAL);
@@ -66,7 +68,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 			assertFalse(iter.hasNext());
 
 			ArrayList a = new ArrayList();
-			a.add(new Long(10));
+			a.add(Long.valueOf(10));
 
 			registrations.add(publishService(a, ArrayList.class.getName()));
 
@@ -78,7 +80,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 
 			assertFalse(iter.hasNext());
 			a = new ArrayList();
-			a.add(new Long(100));
+			a.add(Long.valueOf(100));
 			registrations.add(publishService(a, ArrayList.class.getName()));
 			assertTrue(iter.hasNext());
 			service = iter.next();
@@ -90,6 +92,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 		}
 	}
 
+	@Test
 	public void testFactoryBeanForMultipleServicesAsClasses() throws Exception {
 
 		fb.setAvailability(Availability.OPTIONAL);
@@ -140,6 +143,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 		}
 	}
 
+	@Test
 	public void testIteratorWhenServiceGoesDown() throws Exception {
 		fb.setAvailability(Availability.OPTIONAL);
 		fb.setInterfaces(new Class<?>[] { Date.class });
@@ -184,6 +188,7 @@ public class MultiServiceProxyFactoryBeanTest extends ServiceBaseTest {
 		}
 	}
 
+	@Test
 	public void testProxyDestruction() throws Exception {
 		fb.setAvailability(Availability.OPTIONAL);
 		fb.setInterfaces(new Class<?>[] { Date.class });

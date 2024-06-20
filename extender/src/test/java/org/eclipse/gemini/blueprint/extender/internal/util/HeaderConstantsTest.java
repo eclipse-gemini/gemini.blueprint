@@ -14,37 +14,38 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Dictionary;
 import java.util.Properties;
 
 import org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils;
-
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
  * 
  */
-public class HeaderConstantsTest extends TestCase {
+public class HeaderConstantsTest {
 
 	private Dictionary headers;
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		headers = new Properties();
 		headers.put("some key", new Object());
 		headers.put("another header", new Object());
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER + "1", new Object());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see junit.framework.TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		headers = null;
 	}
 
@@ -52,6 +53,7 @@ public class HeaderConstantsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.internal.ConfigUtils#getSpringContextHeader(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testGetServiceContextHeader() {
 		assertNull(ConfigUtils.getSpringContextHeader(headers));
 		String headerValue = "correct header";
@@ -63,6 +65,7 @@ public class HeaderConstantsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.internal.ConfigUtils#getDirectiveValue(java.lang.String, java.lang.String)}.
 	 */
+	@Test
 	public void testGetDirectiveValue() {
 		String header = "bla bla";
 		assertNull(ConfigUtils.getDirectiveValue(header, "bla"));
@@ -81,6 +84,7 @@ public class HeaderConstantsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.internal.ConfigUtils#getPublishContext(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testGetDontPublishContext() {
 		String header = "nothing";
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER, header);
@@ -103,6 +107,7 @@ public class HeaderConstantsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.internal.ConfigUtils#getCreateAsync(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testGetCreateAsync() {
 		String header = "nothing";
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER, header);
@@ -125,18 +130,19 @@ public class HeaderConstantsTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.util.internal.ConfigUtils#getTimeout(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testGetTimeout() {
 		String header = "nothing";
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER, header);
-		assertEquals(new Long(ConfigUtils.DIRECTIVE_TIMEOUT_DEFAULT), new Long(ConfigUtils.getTimeOut(headers)));
+		assertEquals(Long.valueOf(ConfigUtils.DIRECTIVE_TIMEOUT_DEFAULT), Long.valueOf(ConfigUtils.getTimeOut(headers)));
 
         header = ConfigUtils.DIRECTIVE_TIMEOUT + ConfigUtils.EQUALS + "500";
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER, header);
-		assertEquals(new Long(500), new Long(ConfigUtils.getTimeOut(headers)));
+		assertEquals(Long.valueOf(500), Long.valueOf(ConfigUtils.getTimeOut(headers)));
 
 		header = ConfigUtils.DIRECTIVE_TIMEOUT + ConfigUtils.EQUALS + ConfigUtils.DIRECTIVE_TIMEOUT_VALUE_NONE;
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER, header);
-		assertEquals(new Long(-2), new Long(ConfigUtils.getTimeOut(headers)));
+		assertEquals(Long.valueOf(-2), Long.valueOf(ConfigUtils.getTimeOut(headers)));
 	}
 
 }

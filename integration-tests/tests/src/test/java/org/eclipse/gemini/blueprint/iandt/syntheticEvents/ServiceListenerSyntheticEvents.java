@@ -29,6 +29,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -82,18 +83,18 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		polygon = new Polygon();
 
 		Dictionary polygonProp = new Properties();
-		polygonProp.put(Constants.SERVICE_RANKING, new Integer(1));
+		polygonProp.put(Constants.SERVICE_RANKING, Integer.valueOf(1));
 		// first register polygon
 		polygonReg = bundleContext.registerService(Shape.class.getName(), polygon, polygonProp);
 
 		// then rectangle
 		Dictionary rectangleProp = new Properties();
-		rectangleProp.put(Constants.SERVICE_RANKING, new Integer(10));
+		rectangleProp.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		rectangleReg = bundleContext.registerService(Shape.class.getName(), rectangle, rectangleProp);
 
 		// then area
 		Dictionary areaProp = new Properties();
-		areaProp.put(Constants.SERVICE_RANKING, new Integer(100));
+		areaProp.put(Constants.SERVICE_RANKING, Integer.valueOf(100));
 		areaReg = bundleContext.registerService(Shape.class.getName(), area, areaProp);
 
 	}
@@ -131,6 +132,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 
 	// create appCtx each time since we depend we test startup/shutdown behaviour
 	// and cannot have shared states
+	@Test
 	public void testServiceReferenceEventsOnStartupWithMultipleServicesPresent() throws Exception {
 		registerMultipleServices();
 		createAppCtx();
@@ -139,6 +141,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		assertEquals("wrong service bound", area.toString(), referenceBindServices.get(0).toString());
 	}
 
+	@Test
 	public void testServiceReferenceEventsDuringLifetimeWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();
@@ -149,6 +152,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		assertEquals("wrong 3rd service bound", area.toString(), referenceBindServices.get(2).toString());
 	}
 
+	@Test
 	public void testServiceReferenceEventsOnShutdownWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();
@@ -159,6 +163,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		appCtx = null;
 	}
 
+	@Test
 	public void testServiceCollectionEventsOnStartupWithMultipleServicesPresent() throws Exception {
 		registerMultipleServices();
 		createAppCtx();
@@ -170,6 +175,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 
 	}
 
+	@Test
 	public void testServiceCollectionEventsDuringLifetimeWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();
@@ -180,6 +186,7 @@ public class ServiceListenerSyntheticEvents extends BaseIntegrationTest {
 		assertEquals("wrong 3rd service bound", area.toString(), collectionBindServices.get(2).toString());
 	}
 
+	@Test
 	public void testServiceCollectionEventsOnShutdownWithMultipleServicesPresent() throws Exception {
 		createAppCtx();
 		registerMultipleServices();

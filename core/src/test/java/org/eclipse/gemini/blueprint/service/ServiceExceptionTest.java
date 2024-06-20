@@ -14,23 +14,26 @@
 
 package org.eclipse.gemini.blueprint.service;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
-import org.eclipse.gemini.blueprint.service.ServiceException;
+import org.junit.Test;
 
 /**
  * 
  * @author Costin Leau
  * 
  */
-public class ServiceExceptionTest extends TestCase {
-
+public class ServiceExceptionTest {
+	@Test
 	public void testServiceException() {
 		ServiceException exception = new ServiceException();
 		assertNull(exception.getCause());
 		assertNull(exception.getMessage());
 	}
 
+	@Test
 	public void testServiceExceptionStringThrowable() {
 		String msg = "msg";
 		Exception ex = new Exception();
@@ -39,12 +42,14 @@ public class ServiceExceptionTest extends TestCase {
 		assertEquals(ex, exception.getCause());
 	}
 
+	@Test
 	public void testServiceExceptionString() {
 		String msg = "msg";
 		ServiceException exception = new ServiceException(msg);
 		assertEquals(msg, exception.getMessage());
 	}
 
+	@Test
 	public void testServiceExceptionThrowable() {
 		Exception ex = new Exception();
 		ServiceException exception = new ServiceException(ex);

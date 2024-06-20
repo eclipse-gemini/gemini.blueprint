@@ -15,9 +15,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
-import junit.framework.TestCase;
-import junit.framework.TestFailure;
-import junit.framework.TestResult;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+import org.junit.runner.notification.RunNotifier;
 
 /**
  * Start executing the {@link RunBundleCreationTest} (which is an integration
@@ -25,65 +26,19 @@ import junit.framework.TestResult;
  * 
  * @author Hal Hildebrand
  * @author Costin Leau
+ * @author Michelle Cross
  */
-public class RunBundleCreationTest extends TestCase {
+public class RunBundleCreationTest {
 
-	private TestCase test;
+	@Test
+	public void test() {
+		BundleCreationTstListener listener = new BundleCreationTstListener();
+		BundleCreationTstRunner runner = new BundleCreationTstRunner(listener);
+		RunNotifier notifier = new RunNotifier();
+		runner.run(notifier);
 
-	private TestResult result;
-
-
-	protected void setUp() throws Exception {
-		test = new BundleCreationTst();
-		result = new TestResult();
-	}
-
-	public void testAssertionPass() {
-		executeTest("testAssertionPass");
-		assertEquals(0, result.errorCount());
-		assertEquals(0, result.failureCount());
-	}
-
-	public void testAssertionFailure() {
-		executeTest("testAssertionFailure");
-		assertEquals("failure counted as error", 0, result.errorCount());
-		assertEquals("failure ignored", 1, result.failureCount());
-
-	}
-
-	public void testFailure() {
-		executeTest("testFailure");
-		assertEquals("failure counted as error", 0, result.errorCount());
-		assertEquals("failure ignored", 1, result.failureCount());
-	}
-
-	public void testException() {
-		executeTest("testException");
-		assertEquals("error not considered", 1, result.errorCount());
-		assertEquals("error considered failure", 0, result.failureCount());
-	}
-
-	public void testExceptionClass() throws Exception {
-		executeTest("testException");
-		TestFailure failure = (TestFailure) result.errors().nextElement();
-		assertTrue(failure.thrownException() instanceof RuntimeException);
-	}
-
-	public void testError() {
-		executeTest("testError");
-		assertEquals("error not considered", 1, result.errorCount());
-		assertEquals("error considered failure", 0, result.failureCount());
-	}
-
-	public void testErrorClass() throws Exception {
-		executeTest("testError");
-		TestFailure failure = (TestFailure) result.errors().nextElement();
-		assertTrue(failure.thrownException() instanceof Error);
-	}
-
-	private void executeTest(String testMethod) {
-		test.setName(testMethod);
-		test.run(result);
-		assertEquals(1, result.runCount());
+		assertEquals(6, listener.getStarted());
+		assertEquals(0, listener.getFailed());
+		assertEquals(1, listener.getFinished());
 	}
 }

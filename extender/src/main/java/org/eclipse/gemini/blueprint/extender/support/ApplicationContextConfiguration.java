@@ -62,8 +62,8 @@ public class ApplicationContextConfiguration {
 	}
 
 	public ApplicationContextConfiguration(Bundle bundle, ConfigurationScanner configurationScanner) {
-		Assert.notNull(bundle);
-		Assert.notNull(configurationScanner);
+		Assert.notNull(bundle, "bundle is required");
+		Assert.notNull(configurationScanner, "configurationScanner is required");
 		this.bundle = bundle;
 		this.configurationScanner = configurationScanner;
 

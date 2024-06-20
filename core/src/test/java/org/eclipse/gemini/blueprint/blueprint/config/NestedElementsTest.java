@@ -14,7 +14,11 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -28,7 +32,7 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * 
  */
-public class NestedElementsTest extends TestCase {
+public class NestedElementsTest {
 
 	private static final String CONFIG = "nested-elements.xml";
 
@@ -36,8 +40,8 @@ public class NestedElementsTest extends TestCase {
 	private XmlBeanDefinitionReader reader;
 	private MockBundleContext bundleContext;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 		context = new GenericApplicationContext();
 		context.getBeanFactory().addBeanPostProcessor(new BundleContextAwareProcessor(bundleContext));
@@ -47,11 +51,13 @@ public class NestedElementsTest extends TestCase {
 		context.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testNumberOfBeans() throws Exception {
 		System.out.println("The beans declared are: " + ObjectUtils.nullSafeToString(context.getBeanDefinitionNames()));
 		assertTrue("not enough beans found", context.getBeanDefinitionCount() > 3);

@@ -14,23 +14,26 @@
 
 package org.eclipse.gemini.blueprint.service.importer;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import org.eclipse.gemini.blueprint.service.importer.ServiceProxyDestroyedException;
+import org.junit.Test;
 
 /**
  * 
  * @author Costin Leau
  * 
  */
-public class ServiceProxyDestroyedExceptionTest extends TestCase {
-
+public class ServiceProxyDestroyedExceptionTest {
+	@Test
 	public void testServiceProxyDestroyedException() {
 		ServiceProxyDestroyedException exception = new ServiceProxyDestroyedException();
 		assertNull(exception.getCause());
 		assertNotNull(exception.getMessage());
 	}
 
+	@Test
 	public void testServiceProxyDestroyedExceptionStringThrowable() {
 		String msg = "msg";
 		Exception ex = new Exception();
@@ -39,12 +42,14 @@ public class ServiceProxyDestroyedExceptionTest extends TestCase {
 		assertEquals(ex, exception.getCause());
 	}
 
+	@Test
 	public void testServiceProxyDestroyedExceptionString() {
 		String msg = "msg";
 		ServiceProxyDestroyedException exception = new ServiceProxyDestroyedException(msg);
 		assertEquals(msg, exception.getMessage());
 	}
 
+	@Test
 	public void testServiceProxyDestroyedExceptionThrowable() {
 		Exception ex = new Exception();
 		ServiceProxyDestroyedException exception = new ServiceProxyDestroyedException(ex);

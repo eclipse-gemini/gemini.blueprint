@@ -14,12 +14,19 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.Properties;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceCollection;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceSet;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Constants;
 
 /**
@@ -32,17 +39,19 @@ public class OsgiServiceSetTest extends AbstractOsgiCollectionTest {
 
 	private Dictionary serviceProps;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
+		super.setup();
 		iter = col.iterator();
 
 		serviceProps = new Properties();
 		// set the id to test uniqueness
-		serviceProps.put(Constants.SERVICE_ID, new Long(13));
+		serviceProps.put(Constants.SERVICE_ID, Long.valueOf(13));
 
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		super.tearDown();
 		col = null;
 		iter = null;
@@ -53,6 +62,7 @@ public class OsgiServiceSetTest extends AbstractOsgiCollectionTest {
 				Wrapper.class, Comparable.class }), false);
 	}
 
+	@Test
 	public void testAddDuplicates() {
 		long time1 = 123;
 
@@ -67,6 +77,7 @@ public class OsgiServiceSetTest extends AbstractOsgiCollectionTest {
 		assertEquals("set accepts duplicate services", 1, col.size());
 	}
 
+	@Test
 	public void testAddEqualServiceInstances() {
 		long time = 123;
 		Wrapper date1 = new DateWrapper(time);
@@ -82,6 +93,7 @@ public class OsgiServiceSetTest extends AbstractOsgiCollectionTest {
 		assertEquals("set accepts duplicate services", 1, col.size());
 	}
 
+	@Test
 	public void testAddEqualServiceInstancesWithIterator() {
 		long time = 123;
 		Wrapper date1 = new DateWrapper(time);
@@ -100,6 +112,7 @@ public class OsgiServiceSetTest extends AbstractOsgiCollectionTest {
 		assertFalse("set accepts duplicate services", iter.hasNext());
 	}
 
+	@Test
 	public void testRemoveDuplicates() {
 		long time1 = 123;
 		Wrapper date = new DateWrapper(time1);

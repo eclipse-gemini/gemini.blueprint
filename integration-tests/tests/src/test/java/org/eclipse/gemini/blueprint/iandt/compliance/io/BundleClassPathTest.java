@@ -14,26 +14,22 @@
 
 package org.eclipse.gemini.blueprint.iandt.compliance.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.InputStream;
-import java.lang.reflect.ReflectPermission;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.PropertyPermission;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.osgi.framework.AdminPermission;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundlePermission;
 import org.osgi.framework.Constants;
-import org.osgi.framework.PackagePermission;
-import org.osgi.framework.ServicePermission;
-import org.eclipse.gemini.blueprint.test.platform.OsgiPlatform;
-import org.eclipse.gemini.blueprint.test.platform.Platforms;
 
 /**
  * IO compliance test for bundles containing Bundle ClassPath entries.
@@ -67,27 +63,33 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 		classLocation = BundleClassPathTest.class.getName().replace('.', '/') + ".class";
 	}
 
+	@Test
 	public void testGetResourceOnClassInsideBundle() throws Exception {
 		assertNotNull(bundle.getResource(classLocation));
 	}
 
+	@Test
 	public void testGetResourceOnFileJustInsideBundle() throws Exception {
 		assertNotNull(bundle.getResource("org/eclipse/gemini/blueprint/iandt/compliance/io/package.file"));
 		assertNotNull(bundle.getResource("org/eclipse/gemini/blueprint/iandt/compliance/io/test.file"));
 	}
 
+	@Test
 	public void testGetResourceOnFileOnBundleClassPathAndBundleJar() throws Exception {
 		assertNotNull(bundle.getResource("org/eclipse/gemini/blueprint/iandt/compliance/io/test.file"));
 	}
 
+	@Test
 	public void testGetResourceOnFileJustInsideFolderOnClassPath() throws Exception {
 		assertNotNull(bundle.getResource("org/eclipse/gemini/blueprint/iandt/compliance/io/folder-test.file"));
 	}
 
+	@Test
 	public void testGetResourceOnFileJustInsideJarOnClassPath() throws Exception {
 		assertNotNull(bundle.getResource("jar.file"));
 	}
 
+	@Test
 	public void testGetResourcesOnFilePresentMultipleTimesOnTheClassPathAndInsideTheBundle() throws Exception {
 		System.out.println("running test " + this.getName());
 		Enumeration enm = bundle.getResources("org/eclipse/gemini/blueprint/iandt/compliance/io/test.file");
@@ -100,6 +102,7 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 		assertEquals("not all resources are found", 3, count);
 	}
 
+	@Test
 	public void testFindEntriesOnFileJustInsideFolderOnClassPath() throws Exception {
 		System.out.println("running test" + this.getName());
 		Enumeration enm =
@@ -107,6 +110,7 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 		assertNull("findEntries doesn't work on bundle classpath entries", enm);
 	}
 
+	@Test
 	public void testFindEntriesOnFileJustInsideJarOnClassPath() throws Exception {
 		System.out.println("running test" + this.getName());
 		Enumeration enm = bundle.findEntries("/", "jar.file", false);
@@ -115,6 +119,8 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 
 	// disabled as it fails on the server for some reason (linux + equinox)
 	// TODO: investigate
+	@Ignore
+	@Test
 	public void tstFindEntriesOnFilePresentMultipleTimesOnTheClassPathAndInsideTheBundle() throws Exception {
 		System.out.println("running test" + this.getName());
 		Enumeration enm = bundle.findEntries("org/eclipse/gemini/blueprint/iandt/compliance/io/", "test.file", false);
@@ -125,12 +131,14 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 		assertEquals("bundle only resources are found", 1, count);
 	}
 
+	@Test
 	public void testGetEntryOnFileJustInsideFolderOnClassPath() throws Exception {
 		System.out.println("running test" + this.getName());
 		URL url = bundle.getEntry("org/eclipse/gemini/blueprint/iandt/compliance/io/folder-test.file");
 		assertNull("findEntries doesn't work on bundle classpath entries", url);
 	}
 
+	@Test
 	public void testGetEntryOnFileJustInsideJarOnClassPath() throws Exception {
 		System.out.println("running test" + this.getName());
 		URL url = bundle.getEntry("jar.file");
@@ -138,6 +146,8 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 	}
 
 	// fails on Felix + KF
+	@Ignore
+	@Test
 	public void tstFindEntriesOnMetaInfEntryOnSystemBundle() throws Exception {
 		Bundle sysBundle = bundleContext.getBundle(0);
 		Enumeration enm = sysBundle.findEntries("/", "META-INF", false);
@@ -145,6 +155,8 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 	}
 
 	// fails on Felix + KF
+	@Ignore
+	@Test
 	public void tstGetEntryOnMetaInfEntryOnSystemBundle() throws Exception {
 		Bundle sysBundle = bundleContext.getBundle(0);
 		URL url = sysBundle.getEntry("/META-INF");
@@ -152,6 +164,8 @@ public class BundleClassPathTest extends BaseIntegrationTest {
 	}
 
 	// simple debugging test (no need to keep it running)
+	@Ignore
+	@Test
 	public void tstConnectionToJarOnClassPath() throws Exception {
 		URL url = bundle.getEntry("bundleclasspath/simple.jar");
 		System.out.println("jar url is " + url);

@@ -14,11 +14,15 @@
 
 package org.eclipse.gemini.blueprint.iandt.compliance.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URL;
 import java.util.Enumeration;
 
 import org.eclipse.gemini.blueprint.iandt.io.BaseIoTest;
-import org.eclipse.gemini.blueprint.test.platform.Platforms;
+import org.junit.Test;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -40,6 +44,7 @@ public class IoTest extends BaseIoTest {
 	}
 
 	// using /META-INF fails on KF 3.0.0.x
+	@Test
 	public void testGetResourceOnMetaInf() throws Exception {
 		URL url = bundle.getResource("/META-INF/");
 		System.out.println(url);
@@ -47,6 +52,7 @@ public class IoTest extends BaseIoTest {
 	}
 
 	// fails on Felix 1.0.1 (fixed in 1.0.3 and KF 2.0.3)
+	@Test
 	public void testGetResourceOnRoot() throws Exception {
 		URL url = bundle.getResource("/");
 		System.out.println("getResource('/') = " + url);
@@ -54,6 +60,7 @@ public class IoTest extends BaseIoTest {
 	}
 
 	// fails on Felix 1.0.1 (fixed in 1.0.3 and KF 2.0.3)
+	@Test
 	public void testGetResourceSOnRoot() throws Exception {
 		Enumeration enm = bundle.getResources("/");
 		Object[] res = copyEnumeration(enm);
@@ -61,6 +68,7 @@ public class IoTest extends BaseIoTest {
 		assertEquals("root folder not validated" + ObjectUtils.nullSafeToString(res), 1, res.length);
 	}
 
+	@Test
 	public void testFindEntriesOnFolders() throws Exception {
 		Enumeration enm = bundle.findEntries("/", null, false);
 		// should get 3 entries - META-INF/, org/ and log4j.properties
@@ -69,6 +77,7 @@ public class IoTest extends BaseIoTest {
 		assertEquals("folders ignored; found " + ObjectUtils.nullSafeToString(res), 2, res.length);
 	}
 
+	@Test
 	public void testFindEntriesOnSubFolders() throws Exception {
 		Enumeration enm = bundle.findEntries("/META-INF", null, false);
 		Object[] res = copyEnumeration(enm);
@@ -78,29 +87,34 @@ public class IoTest extends BaseIoTest {
 
 	// Valid jars do not have entries for root folder / - in fact it doesn't
 	// even exist
+	@Test
 	public void testGetEntryOnRoot() throws Exception {
 		URL url = bundle.getEntry("/");
 		assertNotNull(url);
 	}
 
 	// get folders
+	@Test
 	public void testGetEntriesShouldReturnFoldersOnRoot() throws Exception {
 		Enumeration enm = bundle.getEntryPaths("/");
 		Object[] res = copyEnumeration(enm);
 		assertEquals("folders ignored; found " + ObjectUtils.nullSafeToString(res), 2, res.length);
 	}
 
+	@Test
 	public void testGetFolderEntry() throws Exception {
 		URL url = bundle.getEntry("META-INF/");
 		assertNotNull(url);
 	}
 
+	@Test
 	public void testGetFolderEntries() throws Exception {
 		Enumeration enm = bundle.getEntryPaths("META-INF/");
 		Object[] res = copyEnumeration(enm);
 		assertEquals("folders ignored; found " + ObjectUtils.nullSafeToString(res), 1, res.length);
 	}
 
+	@Test
 	public void testURLFolderReturnsProperPathForFolders() throws Exception {
 		Enumeration enm = bundle.findEntries("/", "META-INF", false);
 		assertNotNull(enm);

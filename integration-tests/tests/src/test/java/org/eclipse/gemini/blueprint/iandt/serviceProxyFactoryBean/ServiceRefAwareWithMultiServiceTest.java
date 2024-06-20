@@ -17,13 +17,17 @@ package org.eclipse.gemini.blueprint.iandt.serviceProxyFactoryBean;
 import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
+import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.core.InfrastructureProxy;
 
-import java.util.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.*;
+import java.util.*;
 
 /**
  * @author Costin Leau
@@ -44,6 +48,7 @@ public class ServiceRefAwareWithMultiServiceTest extends ServiceBaseTest {
 		fb = null;
 	}
 
+	@Test
 	public void testProxyForMultipleCardinality() throws Exception {
 		fb.setAvailability(Availability.OPTIONAL);
 		fb.setInterfaces(new Class<?>[] { Date.class });

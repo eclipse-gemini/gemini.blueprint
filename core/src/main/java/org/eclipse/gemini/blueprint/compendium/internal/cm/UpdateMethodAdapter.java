@@ -49,8 +49,8 @@ class UpdateMethodAdapter {
 	 * @return
 	 */
 	static Map determineUpdateMethod(final Class<?> target, final String methodName) {
-		Assert.notNull(target);
-		Assert.notNull(methodName);
+		Assert.notNull(target, "target is required");
+		Assert.notNull(methodName, "methodName is required");
 
 		final Map methods = new LinkedHashMap(2);
 		final boolean trace = log.isTraceEnabled();

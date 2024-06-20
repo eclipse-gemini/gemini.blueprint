@@ -14,11 +14,18 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.blueprint.TestComponent;
 import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
@@ -33,7 +40,7 @@ import org.springframework.core.io.ClassPathResource;
  * 
  * @author Costin Leau
  */
-public class ConstructorInjectionTest extends TestCase {
+public class ConstructorInjectionTest {
 
 	private static final String CONFIG = "blueprint-construct-inject.xml";
 
@@ -41,7 +48,8 @@ public class ConstructorInjectionTest extends TestCase {
 	private XmlBeanDefinitionReader reader;
 	private BlueprintContainer container;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		context = new GenericApplicationContext();
 		context.setClassLoader(getClass().getClassLoader());
 		reader = new XmlBeanDefinitionReader(context);
@@ -52,7 +60,8 @@ public class ConstructorInjectionTest extends TestCase {
 		container = new SpringBlueprintContainer(context);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
@@ -66,20 +75,25 @@ public class ConstructorInjectionTest extends TestCase {
 		return (T) tc.getPropA();
 	}
 
+	@Test
+	@Ignore
 	public void tstCtrAssign() throws Exception {
 		Object propA = getPropA("constructorAssign");
 	}
 
+	@Test
 	public void testCharArray() throws Exception {
 		Object propA = getPropA("compWrappedCharArray");
 		assertTrue(propA instanceof Character[]);
 	}
 
+	@Test
 	public void testPrimitiveShortArray() throws Exception {
 		Object propA = getPropA("compPrimShortArray");
 		assertTrue(propA instanceof short[]);
 	}
 
+	@Test
 	public void testDateArray() throws Exception {
 		Date[] array = getPropA("compDateArray");
 		Date date = new Date("19 Feb 2009");
@@ -87,21 +101,25 @@ public class ConstructorInjectionTest extends TestCase {
 
 	}
 
+	@Test
 	public void testURLArray() throws Exception {
 		URL[] array = getPropA("compURLArray");
 		assertEquals(2, array.length);
 	}
 
+	@Test
 	public void testClassArray() throws Exception {
 		Class<?>[] propA = getPropA("compClassArray");
 		assertEquals(String.class, propA[0]);
 	}
 
+	@Test
 	public void testLocaleArray() throws Exception {
 		Locale[] propA = getPropA("compLocaleArray");
 		assertEquals(Locale.US, propA[0]);
 	}
 
+	@Test
 	public void testPrimitiveConstructor() throws Exception {
 		try {
 			Object component = context.getBean("primToWrapperArg");
@@ -111,6 +129,7 @@ public class ConstructorInjectionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testPrimitiveFactoryMethod() throws Exception {
 		try {
 			Object component = context.getBean("primToWrapperFactory");
@@ -120,18 +139,22 @@ public class ConstructorInjectionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNestedValue() throws Exception {
 		Object component = context.getBean("nestedURLValue");
 	}
 
+	@Test
 	public void testNestedValueFactory() throws Exception {
 		Object component = context.getBean("nestedURLValueFactory");
 	}
 
+	@Test
 	public void testEmptyArray() throws Exception {
 		Object component = context.getBean("emptyArrayConstruct");
 	}
 
+	@Test
 	public void testCollectionConversion() throws Exception {
 		try {
 			Object component = context.getBean("collectionConflict");
@@ -141,7 +164,7 @@ public class ConstructorInjectionTest extends TestCase {
 		}
 	}
 	
-
+	@Test
 	public void testCompProperties() throws Exception {
 		Object component = context.getBean("compProperties");
 	}

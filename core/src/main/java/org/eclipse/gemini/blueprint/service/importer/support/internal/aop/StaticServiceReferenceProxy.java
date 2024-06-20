@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support.internal.aop;
 
+import java.util.Dictionary;
+
 import org.eclipse.gemini.blueprint.service.importer.ServiceReferenceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.util.ServiceComparatorUtil;
 import org.osgi.framework.Bundle;
@@ -39,12 +41,17 @@ public class StaticServiceReferenceProxy implements ServiceReferenceProxy {
 	 * @param target service reference
 	 */
 	public StaticServiceReferenceProxy(ServiceReference target) {
-		Assert.notNull(target);
+		Assert.notNull(target, "target is required");
 		this.target = target;
 	}
 
 	public Bundle getBundle() {
 		return target.getBundle();
+	}
+	
+	@Override
+	public Dictionary getProperties() {
+		return target.getProperties();
 	}
 
 	public Object getProperty(String key) {
@@ -81,5 +88,14 @@ public class StaticServiceReferenceProxy implements ServiceReferenceProxy {
 
 	public int compareTo(Object other) {
 		return ServiceComparatorUtil.compare(target, other);
+	}
+
+	@Override
+	public Object adapt(Class type) {
+		Object adapted = null;
+		if(target != null) {
+			adapted = target.adapt(type);
+		}
+		return adapted;
 	}
 }

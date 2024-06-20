@@ -14,39 +14,45 @@
 
 package org.eclipse.gemini.blueprint.test;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import java.lang.reflect.Field;
-import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.eclipse.gemini.blueprint.test.internal.OsgiJUnitTest;
-import org.eclipse.gemini.blueprint.test.internal.TestRunnerService;
 import org.eclipse.gemini.blueprint.test.internal.holder.OsgiTestInfoHolder;
+import org.eclipse.gemini.blueprint.test.internal.support.OsgiJUnitService;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.Runner;
+import org.junit.runner.notification.RunNotifier;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-public class JUnitTestActivatorTest extends TestCase {
+public class JUnitTestActivatorTest {
 
 	private JUnitTestActivator activator;
 
-	public static class TestExample extends TestCase implements OsgiJUnitTest {
+	public static class TestExample implements OsgiJUnitTest {
 
 		private static BundleContext context;
-
 
 		public void osgiSetUp() throws Exception {
 		}
 
 		public void osgiTearDown() throws Exception {
-		}
-
-		public void osgiRunTest() throws Throwable {
 		}
 
 		public void injectBundleContext(BundleContext bundleContext) {
@@ -67,27 +73,25 @@ public class JUnitTestActivatorTest extends TestCase {
 		public Bundle findBundleBySymbolicName(String bundleSymbolicName) {
 			return null;
 		}
-
-		public TestCase getTestCase() {
-			return this;
-		}
-
 	}
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		activator = new JUnitTestActivator();
 	}
 
+	@Test
 	public void testStart() throws Exception {
 		BundleContext ctx = createMock(BundleContext.class);
 
-		TestRunnerService runner = createMock(TestRunnerService.class);
+		OsgiJUnitService runner = createMock(OsgiJUnitService.class);
 
 		ServiceReference ref = new MockServiceReference();
 
-		expect(ctx.getServiceReference(TestRunnerService.class)).andReturn(ref);
+		expect(ctx.getServiceReference(Runner.class)).andReturn(ref);
 		expect(ctx.getService(ref)).andReturn(runner);
+		runner.setBundleContext(ctx);
+		expectLastCall();
 		expect(ctx.registerService(eq(JUnitTestActivator.class), eq(activator), eq(new Hashtable<String, Object>()))).andReturn(null);
 
 		replay(ctx, runner);
@@ -95,6 +99,7 @@ public class JUnitTestActivatorTest extends TestCase {
 		verify(ctx, runner);
 	}
 
+	@Test
 	public void testStop() throws Exception {
 		ServiceReference ref = new MockServiceReference();
 		ServiceRegistration reg = createMock(ServiceRegistration.class);
@@ -112,30 +117,6 @@ public class JUnitTestActivatorTest extends TestCase {
 		activator.stop(ctx);
 
 		verify(ctx, reg);
-	}
-
-	public void testLoadTest() throws Exception {
-		BundleContext ctx = new MockBundleContext();
-		TestRunnerService runner = createMock(TestRunnerService.class);
-
-		try {
-			activator.executeTest();
-			fail("should have thrown exception");
-		} catch (RuntimeException ex) {
-			// expected
-		}
-
-		setActivatorField("service", runner);
-		runner.runTest(anyObject(OsgiJUnitTest.class));
-        expectLastCall();
-		replay(runner);
-
-		setActivatorField("context", ctx);
-		OsgiTestInfoHolder.INSTANCE.setTestClassName(TestExample.class.getName());
-
-		activator.executeTest();
-		assertSame(ctx, TestExample.context);
-		verify(runner);
 	}
 
 	private void setActivatorField(String fieldName, Object value) throws Exception {

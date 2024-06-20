@@ -16,8 +16,6 @@ package org.eclipse.gemini.blueprint.config.internal.adapter;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -71,17 +69,9 @@ public abstract class CustomListenerAdapterUtils {
 			return Collections.emptyMap();
 		}
 
-		Assert.notEmpty(possibleArgumentTypes);
+		Assert.notEmpty(possibleArgumentTypes, "possibleArgumentTypes is required");
 
-		if (System.getSecurityManager() != null) {
-			return AccessController.doPrivileged(new PrivilegedAction<Map<Class<?>, List<Method>>>() {
-				public Map<Class<?>, List<Method>> run() {
-					return doDetermineCustomMethods(target, methodName, possibleArgumentTypes, onlyPublic);
-				}
-			});
-		} else {
-			return doDetermineCustomMethods(target, methodName, possibleArgumentTypes, onlyPublic);
-		}
+		return doDetermineCustomMethods(target, methodName, possibleArgumentTypes, onlyPublic);
 	}
 
 	private static Map<Class<?>, List<Method>> doDetermineCustomMethods(final Class<?> target, final String methodName,

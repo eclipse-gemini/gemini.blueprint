@@ -14,7 +14,9 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.blueprint.CustomType;
 import org.eclipse.gemini.blueprint.blueprint.TestComponent;
@@ -32,19 +34,23 @@ import org.springframework.util.ObjectUtils;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Costin Leau
  * 
  */
-public class TypeConverterTest extends TestCase {
+public class TypeConverterTest {
 
 	private static final String CONFIG = "type-converters.xml";
 
 	private GenericApplicationContext context;
 	private XmlBeanDefinitionReader reader;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		context = new GenericApplicationContext();
 		context.setClassLoader(getClass().getClassLoader());
 		ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
@@ -57,16 +63,19 @@ public class TypeConverterTest extends TestCase {
 		context.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testNumberOfBeans() throws Exception {
 		System.out.println("The beans declared are: " + ObjectUtils.nullSafeToString(context.getBeanDefinitionNames()));
 		assertTrue("not enough beans found", context.getBeanDefinitionCount() >= 3);
 	}
 
+	@Test
 	public void testReferenceToConverter() throws Exception {
 		TestComponent component = (TestComponent) context.getBean("conversion");
 		Object prop = component.getPropB();
@@ -74,6 +83,7 @@ public class TypeConverterTest extends TestCase {
 		assertEquals("rachmaninoff", ((ComponentHolder) prop).getProperty());
 	}
 
+	@Test
 	public void testNestedConverter() throws Exception {
 		TestComponent component = (TestComponent) context.getBean("conversion");
 		Object prop = component.getPropA();
@@ -81,6 +91,7 @@ public class TypeConverterTest extends TestCase {
 		assertEquals("sergey", ((TestComponent) prop).getPropA());
 	}
 
+	@Test
 	public void testConversionService() throws Exception {
 		SpringBlueprintConverter cs = new SpringBlueprintConverter(context.getBeanFactory());
 
@@ -91,21 +102,25 @@ public class TypeConverterTest extends TestCase {
 		assertEquals(Boolean.TRUE, cs.convert("T", new ReifiedType(Boolean.class)));
 	}
 
+	@Test
 	public void testBooleanConversion() throws Exception {
 		TestComponent comp = (TestComponent) context.getBean("booleanConversion");
 		assertEquals(Boolean.TRUE, comp.getPropA());
 	}
 
+	@Test
 	public void testArrayConversion() throws Exception {
 		TestComponent comp = (TestComponent) context.getBean("arrayConversion");
 		assertTrue(comp.getPropA() instanceof CustomType[]);
 	}
 
+	@Test
 	public void testReferenceDelegate() throws Exception {
 		TestComponent comp = (TestComponent) context.getBean("serviceReference");
 		assertNotNull(comp.getServiceReference());
 	}
 
+	@Test
 	public void testObjectToCollectionConversion1() throws Exception {
 		TestComponent comp = (TestComponent) context.getBean("objectToCollectionConversion1");
 		Object propA = comp.getPropA();
@@ -113,6 +128,7 @@ public class TypeConverterTest extends TestCase {
 		assertThat((List) propA).hasSize(1);
 	}
 
+	@Test
 	public void testObjectToCollectionConversion2() throws Exception {
 		TestComponent comp = (TestComponent) context.getBean("objectToCollectionConversion2");
 		Object propA = comp.getPropA();

@@ -14,9 +14,13 @@
 
 package org.eclipse.gemini.blueprint.blueprint.reflect;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collection;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintEditorRegistrar;
@@ -38,7 +42,7 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 /**
  * @author Costin Leau
  */
-public class NestedDefinitionMetadataTest extends TestCase {
+public class NestedDefinitionMetadataTest {
 
 	private static final String CONFIG = "nested-managers.xml";
 
@@ -47,7 +51,8 @@ public class NestedDefinitionMetadataTest extends TestCase {
 	protected MockBundleContext bundleContext;
 	private BlueprintContainer blueprintContainer;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 
 		context = new GenericApplicationContext();
@@ -68,11 +73,13 @@ public class NestedDefinitionMetadataTest extends TestCase {
 		blueprintContainer = new SpringBlueprintContainer(context);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testFirstLevel() throws Exception {
 		String name = "first-level";
 		BeanDefinition def = context.getBeanDefinition(name);
@@ -80,6 +87,7 @@ public class NestedDefinitionMetadataTest extends TestCase {
 		assertEquals(2, metadata.size());
 	}
 
+	@Test
 	public void testDeeplyNested() throws Exception {
 		String name = "deeply-nested";
 		BeanDefinition def = context.getBeanDefinition(name);
@@ -87,6 +95,7 @@ public class NestedDefinitionMetadataTest extends TestCase {
 		assertEquals(3, metadata.size());
 	}
 
+	@Test
 	public void testCollectionNested() throws Exception {
 		String name = "nested-collection";
 		BeanDefinition def = context.getBeanDefinition(name);
@@ -94,6 +103,7 @@ public class NestedDefinitionMetadataTest extends TestCase {
 		assertEquals(3, metadata.size());
 	}
 
+	@Test
 	public void testNestedBeans() throws Exception {
 		String name = "nested-beans";
 		BeanDefinition def = context.getBeanDefinition(name);
@@ -101,6 +111,7 @@ public class NestedDefinitionMetadataTest extends TestCase {
 		assertEquals(4, metadata.size());
 	}
 
+	@Test
 	public void testNestedServices() throws Exception {
 		String name = "nested-references";
 		BeanDefinition def = context.getBeanDefinition(name);
@@ -108,6 +119,7 @@ public class NestedDefinitionMetadataTest extends TestCase {
 		assertEquals(2, metadata.size());
 	}
 
+	@Test
 	public void testOverallMetadata() throws Exception {
 
 		BeanDefinition def = new GenericBeanDefinition();

@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.blueprint.metadata;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.blueprint.TestComponent;
+import org.junit.Test;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanProperty;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
@@ -36,6 +40,7 @@ public class DefaultsTest extends BaseMetadataTest {
 		return "/org/eclipse/gemini/blueprint/blueprint/config/blueprint-defaults.xml";
 	}
 
+	@Test
 	public void testDefaultsOnNestedBeans() throws Exception {
 		ComponentMetadata metadata = blueprintContainer.getComponentMetadata("nested");
 		assertEquals(ComponentMetadata.ACTIVATION_LAZY, metadata.getActivation());
@@ -54,12 +59,14 @@ public class DefaultsTest extends BaseMetadataTest {
 		assertEquals(ReferenceListMetadata.USE_SERVICE_REFERENCE, nestedList.getMemberType());
 	}
 
+	@Test
 	public void testBeanInstances() throws Exception {
 		TestComponent componentInstance = (TestComponent) blueprintContainer.getComponentInstance("nested");
 		Collection propB = (Collection) componentInstance.getPropB();
 		System.out.println(propB.size());
 	}
 
+	@Test
 	public void testDefaultActivation() throws Exception {
 		ComponentMetadata metadata = blueprintContainer.getComponentMetadata("lazy-ref");
 		assertEquals(ReferenceMetadata.ACTIVATION_LAZY, metadata.getActivation());
@@ -69,6 +76,7 @@ public class DefaultsTest extends BaseMetadataTest {
 		assertEquals(ReferenceMetadata.ACTIVATION_LAZY, metadata.getActivation());
 	}
 	
+	@Test
 	public void testOverriddenActivation() throws Exception {
 		ComponentMetadata metadata = blueprintContainer.getComponentMetadata("overriden-activation");
 		assertEquals(ReferenceMetadata.ACTIVATION_EAGER, metadata.getActivation());

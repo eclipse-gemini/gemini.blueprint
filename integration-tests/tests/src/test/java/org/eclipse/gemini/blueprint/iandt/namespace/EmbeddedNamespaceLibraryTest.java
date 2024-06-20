@@ -14,10 +14,13 @@
 
 package org.eclipse.gemini.blueprint.iandt.namespace;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.net.URL;
 import java.util.jar.Manifest;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
@@ -49,11 +52,13 @@ public class EmbeddedNamespaceLibraryTest extends BaseIntegrationTest {
 		return new String[] { "org/eclipse/gemini/blueprint/iandt/namespace/context.xml" };
 	}
 
+	@Test
 	public void testApplicationContextWasProperlyStarted() throws Exception {
 		assertNotNull(applicationContext);
 		assertNotNull(applicationContext.getBean("bean"));
 	}
 
+	@Test
 	public void testNamespaceFilesOnTheClassPath() throws Exception {
 		// simple code to trigger an import for this package
 		assertNotNull(NamespaceHandlerResolver.class);
@@ -64,7 +69,6 @@ public class EmbeddedNamespaceLibraryTest extends BaseIntegrationTest {
 
 		assertNotNull(handlers);
 		assertNotNull(schemas);
-
 	}
 
 }

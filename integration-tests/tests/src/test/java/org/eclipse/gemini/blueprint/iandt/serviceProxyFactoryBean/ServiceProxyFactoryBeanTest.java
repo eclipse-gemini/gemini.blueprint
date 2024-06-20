@@ -17,6 +17,7 @@ package org.eclipse.gemini.blueprint.iandt.serviceProxyFactoryBean;
 import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 
 import java.io.Serializable;
@@ -47,6 +48,7 @@ public class ServiceProxyFactoryBeanTest extends ServiceBaseTest {
 		fb = null;
 	}
 
+	@Test
 	public void testFactoryBeanForOneServiceAsClass() throws Exception {
 		long time = 1234;
 		Date date = new Date(time);
@@ -67,6 +69,7 @@ public class ServiceProxyFactoryBeanTest extends ServiceBaseTest {
 		}
 	}
 
+	@Test
 	public void testFactoryBeanForOneServiceAsInterface() throws Exception {
 		long time = 1234;
 		Date date = new Date(time);

@@ -14,10 +14,17 @@
 
 package org.eclipse.gemini.blueprint.blueprint.metadata;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.Socket;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.Ignore;
+import org.junit.Test;
 import org.osgi.service.blueprint.reflect.BeanArgument;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanProperty;
@@ -49,6 +56,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		return localMetadata;
 	}
 
+	@Test
 	public void testArgumentIndex() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("idref");
 		List<BeanArgument> list = localMetadata.getArguments();
@@ -56,6 +64,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertEquals(-1, arg.getIndex());
 	}
 
+	@Test
 	public void testConstructorArg() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("constructor-arg");
 		assertEquals(Integer.class.getName(), localMetadata.getClassName());
@@ -68,6 +77,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertEquals("3", ((ValueMetadata) param.getValue()).getStringValue());
 	}
 
+	@Test
 	public void testValueInlined() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("propertyValueInline");
 		assertEquals(Socket.class.getName(), localMetadata.getClassName());
@@ -78,6 +88,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertTrue(prop.getValue() instanceof ValueMetadata);
 	}
 
+	@Test
 	public void testNullProperty() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("null");
 		Collection<BeanProperty> props = localMetadata.getProperties();
@@ -87,6 +98,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertEquals(NullMetadata.NULL, prop.getValue());
 	}
 
+	@Test
 	public void testConstructorAndNestedValueTypes() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("nestedArgs");
 		List<BeanArgument> params = localMetadata.getArguments();
@@ -98,6 +110,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertEquals(Boolean.class.getName(), stv.getType());
 	}
 
+	@Test
 	public void testConstructorAndNestedValueWOTypes() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("nestedArgs2");
 		List<BeanArgument> params = localMetadata.getArguments();
@@ -109,12 +122,14 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertEquals(null, stv.getType());
 	}
 
+	@Test
 	public void testNanDouble() throws Exception {
 		System.out.println(blueprintContainer.getComponentInstance("nan"));
 		BeanMetadata localMetadata = getLocalMetadata("set");
 		System.out.println(localMetadata.getProperties());
 	}
 
+	@Test
 	public void testCollectionWithDefaultType() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("listWDefaultType");
 		BeanProperty prop = (BeanProperty) localMetadata.getProperties().iterator().next();
@@ -127,6 +142,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		}
 	}
 
+	@Test
 	public void testPropertiesMetadata() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("props");
 		BeanProperty prop = (BeanProperty) localMetadata.getProperties().iterator().next();
@@ -135,12 +151,14 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		// assertEquals("two", propsValue.getEntries().getProperty("one"));
 	}
 
+	@Test
 	public void testNestedRef() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("nestedRef");
 
 	}
 
 	// SPR-5554
+	@Test
 	public void testStaticFactoryArgumentsOrder() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("staticFactory");
 		List<BeanArgument> args = localMetadata.getArguments();
@@ -155,6 +173,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertEquals(0, args.get(2).getIndex());
 	}
 
+	@Test
 	public void testFactoryMethod() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("noArgStaticFactory");
 		assertEquals("staticMethod", localMetadata.getFactoryMethod());
@@ -164,6 +183,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertTrue(localMetadata.getArguments().isEmpty());
 	}
 
+	@Test
 	public void testFactoryArgMethod() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("oneArgStaticFactory");
 		assertNull(localMetadata.getFactoryComponent());
@@ -174,6 +194,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertTrue(localMetadata.getProperties().isEmpty());
 	}
 
+	@Test
 	public void testInstanceFactoryMethod() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("noArgInstanceFactory");
 		assertEquals("instanceMethod", localMetadata.getFactoryMethod());
@@ -184,6 +205,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertTrue(localMetadata.getProperties().isEmpty());
 	}
 
+	@Test
 	public void testInstanceFactoryArgMethod() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("oneArgInstanceFactory");
 		assertEquals("instanceMethod", localMetadata.getFactoryMethod());
@@ -196,6 +218,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertTrue(localMetadata.getProperties().isEmpty());
 	}
 
+	@Test
 	public void testEmptyArray() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("arrayItem");
 		List<BeanArgument> args = localMetadata.getArguments();
@@ -205,7 +228,9 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		}
 	}
 
-	public void tstPrimitiveArray() throws Exception {
+	@Test
+	@Ignore
+	public void testPrimitiveArray() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("primitiveArray");
 		List<BeanArgument> args = localMetadata.getArguments();
 		for (BeanArgument beanArgument : args) {
@@ -214,6 +239,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		}
 	}
 
+	@Test
 	public void testCompDateArray() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("compURLArray");
 		System.out.println(blueprintContainer.getComponentInstance("compDateArray"));
@@ -230,6 +256,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		}
 	}
 
+	@Test
 	public void testNestedBeanProperties() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("nestedBeanInitializing");
 		List<BeanProperty> props = localMetadata.getProperties();
@@ -239,6 +266,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		assertEquals(BeanMetadata.ACTIVATION_LAZY, meta.getActivation());
 	}
 
+	@Test
 	public void testInnerMap() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("compInnerMap");
 		List<BeanArgument> args = localMetadata.getArguments();
@@ -263,6 +291,7 @@ public class BeanComponentMetadataTest extends BaseMetadataTest {
 		}
 	}
 	
+	@Test
 	public void testTypedItemMetadata() throws Exception {
 		BeanMetadata localMetadata = getLocalMetadata("typedItem");
 		List<BeanProperty> properties = localMetadata.getProperties();

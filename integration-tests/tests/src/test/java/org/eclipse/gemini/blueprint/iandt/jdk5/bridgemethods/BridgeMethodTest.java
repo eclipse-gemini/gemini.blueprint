@@ -14,11 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.jdk5.bridgemethods;
 
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.util.List;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 
 /**
@@ -33,6 +36,7 @@ public class BridgeMethodTest extends BaseIntegrationTest {
 		return new String[] { "/org/eclipse/gemini/blueprint/iandt/jdk5/bridgemethods/config.xml" };
 	}
 
+	@Test
 	public void testGenerifiedListener() throws Exception {
 		assertEquals(Listener.BIND_CALLS, 0);
 		assertEquals(Listener.UNBIND_CALLS, 1);

@@ -14,6 +14,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.importer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
@@ -23,6 +28,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -142,6 +148,7 @@ public class ServiceComparatorTest extends BaseIntegrationTest {
 		return appContext;
 	}
 
+	@Test
 	public void testComparableImportedObjects() throws Exception {
 		assertNotNull(context);
 		assertTrue("service 1 is greater then service2", ((Comparable) service1).compareTo(service2) < 0);
@@ -157,6 +164,7 @@ public class ServiceComparatorTest extends BaseIntegrationTest {
 		assertTrue(service1 instanceof Serializable);
 	}
 
+	@Test
 	public void testServiceReferenceOrderingOnImportedObjects() throws Exception {
 		Set set = (Set) context.getBean("setWithServiceReference");
 		assertNotNull(set);
@@ -168,6 +176,7 @@ public class ServiceComparatorTest extends BaseIntegrationTest {
 		assertEquals(service1, iter.next());
 	}
 
+	@Test
 	public void testReferenceInjection() throws Exception {
 		TestBean bean = (TestBean) context.getBean("testBean");
 		assertNotNull(bean.getProp1());

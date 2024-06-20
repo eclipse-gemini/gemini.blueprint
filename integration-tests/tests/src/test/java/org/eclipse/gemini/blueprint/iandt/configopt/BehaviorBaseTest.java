@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.iandt.configopt;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.FilePermission;
 import java.util.List;
 
@@ -38,7 +41,7 @@ public abstract class BehaviorBaseTest extends BaseIntegrationTest {
 	 * @param alive
 	 */
 	protected void assertContextServiceIs(Bundle bundle, boolean alive, long maxWait) {
-		Assert.notNull(bundle);
+		Assert.notNull(bundle, "bundle is required");
 
 		try {
 			waitOnContextCreation(bundle.getSymbolicName(), maxWait / 1000 + 1);

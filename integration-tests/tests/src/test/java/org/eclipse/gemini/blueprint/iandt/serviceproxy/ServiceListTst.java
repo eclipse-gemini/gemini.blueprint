@@ -14,12 +14,15 @@
 
 package org.eclipse.gemini.blueprint.iandt.serviceproxy;
 
+import static org.junit.Assert.assertSame;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.OsgiServiceList;
 import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -36,6 +39,7 @@ public abstract class ServiceListTst extends ServiceCollectionTest {
 		return col;
 	}
 
+	@Test
 	public void testListContent() throws Exception {
 		List list = (List) createCollection();
 

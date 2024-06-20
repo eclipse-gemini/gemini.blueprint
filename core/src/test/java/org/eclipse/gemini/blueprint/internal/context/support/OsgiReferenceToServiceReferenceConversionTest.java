@@ -14,6 +14,9 @@
 
 package org.eclipse.gemini.blueprint.internal.context.support;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.io.IOException;
@@ -21,7 +24,9 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
@@ -36,7 +41,7 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  * @author Costin Leau
  * 
  */
-public class OsgiReferenceToServiceReferenceConversionTest extends TestCase {
+public class OsgiReferenceToServiceReferenceConversionTest {
 
 	private MockBundleContext context;
 
@@ -52,7 +57,8 @@ public class OsgiReferenceToServiceReferenceConversionTest extends TestCase {
 		}
 	}
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		service = new Polygon();
 		RefContainer.reference = null;
 
@@ -85,7 +91,8 @@ public class OsgiReferenceToServiceReferenceConversionTest extends TestCase {
 		appCtx.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context = null;
 		appCtx.close();
 		appCtx = null;
@@ -93,10 +100,12 @@ public class OsgiReferenceToServiceReferenceConversionTest extends TestCase {
 		RefContainer.reference = null;
 	}
 
+	@Test
 	public void testApplicationContextStarted() throws Exception {
 		assertEquals(2, appCtx.getBeanDefinitionCount());
 	}
 
+	@Test
 	public void testConversion() throws Exception {
 		assertNotNull(RefContainer.reference);
 		System.out.println(RefContainer.reference);

@@ -14,9 +14,17 @@
 
 package org.eclipse.gemini.blueprint.internal.service.interceptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Method;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
@@ -35,7 +43,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceReference;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceDynamicInterceptorTest extends TestCase {
+public class OsgiServiceDynamicInterceptorTest {
 
 	private ServiceDynamicInterceptor interceptor;
 
@@ -51,8 +59,8 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 
 	private BundleContext ctx;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		service = new Object();
 		serv2 = new Object();
 		serv3 = new Object();
@@ -104,7 +112,8 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 		createInterceptor(null);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		service = null;
 		interceptor = null;
 		listener = null;
@@ -126,6 +135,7 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.service.interceptor.ServiceDynamicInterceptor#OsgiServiceDynamicInterceptor()}.
 	 */
+	@Test
 	public void testOsgiServiceDynamicInterceptor() {
 		assertNotNull(interceptor.getRetryTemplate());
 	}
@@ -134,6 +144,7 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.service.interceptor.ServiceDynamicInterceptor#lookupService()}.
 	 */
+	@Test
 	public void testLookupService() throws Throwable {
 		Object serv = interceptor.getTarget();
 		assertSame(service, serv);
@@ -143,18 +154,20 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.service.interceptor.ServiceDynamicInterceptor#doInvoke(java.lang.Object, org.aopalliance.intercept.MethodInvocation)}.
 	 */
+	@Test
 	public void testDoInvoke() throws Throwable {
 		Object target = new Object();
 		Method m = target.getClass().getDeclaredMethod("hashCode", null);
 
 		MethodInvocation invocation = new MockMethodInvocation(m);
-		assertEquals(new Integer(service.hashCode()), interceptor.invoke(invocation));
+		assertEquals(Integer.valueOf(service.hashCode()), interceptor.invoke(invocation));
 	}
 
 	/**
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.service.interceptor.ServiceDynamicInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)}.
 	 */
+	@Test
 	public void testInvocationWhenServiceNA() throws Throwable {
 		// service n/a
 
@@ -176,9 +189,10 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 		// service is up
 		reference = oldRef;
 
-		assertEquals(new Integer(service.hashCode()), interceptor.invoke(invocation));
+		assertEquals(Integer.valueOf(service.hashCode()), interceptor.invoke(invocation));
 	}
 
+	@Test
 	public void testInvocationTimeoutWhenServiceNA() throws Throwable {
 		// service n/a
 
@@ -210,6 +224,7 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.service.interceptor.ServiceDynamicInterceptor#getTarget()}.
 	 */
+	@Test
 	public void testGetTarget() throws Throwable {
 		// add service
 		ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, reference);
@@ -219,6 +234,7 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 		assertSame("target not properly discovered", service, target);
 	}
 
+	@Test
 	public void testGetTargetWhenMultipleServicesAreAvailable() throws Throwable {
 		// add service
 		ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, reference);
@@ -248,6 +264,7 @@ public class OsgiServiceDynamicInterceptorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.service.interceptor.ServiceDynamicInterceptor#afterPropertiesSet()}.
 	 */
+	@Test
 	public void testAfterPropertiesSet() {
 		assertNotNull("should have initialized listener", listener);
 	}

@@ -14,6 +14,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import org.springframework.core.io.Resource;
 
 /**
@@ -23,7 +27,7 @@ import org.springframework.core.io.Resource;
  * 
  */
 public class ClassSpaceTest extends BaseIoTest {
-
+	@Test
 	public void testFolder() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/org/eclipse/gemini/blueprint");
 		// EQ returns the fragments paths also
@@ -33,12 +37,14 @@ public class ClassSpaceTest extends BaseIoTest {
 	// META-INF seems to be a special case, since the manifest is added
 	// automatically by the jar stream
 	// but it's the JarCreator which creates the META-INF folder
+	@Test
 	public void testMetaInfFolder() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/META-INF");
 		// Equinox returns more entries (bootpath delegation)
 		assertTrue(res.length >= 1);
 	}
 
+	@Test
 	public void testClass() throws Exception {
 		Resource res[] = patternLoader.getResources("classpath:/org/eclipse/gemini/blueprint/iandt/io/ClassSpaceTest.class");
 		assertEquals(1, res.length);

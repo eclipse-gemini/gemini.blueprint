@@ -14,11 +14,19 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.DynamicList;
 
@@ -26,23 +34,25 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.collection
  * @author Costin Leau
  * 
  */
-public class DynamicListTest extends TestCase {
+public class DynamicListTest {
 
 	private List dynamicList;
 
 	private ListIterator iter;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		dynamicList = new DynamicList();
 		iter = dynamicList.listIterator();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dynamicList = null;
 		iter = null;
 	}
 
+	@Test
 	public void testAddWhileListIterating() throws Exception {
 		assertTrue(dynamicList.isEmpty());
 		assertFalse(iter.hasNext());
@@ -56,6 +66,7 @@ public class DynamicListTest extends TestCase {
 		assertSame(a, iter.previous());
 	}
 
+	@Test
 	public void testRemoveWhileListIterating() throws Exception {
 		assertTrue(dynamicList.isEmpty());
 		assertFalse(iter.hasNext());
@@ -81,6 +92,7 @@ public class DynamicListTest extends TestCase {
 		assertSame(a, iter.previous());
 	}
 
+	@Test
 	public void testRemovePreviouslyIteratedWhileIterating() throws Exception {
 		assertTrue(dynamicList.isEmpty());
 		assertFalse(iter.hasNext());
@@ -99,6 +111,7 @@ public class DynamicListTest extends TestCase {
 		assertFalse(iter.hasPrevious());
 	}
 
+	@Test
 	public void testListIteratorIndexes() throws Exception {
 		assertTrue(dynamicList.isEmpty());
 		assertFalse(iter.hasNext());
@@ -128,6 +141,7 @@ public class DynamicListTest extends TestCase {
 
 	}
 
+	@Test
 	public void testListIteratorAdd() {
 		Object a = new Object();
 		Object b = new Object();
@@ -154,6 +168,7 @@ public class DynamicListTest extends TestCase {
 		assertSame(a, iter.next());
 	}
 
+	@Test
 	public void testListIteratorHasNextHasPrevious() {
 		Object a = new Object();
 		dynamicList.add(a);
@@ -176,6 +191,7 @@ public class DynamicListTest extends TestCase {
 		assertFalse(iter.hasNext());
 	}
 
+	@Test
 	public void testListIteratorNextIndexPreviousIndex() {
 		Object a = new Object();
 
@@ -193,6 +209,7 @@ public class DynamicListTest extends TestCase {
 		assertEquals(dynamicList.size(), iter.nextIndex());
 	}
 
+	@Test
 	public void testListIteratorPreviousException() {
 		try {
 			iter.previous();
@@ -211,6 +228,7 @@ public class DynamicListTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testListIteratorRemoveBetweenOperations() {
 		Object a = new Object();
 		Object b = new Object();
@@ -240,6 +258,7 @@ public class DynamicListTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testListIteratorSetWithNext() {
 		Object a = new Object();
 		Object b = new Object();
@@ -293,6 +312,7 @@ public class DynamicListTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testListIteratorSetWithPrevious() {
 		Object a = new Object();
 		Object b = new Object();

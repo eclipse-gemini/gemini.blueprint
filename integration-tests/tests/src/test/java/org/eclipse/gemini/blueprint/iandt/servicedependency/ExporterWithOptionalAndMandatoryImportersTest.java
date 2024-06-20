@@ -14,13 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.servicedependency;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import junit.framework.Assert;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.osgi.framework.Bundle;
@@ -32,6 +33,7 @@ import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
 import org.eclipse.gemini.blueprint.util.OsgiServiceUtils;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
@@ -59,6 +61,7 @@ public class ExporterWithOptionalAndMandatoryImportersTest extends BaseIntegrati
 		OsgiServiceUtils.unregisterService(optional);
 	}
 
+	@Test
 	public void testInjectedDependencies() throws Exception {
 		Bundle bnd = getDependencyBundle();
 		bnd.start();
@@ -80,6 +83,7 @@ public class ExporterWithOptionalAndMandatoryImportersTest extends BaseIntegrati
 		assertTrue("exporter affected by the optional dependency", isInjectedExporterAlive());
 	}
 
+	@Test
 	public void testDependsOnDependencies() throws Exception {
 		Bundle bnd = getDependencyBundle();
 		bnd.start();

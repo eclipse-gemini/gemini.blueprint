@@ -73,7 +73,7 @@ public class OsgiBundleScope implements Scope, DisposableBean {
 
 
 		public BundleScopeServiceFactory(ServiceFactory serviceFactory) {
-			Assert.notNull(serviceFactory);
+			Assert.notNull(serviceFactory, "serviceFactory is required");
 			this.decoratedServiceFactory = serviceFactory;
 		}
 

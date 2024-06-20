@@ -14,7 +14,8 @@
 
 package org.eclipse.gemini.blueprint.blueprint.metadata;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
 
 import org.eclipse.gemini.blueprint.blueprint.container.SpringBlueprintContainer;
 import org.eclipse.gemini.blueprint.blueprint.container.support.BlueprintEditorRegistrar;
@@ -34,14 +35,15 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
  * 
  * @author Costin Leau
  */
-public abstract class BaseMetadataTest extends TestCase {
+public abstract class BaseMetadataTest {
 
 	protected GenericApplicationContext applicationContext;
 	protected BlueprintContainer blueprintContainer;
 	private XmlBeanDefinitionReader reader;
 	protected MockBundleContext bundleContext;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleContext = new MockBundleContext();
 		applicationContext = new GenericApplicationContext();
 		applicationContext.setClassLoader(getClass().getClassLoader());
@@ -61,7 +63,8 @@ public abstract class BaseMetadataTest extends TestCase {
 
 	protected abstract String getConfig();
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		applicationContext.close();
 		applicationContext = null;
 		blueprintContainer = null;

@@ -14,21 +14,26 @@
 
 package org.eclipse.gemini.blueprint;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
+import org.junit.Test;
 
 /**
  * 
  * @author Costin Leau
  * 
  */
-public class OsgiExceptionTest extends TestCase {
-
+public class OsgiExceptionTest {
+	@Test
 	public void testOsgiException() {
 		OsgiException exception = new OsgiException();
 		assertNull(exception.getCause());
 		assertNull(exception.getMessage());
 	}
 
+	@Test
 	public void testOsgiExceptionStringThrowable() {
 		String msg = "msg";
 		Exception ex = new Exception();
@@ -37,12 +42,14 @@ public class OsgiExceptionTest extends TestCase {
 		assertEquals(ex, exception.getCause());
 	}
 
+	@Test
 	public void testOsgiExceptionString() {
 		String msg = "msg";
 		OsgiException exception = new OsgiException(msg);
 		assertEquals(msg, exception.getMessage());
 	}
 
+	@Test
 	public void testOsgiExceptionThrowable() {
 		Exception ex = new Exception();
 		OsgiException exception = new OsgiException(ex);

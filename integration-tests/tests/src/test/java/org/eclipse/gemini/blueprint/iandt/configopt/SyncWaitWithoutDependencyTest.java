@@ -15,7 +15,11 @@
 package org.eclipse.gemini.blueprint.iandt.configopt;
 
 import org.osgi.framework.Bundle;
+
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * Integration test for Sync Wait but this time, by checking the waiting by
@@ -25,7 +29,7 @@ import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
  * 
  */
 public class SyncWaitWithoutDependencyTest extends BehaviorBaseTest {
-
+	@Test
 	public void testBehaviour() throws Exception {
 
 		String bundleId = "org.eclipse.gemini.blueprint.iandt, sync-wait-bundle,"

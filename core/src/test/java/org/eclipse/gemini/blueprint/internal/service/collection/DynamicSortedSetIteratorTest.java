@@ -14,12 +14,18 @@
 
 package org.eclipse.gemini.blueprint.internal.service.collection;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.service.importer.support.internal.collection.DynamicSortedSet;
 
@@ -28,7 +34,7 @@ import org.eclipse.gemini.blueprint.service.importer.support.internal.collection
  * @author Costin Leau
  * 
  */
-public class DynamicSortedSetIteratorTest extends TestCase {
+public class DynamicSortedSetIteratorTest {
 
 	private SortedSet dynamicSortedSet;
 
@@ -42,12 +48,13 @@ public class DynamicSortedSetIteratorTest extends TestCase {
 
 	private Iterator iter;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		dynamicSortedSet = new DynamicSortedSet();
 
-		one = new Integer(1);
-		two = new Integer(2);
-		three = new Integer(3);
+		one = Integer.valueOf(1);
+		two = Integer.valueOf(2);
+		three = Integer.valueOf(3);
 
 		list = new ArrayList();
 		list.add(one);
@@ -58,7 +65,8 @@ public class DynamicSortedSetIteratorTest extends TestCase {
 		iter = dynamicSortedSet.iterator();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		dynamicSortedSet = null;
 		list = null;
 		one = null;
@@ -67,6 +75,7 @@ public class DynamicSortedSetIteratorTest extends TestCase {
 		iter = null;
 	}
 
+	@Test
 	public void testIteratingWhileAdding() {
 		assertFalse(iter.hasNext());
 
@@ -80,6 +89,7 @@ public class DynamicSortedSetIteratorTest extends TestCase {
 		assertFalse(iter.hasNext());
 	}
 
+	@Test
 	public void testIteratingWhileAddingSeveralElements() {
 		assertFalse(iter.hasNext());
 
@@ -95,6 +105,7 @@ public class DynamicSortedSetIteratorTest extends TestCase {
 		assertSame(three, iter.next());
 	}
 
+	@Test
 	public void testDoubleIteratingWithAdding() {
 		assertFalse(iter.hasNext());
 		Iterator it = dynamicSortedSet.iterator();
@@ -110,6 +121,7 @@ public class DynamicSortedSetIteratorTest extends TestCase {
 		assertSame(two, it.next());
 	}
 
+	@Test
 	public void testIteratingWhileRemoving() {
 		dynamicSortedSet.add(two);
 		dynamicSortedSet.add(three);
@@ -119,6 +131,7 @@ public class DynamicSortedSetIteratorTest extends TestCase {
 		assertSame(three, iter.next());
 	}
 
+	@Test
 	public void testDoubleIteratingWhileRemoving() {
 		Iterator it = dynamicSortedSet.iterator();
 		dynamicSortedSet.add(one);

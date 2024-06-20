@@ -14,21 +14,20 @@
 
 package org.eclipse.gemini.blueprint.mock;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.mock.MockBundleActivator;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.BundleActivator;
 
 /**
  * @author Costin Leau
  * 
  */
-public class MockBundleActivatorTest extends TestCase {
+public class MockBundleActivatorTest {
 
 	BundleActivator mock;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		mock = new MockBundleActivator();
 	}
 
@@ -36,6 +35,7 @@ public class MockBundleActivatorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockBundleActivator#start(org.osgi.framework.BundleContext)}.
 	 */
+	@Test
 	public void testStart() throws Exception {
 		mock.start(new MockBundleContext());
 	}
@@ -44,6 +44,7 @@ public class MockBundleActivatorTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockBundleActivator#stop(org.osgi.framework.BundleContext)}.
 	 */
+	@Test
 	public void testStop() throws Exception {
 		mock.stop(new MockBundleContext());
 	}

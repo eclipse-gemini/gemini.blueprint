@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.test.platform;
 
+import org.junit.After;
+import org.junit.Before;
 
 /**
  * @author Costin Leau
@@ -21,16 +23,21 @@ package org.eclipse.gemini.blueprint.test.platform;
  */
 public class KnopflerfishPlatformTest extends CommonPlatformTest {
 
-	protected void setUp() throws Exception {
+	@Before
+	@Override
+	public void setUp() throws Exception {
 		System.setProperty("org.knopflerfish.osgi.registerserviceurlhandler", "false");
 		super.setUp();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	@Override
+	public void tearDown() throws Exception {
 		System.getProperties().remove("org.knopflerfish.osgi.registerserviceurlhandler");
 		super.tearDown();
 	}
 
+	@Override
 	AbstractOsgiPlatform createPlatform() {
 		return new KnopflerfishPlatform();
 	}

@@ -14,9 +14,13 @@
 
 package org.eclipse.gemini.blueprint.blueprint.metadata;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.junit.Test;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.RefMetadata;
 import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
@@ -42,10 +46,12 @@ public class ImporterCollectionsMetadataTest extends BaseMetadataTest {
 		return referenceMetadata;
 	}
 
+	@Test
 	public void testSimpleList() throws Exception {
 		ReferenceListMetadata metadata = (ReferenceListMetadata) getReferenceMetadata("simpleList");
 	}
 
+	@Test
 	public void testListeners() throws Exception {
 		ReferenceListMetadata metadata = (ReferenceListMetadata) getReferenceMetadata("listeners");
 		Collection<ReferenceListener> listeners = metadata.getReferenceListeners();

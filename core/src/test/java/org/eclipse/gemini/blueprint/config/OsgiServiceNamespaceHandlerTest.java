@@ -14,6 +14,13 @@
 
 package org.eclipse.gemini.blueprint.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -24,23 +31,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
+import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
 import org.eclipse.gemini.blueprint.service.exporter.OsgiServiceRegistrationListener;
 import org.eclipse.gemini.blueprint.service.exporter.support.OsgiServiceFactoryBean;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
-import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
 
 /**
  * Integration test for osgi:service namespace handler.
@@ -48,7 +54,7 @@ import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceNamespaceHandlerTest extends TestCase {
+public class OsgiServiceNamespaceHandlerTest {
 
 	private GenericApplicationContext appContext;
 
@@ -58,7 +64,8 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 
 	private ServiceRegistration registration;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 
 		services.clear();
 
@@ -99,6 +106,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		return fact.getService(null, null);
 	}
 
+	@Test
 	public void testSimpleService() {
 		Object bean = appContext.getBean("&inlineReference");
 		assertSame(OsgiServiceFactoryBean.class, bean.getClass());
@@ -111,6 +119,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		assertSame(appContext.getBean("string"), getServiceAtIndex(0));
 	}
 
+	@Test
 	public void testBiggerService() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&manyOptions");
 
@@ -128,6 +137,7 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		//assertEquals(appContext.getBean("string"), getTarget(exporter));
 	}
 
+	@Test
 	public void testNestedService() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&nestedService");
 		assertTrue(Arrays.equals(new Class<?>[] { Object.class }, getInterfaces(exporter)));
@@ -139,12 +149,14 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		assertNotNull(getTarget(exporter));
 	}
 
+	@Test
 	public void testServiceExporterFactoryBean() {
 		Object bean = appContext.getBean("nestedService");
 		assertTrue(bean instanceof ServiceRegistration);
 		assertNotSame("registration not wrapped to provide exporting listener notification", registration, bean);
 	}
 
+	@Test
 	public void testServiceProperties() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&serviceProperties");
 		Map properties = exporter.getServiceProperties();
@@ -157,12 +169,14 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 
 	}
 
+	@Test
 	public void testListeners() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&exporterWithListener");
 		OsgiServiceRegistrationListener[] listeners = getListeners(exporter);
 		assertEquals(2, listeners.length);
 	}
 
+	@Test
 	public void testListenersInvoked() throws Exception {
 		// registration should have been already called
 		assertEquals(2, RegistrationListener.BIND_CALLS);
@@ -178,12 +192,14 @@ public class OsgiServiceNamespaceHandlerTest extends TestCase {
 		assertSame(RegistrationListener.SERVICE_REG, RegistrationListener.SERVICE_UNREG);
 	}
 
+	@Test
 	public void testFBWithCustomListeners() {
 		OsgiServiceFactoryBean exporter = (OsgiServiceFactoryBean) appContext.getBean("&exporterWithCustomListener");
 		OsgiServiceRegistrationListener[] listeners = getListeners(exporter);
 		assertEquals(1, listeners.length);
 	}
 
+	@Test
 	public void testCustomListenerInvoked() throws Exception {
 		// registration should have been already called (service already
 		// published)

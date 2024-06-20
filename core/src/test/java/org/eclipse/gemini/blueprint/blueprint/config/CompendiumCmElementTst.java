@@ -14,7 +14,11 @@
 
 package org.eclipse.gemini.blueprint.blueprint.config;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
@@ -27,15 +31,15 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * 
  */
-public class CompendiumCmElementTst extends TestCase {
+public class CompendiumCmElementTst {
 
 	private static final String CONFIG = "cm-config.xml";
 
 	private GenericApplicationContext context;
 	private XmlBeanDefinitionReader reader;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		context = new GenericApplicationContext();
 		context.setClassLoader(getClass().getClassLoader());
 		reader = new XmlBeanDefinitionReader(context);
@@ -43,11 +47,13 @@ public class CompendiumCmElementTst extends TestCase {
 		context.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		context.close();
 		context = null;
 	}
 
+	@Test
 	public void testNumberOfBeans() throws Exception {
 		System.out.println("The beans declared are: " + ObjectUtils.nullSafeToString(context.getBeanDefinitionNames()));
 		assertTrue("not enough beans found", context.getBeanDefinitionCount() > 6);

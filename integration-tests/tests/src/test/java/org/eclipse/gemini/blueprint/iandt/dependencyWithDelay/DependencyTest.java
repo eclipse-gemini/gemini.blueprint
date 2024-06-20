@@ -15,6 +15,10 @@
 
 package org.eclipse.gemini.blueprint.iandt.dependencyWithDelay;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+
 import java.io.FilePermission;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,7 @@ import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 
 /**
  * Crucial test for the asych, service-dependency waiting. Installs several
@@ -55,6 +60,7 @@ public class DependencyTest extends BaseIntegrationTest {
 	// simple.service2 - publishes service2
 	// simple.service3 - publishes service3
 	// simple - publishes service1
+	@Test
 	public void testDependencies() throws Exception {
 		System.setProperty("org.eclipse.gemini.blueprint.iandt.simpleservice.impl.delay", "10000");
 		// waitOnContextCreation("org.eclipse.gemini.blueprint.iandt.simpleservice");
@@ -74,13 +80,13 @@ public class DependencyTest extends BaseIntegrationTest {
 		assertNotNull("Cannot find the simple service 3 bundle", simpleService3Bundle);
 		assertNotNull("dependencyTest can't be resolved", dependencyTestBundle);
 
-		assertNotSame("simple service bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleServiceBundle.getState()));
 
-		assertNotSame("simple service 2 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 2 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService2Bundle.getState()));
 
-		assertNotSame("simple service 3 bundle is in the activated state!", new Integer(Bundle.ACTIVE), new Integer(
+		assertNotSame("simple service 3 bundle is in the activated state!", Integer.valueOf(Bundle.ACTIVE), Integer.valueOf(
 			simpleService3Bundle.getState()));
 
 		startDependencyAsynch(dependencyTestBundle);

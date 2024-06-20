@@ -18,13 +18,14 @@ import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
 import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
+import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 import org.springframework.aop.SpringProxy;
 import org.springframework.core.InfrastructureProxy;
 
 import java.util.*;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -50,6 +51,7 @@ public class ServiceRefAwareWithSingleServiceTest extends ServiceBaseTest {
 		fb = null;
 	}
 
+	@Test
 	public void testProxyForUnaryCardinality() throws Exception {
 		long time = 1234;
 		Date date = new Date(time);
@@ -85,6 +87,7 @@ public class ServiceRefAwareWithSingleServiceTest extends ServiceBaseTest {
 		assertNull(refAware.getServiceReference().getBundle());
 	}
 	
+	@Test
 	public void testServiceReferenceProperties() throws Exception {
 		long time = 1234;
 		Date date = new Date(time);

@@ -19,9 +19,14 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.eclipse.gemini.blueprint.TestUtils;
 import org.eclipse.gemini.blueprint.compendium.internal.cm.ManagedServiceInstanceTrackerPostProcessor;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
@@ -40,13 +45,14 @@ import org.eclipse.gemini.blueprint.mock.MockServiceRegistration;
  * @author Costin Leau
  * 
  */
-public class ManagedPropertiesTest extends TestCase {
+public class ManagedPropertiesTest {
 
 	private GenericApplicationContext appContext;
 	private int unregistrationCounter;
 	private int registrationCounter;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 
 		final Configuration cfg = createNiceMock(Configuration.class);
         expect(cfg.getProperties()).andReturn(new Hashtable<String, Object>());
@@ -92,7 +98,8 @@ public class ManagedPropertiesTest extends TestCase {
 		appContext.refresh();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		appContext.close();
 		appContext = null;
 	}
@@ -102,6 +109,7 @@ public class ManagedPropertiesTest extends TestCase {
 				.getBean(ManagedServiceInstanceTrackerPostProcessor.class.getName() + "#0#" + beanName);
 	}
 
+	@Test
 	public void testSimpleBeanTrackingBpp() throws Exception {
 		ManagedServiceInstanceTrackerPostProcessor bpp = getTrackerForBean("simple");
 		assertEquals("simple", TestUtils.getFieldValue(bpp, "pid"));
@@ -109,6 +117,7 @@ public class ManagedPropertiesTest extends TestCase {
 		assertNull(TestUtils.getFieldValue(bpp, "updateStrategy"));
 	}
 
+	@Test
 	public void testSimpleBeanWithNoNameTrackingBpp() throws Exception {
 		ManagedServiceInstanceTrackerPostProcessor bpp =
 				getTrackerForBean("org.eclipse.gemini.blueprint.compendium.OneSetter#0");
@@ -117,12 +126,14 @@ public class ManagedPropertiesTest extends TestCase {
 		assertNull(TestUtils.getFieldValue(bpp, "updateStrategy"));
 	}
 
+	@Test
 	public void testSimpleWUpdateBeanTrackingBpp() throws Exception {
 		ManagedServiceInstanceTrackerPostProcessor bpp = getTrackerForBean("simpleWUpdate");
 		assertEquals("simple", TestUtils.getFieldValue(bpp, "pid"));
 		assertNull(TestUtils.getFieldValue(bpp, "updateMethod"));
 	}
 
+	@Test
 	public void testMultipleWUpdateBeanTrackingBpp() throws Exception {
 		ManagedServiceInstanceTrackerPostProcessor bpp = getTrackerForBean("multipleWUpdate");
 		assertEquals("multiple", TestUtils.getFieldValue(bpp, "pid"));
@@ -130,6 +141,7 @@ public class ManagedPropertiesTest extends TestCase {
 		assertEquals(true, TestUtils.getFieldValue(bpp, "autowireOnUpdate"));
 	}
 
+	@Test
 	public void testBeanManagedTrackingBpp() throws Exception {
 		ManagedServiceInstanceTrackerPostProcessor bpp = getTrackerForBean("beanManaged");
 		assertEquals("bean-managed", TestUtils.getFieldValue(bpp, "pid"));
@@ -137,6 +149,7 @@ public class ManagedPropertiesTest extends TestCase {
 		assertEquals(false, TestUtils.getFieldValue(bpp, "autowireOnUpdate"));
 	}
 	
+	@Test
 	public void testMixedManagedTrackingBpp() throws Exception {
 		ManagedServiceInstanceTrackerPostProcessor bpp = getTrackerForBean("mixedManaged");
 		assertEquals("bean-managed", TestUtils.getFieldValue(bpp, "pid"));
@@ -144,6 +157,7 @@ public class ManagedPropertiesTest extends TestCase {
 		assertEquals(true, TestUtils.getFieldValue(bpp, "autowireOnUpdate"));
 	}
 
+	@Test
 	public void testTrackingCleanup() throws Exception {
 		assertEquals(6, registrationCounter);
 		assertEquals(0, unregistrationCounter);

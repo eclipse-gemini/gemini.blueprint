@@ -14,6 +14,8 @@
 
 package org.eclipse.gemini.blueprint.iandt.ns;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.awt.Shape;
 import java.net.URL;
 
@@ -24,6 +26,7 @@ import org.osgi.framework.ServiceReference;
 import org.springframework.context.ApplicationContext;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
+import org.junit.Test;
 
 /**
  * Integration test that provides a namespace that is also used internally.
@@ -45,16 +48,19 @@ public class NamespaceProviderAndConsumerTest extends BaseIntegrationTest {
 		return new String[] { "org/eclipse/gemini/blueprint/iandt/ns/context.xml" };
 	}
 
+	@Test
 	public void testApplicationContextWasProperlyStarted() throws Exception {
 		assertNotNull(applicationContext);
 		assertNotNull(applicationContext.getBean("nsDate"));
 		assertNotNull(applicationContext.getBean("nsBean"));
 	}
 
+	@Test
 	public void testTestAutowiring() throws Exception {
 		assertNotNull(nsBean);
 	}
 
+	@Test
 	public void testNamespaceFilesOnTheClassPath() throws Exception {
 		Bundle bundle = OsgiBundleUtils.findBundleBySymbolicName(bundleContext, BND_SYM_NAME);
 		assertNotNull("cannot find handler bundle", bundle);
@@ -65,6 +71,7 @@ public class NamespaceProviderAndConsumerTest extends BaseIntegrationTest {
 		assertNotNull("cannot find a schema inside the custom bundle", schemas);
 	}
 
+	@Test
 	public void testNSBundlePublishedOkay() throws Exception {
 		ServiceReference ref = OsgiServiceReferenceUtils.getServiceReference(bundleContext,
 			ApplicationContext.class.getName(), "(" + Constants.BUNDLE_SYMBOLICNAME + "=" + BND_SYM_NAME + ")");

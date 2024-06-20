@@ -14,8 +14,6 @@
 
 package org.eclipse.gemini.blueprint.io.internal.resolver;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,7 +55,7 @@ public class PackageAdminResolver implements DependencyResolver {
 
 
 	public PackageAdminResolver(BundleContext bundleContext) {
-		Assert.notNull(bundleContext);
+		Assert.notNull(bundleContext, "bundleContext is required");
 		this.bundleContext = bundleContext;
 	}
 
@@ -170,17 +168,11 @@ public class PackageAdminResolver implements DependencyResolver {
 	}
 
 	private PackageAdmin getPackageAdmin() {
-
-		return AccessController.doPrivileged(new PrivilegedAction<PackageAdmin>() {
-
-			public PackageAdmin run() {
-				ServiceReference ref = bundleContext.getServiceReference(PackageAdmin.class.getName());
-				if (ref == null)
-					throw new IllegalStateException(PackageAdmin.class.getName() + " service is required");
-				// don't do any proxying since PackageAdmin is normally a framework service
-				// we can assume for now that it will always be available
-				return (PackageAdmin) bundleContext.getService(ref);
-			}
-		});
+	    ServiceReference ref = bundleContext.getServiceReference(PackageAdmin.class.getName());
+        if (ref == null)
+            throw new IllegalStateException(PackageAdmin.class.getName() + " service is required");
+        // don't do any proxying since PackageAdmin is normally a framework service
+        // we can assume for now that it will always be available
+        return (PackageAdmin) bundleContext.getService(ref);
 	}
 }

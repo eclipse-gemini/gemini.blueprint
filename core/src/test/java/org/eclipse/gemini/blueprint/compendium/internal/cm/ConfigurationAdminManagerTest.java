@@ -23,9 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.easymock.IMocksControl;
 import org.eclipse.gemini.blueprint.compendium.config.MockConfigurationAdmin;
@@ -38,7 +43,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 
-public class ConfigurationAdminManagerTest extends TestCase {
+public class ConfigurationAdminManagerTest {
 
 	private ConfigurationAdminManager cam;
 	private String pid;
@@ -46,8 +51,8 @@ public class ConfigurationAdminManagerTest extends TestCase {
 	private Map services;
 	private Configuration cfg;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		services = new LinkedHashMap();
 		IMocksControl mc = createNiceControl();
 		cfg = mc.createMock(Configuration.class);
@@ -80,10 +85,7 @@ public class ConfigurationAdminManagerTest extends TestCase {
 		cam = new ConfigurationAdminManager(pid, bundleContext);
 	}
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-
+	@Test
 	public void testManagedServiceRegistration() throws Exception {
 		assertTrue(services.isEmpty());
 		assertNotNull(cam.getConfiguration());
@@ -92,6 +94,7 @@ public class ConfigurationAdminManagerTest extends TestCase {
 		assertEquals(1, services.size());
 	}
 
+	@Test
 	public void testManagedServiceProperties() {
 		assertTrue(services.isEmpty());
 		assertNotNull(cam.getConfiguration());
@@ -100,6 +103,7 @@ public class ConfigurationAdminManagerTest extends TestCase {
 		assertEquals(pid, props.get(Constants.SERVICE_PID));
 	}
 
+	@Test
 	public void testManagedServiceInstance() {
 		assertTrue(services.isEmpty());
 		assertNotNull(cam.getConfiguration());
@@ -107,6 +111,7 @@ public class ConfigurationAdminManagerTest extends TestCase {
 		assertTrue(serviceInstance instanceof ManagedService);
 	}
 
+	@Test
 	public void testUpdateCallback() throws Exception {
 		final List holder = new ArrayList(4);
 

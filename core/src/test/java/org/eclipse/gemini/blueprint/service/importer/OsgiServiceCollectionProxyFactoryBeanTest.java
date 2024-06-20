@@ -14,32 +14,39 @@
 
 package org.eclipse.gemini.blueprint.service.importer;
 
+import static org.easymock.EasyMock.createMock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
 import org.eclipse.gemini.blueprint.TestUtils;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.eclipse.gemini.blueprint.service.ServiceUnavailableException;
-import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
 import org.eclipse.gemini.blueprint.service.importer.support.Availability;
 import org.eclipse.gemini.blueprint.service.importer.support.MemberType;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
 import org.eclipse.gemini.blueprint.util.OsgiFilterUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
 /**
  * @author Costin Leau
  * 
  */
-public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
+public class OsgiServiceCollectionProxyFactoryBeanTest {
 
 	private OsgiServiceCollectionProxyFactoryBean serviceFactoryBean;
 
@@ -47,11 +54,9 @@ public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
 
 	private ServiceReference ref;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setup() throws Exception {
 		this.serviceFactoryBean = new OsgiServiceCollectionProxyFactoryBean();
-		// this.serviceFactoryBean.setApplicationContext(new
-		// GenericApplicationContext());
 
 		ref = new MockServiceReference(new String[] { Runnable.class.getName() });
 
@@ -69,14 +74,15 @@ public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
 
 		serviceFactoryBean.setBundleContext(this.bundleContext);
 		serviceFactoryBean.setBeanClassLoader(getClass().getClassLoader());
-		serviceFactoryBean.setInterfaces(new Class<?>[] { TestCase.class });
-
+		serviceFactoryBean.setInterfaces(new Class<?>[] {Integer.class});
 	}
 
-	protected void tearDown() {
+	@After
+	public void tearDown() {
 		serviceFactoryBean = null;
 	}
 
+	@Test
 	public void testListenersSetOnCollection() throws Exception {
 		serviceFactoryBean.setAvailability(Availability.OPTIONAL);
 
@@ -89,7 +95,9 @@ public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
 		assertSame(listeners, TestUtils.getFieldValue(exposedProxy, "listeners"));
 	}
 
-	public void tstMandatoryServiceAtStartupFailure() throws Exception {
+	@Test
+	@Ignore
+	public void testMandatoryServiceAtStartupFailure() throws Exception {
 		serviceFactoryBean.setAvailability(Availability.MANDATORY);
 
 		try {
@@ -102,6 +110,7 @@ public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testMandatoryServiceAvailableAtStartup() {
 		serviceFactoryBean.setInterfaces(new Class<?>[] { Runnable.class });
 		serviceFactoryBean.afterPropertiesSet();
@@ -109,6 +118,7 @@ public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
 		assertNotNull(serviceFactoryBean.getObject());
 	}
 
+	@Test
 	public void testMandatoryServiceUnAvailableWhileWorking() {
 		serviceFactoryBean.setInterfaces(new Class<?>[] { Runnable.class });
 		serviceFactoryBean.afterPropertiesSet();
@@ -124,6 +134,7 @@ public class OsgiServiceCollectionProxyFactoryBeanTest extends TestCase {
 		col.isEmpty();
 	}
 
+	@Test
 	public void testServiceReferenceMemberType() throws Exception {
 		serviceFactoryBean.setMemberType(MemberType.SERVICE_REFERENCE);
 		serviceFactoryBean.setInterfaces(new Class<?>[] { Runnable.class });

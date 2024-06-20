@@ -14,10 +14,15 @@
 
 package org.eclipse.gemini.blueprint.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.lang.reflect.Field;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ReflectionUtils;
@@ -28,25 +33,29 @@ import org.springframework.util.ReflectionUtils;
  * @author Costin Leau
  * 
  */
-public class ConfigurableBundleCreatorTestsTest extends TestCase {
+public class ConfigurableBundleCreatorTestsTest {
 
 	private AbstractConfigurableBundleCreatorTests bundleCreator;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		bundleCreator = new AbstractConfigurableBundleCreatorTests() {
 		};
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		bundleCreator = null;
 	}
 
+	@Test
 	public void testGetSettingsLocation() throws Exception {
 
 		assertEquals(bundleCreator.getClass().getPackage().getName().replace('.', '/')
 				+ "/ConfigurableBundleCreatorTestsTest$1-bundle.properties", bundleCreator.getSettingsLocation());
 	}
 
+	@Test
 	public void testDefaultJarSettings() throws Exception {
 
 		Properties defaultSettings = bundleCreator.getSettings();
@@ -59,6 +68,7 @@ public class ConfigurableBundleCreatorTestsTest extends TestCase {
 		assertNotNull(bundleCreator.getManifestLocation());
 	}
 
+	@Test
 	public void testPropertiesLoading() throws Exception {
 		Properties testSettings = bundleCreator.getSettings();
 

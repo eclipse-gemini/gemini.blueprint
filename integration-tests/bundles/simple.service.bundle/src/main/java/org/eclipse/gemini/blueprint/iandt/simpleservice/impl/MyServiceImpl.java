@@ -25,7 +25,7 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class MyServiceImpl implements MyService, InitializingBean {
     public void afterPropertiesSet() throws Exception {
-        Integer delay = Integer.getInteger("org.eclipse.gemini.blueprint.iandt.simpleservice.impl.delay", new Integer(0));
+        Integer delay = Integer.getInteger("org.eclipse.gemini.blueprint.iandt.simpleservice.impl.delay", Integer.valueOf(0));
         System.getProperties().remove("org.eclipse.gemini.blueprint.iandt.simpleservice.impl.delay");
         System.out.println("Delaying for:" + delay);
         Thread.sleep(delay.intValue());

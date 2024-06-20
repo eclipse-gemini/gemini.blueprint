@@ -14,23 +14,24 @@
 
 package org.eclipse.gemini.blueprint.mock;
 
+import static org.junit.Assert.assertFalse;
+
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.mock.MockFilter;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
+import org.junit.Before;
+import org.junit.Test;
 import org.osgi.framework.Filter;
 
 /**
  * @author Costin Leau
  * 
  */
-public class MockFilterTest extends TestCase {
+public class MockFilterTest {
 
 	Filter mock;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		mock = new MockFilter();
 	}
 
@@ -38,6 +39,7 @@ public class MockFilterTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockFilter#match(org.osgi.framework.ServiceReference)}.
 	 */
+	@Test
 	public void testMatchServiceReference() {
 		assertFalse(mock.match(new MockServiceReference()));
 	}
@@ -46,6 +48,7 @@ public class MockFilterTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockFilter#match(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testMatchDictionary() {
 		assertFalse(mock.match(new Hashtable()));
 	}
@@ -54,8 +57,8 @@ public class MockFilterTest extends TestCase {
 	 * Test method for
 	 * {@link org.eclipse.gemini.blueprint.mock.MockFilter#matchCase(java.util.Dictionary)}.
 	 */
+	@Test
 	public void testMatchCase() {
 		assertFalse(mock.matchCase(new Hashtable()));
 	}
-
 }

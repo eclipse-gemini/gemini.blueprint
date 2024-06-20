@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.configopt;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Shape;
 
 import org.osgi.framework.Bundle;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
+import org.junit.Test;
 
 /**
  * Integration test for Sync Wait.
@@ -29,7 +33,7 @@ import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
  * 
  */
 public class SyncWaitTest extends BehaviorBaseTest {
-
+	@Test
 	public void testBehaviour() throws Exception {
 
 		// locate bundle
@@ -57,7 +61,5 @@ public class SyncWaitTest extends BehaviorBaseTest {
 		// check that the dependency service is actually started as the
 		// dependency bundle has started
 		assertNotNull(bundleContext.getServiceReference(Shape.class.getName()));
-
 	}
-
 }

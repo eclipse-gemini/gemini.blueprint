@@ -16,8 +16,6 @@
 package org.eclipse.gemini.blueprint.context.support;
 
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
@@ -117,20 +115,9 @@ public class OsgiBundleXmlApplicationContext extends AbstractDelegatedExecutionA
 
 		final BundleContext ctx = getBundleContext();
 
-		if (System.getSecurityManager() != null) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					String filter = BundleUtils.createNamespaceFilter(ctx);
-					resolvers[0] = createNamespaceHandlerResolver(ctx, filter, getClassLoader());
-					resolvers[1] = createEntityResolver(ctx, filter, getClassLoader());
-					return null;
-				}
-			});
-		} else {
-			String filter = BundleUtils.createNamespaceFilter(ctx);
-			resolvers[0] = createNamespaceHandlerResolver(ctx, filter, getClassLoader());
-			resolvers[1] = createEntityResolver(ctx, filter, getClassLoader());
-		}
+		String filter = BundleUtils.createNamespaceFilter(ctx);
+		resolvers[0] = createNamespaceHandlerResolver(ctx, filter, getClassLoader());
+		resolvers[1] = createEntityResolver(ctx, filter, getClassLoader());
 
 		beanDefinitionReader.setNamespaceHandlerResolver((NamespaceHandlerResolver) resolvers[0]);
 		beanDefinitionReader.setEntityResolver((EntityResolver) resolvers[1]);
@@ -279,5 +266,10 @@ public class OsgiBundleXmlApplicationContext extends AbstractDelegatedExecutionA
 
 	public String[] getConfigLocations() {
 		return super.getConfigLocations();
+	}
+
+	@Override
+	public void destroy() throws Exception {
+
 	}
 }

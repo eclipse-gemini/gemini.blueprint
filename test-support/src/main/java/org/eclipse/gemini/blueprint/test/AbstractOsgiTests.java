@@ -18,17 +18,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 
-import junit.framework.Protectable;
-import junit.framework.TestCase;
-import junit.framework.TestResult;
-
 import org.eclipse.gemini.blueprint.io.OsgiBundleResourceLoader;
 import org.eclipse.gemini.blueprint.test.internal.holder.OsgiTestInfoHolder;
-import org.eclipse.gemini.blueprint.test.internal.util.TestUtils;
+import org.eclipse.gemini.blueprint.test.junit4.ConditionalTestCase;
 import org.eclipse.gemini.blueprint.test.platform.OsgiPlatform;
 import org.eclipse.gemini.blueprint.util.OsgiBundleUtils;
 import org.eclipse.gemini.blueprint.util.OsgiPlatformDetector;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -63,9 +60,6 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
     // JUnitService trigger
     private static Method serviceTrigger;
 
-    // the test results used by the triggering test runner
-    private TestResult originalResult;
-
     // OsgiResourceLoader
     protected ResourceLoader resourceLoader;
 
@@ -73,7 +67,7 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
      * Hook for JUnit infrastructures which can't reuse this class hierarchy. This instance represents the test which
      * will be executed by AbstractOsgiTests & co.
      */
-    private TestCase osgiJUnitTest = this;
+    private ConditionalTestCase osgiJUnitTest = this;
 
     private static final String ACTIVATOR_REFERENCE = "org.eclipse.gemini.blueprint.test.JUnitTestActivator";
 
@@ -151,30 +145,8 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
     // JUnit overridden methods.
     //
 
-    /**
-     * {@inheritDoc}
-     * <p/>
-     * <p/> Replacement run method. Gets a hold of the TestRunner used for running this test so it can populate it with
-     * the results retrieved from OSGi.
-     */
-    public final void run(TestResult result) {
-
-        // get a hold of the test result
-        originalResult = result;
-
-        result.startTest(osgiJUnitTest);
-        result.runProtected(osgiJUnitTest, new Protectable() {
-
-            public void protect() throws Throwable {
-                AbstractOsgiTests.this.runBare();
-            }
-        });
-        result.endTest(osgiJUnitTest);
-
-        // super.run(result);
-    }
-
-    public void runBare() throws Throwable {
+    @Test
+    public void test() throws Throwable {
         // add ConditionalTestCase behaviour
 
         // getName will return the name of the method being run
@@ -186,8 +158,6 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
             prepareTestExecution();
             // invoke OSGi test run
             invokeOSGiTestExecution();
-            readTestResult();
-
         }
     }
 
@@ -434,20 +404,6 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
         return (ctx == null ? platformContext : ctx);
     }
 
-    // runs outside OSGi
-    private void readTestResult() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Reading OSGi results for test [" + getName() + "]");
-        }
-
-        // copy results from OSGi into existing test result
-        TestUtils.cloneTestResults(OsgiTestInfoHolder.INSTANCE, originalResult, osgiJUnitTest);
-
-        if (logger.isTraceEnabled()) {
-            logger.debug("Test[" + getName() + "]'s result read");
-        }
-    }
-
     /**
      * Special shutdown hook.
      */
@@ -502,7 +458,7 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
      *
      * @param test
      */
-    private void injectOsgiJUnitTest(TestCase test) {
+    private void injectOsgiJUnitTest(ConditionalTestCase test) {
         this.osgiJUnitTest = test;
     }
 
@@ -527,7 +483,7 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
      * @throws Throwable
      */
     private void osgiRunTest() throws Throwable {
-        super.runTest();
+        test();
     }
 
 }

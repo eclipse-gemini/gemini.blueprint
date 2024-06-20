@@ -14,10 +14,16 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+
 import java.awt.Polygon;
 import java.awt.Shape;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.aopalliance.aop.Advice;
 import org.eclipse.gemini.blueprint.TestUtils;
@@ -39,7 +45,7 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * 
  */
-public class OsgiServiceProxyEqualityTest extends TestCase {
+public class OsgiServiceProxyEqualityTest {
 
 	private Object target;
 
@@ -99,8 +105,8 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 
 	private ServiceReference ref;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		ref = new MockServiceReference();
 		bundleContext = new MockBundleContext() {
 
@@ -116,7 +122,8 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		classLoader = getClass().getClassLoader();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		target = null;
 		bundleContext = null;
 	}
@@ -154,7 +161,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 	}
 
 	// TESTS on target W/O an equals defined on it
-
+	@Test
 	public void testSameInterceptorEquality() throws Exception {
 		target = new Polygon();
 
@@ -167,6 +174,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertEquals(proxyA, proxyB);
 	}
 
+	@Test
 	public void testEqualsInterceptorsEquality() throws Exception {
 
 		target = new Polygon();
@@ -182,6 +190,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertEquals(interceptorA, interceptorB);
 	}
 
+	@Test
 	public void testMultipleInterceptorEquality() throws Exception {
 		target = new Polygon();
 
@@ -208,6 +217,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 	//
 	// TESTS on object with an EQUAL defined on it
 	//
+	@Test
 	public void testDifferentInterceptorsButTargetHasEquals() throws Exception {
 		target = new Implementor();
 		bundleContext = new MockBundleContext() {
@@ -236,6 +246,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertEquals(proxyA, proxyB);
 	}
 
+	@Test
 	public void testDifferentProxySetupButTargetHasEquals() throws Exception {
 		target = new Implementor();
 
@@ -256,6 +267,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertEquals(proxyA, proxyB);
 	}
 
+	@Test
 	public void testSpringInfrastructureProxyOnImportersWithTheSameRef() throws Exception {
 		Object service = new Object();
 		ServiceInvoker invokerA = new ServiceStaticInterceptor(createObjectTrackingBundleContext(service), ref);
@@ -270,6 +282,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertSame(proxyA.getWrappedObject(), proxyB.getWrappedObject());
 	}
 
+	@Test
 	public void testSpringInfrastructureProxyOnImportersWithDifferentRefs() throws Exception {
 		Object service = new Object();
 		BundleContext ctx = createObjectTrackingBundleContext(service);
@@ -283,6 +296,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertFalse("target objects should not be equal", proxyA.getWrappedObject().equals(proxyB.getWrappedObject()));
 	}
 
+	@Test
 	public void testNakedTargetPropertyReturnedByTheInfrastructureProxy() throws Exception {
 		Object service = new Object();
 		ServiceInvoker invoker = new ServiceStaticInterceptor(createObjectTrackingBundleContext(service), ref);
@@ -291,6 +305,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertSame(service, proxy.getWrappedObject());
 	}
 
+	@Test
 	public void testEqualityBetweenInfrastructureProxies() throws Exception {
 		Advice interceptorA1 = new InfrastructureOsgiProxyAdvice(new ServiceStaticInterceptor(bundleContext, ref));
 		Advice interceptorB1 = new InfrastructureOsgiProxyAdvice(new ServiceStaticInterceptor(bundleContext, ref));
@@ -298,6 +313,7 @@ public class OsgiServiceProxyEqualityTest extends TestCase {
 		assertEquals("interceptors should be equal", interceptorA1, interceptorB1);
 	}
 
+	@Test
 	public void testNonEqualityBetweenInfrastructureProxies() throws Exception {
 		Advice interceptorA1 = new InfrastructureOsgiProxyAdvice(new ServiceStaticInterceptor(bundleContext, ref));
 		Advice interceptorB1 = new InfrastructureOsgiProxyAdvice(createInterceptorWOServiceRequired());

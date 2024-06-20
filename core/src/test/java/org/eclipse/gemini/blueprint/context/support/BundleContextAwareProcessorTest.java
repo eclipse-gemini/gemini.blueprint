@@ -14,9 +14,14 @@
 
 package org.eclipse.gemini.blueprint.context.support;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
@@ -27,14 +32,15 @@ import org.osgi.framework.BundleContext;
  * @author Adrian Colyer
  * @since 2.0
  */
-public abstract class BundleContextAwareProcessorTest extends TestCase{
+public abstract class BundleContextAwareProcessorTest {
 
     // TODO: is this test still applicable?  Does not look like it is testing anything.
 
 	private BundleContext mockContext;
 	private BundleContextAware mockAware;
 	
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		this.mockContext = createMock(BundleContext.class);
 		// no tests should ever call the mockContext, we're really
 		// using it just as a convenient implementation
@@ -43,10 +49,12 @@ public abstract class BundleContextAwareProcessorTest extends TestCase{
 		this.mockAware = createMock(BundleContextAware.class);
 	}
 	
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		verify(mockContext);
 	}
 	
+	@Test
 	public void testBeforeInitializationNoBundleContext() {
 		BundleContextAwareProcessor bcaProcessor = new BundleContextAwareProcessor(null);
 		replay(mockAware);
@@ -61,6 +69,7 @@ public abstract class BundleContextAwareProcessorTest extends TestCase{
 		verify(mockAware);
 	}
 	
+	@Test
 	public void testBeforeInitializationNonImplementer() {
 		BundleContextAwareProcessor bcaProcessor = new BundleContextAwareProcessor(this.mockContext);
 		Object bean = new Object();
@@ -68,6 +77,7 @@ public abstract class BundleContextAwareProcessorTest extends TestCase{
 		assertSame("should return same bean instance",bean,ret);
 	}
 	
+	@Test
 	public void testBeforeInitializationBundleContextImplementer() {
 		BundleContextAwareProcessor bcaProcessor = new BundleContextAwareProcessor(this.mockContext);
 		this.mockAware.setBundleContext(this.mockContext);
@@ -77,6 +87,7 @@ public abstract class BundleContextAwareProcessorTest extends TestCase{
 		//assertTrue("should return true",ret);
 	}
 	
+	@Test
 	public void testAfterInitialization() {
 		Object bean = new Object();
 		BundleContextAwareProcessor bcaProcessor = new BundleContextAwareProcessor(this.mockContext);

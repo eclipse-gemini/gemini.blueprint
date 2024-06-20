@@ -1,12 +1,9 @@
 package org.eclipse.gemini.blueprint.iandt.recursive;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.eclipse.gemini.blueprint.util.OsgiServiceReferenceUtils;
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
-import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
+import org.junit.Test;
+import org.osgi.framework.Bundle;
 
 
 public class RecursiveTypesTest extends BaseIntegrationTest {
@@ -19,6 +16,7 @@ public class RecursiveTypesTest extends BaseIntegrationTest {
 		return null;
 	}
 
+	@Test
 	public void testBeanReference() throws Exception {
 
 		Bundle bundle = bundleContext.installBundle(getLocator().locateArtifact(

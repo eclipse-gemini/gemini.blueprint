@@ -14,37 +14,42 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.util;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
 import org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils;
-import org.eclipse.gemini.blueprint.io.OsgiBundleResource;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Costin Leau
  * 
  */
-public class ConfigUtilsTest extends TestCase {
+public class ConfigUtilsTest {
 
 	private Dictionary headers;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		headers = new Hashtable();
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		headers = null;
 	}
 
+	@Test
 	public void testGetCompletelyEmptySpringContextHeader() throws Exception {
 		String[] locations = ConfigUtils.getHeaderLocations(headers);
 		assertEquals(0, locations.length);
 
 	}
 
+	@Test
 	public void testGetEmptyConfigLocations() throws Exception {
 		String entry = ";early-init-importers=true";
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER, entry);
@@ -52,6 +57,7 @@ public class ConfigUtilsTest extends TestCase {
 		assertEquals(0, locations.length);
 	}
 
+	@Test
 	public void testGetNotExistingConfigLocations() throws Exception {
 		String location = "osgibundle:/META-INF/non-existing.xml";
 		String entry = location + "; early-init-importers=true";
@@ -63,6 +69,7 @@ public class ConfigUtilsTest extends TestCase {
 
 	}
 
+	@Test
 	public void testGetWildcardConfigLocs() throws Exception {
 		String location = "classpath:/META-INF/spring/*.xml";
 		String entry = location + "; early-init-importers=true";
@@ -72,6 +79,7 @@ public class ConfigUtilsTest extends TestCase {
 		assertEquals(location, locations[0]);
 	}
 
+	@Test
 	public void testMultipleConfigLocs() throws Exception {
 		String location1 = "classpath:/META-INF/spring/*.xml";
 		String location2 = "osgibundle:/META-INF/non-existing.xml";
@@ -84,6 +92,7 @@ public class ConfigUtilsTest extends TestCase {
 		assertEquals(location2, locations[1]);
 	}
 
+	@Test
 	public void testLocationWithMultipleDots() throws Exception {
 		headers.put(ConfigUtils.SPRING_CONTEXT_HEADER,
 			"META-INF/file.with.multiple.dots.xml, META-INF/another.file.xml");

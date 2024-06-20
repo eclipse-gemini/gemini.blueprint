@@ -14,20 +14,21 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.util.concurrent;
 
-import org.eclipse.gemini.blueprint.extender.internal.util.concurrent.RunnableTimedExecution;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * 
  * @author Costin Leau
  * 
  */
-public class RunnableTimedExecutionTest extends TestCase {
+public class RunnableTimedExecutionTest {
 
 	private long wait = 5 * 1000;
 
-
+	@Test
 	public void testExecute() {
 		RunnableTimedExecution.execute(new Runnable() {
 
@@ -38,6 +39,7 @@ public class RunnableTimedExecutionTest extends TestCase {
 		}, wait);
 	}
 
+	@Test
 	public void testDestroy() {
 		RunnableTimedExecution.execute(new Runnable() {
 

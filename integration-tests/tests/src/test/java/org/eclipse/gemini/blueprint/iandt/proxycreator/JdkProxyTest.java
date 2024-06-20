@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.iandt.proxycreator;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -33,6 +37,7 @@ public class JdkProxyTest extends BaseIntegrationTest {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt,jdk.proxy," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testJDKProxyCreationUsingTheInterfaceClassLoaderInsteadOfTheHandlerOne() throws Exception {
 		// get the invocation handler directly
 		InvocationHandler handler = getInvocationHandler();

@@ -14,102 +14,62 @@
 
 package org.eclipse.gemini.blueprint.test.internal.support;
 
-import junit.framework.Protectable;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestResult;
+import java.lang.reflect.Method;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.test.internal.OsgiJUnitTest;
-import org.eclipse.gemini.blueprint.test.internal.TestRunnerService;
-import org.eclipse.gemini.blueprint.test.internal.holder.HolderLoader;
-import org.eclipse.gemini.blueprint.test.internal.holder.OsgiTestInfoHolder;
-import org.eclipse.gemini.blueprint.test.internal.util.TestUtils;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
+import org.junit.runner.notification.RunNotifier;
+import org.osgi.framework.BundleContext;
 
 /**
  * OSGi service for executing JUnit tests.
  *
  * @author Costin Leau
+ * @author Michelle Cross
  */
-public class OsgiJUnitService implements TestRunnerService {
+public class OsgiJUnitService extends Runner {
 
-    private static final Log log = LogFactory.getLog(OsgiJUnitService.class);
+	private Class<?> test;
 
+	private BundleContext bc;
 
-    public void runTest(OsgiJUnitTest test) {
-        try {
-            executeTest(test);
-        } catch (Exception ex) {
-            if (ex instanceof RuntimeException) {
-                throw (RuntimeException) ex;
-            }
-            throw new RuntimeException("cannot execute test:" + ex, ex);
-        }
-    }
+	public OsgiJUnitService(Class<?> test) {
+		super();
+		this.test = test;
+	}
 
-    /**
-     * Execute the JUnit test and publish results to the outside-OSGi world.
-     *
-     * @param test
-     * @throws Exception
-     */
-    protected void executeTest(OsgiJUnitTest test) throws Exception {
-        // create holder
-        // since we're inside OSGi, we have to use the special loading procedure
-        OsgiTestInfoHolder holder = HolderLoader.INSTANCE.getHolder();
+	@Override
+	public Description getDescription() {
+		return Description.createTestDescription(test, "OsgiJUnitService");
+	}
 
-        // read the test to be executed
-        String testName = holder.getTestMethodName();
-        if (log.isDebugEnabled()) {
-            log.debug("Reading test [" + testName + "] for execution inside OSGi");
-        }
-        // execute the test
-        TestResult result = runTest(test, testName);
+	@Override
+	public void run(RunNotifier notifier) {
+		System.out.println("Running the tests from OsgiJUnitService: " + test);
+		try {
+			OsgiJUnitTest testObject = (OsgiJUnitTest) test.newInstance();
+			for (Method method : test.getMethods()) {
+				if (method.isAnnotationPresent(Test.class) && !method.isAnnotationPresent(Ignore.class)) {
+					notifier.fireTestStarted(Description.createTestDescription(test, method.getName()));
+					try {
+						testObject.injectBundleContext(bc);
+						testObject.osgiSetUp();
+						method.invoke(testObject);
+					} finally {
+						testObject.osgiTearDown();
+					}
+					notifier.fireTestFinished(Description.createTestDescription(test, method.getName()));
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-        if (log.isDebugEnabled()) {
-            log.debug("Sending test results from OSGi");
-        }
-        // write result back to the outside world
-        TestUtils.unpackProblems(result, holder);
-    }
-
-    /**
-     * Run fixture setup, test from the given test case and fixture teardown.
-     *
-     * @param osgiTestExtensions
-     * @param testName
-     */
-    protected TestResult runTest(final OsgiJUnitTest osgiTestExtensions, String testName) {
-        if (log.isDebugEnabled()) {
-            log.debug("Running test [" + testName + "] on testCase " + osgiTestExtensions);
-        }
-
-        final TestResult result = new TestResult();
-        TestCase rawTest = osgiTestExtensions.getTestCase();
-        rawTest.setName(testName);
-
-        try {
-            osgiTestExtensions.osgiSetUp();
-
-            try {
-                // use TestResult method to bypass the setUp/tearDown methods
-                result.runProtected(rawTest, new Protectable() {
-
-                    public void protect() throws Throwable {
-                        osgiTestExtensions.osgiRunTest();
-                    }
-
-                });
-            } finally {
-                osgiTestExtensions.osgiTearDown();
-            }
-        }
-        // exceptions thrown by osgiSetUp/osgiTearDown
-        catch (Exception ex) {
-            log.error("test exception threw exception ", ex);
-            result.addError(rawTest, ex);
-        }
-        return result;
-    }
+	public void setBundleContext(BundleContext bc) {
+		this.bc = bc;
+	}
 }

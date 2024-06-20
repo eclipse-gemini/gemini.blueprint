@@ -2,9 +2,9 @@ Export-Package: \
  !*.internal.*, \
  org.eclipse.gemini.blueprint.io.*;version=${project.version}
 
-Import-Package: \
- org.osgi.framework;version=1.3, \
- org.osgi.service.packageadmin;version=1.2, \
+Import-Package: !java.*, \
+ org.osgi.framework;version=${osgi.framework.ver}, \
+ org.osgi.service.packageadmin;version=${osgi.service.packageadmin.ver}, \
  org.springframework.*;version=${spring.version.range}, \
  org.apache.commons.logging.*;version=${logging.version.range}, \
  *;resolution:=optional

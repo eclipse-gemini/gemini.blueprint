@@ -14,8 +14,12 @@
 
 package org.eclipse.gemini.blueprint.iandt.jdk5.io;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
 import org.eclipse.gemini.blueprint.iandt.io.component.ComponentBean;
+import org.junit.Test;
 
 /**
  * Integration test for Spring 2.5 component scan.
@@ -33,6 +37,7 @@ public class ComponentScanTest extends BaseIntegrationTest {
 		return new String[] { "org.eclipse.gemini.blueprint.iandt,component.scan.bundle," + getSpringDMVersion() };
 	}
 
+	@Test
 	public void testComponentScan() throws Exception {
 		// force an import on component bean
 		assertNotNull(ComponentBean.class);

@@ -47,4 +47,14 @@ public class MockConfigurationAdmin implements ConfigurationAdmin {
 		return null;
 	}
 
+	@Override
+	public Configuration getFactoryConfiguration(String factoryPid, String name, String location) throws IOException {
+		return null;
+	}
+
+	@Override
+	public Configuration getFactoryConfiguration(String factoryPid, String name) throws IOException {
+		return null;
+	}
+
 }

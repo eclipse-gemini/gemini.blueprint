@@ -14,9 +14,11 @@
 
 package org.eclipse.gemini.blueprint.iandt.testingFramework;
 
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.gemini.blueprint.iandt.BaseIntegrationTest;
+import org.junit.Test;
 import org.osgi.framework.Constants;
-import org.eclipse.gemini.blueprint.test.AbstractConfigurableBundleCreatorTests;
 
 /**
  * This test might log exceptions since the OSGi platform may try to register an
@@ -37,6 +39,7 @@ public class OsgiPlatformTest extends BaseIntegrationTest {
 		platform = getPlatformName();
 	}
 
+	@Test
 	public void testOsgiPlatform() throws Exception {
 		String vendor = bundleContext.getProperty(Constants.FRAMEWORK_VENDOR);
 

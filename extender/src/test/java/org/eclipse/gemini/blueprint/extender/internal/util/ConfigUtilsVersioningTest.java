@@ -14,17 +14,23 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.util;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Dictionary;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.eclipse.gemini.blueprint.extender.support.internal.ConfigUtils;
 import org.eclipse.gemini.blueprint.mock.MockBundle;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
-public class ConfigUtilsVersioningTest extends TestCase {
+public class ConfigUtilsVersioningTest {
 
 	private Bundle bundle;
 
@@ -32,8 +38,8 @@ public class ConfigUtilsVersioningTest extends TestCase {
 
 	private Version min, max, version;
 
-
-	protected void setUp() throws Exception {
+	@Before
+	public void setup() throws Exception {
 		props = new Properties();
 		bundle = new MockBundle(props);
 
@@ -42,7 +48,8 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		version = Version.parseVersion("1.2.5");
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		props = null;
 		bundle = null;
 	}
@@ -51,10 +58,12 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		props.put(ConfigUtils.EXTENDER_VERSION, version);
 	}
 
+	@Test
 	public void testNoVersion() {
 		assertTrue(ConfigUtils.matchExtenderVersionRange(bundle, ConfigUtils.EXTENDER_VERSION, Version.emptyVersion));
 	}
 
+	@Test
 	public void testLeftOpenRange() {
 		String ver = "(1.2, 1.3]";
 		addVersion(ver);
@@ -63,6 +72,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		assertTrue(ConfigUtils.matchExtenderVersionRange(bundle, ConfigUtils.EXTENDER_VERSION, version));
 	}
 
+	@Test
 	public void testRightOpenRange() {
 		String ver = "[1.2, 1.3)";
 		addVersion(ver);
@@ -71,6 +81,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		assertTrue(ConfigUtils.matchExtenderVersionRange(bundle, ConfigUtils.EXTENDER_VERSION, version));
 	}
 
+	@Test
 	public void testLeftCloseRange() {
 		String ver = "[1.2, 1.3]";
 		addVersion(ver);
@@ -79,6 +90,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		assertTrue(ConfigUtils.matchExtenderVersionRange(bundle, ConfigUtils.EXTENDER_VERSION, version));
 	}
 
+	@Test
 	public void testRightCloseRange() {
 		String ver = "[1.2, 1.3]";
 		addVersion(ver);
@@ -87,6 +99,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		assertTrue(ConfigUtils.matchExtenderVersionRange(bundle, ConfigUtils.EXTENDER_VERSION, version));
 	}
 
+	@Test
 	public void testTooManyCommas() {
 		String ver = "[1.2, ,1.3]";
 		addVersion(ver);
@@ -100,6 +113,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testTooManyCommasAgain() {
 		String ver = "[1,2 , 1.3)";
 		addVersion(ver);
@@ -113,6 +127,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNoBracketsIntervalOnRight() {
 		String ver = "[1.2, 1.3";
 		addVersion(ver);
@@ -127,6 +142,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 
 	}
 
+	@Test
 	public void testNoBracketsIntervalOnLeft() {
 		String ver = "1.2, 1.3)";
 		addVersion(ver);
@@ -141,6 +157,7 @@ public class ConfigUtilsVersioningTest extends TestCase {
 
 	}
 
+	@Test
 	public void testNoCommaInterval() {
 		String ver = "[1.2 1.3]";
 		addVersion(ver);

@@ -15,28 +15,30 @@
 
 package org.eclipse.gemini.blueprint.service.exporter;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
-import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.*;
-
+import org.eclipse.gemini.blueprint.service.exporter.support.BeanNameServicePropertiesResolver;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-
-import org.eclipse.gemini.blueprint.service.exporter.support.BeanNameServicePropertiesResolver;
 
 
 /**
  * @author Adrian Colyer
  * @author Hal Hildebrand
  */
-public class BeanNameServicePropertiesResolverTest extends TestCase {
-
+public class BeanNameServicePropertiesResolverTest {
+	@Test
 	public void testAfterPropertiesSetNoBundleContext() throws Exception {
 		try {
 			new BeanNameServicePropertiesResolver().afterPropertiesSet();
@@ -47,6 +49,7 @@ public class BeanNameServicePropertiesResolverTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testGetServiceProperties() {
         BundleContext mockContext = createMock(BundleContext.class);
         Bundle mockBundle = createMock(Bundle.class);

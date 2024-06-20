@@ -14,10 +14,14 @@
 
 package org.eclipse.gemini.blueprint.test.internal.util;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 
 import org.eclipse.gemini.blueprint.test.internal.util.jar.storage.FileSystemStorage;
 import org.eclipse.gemini.blueprint.test.internal.util.jar.storage.Storage;
+import org.junit.Test;
 import org.springframework.core.io.Resource;
 
 /**
@@ -34,6 +38,7 @@ public class FileSystemStorageTest extends AbstractStorageTest {
 		return new FileSystemStorage();
 	}
 
+	@Test
 	public void testResourceForTempFile() throws Exception {
 		Resource res = storage.getResource();
 		assertTrue(res.exists());
@@ -43,6 +48,7 @@ public class FileSystemStorageTest extends AbstractStorageTest {
 		assertTrue(tempFile.canWrite());
 	}
 
+	@Test
 	public void testDispose() throws Exception {
 		Resource res = storage.getResource();
 		File file = res.getFile();
