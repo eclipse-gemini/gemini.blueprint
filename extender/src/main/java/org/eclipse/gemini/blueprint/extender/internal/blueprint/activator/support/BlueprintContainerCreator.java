@@ -25,6 +25,9 @@ import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfigura
 import org.eclipse.gemini.blueprint.util.OsgiStringUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Blueprint specific context creator. Picks up the Blueprint locations instead of Spring DM's.
  * 
@@ -48,6 +51,16 @@ public class BlueprintContainerCreator implements OsgiApplicationContextCreator 
 		if (!config.isSpringPoweredBundle()) {
 			if (log.isDebugEnabled())
 				log.debug("No blueprint configuration found in bundle " + bundleName + "; ignoring it...");
+			return null;
+		}
+
+		// If Aries Blueprint is present, delegates to him the blueprint instantiation
+		List<Bundle> allBundles = Arrays.asList(bundleContext.getBundles());
+		boolean hasAries = allBundles.stream()
+						.anyMatch(b -> b.getSymbolicName().equals("org.apache.aries.blueprint.core"));
+		if (hasAries) {
+			log.info("[Gemini Extender] Aries Blueprint is enabled at the running container, skipping blueprint " +
+							"instantiation for bundle " + bundleName + "...");
 			return null;
 		}
 
