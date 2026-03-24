@@ -46,8 +46,8 @@ public abstract class BeanFactoryUtils {
 	 */
 	public static String[] getTransitiveDependenciesForBean(ConfigurableListableBeanFactory beanFactory,
 			String beanName, boolean rawFactoryBeans, Class<?> type) {
-		Assert.notNull(beanFactory);
-		Assert.hasText(beanName);
+		Assert.notNull(beanFactory, "argument must not be null");
+		Assert.hasText(beanName, "argument must have text");
 
 		Assert.isTrue(beanFactory.containsBean(beanName), "no bean by name [" + beanName + "] can be found");
 

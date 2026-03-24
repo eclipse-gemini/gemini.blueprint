@@ -15,9 +15,9 @@
 package org.eclipse.gemini.blueprint.context.support.internal.security;
 
 import java.security.AccessControlContext;
+import java.security.AccessController;
 
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -26,13 +26,9 @@ import org.springframework.context.ApplicationContext;
 public abstract class SecurityUtils {
 
 	public static AccessControlContext getAccFrom(BeanFactory beanFactory) {
-		AccessControlContext acc = null;
-		if (beanFactory != null) {
-			if (beanFactory instanceof ConfigurableBeanFactory) {
-				return ((ConfigurableBeanFactory) beanFactory).getAccessControlContext();
-			}
-		}
-		return acc;
+		// Security Manager is deprecated since Java 17 and getAccessControlContext()
+		// was removed from Spring 6. Return the current context as a fallback.
+		return AccessController.getContext();
 	}
 
 	public static AccessControlContext getAccFrom(ApplicationContext ac) {

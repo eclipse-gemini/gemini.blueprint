@@ -5,7 +5,7 @@
     <groupId>org.eclipse.gemini.blueprint</groupId>
     <artifactId>gemini-blueprint</artifactId>
     <!-- Note: When updating the version, ensure it is a valid OSGi version -->
-    <version>3.0.1.BUILD-SNAPSHOT</version>
+    <version>4.0.0.BUILD-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
@@ -23,8 +23,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Spring version -->
-        <spring.maven.artifact.version>5.0.4.RELEASE_1</spring.maven.artifact.version>
-        <spring.base.version>5.0.0</spring.base.version>
+        <spring.maven.artifact.version>7.0.6</spring.maven.artifact.version>
+        <spring.base.version>7.0.0</spring.base.version>
 
         <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
         <spring.osgi.symbolic.name>${project.groupId}.${project.artifactId}</spring.osgi.symbolic.name>
@@ -32,20 +32,19 @@
         <spring.osgi.license.loc>..</spring.osgi.license.loc>
 
         <!-- other properties -->
-        <slf4j.version>1.7.5</slf4j.version>
-        <logback.version>1.0.13</logback.version>
+        <slf4j.version>2.0.16</slf4j.version>
+        <logback.version>1.5.16</logback.version>
         <env.buildPlan />
         <env.buildNumber />
 
         <!-- compiled against osgi Revision -->
-        <osgi.ver>5.0.0</osgi.ver>
+        <osgi.ver>8.0.0</osgi.ver>
+        <osgi.cmpn.ver>7.0.0</osgi.cmpn.ver>
         <!-- platform versions -->
-        <!-- equinox - repackaged in ${basedir}/lib/equinox -->
-        <equinox.ver>3.9.1.v20130814-1242</equinox.ver>
-        <!-- Knopflerfish -->
-        <kf.ver>7.1.2</kf.ver>
-        <!-- Felix 4.4.x supports OSGi R5 -->
-        <felix.ver>4.4.0</felix.ver>
+        <!-- equinox -->
+        <equinox.ver>3.23.100</equinox.ver>
+        <!-- Felix -->
+        <felix.ver>7.0.5</felix.ver>
 
         <!-- javadoc configuration -->
         <javadoc.loc>${basedir}/docs/src/javadoc</javadoc.loc>
@@ -60,9 +59,9 @@
         <security.argLine />
         <policy.url>..${file.separator}policy.all</policy.url>
 
-        <!-- common version ranges -->
-        <spring.version.range.nq>[${spring.base.version},6)</spring.version.range.nq>
-        <spring.version.range>"${spring.version.range.nq}"</spring.version.range>
+        <!-- common version ranges (no version constraint on Spring packages) -->
+        <spring.version.range.nq></spring.version.range.nq>
+        <spring.version.range></spring.version.range>
         <gemini.blueprint.version.range.nq>[${project.version},${project.version}]</gemini.blueprint.version.range.nq>
         <gemini.blueprint.version.range>"${gemini.blueprint.version.range.nq}"</gemini.blueprint.version.range>
         <logging.version.range>"[1.0,2.0)"</logging.version.range>
@@ -221,76 +220,66 @@
 
             <!-- Spring -->
             <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.spring-aop</artifactId>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
                 <version>${spring.maven.artifact.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
                 <version>${spring.maven.artifact.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.spring-core</artifactId>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
                 <version>${spring.maven.artifact.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.spring-context</artifactId>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
                 <version>${spring.maven.artifact.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.spring-expression</artifactId>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
                 <version>${spring.maven.artifact.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.spring-test</artifactId>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
                 <version>${spring.maven.artifact.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.aopalliance</artifactId>
-                <version>1.0_6</version>
             </dependency>
 
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.core</artifactId>
+                <artifactId>osgi.core</artifactId>
                 <version>${osgi.ver}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.compendium</artifactId>
-                <version>${osgi.ver}</version>
+                <artifactId>osgi.cmpn</artifactId>
+                <version>${osgi.cmpn.ver}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.junit</artifactId>
-                <version>4.12_1</version>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
             </dependency>
 
             <dependency>
-                <groupId>org.eclipse.birt.runtime</groupId>
+                <groupId>org.eclipse.platform</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
                 <version>${equinox.ver}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.knopflerfish</groupId>
-                <artifactId>framework</artifactId>
-                <version>${kf.ver}</version>
-            </dependency>
+
 
             <dependency>
                 <groupId>org.apache.felix</groupId>
@@ -312,23 +301,17 @@
 
     <!-- shared dependencies across modules -->
     <dependencies>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
-        </dependency>
-
         <!-- junit -->
         <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.junit</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-            <version>3.2</version>
+            <version>5.2.0</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -340,8 +323,8 @@
 
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <artifactId>mockito-core</artifactId>
+            <version>4.11.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -350,14 +333,6 @@
             <artifactId>assertj-core</artifactId>
             <version>3.6.2</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- commons-logging in slf4j wrapper -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -414,7 +389,7 @@
                 <plugin>
                     <groupId>biz.aQute.bnd</groupId>
                     <artifactId>bnd-maven-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>7.0.0</version>
                     <executions>
                         <execution>
                             <goals>
@@ -466,17 +441,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
-                    <dependencies>
-                        <!-- force surefire to use new junit 4.7+ runner, it would normally auto detect this -->
-                        <!-- but since we're not using the official junit dependency it is unable to do so.-->
-                        <!-- - this makes things like @Ignore work. -->
-                        <dependency>
-                            <groupId>org.apache.maven.surefire</groupId>
-                            <artifactId>surefire-junit47</artifactId>
-                            <version>2.19.1</version>
-                        </dependency>
-                    </dependencies>
+                    <version>3.2.5</version>
+                    <configuration>
+                        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -538,7 +506,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>3.2.5</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -552,10 +520,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -782,7 +750,7 @@
     </build>
 
 
-    <!-- profiles for equinox, knopflerfish, and felix                 -->
+    <!-- profiles for equinox and felix                                -->
     <!-- to use these profiles invoke maven with -Pprofile-name, e.g. -->
     <!-- mvn -Pfelix test                                             -->
     <profiles>
@@ -790,7 +758,7 @@
             <id>equinox</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.eclipse.birt.runtime</groupId>
+                    <groupId>org.eclipse.platform</groupId>
                     <artifactId>org.eclipse.osgi</artifactId>
                     <version>${equinox.ver}</version>
                     <scope>provided</scope>
@@ -798,22 +766,6 @@
             </dependencies>
             <properties>
                 <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.EquinoxPlatform</osgi.test.platform>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>knopflerfish</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.knopflerfish</groupId>
-                    <artifactId>framework</artifactId>
-                    <version>${kf.ver}</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-            <properties>
-                <osgi.test.platform>org.eclipse.gemini.blueprint.test.platform.KnopflerfishPlatform</osgi.test.platform>
-                <org.knopflerfish.osgi.setcontextclassloader>true</org.knopflerfish.osgi.setcontextclassloader>
             </properties>
         </profile>
 
@@ -834,7 +786,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
+                    <artifactId>osgi.core</artifactId>
                     <scope>compile</scope>
                 </dependency>
             </dependencies>
@@ -912,11 +864,11 @@
                     <!--
                        The test sources are compiled against this generic dependency.
                        usually, test sources are compiled with regard to the framework chosen for
-                       running the integration tests (e.g. felix, knopflerfish...). however, during release
+                       running the integration tests (e.g. equinox, felix). however, during release
                        they are simply compiled and not executed, thus we need this generic dependency.
                     -->
                     <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
+                    <artifactId>osgi.core</artifactId>
                     <scope>compile</scope>
                 </dependency>
             </dependencies>
@@ -1037,11 +989,6 @@
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
 
-        <repository>
-            <id>knopflerfish-repo</id>
-            <name>Official Knopflerfish Repository</name>
-            <url>https://www.knopflerfish.org/maven2/</url>
-        </repository>
     </repositories>
 
 </project>

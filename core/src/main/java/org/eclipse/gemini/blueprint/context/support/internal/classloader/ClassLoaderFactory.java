@@ -46,7 +46,7 @@ public abstract class ClassLoaderFactory {
 	 * @return AOP class loader created using the given argument
 	 */
 	public static ChainedClassLoader getAopClassLoaderFor(ClassLoader classLoader) {
-		Assert.notNull(classLoader);
+		Assert.notNull(classLoader, "argument must not be null");
 		return aopClassLoaderFactory.createClassLoader(classLoader);
 	}
 
@@ -65,7 +65,7 @@ public abstract class ClassLoaderFactory {
 	 * @return associated wrapping class loader
 	 */
 	public static ClassLoader getBundleClassLoaderFor(Bundle bundle) {
-		Assert.notNull(bundle);
+		Assert.notNull(bundle, "argument must not be null");
 		return bundleClassLoaderFactory.createClassLoader(bundle);
 	}
 }

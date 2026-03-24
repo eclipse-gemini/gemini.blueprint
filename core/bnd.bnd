@@ -11,14 +11,14 @@ Export-Package: !*.internal.*, \
  org.eclipse.gemini.blueprint;version=${project.version}
 
 Import-Package: \
- org.springframework.aop;version="${spring.version.range.nq}", \
- org.springframework.beans.propertyeditors;version="${spring.version.range.nq}", \
+ org.springframework.aop, \
+ org.springframework.beans.propertyeditors, \
  org.osgi.framework;version=1.3, \
  org.aopalliance.*;version="0.0.0", \
  org.osgi.service.cm;version=1.2;resolution:=optional, \
  org.osgi.service.startlevel;version=1.0;resolution:=optional, \
  org.apache.commons.logging.*;version=${logging.version.range}, \
- org.springframework.*;version=${spring.version.range}, \
+ org.springframework.*, \
  *;resolution:="optional"
 
 

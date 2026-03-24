@@ -40,7 +40,7 @@ class DelegatedNamespaceHandlerResolver implements NamespaceHandlerResolver {
 
 
 	public void addNamespaceHandler(NamespaceHandlerResolver resolver, String resolverToString) {
-		Assert.notNull(resolver);
+		Assert.notNull(resolver, "argument must not be null");
 		resolvers.put(resolver, resolverToString);
 	}
 

@@ -288,6 +288,18 @@ public class MockBundleContext implements BundleContext {
 		return false;
 	}
 
+	@Override
+	public <S> ServiceRegistration<S> registerService(Class<S> clazz, org.osgi.framework.ServiceFactory<S> factory, Dictionary<String, ?> properties) {
+		@SuppressWarnings("unchecked")
+		ServiceRegistration<S> registration = (ServiceRegistration<S>) registerService(clazz.getName(), factory, properties);
+		return registration;
+	}
+
+	@Override
+	public <S> org.osgi.framework.ServiceObjects<S> getServiceObjects(ServiceReference<S> reference) {
+		return null;
+	}
+
 	/**
 	 * Sets the bundle associated with this context.
 	 * 

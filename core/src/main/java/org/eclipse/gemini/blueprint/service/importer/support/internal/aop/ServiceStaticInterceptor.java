@@ -45,7 +45,7 @@ public class ServiceStaticInterceptor extends ServiceInvoker {
 	private volatile Object target = null;
 
 	public ServiceStaticInterceptor(BundleContext context, ServiceReference reference) {
-		Assert.notNull(context);
+		Assert.notNull(context, "argument must not be null");
 		Assert.notNull(reference, "a not null service reference is required");
 		this.bundleContext = context;
 		this.reference = reference;

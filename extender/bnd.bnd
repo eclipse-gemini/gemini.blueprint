@@ -13,7 +13,7 @@ Import-Package: org.eclipse.gemini.blueprint.extensions.annotation;resolution:=o
  org.apache.commons.logging.*;version=${logging.version.range}, \
  org.eclipse.gemini.blueprint.blueprint.*;version=${gemini.blueprint.version.range}, \
  org.eclipse.gemini.blueprint.*;version=${gemini.blueprint.version.range}, \
- org.springframework.*;version=${spring.version.range}, \
+ org.springframework.*, \
  *;resolution:=optional
 
 Bundle-Activator: org.eclipse.gemini.blueprint.extender.internal.boot.ChainActivator

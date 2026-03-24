@@ -35,7 +35,7 @@ public class ServiceRegistrationDecorator implements ServiceRegistration {
 	private volatile UnregistrationNotifier notifier;
 
 	public ServiceRegistrationDecorator(ServiceRegistration registration) {
-		Assert.notNull(registration);
+		Assert.notNull(registration, "argument must not be null");
 		this.delegate = registration;
 	}
 

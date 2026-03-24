@@ -5,7 +5,7 @@
     <parent>
         <artifactId>gemini-blueprint-integration-test-bundles</artifactId>
         <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
-        <version>3.0.1.BUILD-SNAPSHOT</version>
+        <version>4.0.0.BUILD-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

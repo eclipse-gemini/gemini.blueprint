@@ -71,7 +71,7 @@ public abstract class CustomListenerAdapterUtils {
 			return Collections.emptyMap();
 		}
 
-		Assert.notEmpty(possibleArgumentTypes);
+		Assert.notEmpty(possibleArgumentTypes, "argument must not be empty");
 
 		if (System.getSecurityManager() != null) {
 			return AccessController.doPrivileged(new PrivilegedAction<Map<Class<?>, List<Method>>>() {

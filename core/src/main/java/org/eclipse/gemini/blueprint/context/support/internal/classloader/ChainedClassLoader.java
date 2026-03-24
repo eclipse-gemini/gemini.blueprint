@@ -79,7 +79,7 @@ public class ChainedClassLoader extends ClassLoader {
 
 		this.parent = parent;
 
-		Assert.notEmpty(loaders);
+		Assert.notEmpty(loaders, "argument must not be empty");
 
 		synchronized (this.loaders) {
 			for (int i = 0; i < loaders.length; i++) {

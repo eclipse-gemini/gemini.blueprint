@@ -211,13 +211,13 @@ public abstract class ClassUtils {
 		private final ClassLoader classLoader;
 
 		public ClassLoaderBridge(Bundle bundle) {
-			Assert.notNull(bundle);
+			Assert.notNull(bundle, "argument must not be null");
 			this.bundle = bundle;
 			this.classLoader = null;
 		}
 
 		public ClassLoaderBridge(ClassLoader classLoader) {
-			Assert.notNull(classLoader);
+			Assert.notNull(classLoader, "argument must not be null");
 			this.classLoader = classLoader;
 			this.bundle = null;
 		}
@@ -353,7 +353,7 @@ public abstract class ClassUtils {
 	 * @return all interfaces implemented by the given class.
 	 */
 	public static Class<?>[] getAllInterfaces(Class<?> clazz) {
-		Assert.notNull(clazz);
+		Assert.notNull(clazz, "argument must not be null");
 		return getAllInterfaces(clazz, new LinkedHashSet<Class<?>>(8));
 	}
 
@@ -384,8 +384,8 @@ public abstract class ClassUtils {
 	 * @return
 	 */
 	public static boolean isPresent(String className, Bundle bundle) {
-		Assert.hasText(className);
-		Assert.notNull(bundle);
+		Assert.hasText(className, "argument must have text");
+		Assert.notNull(bundle, "argument must not be null");
 
 		try {
 			bundle.loadClass(className);
@@ -403,7 +403,7 @@ public abstract class ClassUtils {
 	 * @return
 	 */
 	public static ClassLoader getClassLoader(Class<?> clazz) {
-		Assert.notNull(clazz);
+		Assert.notNull(clazz, "argument must not be null");
 		ClassLoader loader = clazz.getClassLoader();
 		return (loader == null ? ClassLoader.getSystemClassLoader() : loader);
 	}

@@ -452,7 +452,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 	 * @see ExportContextClassLoaderEnum
 	 */
 	public void setExportContextClassLoader(ExportContextClassLoaderEnum ccl) {
-		Assert.notNull(ccl);
+		Assert.notNull(ccl, "argument must not be null");
 		this.contextClassLoader = ccl;
 	}
 
@@ -503,7 +503,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 	 * @param detector
 	 */
 	public void setInterfaceDetector(InterfaceDetector detector) {
-		Assert.notNull(detector);
+		Assert.notNull(detector, "argument must not be null");
 		this.interfaceDetector = detector;
 	}
 

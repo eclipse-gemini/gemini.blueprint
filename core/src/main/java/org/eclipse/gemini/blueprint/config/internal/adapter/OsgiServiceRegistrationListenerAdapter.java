@@ -70,7 +70,7 @@ public class OsgiServiceRegistrationListenerAdapter implements OsgiServiceRegist
 	private boolean isBlueprintCompliant = false;
 
 	public void afterPropertiesSet() {
-		Assert.notNull(beanFactory);
+		Assert.notNull(beanFactory, "argument must not be null");
 		Assert.isTrue(target != null || StringUtils.hasText(targetBeanName),
 				"one of 'target' or 'targetBeanName' properties has to be set");
 

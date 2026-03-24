@@ -44,7 +44,7 @@ public class OsgiDefaultsDefinition {
 	private Availability availability = Availability.MANDATORY;
 
 	public OsgiDefaultsDefinition(Document document, ParserContext parserContext) {
-		Assert.notNull(document);
+		Assert.notNull(document, "argument must not be null");
 		Element root = document.getDocumentElement();
 
 		ReferenceParsingUtil.checkAvailabilityAndCardinalityDuplication(root, DEFAULT_AVAILABILITY,

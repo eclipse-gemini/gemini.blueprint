@@ -541,11 +541,7 @@ public class DependencyServiceManager {
 	}
 
 	private AccessControlContext getAcc() {
-		AutowireCapableBeanFactory beanFactory = context.getAutowireCapableBeanFactory();
-		if (beanFactory instanceof ConfigurableBeanFactory) {
-			return ((ConfigurableBeanFactory) beanFactory).getAccessControlContext();
-		}
-		return null;
+		return AccessController.getContext();
 	}
 	
     public boolean allDependenciesSatisfied() {

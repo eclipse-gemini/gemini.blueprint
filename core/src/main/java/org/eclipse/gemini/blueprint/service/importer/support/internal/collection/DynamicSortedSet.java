@@ -63,7 +63,7 @@ public class DynamicSortedSet<E> extends DynamicSet<E> implements SortedSet<E> {
 	}
 
 	public boolean add(E o) {
-		Assert.notNull(o);
+		Assert.notNull(o, "argument must not be null");
 
 		if (comparator == null && !(o instanceof Comparable))
 			throw new ClassCastException("given object does not implement " + Comparable.class.getName()
@@ -87,7 +87,7 @@ public class DynamicSortedSet<E> extends DynamicSet<E> implements SortedSet<E> {
 	}
 
 	public boolean remove(Object o) {
-		Assert.notNull(o);
+		Assert.notNull(o, "argument must not be null");
 		return super.remove(o);
 	}
 

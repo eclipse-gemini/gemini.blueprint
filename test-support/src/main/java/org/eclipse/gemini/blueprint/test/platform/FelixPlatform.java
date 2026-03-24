@@ -15,23 +15,17 @@
 package org.eclipse.gemini.blueprint.test.platform;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.felix.framework.Felix;
-import org.apache.felix.framework.util.StringMap;
 import org.apache.felix.main.AutoProcessor;
 import org.apache.felix.main.Main;
 import org.eclipse.gemini.blueprint.test.internal.util.IOUtils;
 import org.osgi.framework.BundleContext;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.ClassUtils;
 
 /**
  * Apache Felix (1.0.3+/1.4.x+/2.0.x) OSGi platform. Automatically detects the available version on the classpath and
@@ -40,69 +34,6 @@ import org.springframework.util.ClassUtils;
  * @author Costin Leau
  */
 public class FelixPlatform extends AbstractOsgiPlatform {
-
-	private static abstract class Felix1XPlatform implements Platform {
-		private static final Constructor<?> CTOR;
-
-		static {
-			Class<?> autoActivator =
-					ClassUtils.resolveClassName("org.apache.felix.main.AutoActivator", Felix1XPlatform.class
-							.getClassLoader());
-			try {
-				CTOR = autoActivator.getConstructor(Map.class);
-			} catch (Exception ex) {
-				throw new IllegalStateException("Cannot instantiate class " + autoActivator, ex);
-			}
-		}
-
-		private Felix felix;
-
-		public final BundleContext start() throws Exception {
-			// load properties
-			Map<String, String> configMap = getConfiguration();
-
-			// pass the auto activator as a list
-			List<Object> list = new ArrayList<Object>(1);
-			list.add(BeanUtils.instantiateClass(CTOR, configMap));
-
-			felix = createFelix(configMap, list);
-			felix.start();
-			return felix.getBundleContext();
-		}
-
-		public final void stop() throws Exception {
-			felix.stop();
-		}
-
-		abstract Felix createFelix(Map<String, String> configMap, List<?> activators) throws Exception;
-	}
-
-//	private static class Felix10XPlatform extends Felix1XPlatform {
-//
-//		private static final Constructor<Felix> CTOR;
-//		static {
-//			try {
-//				CTOR = Felix.class.getConstructor(Map.class, List.class);
-//			} catch (NoSuchMethodException ex) {
-//				throw new IllegalStateException("Cannot find Felix constructor", ex);
-//			}
-//		}
-//
-//		@Override
-//		Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception {
-//
-//			return CTOR.newInstance(configMap, activators);
-//		}
-//	}
-
-//	private static class Felix14XPlatform extends Felix1XPlatform {
-//
-//		@Override
-//		Felix createFelix(Map<Object, Object> configMap, List<?> activators) throws Exception {
-//			configMap.put("felix.systembundle.activators", activators);
-//			return new Felix(configMap);
-//		}
-//	}
 
 	private static class Felix20XPlatform implements Platform {
 		private FrameworkTemplate fwkTemplate;

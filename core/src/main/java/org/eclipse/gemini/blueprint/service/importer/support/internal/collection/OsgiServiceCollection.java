@@ -463,7 +463,7 @@ public class OsgiServiceCollection implements Collection, InitializingBean, Coll
 	 * @param listeners The listeners to set.
 	 */
 	public void setListeners(OsgiServiceLifecycleListener[] listeners) {
-		Assert.notNull(listeners);
+		Assert.notNull(listeners, "argument must not be null");
 		this.listeners = listeners;
 	}
 

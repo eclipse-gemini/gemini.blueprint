@@ -39,7 +39,7 @@ public class StaticServiceReferenceProxy implements ServiceReferenceProxy {
 	 * @param target service reference
 	 */
 	public StaticServiceReferenceProxy(ServiceReference target) {
-		Assert.notNull(target);
+		Assert.notNull(target, "argument must not be null");
 		this.target = target;
 	}
 
@@ -65,6 +65,14 @@ public class StaticServiceReferenceProxy implements ServiceReferenceProxy {
 
 	public ServiceReference getTargetServiceReference() {
 		return target;
+	}
+
+	public Object adapt(Class type) {
+		return target.adapt(type);
+	}
+
+	public java.util.Dictionary<String, Object> getProperties() {
+		return target.getProperties();
 	}
 
 	public boolean equals(Object obj) {

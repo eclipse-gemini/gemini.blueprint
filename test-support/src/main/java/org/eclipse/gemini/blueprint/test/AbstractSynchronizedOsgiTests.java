@@ -117,9 +117,16 @@ public abstract class AbstractSynchronizedOsgiTests extends AbstractConfigurable
 
 		String filter = "(org.springframework.context.service.name=" + forBundleWithSymbolicName + ")";
 
-		ServiceListener listener = new ServiceListener() {
+		// Use AllServiceListener to bypass OSGi class assignability checks.
+		// The application context service is registered under interface names
+		// (e.g. Spring, Gemini Blueprint) that the system bundle may not be able
+		// to load, causing regular ServiceListener events to be filtered out.
+		ServiceListener listener = new org.osgi.framework.AllServiceListener() {
 
 			public void serviceChanged(ServiceEvent event) {
+				if (logger.isDebugEnabled())
+					logger.debug("ServiceEvent type=" + event.getType() + " for filter " + filter
+							+ " ref=" + event.getServiceReference());
 				if (event.getType() == ServiceEvent.REGISTERED)
 					counter.decrement();
 			}

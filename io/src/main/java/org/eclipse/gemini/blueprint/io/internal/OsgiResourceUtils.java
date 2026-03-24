@@ -84,7 +84,7 @@ public abstract class OsgiResourceUtils {
 	 * @return
 	 */
 	public static int getSearchType(String path) {
-		Assert.notNull(path);
+		Assert.notNull(path, "argument must not be null");
 		int type = PREFIX_TYPE_NOT_SPECIFIED;
 		String prefix = getPrefix(path);
 

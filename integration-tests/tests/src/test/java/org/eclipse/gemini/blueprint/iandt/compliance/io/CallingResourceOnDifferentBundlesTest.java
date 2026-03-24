@@ -70,13 +70,13 @@ public class CallingResourceOnDifferentBundlesTest extends BaseIntegrationTest {
 	}
 
 	public void testCallGetResourceOnADifferentBundleRetrievedThroughBundleEvent() throws Exception {
-		String EXTRA_BUNDLE = "org.apache.servicemix.bundles.spring-core";
+		// Spring 7 is wrapped with BSN org.springframework.core (see wrapped-jars module)
+		String EXTRA_BUNDLE = "org.springframework.core";
 
 		Bundle[] bundles = bundleContext.getBundles();
 		Bundle bundle = null;
 		for (int i = 1; bundle == null && i < bundles.length; i++) {
-			String location = bundles[i].getLocation();
-			if (location != null && location.contains(EXTRA_BUNDLE))
+			if (EXTRA_BUNDLE.equals(bundles[i].getSymbolicName()))
 				bundle = bundles[i];
 		}
 

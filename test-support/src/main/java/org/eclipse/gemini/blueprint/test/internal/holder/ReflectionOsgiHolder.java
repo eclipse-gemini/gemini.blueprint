@@ -42,7 +42,7 @@ class ReflectionOsgiHolder extends OsgiTestInfoHolder {
 	 * @param twinInstance instance to wrap
 	 */
 	ReflectionOsgiHolder(Object twinInstance) {
-		Assert.notNull(twinInstance);
+		Assert.notNull(twinInstance, "argument must not be null");
 		this.instance = twinInstance;
 		Class<?> clazz = instance.getClass();
 		GET_TEST_BUNDLE_ID = ReflectionUtils.findMethod(clazz, "getTestBundleId");

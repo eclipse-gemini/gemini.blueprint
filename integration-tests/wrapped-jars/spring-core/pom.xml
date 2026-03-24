@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <artifactId>wrapped-jars-parent</artifactId>
+        <version>4.0.0.BUILD-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>spring-core-osgi</artifactId>
+    <packaging>bundle</packaging>
+    <name>OSGi Bundle Wrapper: spring-core</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.maven.artifact.version}</version>
+            <exclusions>
+                <exclusion><groupId>*</groupId><artifactId>*</artifactId></exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>org.springframework.core</Bundle-SymbolicName>
+                        <Bundle-Version>${spring.maven.artifact.version}</Bundle-Version>
+                        <Export-Package>*;version="${spring.maven.artifact.version}";-noimport:=true</Export-Package>
+                        <Import-Package>*;resolution:=optional</Import-Package>
+                        <Embed-Dependency>spring-core;inline=true</Embed-Dependency>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -13,9 +13,8 @@ Import-Package: \
  org.osgi.service.cm;version=1.2;resolution:=optional, \
  org.apache.commons.logging.*;version=${logging.version.range}, \
  org.eclipse.gemini.blueprint.*;version=${gemini.blueprint.version.range}, \
- org.springframework.*;version=${spring.version.range}, \
+ org.springframework.*, \
  org.eclipse.*;resolution:=optional, \
- org.knopflerfish.*;resolution:=optional, \
  org.apache.felix.*;resolution:=optional, \
  junit.*;version=3.8, \
  *;resolution:=optional

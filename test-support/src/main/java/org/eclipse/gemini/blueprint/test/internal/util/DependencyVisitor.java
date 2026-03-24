@@ -65,7 +65,7 @@ import org.objectweb.asm.signature.SignatureVisitor;
  */
 public class DependencyVisitor extends ClassVisitor {
 
-	private final AnnotationVisitor av = new AnnotationVisitor(Opcodes.ASM5) {
+	private final AnnotationVisitor av = new AnnotationVisitor(Opcodes.ASM9) {
 			@Override
 			public void visit(String name, Object value) {
 				DependencyVisitor.this.visit(name, value);
@@ -92,7 +92,7 @@ public class DependencyVisitor extends ClassVisitor {
 			}
 	};
 
-	private final SignatureVisitor sv = new SignatureVisitor(Opcodes.ASM5) {
+	private final SignatureVisitor sv = new SignatureVisitor(Opcodes.ASM9) {
 		@Override
 		public void visitFormalTypeParameter(String name) {
 			DependencyVisitor.this.visitFormalTypeParameter(name);
@@ -174,7 +174,7 @@ public class DependencyVisitor extends ClassVisitor {
 		}
 	};
 
-	private final FieldVisitor fv = new FieldVisitor(Opcodes.ASM5) {
+	private final FieldVisitor fv = new FieldVisitor(Opcodes.ASM9) {
 		@Override
 		public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
 			return DependencyVisitor.this.visitAnnotation(desc, visible);
@@ -196,7 +196,7 @@ public class DependencyVisitor extends ClassVisitor {
 		}
 	};
 
-	private final MethodVisitor mv = new MethodVisitor(Opcodes.ASM5) {
+	private final MethodVisitor mv = new MethodVisitor(Opcodes.ASM9) {
 		@Override
 		public void visitParameter(String name, int access) {
 			DependencyVisitor.this.visitParameter(name, access);
@@ -354,7 +354,7 @@ public class DependencyVisitor extends ClassVisitor {
 	};
 
 	public DependencyVisitor() {
-		super(Opcodes.ASM5);
+		super(Opcodes.ASM9);
 	}
 
 	private AnnotationVisitor visitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start, Label[] end, int[] index, String desc, boolean visible) {

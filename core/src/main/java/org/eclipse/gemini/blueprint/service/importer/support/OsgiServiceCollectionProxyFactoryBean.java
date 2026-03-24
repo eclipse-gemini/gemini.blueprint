@@ -257,7 +257,7 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 	 * @param collectionType the collection type as string using one of the values above.
 	 */
 	public void setCollectionType(CollectionType collectionType) {
-		Assert.notNull(collectionType);
+		Assert.notNull(collectionType, "argument must not be null");
 		this.collectionType = collectionType;
 	}
 
@@ -296,7 +296,7 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 	 * @param type the collection member type
 	 */
 	public void setMemberType(MemberType type) {
-		Assert.notNull(type);
+		Assert.notNull(type, "argument must not be null");
 		this.memberType = type;
 	}
 }

@@ -26,7 +26,7 @@ import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -45,7 +45,7 @@ import java.util.SortedSet;
  *
  * @author Andy Piper
  */
-public class ServiceReferenceInjectionBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements
+public class ServiceReferenceInjectionBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor,
 		BundleContextAware, BeanFactoryAware, BeanClassLoaderAware {
 
 	private BundleContext bundleContext;
@@ -190,10 +190,16 @@ public class ServiceReferenceInjectionBeanPostProcessor extends InstantiationAwa
 		});
 	}
 
-	public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean,
-			String beanName) throws BeansException {
+	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName)
+			throws BeansException {
 
 		MutablePropertyValues newprops = new MutablePropertyValues(pvs);
+		PropertyDescriptor[] pds;
+		try {
+			pds = java.beans.Introspector.getBeanInfo(bean.getClass()).getPropertyDescriptors();
+		} catch (java.beans.IntrospectionException e) {
+			throw new FatalBeanException("Failed to introspect bean class: " + bean.getClass(), e);
+		}
 		for (PropertyDescriptor pd : pds) {
 			ServiceReference s = hasServiceProperty(pd);
 			if (s != null && !pvs.contains(pd.getName())) {

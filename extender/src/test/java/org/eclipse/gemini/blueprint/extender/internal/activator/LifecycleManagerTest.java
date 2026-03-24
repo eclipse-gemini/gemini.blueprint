@@ -21,23 +21,23 @@ import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 
 import static java.lang.Thread.yield;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
  * @author Olaf Otto
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class LifecycleManagerTest {
     @Mock
     private DelegatedExecutionOsgiBundleApplicationContext context;
@@ -96,7 +96,7 @@ public class LifecycleManagerTest {
         withFailingApplicationContextClose();
 
         shutdownContext();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();
@@ -130,7 +130,7 @@ public class LifecycleManagerTest {
         addContextToLifecycleManager();
 
         destroy();
-        yield();
+        Thread.yield();
 
         verifyContextIsClosed();
         verifyOsgiContextProcessorInteractions();
@@ -143,7 +143,7 @@ public class LifecycleManagerTest {
     }
 
     private void verifyContextCreationIsNotAttempted() throws Exception {
-        verify(this.contextCreator, never()).createApplicationContext(Matchers.<BundleContext>any());
+        verify(this.contextCreator, never()).createApplicationContext(ArgumentMatchers.<BundleContext>any());
     }
 
     private Bundle createBundleWithoutBundleContext() {

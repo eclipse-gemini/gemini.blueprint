@@ -368,9 +368,7 @@ public class OsgiServiceAnnotationTest extends TestCase {
 		ServiceReferenceInjectionBeanPostProcessor p = new ServiceReferenceInjectionBeanPostProcessor();
 		p.setBundleContext(context);
 		p.setBeanClassLoader(getClass().getClassLoader());
-		PropertyValues pvs = p.postProcessPropertyValues(new MutablePropertyValues(), new PropertyDescriptor[] {
-			new PropertyDescriptor("serviceBean", ServiceFactoryBean.class),
-			new PropertyDescriptor("serializableBean", ServiceFactoryBean.class) }, bean, "myBean");
+		PropertyValues pvs = p.postProcessProperties(new MutablePropertyValues(), bean, "myBean");
 
 		MyService msb = (MyService) pvs.getPropertyValue("serviceBean").getValue();
 		Serializable ssb = (Serializable) pvs.getPropertyValue("serializableBean").getValue();
@@ -417,9 +415,7 @@ public class OsgiServiceAnnotationTest extends TestCase {
 		ServiceReferenceInjectionBeanPostProcessor p = new ServiceReferenceInjectionBeanPostProcessor();
 		p.setBundleContext(context);
 		p.setBeanClassLoader(getClass().getClassLoader());
-		PropertyValues pvs = p.postProcessPropertyValues(new MutablePropertyValues(), new PropertyDescriptor[] {
-			new PropertyDescriptor("serviceBean", ServiceBean.class),
-			new PropertyDescriptor("serializableBean", ServiceBean.class) }, bean, "myBean");
+		PropertyValues pvs = p.postProcessProperties(new MutablePropertyValues(), bean, "myBean");
 
 		MyService msb = (MyService) pvs.getPropertyValue("serviceBean").getValue();
 		Serializable ssb = (Serializable) pvs.getPropertyValue("serializableBean").getValue();

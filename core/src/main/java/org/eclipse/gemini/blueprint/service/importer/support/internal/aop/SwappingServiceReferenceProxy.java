@@ -38,7 +38,7 @@ class SwappingServiceReferenceProxy implements ServiceReferenceProxy {
 	private ServiceReference delegate;
 
 	synchronized ServiceReference swapDelegates(ServiceReference newDelegate) {
-		Assert.notNull(newDelegate);
+		Assert.notNull(newDelegate, "argument must not be null");
 		ServiceReference old = this.delegate;
 		this.delegate = newDelegate;
 
@@ -67,6 +67,14 @@ class SwappingServiceReferenceProxy implements ServiceReferenceProxy {
 
 	public synchronized ServiceReference getTargetServiceReference() {
 		return delegate;
+	}
+
+	public synchronized Object adapt(Class type) {
+		return (delegate == null ? null : delegate.adapt(type));
+	}
+
+	public synchronized java.util.Dictionary<String, Object> getProperties() {
+		return (delegate == null ? null : delegate.getProperties());
 	}
 
 	public boolean equals(Object obj) {

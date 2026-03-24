@@ -80,7 +80,7 @@ public class OsgiServiceLifecycleListenerAdapter implements OsgiServiceLifecycle
 	private boolean initialized;
 
 	public void afterPropertiesSet() {
-		Assert.notNull(beanFactory);
+		Assert.notNull(beanFactory, "argument must not be null");
 		Assert.isTrue(target != null || StringUtils.hasText(targetBeanName),
 				"one of 'target' or 'targetBeanName' properties has to be set");
 

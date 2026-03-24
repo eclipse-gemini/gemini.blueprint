@@ -431,6 +431,22 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
             }
         }
 
+        // If the holder mechanism didn't provide a bundle context
+        // (OsgiTestInfoHolder.INSTANCE inside the bundle may be a different instance
+        // than the one the test runner sees), find the test-support bundle by symbolic name.
+        if (ctx == null) {
+            for (Bundle b : platformContext.getBundles()) {
+                if ("org.eclipse.gemini.blueprint.test".equals(b.getSymbolicName())) {
+                    try {
+                        ctx = OsgiBundleUtils.getBundleContext(b);
+                    } catch (RuntimeException ex) {
+                        logger.trace("cannot determine bundle context for test-support bundle", ex);
+                    }
+                    break;
+                }
+            }
+        }
+
         return (ctx == null ? platformContext : ctx);
     }
 

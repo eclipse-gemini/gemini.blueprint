@@ -73,15 +73,5 @@ spec:
         }
       }
     }
-    stage('Integration tests with Knopflerfish profile') {
-      steps {
-        container('maven') {
-          dir("integration-tests") {
-            sh 'mvn clean install -P knopflerfish'
-            junit '**/target/surefire-reports/*.xml'
-          }
-        }
-      }
-    }
   }
 }

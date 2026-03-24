@@ -278,6 +278,16 @@ public abstract class AbstractOnTheFlyBundleCreatorTests extends AbstractDepende
 		Collection specialImportsOut = eliminateSpecialPackages(rawImports);
 		Collection imports = eliminatePackagesAvailableInTheJar(specialImportsOut);
 
+		// Spring 7's MetadataReader resolves annotation classes via the classloader.
+		// If the test uses Spring context (component scanning), the scanned beans'
+		// annotations (e.g. @Component) must be loadable. The bytecode analysis only
+		// finds direct references from the test class, not annotations on scanned beans
+		// in other bundles, so add the stereotype package when Spring context is imported.
+		if (imports.contains("org.springframework.context")
+				|| imports.contains("org.springframework.context.annotation")) {
+			imports.add("org.springframework.stereotype");
+		}
+
 		if (trace) {
 			logger.trace("Filtered imports are " + imports);
         }

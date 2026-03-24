@@ -425,7 +425,7 @@ public class OsgiBundleResource extends AbstractResource implements ContextResou
 			throw new IllegalArgumentException(
 				"cannot locate items in bundle-space w/o a bundle; specify one when creating this resolver");
 
-		Assert.notNull(location);
+		Assert.notNull(location, "argument must not be null");
 		Set<UrlContextResource> resources = new LinkedHashSet<UrlContextResource>(5);
 
 		location = StringUtils.cleanPath(location);

@@ -420,7 +420,7 @@ class LifecycleManager implements DisposableBean {
         try {
             Long id = new Long(bundle.getBundleId());
             context = (ConfigurableOsgiBundleApplicationContext) managedContexts.get(id);
-        } catch (IllegalStateException _) {
+        } catch (IllegalStateException e) {
             // ignore
         }
         return context;

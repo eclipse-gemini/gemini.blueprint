@@ -37,7 +37,7 @@ public class ImportedOsgiServiceProxyAdvice extends DelegatingIntroductionInterc
 
 
 	public ImportedOsgiServiceProxyAdvice(ServiceReference reference) {
-		Assert.notNull(reference);
+		Assert.notNull(reference, "argument must not be null");
 		this.reference = (reference instanceof ServiceReferenceProxy ? (ServiceReferenceProxy) reference
 				: new StaticServiceReferenceProxy(reference));
 	}

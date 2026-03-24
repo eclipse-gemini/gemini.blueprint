@@ -36,15 +36,16 @@ configurations.
 
 2. RELEASE INFO
 
-The Eclipse Gemini Blueprint is targeted at OSGi R4 and above, and JDK level 5.0 and above.
+The Eclipse Gemini Blueprint is targeted at OSGi R8 and above, Spring Framework 7.0 and above,
+and JDK level 17 and above.
 
 Release contents:
 * "src" contains the Java source files for the framework
 * "dist" contains various Eclipse Gemini distribution jar files
 * "docs" contains general documentation and API javadocs
 
-Maven 2 pom.xml are provided for building the sources.
- 
+Maven pom.xml are provided for building the sources (use the included Maven wrapper: ./mvnw).
+
 Latest info is available at the public website: http://www.eclipse.org/gemini/blueprint
 
 Eclipse Gemini Blueprint is released under the terms of the Eclipse Public License v1.0 and 
@@ -84,7 +85,7 @@ exact list of Eclipse Gemini Blueprint project dependencies see the respective M
 * gemini-blueprint-test-${version}.jar
 - Contents: The Eclipse Gemini Blueprint Integration Testing framework
 - Dependencies: asm, junit, slf4j, gemini-blueprint-core, gemini-blueprint-extender
-                [Equinox, Felix, Knopflerfish, Log4J]
+                [Equinox, Felix]
 
 4. WHERE TO START
 
@@ -92,8 +93,8 @@ This distribution contains API documentation and several sample applications ill
 The Eclipse Gemini Blueprint reference documentation can be found at http://www.eclipse.org/gemini/blueprint
 
 A great way to get started is to review and run the sample applications, supplementing with reference manual
-material as needed. You will require Maven 2.0.x, which can be downloaded from http://maven.apache.org/, for building
-Gemini Blueprint.
+material as needed. A Maven wrapper (./mvnw) is included; alternatively Maven 3.6+ can be downloaded
+from http://maven.apache.org/.
 
 5. ADDITIONAL RESOURCES
 

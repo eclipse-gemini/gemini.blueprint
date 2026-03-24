@@ -16,6 +16,7 @@ package org.eclipse.gemini.blueprint;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.PropertiesEditor;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -32,6 +33,7 @@ public class DictionaryEditorTest extends AbstractJUnit4SpringContextTests imple
     private Dictionary dictionary;
 
     @Autowired
+    @Qualifier("dictionary")
     public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
     }

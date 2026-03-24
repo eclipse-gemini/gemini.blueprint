@@ -81,7 +81,7 @@ public abstract class RunnableTimedExecution {
 	}
 
 	public static boolean execute(Runnable task, long waitTime, TaskExecutor taskExecutor) {
-		Assert.notNull(task);
+		Assert.notNull(task, "argument must not be null");
 
 		Counter counter = new Counter("counter for task: " + task);
 		Runnable wrapper = new MonitoredRunnable(task, counter);

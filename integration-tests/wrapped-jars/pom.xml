@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.gemini.blueprint.iandt</groupId>
+        <artifactId>gemini-blueprint-integration-tests-parent</artifactId>
+        <version>4.0.0.BUILD-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>wrapped-jars-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>Eclipse Gemini Blueprint Wrapped JARs Parent</name>
+    <description>
+        Wraps third-party JARs that lack OSGi metadata (Spring 7, commons-logging)
+        as proper OSGi bundles for use in integration tests.
+    </description>
+
+    <modules>
+        <module>commons-logging</module>
+        <module>spring-core</module>
+        <module>spring-beans</module>
+        <module>spring-aop</module>
+        <module>spring-expression</module>
+        <module>spring-context</module>
+        <module>spring-test</module>
+        <module>junit</module>
+        <module>hamcrest-core</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>5.1.9</version>
+                    <extensions>true</extensions>
+                </plugin>
+                <!-- Disable bnd-maven-plugin inherited from root POM -->
+                <plugin>
+                    <groupId>biz.aQute.bnd</groupId>
+                    <artifactId>bnd-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

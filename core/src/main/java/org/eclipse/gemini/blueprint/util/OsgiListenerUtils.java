@@ -85,12 +85,25 @@ public abstract class OsgiListenerUtils {
 
 		// now get the already registered services and call the listener
 		// (the listener should be able to handle duplicates)
-		dispatchServiceRegistrationEvents(OsgiServiceReferenceUtils.getServiceReferences(context, filter), listener);
+		// Use getAllServiceReferences for AllServiceListener to bypass class assignability
+		// checks, matching the behavior of the listener registration itself.
+		ServiceReference[] refs;
+		if (listener instanceof org.osgi.framework.AllServiceListener) {
+			try {
+				refs = context.getAllServiceReferences(null, filter);
+				if (refs == null) refs = new ServiceReference[0];
+			} catch (InvalidSyntaxException e) {
+				throw (RuntimeException) new IllegalArgumentException("Invalid filter").initCause(e);
+			}
+		} else {
+			refs = OsgiServiceReferenceUtils.getServiceReferences(context, filter);
+		}
+		dispatchServiceRegistrationEvents(refs, listener);
 	}
 
 	private static void registerListener(BundleContext context, ServiceListener listener, String filter) {
-		Assert.notNull(context);
-		Assert.notNull(listener);
+		Assert.notNull(context, "argument must not be null");
+		Assert.notNull(listener, "argument must not be null");
 
 		try {
 			// add listener
